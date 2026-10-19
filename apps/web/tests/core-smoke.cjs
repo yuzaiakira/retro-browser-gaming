@@ -2,6 +2,7 @@ const { chromium } = require('@playwright/test');
 const { createServer } = require('node:http');
 const { readFile } = require('node:fs/promises');
 const { extname, join, normalize } = require('node:path');
+const { PNG } = require('pngjs');
 
 const root = join(__dirname, '..', 'public');
 const fixtureName = process.env.GENESIS_FIXTURE || 'mit-genesis-breakout.bin';
@@ -21,6 +22,18 @@ window.result = new Promise((resolve, reject) => {
     document.querySelector('iframe').contentWindow.postMessage({type:'init',session:'core-smoke-1',file:new File([bytes], '${fixtureName}'),core:'genesis_plus_gx',name:'${fixtureName}'}, location.origin);
   }, { once: true });
 });
+window.command = (method, value) => new Promise((resolve, reject) => {
+  const id = crypto.randomUUID();
+  const timeout = setTimeout(() => reject(new Error(method + ' timed out')), 10000);
+  const listener = event => {
+    if (event.origin !== location.origin || event.data?.type !== 'reply' || event.data?.id !== id) return;
+    removeEventListener('message', listener); clearTimeout(timeout);
+    event.data.error ? reject(new Error(event.data.error)) : resolve(event.data.value);
+  };
+  addEventListener('message', listener);
+  document.querySelector('iframe').contentWindow.postMessage({type:'command',session:'core-smoke-1',id,method,value}, location.origin);
+});
+window.input = (command, value) => document.querySelector('iframe').contentWindow.postMessage({type:'input',session:'core-smoke-1',command,value}, location.origin);
 </script>`;
 
 async function handler(request, response) {
@@ -34,6 +47,25 @@ async function handler(request, response) {
   } catch { response.writeHead(404, headers).end(); }
 }
 
+function paddleCenter(png) {
+  let best;
+  for (let y = Math.floor(png.height * 0.45); y < png.height; y++) {
+    let runStart = -1;
+    for (let x = 0; x <= png.width; x++) {
+      const index = (y * png.width + x) * 4;
+      const green = x < png.width && png.data[index] < 32 && png.data[index + 1] > 128 && png.data[index + 2] < 32;
+      if (green && runStart < 0) runStart = x;
+      if (!green && runStart >= 0) {
+        const width = x - runStart;
+        if (width >= 40 && (!best || width > best.width)) best = { center: runStart + width / 2, width, y };
+        runStart = -1;
+      }
+    }
+  }
+  if (!best) throw new Error('Genesis Breakout paddle was not rendered');
+  return best;
+}
+
 async function run() {
   const server = createServer((request, response) => { handler(request, response); });
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
@@ -45,16 +77,28 @@ async function run() {
     await page.goto(`http://127.0.0.1:${port}/`);
     const result = await page.evaluate(() => window.result);
     if (!result.capabilities?.saveState) throw new Error('Genesis core did not expose save state capability');
-    await page.evaluate(() => {
-      const frame = document.querySelector('iframe');
-      frame.contentWindow.postMessage({ type: 'input', session: 'core-smoke-1', command: 3, value: 1 }, location.origin);
-      frame.contentWindow.postMessage({ type: 'input', session: 'core-smoke-1', command: 3, value: 0 }, location.origin);
-      frame.contentWindow.postMessage({ type: 'input', session: 'core-smoke-1', command: 0, value: 1 }, location.origin);
-      frame.contentWindow.postMessage({ type: 'input', session: 'core-smoke-1', command: 0, value: 0 }, location.origin);
-    });
-    await page.waitForTimeout(2000);
-    await page.screenshot({ path: '../../docs/test-evidence/PH-05/screenshots/genesis-core-boot.png', fullPage: true });
-    console.log(`GENESIS_CORE_READY ${JSON.stringify(result.capabilities)}`);
+    // The core and legal ROM are already loaded. Gameplay must not need the
+    // local HTTP server after this point.
+    await page.context().setOffline(true);
+    await page.evaluate(() => window.input(3, 1));
+    await page.waitForTimeout(500);
+    await page.evaluate(() => window.input(3, 0));
+    await page.waitForTimeout(700);
+    const frame = page.locator('#game');
+    const before = paddleCenter(PNG.sync.read(await frame.screenshot()));
+    const state = await page.evaluate(() => window.command('save'));
+    if (!(state?.byteLength > 1024)) throw new Error('Genesis core returned an implausibly small save state');
+    await page.evaluate(() => window.input(6, 1));
+    await page.waitForTimeout(450);
+    await page.evaluate(() => window.input(6, 0));
+    const moved = paddleCenter(PNG.sync.read(await frame.screenshot()));
+    if (!(moved.center < before.center - 12)) throw new Error(`Genesis left input did not move the paddle: ${before.center} -> ${moved.center}`);
+    await page.evaluate((saved) => window.command('load', saved), state);
+    await page.waitForTimeout(150);
+    const restored = paddleCenter(PNG.sync.read(await frame.screenshot()));
+    if (Math.abs(restored.center - before.center) > 3) throw new Error(`Genesis save state did not restore paddle position: ${before.center} -> ${restored.center}`);
+    await page.screenshot({ path: '../../docs/test-evidence/PH-05/screenshots/genesis-gameplay.png', fullPage: true });
+    console.log(`GENESIS_GAMEPLAY_PASS ${JSON.stringify({ capabilities: result.capabilities, stateBytes: state.byteLength, before: before.center, moved: moved.center, restored: restored.center })}`);
   } finally { await browser.close(); await new Promise((resolve) => server.close(resolve)); }
 }
 

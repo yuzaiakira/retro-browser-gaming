@@ -9,13 +9,16 @@
 | CAT-001 | PASSED (HTML5) | `PH-02/test-run.txt`: catalog → download → install → play |
 | CAT-002 | NOT_VERIFIED | Error/empty visual E2E matrix remains |
 | DL-001 | PASSED (small asset) | Real HTTP 206 through authenticated S3 and the same-origin launcher gateway; browser install evidence in `PH-01/compose-20261019.md` |
-| DL-002, DL-005, DL-006, DL-007, DL-008 | NOT_VERIFIED | Interrupted/reload/two-tab/crash browser tests outstanding |
-| DL-003, DL-004 | PASSED (transport only) | Backend tests reject/handle 200 and 416; browser fault path outstanding |
-| DL-009, DL-010, DL-011, DL-012, DL-013 | NOT_VERIFIED | Version/hash/quota/cancel/1 GiB acceptance suite outstanding |
+| DL-002, DL-006, DL-008 | NOT_VERIFIED | Multi-chunk truncation, browser-restart recovery, and crash-before-journal-commit remain outstanding |
+| DL-003, DL-004 | PASSED (browser fault injection) | Real download worker rejects injected HTTP 200 and 416 without installing (`PH-03/download-faults-20261019.md`) |
+| DL-005 | PASSED (small asset) | A real worker retried an injected connection reset and verified the installed asset (`PH-03/download-faults-20261019.md`) |
+| DL-007 | PASSED (small asset) | Two Chromium tabs contended for the real Web Lock; one writer installed and the other received `DOWNLOAD_BUSY_OTHER_TAB` |
+| DL-009, DL-011, DL-012, DL-013 | NOT_VERIFIED | Changed version, quota, cancel/delete, and 1 GiB bounded-memory acceptance remain outstanding |
+| DL-010 | PASSED (browser fault injection) | Altered bytes in a valid 206 fail final streaming SHA-256 and remain non-installed |
 | OFF-001 | NOT_VERIFIED | Offline library passed, full cached catalog reload not yet proven |
 | OFF-002, OFF-003 | PASSED (HTML5) | Offline boot/save + three reloads in `PH-02/test-run.txt` |
 | OFF-004, OFF-005 | NOT_VERIFIED | Core eviction and SW update fault tests outstanding |
-| EMU-001 | NOT_VERIFIED | Real legal Genesis boot/core controls in `PH-05`; gameplay evidence still required |
+| EMU-001 | NOT_VERIFIED | `PH-05/genesis-gameplay-20261019.md` proves real gameplay, command input, save/load, and post-load offline runtime; physical audio and installed-release restart evidence remain outstanding |
 | EMU-002 | BLOCKED_EXTERNAL_ASSET | Legal reviewed PS1 disc bundle plus multi-file adapter validation unavailable |
 | EMU-003, EMU-004 | BLOCKED_EXTERNAL_ASSET | Legal PSP fixture/threaded gameplay and large-file run unavailable |
 | EMU-005, EMU-006 | NOT_VERIFIED | Lifecycle stress and negative E2E outstanding |

@@ -11,7 +11,8 @@
 | Browser HTML5 offline flow | PASS | `test-evidence/PH-02/test-run.txt` and screenshots; re-run 2026-10-19 with system Chromium 154 |
 | Standalone static file serving | PASS | `test-evidence/PH-02/standalone-static.txt` |
 | Core byte lock | PASS, 47 files | `scripts/verify-core-lock.py` |
-| Real Genesis core boot | PASS, scoped | `test-evidence/PH-05/test-run.txt`, screenshot; re-run 2026-10-19 with system Chromium 154 |
+| Genesis real gameplay | PASS, scoped | `test-evidence/PH-05/genesis-gameplay-20261019.md`, framebuffer input/state assertions and screenshot |
+| Browser download faults | PASS, scoped | `test-evidence/PH-03/download-faults-20261019.md`: retry, 200/416, SHA-256 and two-tab lock tests against the Compose app |
 | Client secret scan / Compose YAML parse | PASS, scoped | No secret variable identifiers in web sources/build; required service graph parses |
 | Docker Compose / native PostgreSQL | PASS | `test-evidence/PH-01/compose-20261019.md`: native PostgreSQL, SeaweedFS S3, Django and Next.js health checks, S3 Range probe and Chromium E2E |
 | PS1 / PSP / large download / physical devices | NOT_VERIFIED or BLOCKED_EXTERNAL_ASSET | `docs/acceptance-matrix.md` |
