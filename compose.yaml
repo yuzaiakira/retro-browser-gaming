@@ -13,19 +13,30 @@ services:
       context: .
       dockerfile: infra/docker/object-store.Dockerfile
     environment:
-      MINIO_ROOT_USER: ${S3_ACCESS_KEY_ID:?Run scripts/init-env.py}
-      MINIO_ROOT_PASSWORD: ${S3_SECRET_ACCESS_KEY:?Run scripts/init-env.py}
-    command: ["server", "/data", "--address", ":9000"]
+      S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:?Run scripts/init-env.py}
+      S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:?Run scripts/init-env.py}
     ports: ["127.0.0.1:9000:9000"]
     volumes: ["object-data:/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 9000"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
   api:
     build:
       context: .
       dockerfile: infra/docker/api.Dockerfile
+      args: [HTTP_PROXY, HTTPS_PROXY, NO_PROXY]
+      extra_hosts: ["proxy:${RBG_DOCKER_PROXY_IP:-127.0.0.1}"]
+      secrets: [proxy_ca]
     env_file: .env
+    environment:
+      # SeaweedFS authenticates signed GETs but rejects unsigned CORS
+      # preflights. Keep launcher transfers same-origin in local Compose.
+      S3_BROWSER_PROXY: "true"
     depends_on:
       db: {condition: service_healthy}
-      object-store: {condition: service_started}
+      object-store: {condition: service_healthy}
     command: ["sh", "-c", "python manage.py migrate && python manage.py init_storage && python manage.py seed_demo --safe-assets-only && python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2"]
     ports: ["127.0.0.1:8000:8000"]
     volumes: ["api-static:/app/staticfiles"]
@@ -38,6 +49,13 @@ services:
     build:
       context: .
       dockerfile: infra/docker/web.Dockerfile
+      args:
+        API_INTERNAL_URL: http://api:8000
+        HTTP_PROXY:
+        HTTPS_PROXY:
+        NO_PROXY:
+      extra_hosts: ["proxy:${RBG_DOCKER_PROXY_IP:-127.0.0.1}"]
+      secrets: [proxy_ca]
     environment:
       API_INTERNAL_URL: http://api:8000
       NODE_ENV: production
@@ -61,3 +79,9 @@ volumes:
   postgres-data:
   object-data:
   api-static:
+
+secrets:
+  # The wrapper points this at the injected CA when a TLS-inspecting proxy is
+  # present. The secret is mounted only during dependency-install layers.
+  proxy_ca:
+    file: ${CODEX_PROXY_CERT:-/dev/null}

@@ -23,7 +23,7 @@ from .serializers import (
     ReleaseSerializer,
 )
 from .services import catalog_queryset, is_public, public_release
-from .storage import LocalStorage, storage
+from .storage import LocalStorage, S3Storage, storage
 
 
 class StorageUnavailable(APIException):
@@ -175,17 +175,25 @@ def ready(request):
 
 
 def local_asset(request, asset_id):
-    if not settings.DEBUG or settings.STORAGE_BACKEND != "local":
+    if not settings.DEBUG or (
+        settings.STORAGE_BACKEND != "local" and not settings.S3_BROWSER_PROXY
+    ):
         raise Http404
     if request.method not in {"GET", "HEAD"}:
         return HttpResponse(status=405, headers={"Allow": "GET, HEAD"})
     asset = get_object_or_404(GameAsset, pk=asset_id)
     public_release(asset.release_id)
-    path = LocalStorage().path(asset.object_key)
-    if not path.is_file() or path.stat().st_size != asset.byte_size:
+    local = settings.STORAGE_BACKEND == "local"
+    if local:
+        path = LocalStorage().path(asset.object_key)
+        if not path.is_file() or path.stat().st_size != asset.byte_size:
+            raise Http404
+    elif not S3Storage().contains(asset):
         raise Http404
     size = asset.byte_size
-    etag = f'"{asset.sha256}"'
+    # The manifest ETag is the version precondition used by the browser.
+    # It is deliberately separate from the SHA-256 content-integrity check.
+    etag = f'"{asset.etag}"'
     headers = {
         "ETag": etag,
         "Accept-Ranges": "bytes",
@@ -196,7 +204,7 @@ def local_asset(request, asset_id):
         return HttpResponse(status=412, headers=headers)
     start, end, status = 0, size - 1, 200
     requested = request.headers.get("Range")
-    if requested and request.headers.get("If-Range", etag) == etag:
+    if requested and request.headers.get("If-Range") in {None, etag}:
         match = re.fullmatch(r"bytes=(\d*)-(\d*)", requested)
         if len(requested) > 100 or not match or not any(match.groups()):
             return HttpResponse(status=416, headers={**headers, "Content-Range": f"bytes */{size}"})
@@ -212,15 +220,34 @@ def local_asset(request, asset_id):
     headers["Content-Length"] = str(end - start + 1)
 
     def chunks():
-        with path.open("rb") as file:
-            file.seek(start)
-            remaining = end - start + 1
-            while remaining:
-                data = file.read(min(1024 * 1024, remaining))
-                if not data:
-                    break
-                remaining -= len(data)
+        if local:
+            with path.open("rb") as file:
+                file.seek(start)
+                remaining = end - start + 1
+                while remaining:
+                    data = file.read(min(1024 * 1024, remaining))
+                    if not data:
+                        break
+                    remaining -= len(data)
+                    yield data
+            return
+        try:
+            remote = (
+                S3Storage()
+                .client()
+                .get_object(
+                    Bucket=settings.S3_BUCKET,
+                    Key=asset.object_key,
+                    Range=f"bytes={start}-{end}",
+                )["Body"]
+            )
+        except (BotoCoreError, ClientError):
+            raise Http404 from None
+        try:
+            for data in iter(lambda: remote.read(1024 * 1024), b""):
                 yield data
+        finally:
+            remote.close()
 
     if request.method == "HEAD":
         return HttpResponse(status=status, headers=headers, content_type=asset.content_type)

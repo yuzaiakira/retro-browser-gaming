@@ -2,7 +2,7 @@
 
 | Area | Result | Evidence |
 |---|---|---|
-| Backend domain/API/security/range | PASS, 27 tests | `apps/api/tests/test_catalog.py`; latest local run passed |
+| Backend domain/API/security/range | PASS, 28 tests | `apps/api/tests/test_catalog.py`; latest local run passed |
 | Backend lint/migration drift | PASS | `ruff check`, `ruff format --check`, `makemigrations --check --dry-run` |
 | Real S3 integration | PASS, scoped | `test-evidence/PH-01/s3-garage.md` |
 | PostgreSQL protocol migration | PASS, scoped | `test-evidence/PH-01/pglite-postgres-protocol.txt` |
@@ -13,7 +13,7 @@
 | Core byte lock | PASS, 47 files | `scripts/verify-core-lock.py` |
 | Real Genesis core boot | PASS, scoped | `test-evidence/PH-05/test-run.txt`, screenshot; re-run 2026-10-19 with system Chromium 154 |
 | Client secret scan / Compose YAML parse | PASS, scoped | No secret variable identifiers in web sources/build; required service graph parses |
-| Docker Compose / native PostgreSQL | BLOCKED_EXTERNAL | Docker daemon is available, but build containers cannot resolve the required proxy hostname for PyPI/GitHub, so images cannot complete their dependency downloads |
+| Docker Compose / native PostgreSQL | PASS | `test-evidence/PH-01/compose-20261019.md`: native PostgreSQL, SeaweedFS S3, Django and Next.js health checks, S3 Range probe and Chromium E2E |
 | PS1 / PSP / large download / physical devices | NOT_VERIFIED or BLOCKED_EXTERNAL_ASSET | `docs/acceptance-matrix.md` |
 
 The browser evidence uses Playwright Chromium with actual OPFS, IndexedDB, service worker, HTTP range response and iframe runtime. The explicit remaining tests are not represented as passing by unit or mock tests.

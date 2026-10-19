@@ -120,6 +120,10 @@ class S3Storage:
         return True
 
     def url(self, asset, request) -> str:
+        if settings.S3_BROWSER_PROXY:
+            from django.urls import reverse
+
+            return request.build_absolute_uri(reverse("local-asset", args=[asset.pk]))
         return self.client(public=True).generate_presigned_url(
             "get_object",
             Params={"Bucket": settings.S3_BUCKET, "Key": asset.object_key},

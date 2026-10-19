@@ -225,6 +225,17 @@ class CatalogTests(TestCase):
         self.assertEqual(result.status_code, 200)
         self.assertEqual(len(b"".join(result.streaming_content)), self.asset.byte_size)
 
+    def test_DL_003_manifest_etag_is_accepted_by_range_gateway(self):
+        """The browser sends the manifest ETag as If-Match for each chunk."""
+        result = self.client.get(
+            self.url,
+            HTTP_RANGE="bytes=0-9",
+            HTTP_IF_MATCH=f'"{self.asset.etag}"',
+        )
+        self.assertEqual(result.status_code, 206)
+        expected = LocalStorage().path(self.asset.object_key).read_bytes()[:10]
+        self.assertEqual(b"".join(result.streaming_content), expected)
+
     def test_DL_004_invalid_ranges(self):
         for value in ("bytes=999999-", "bytes=10-1", "bytes=0-1,3-4", "bytes=-0", "garbage"):
             result = self.client.get(self.url, HTTP_RANGE=value)

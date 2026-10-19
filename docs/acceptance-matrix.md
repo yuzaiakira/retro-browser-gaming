@@ -4,11 +4,11 @@
 
 | ID | Status | Evidence or next gate |
 |---|---|---|
-| API-001, API-002, API-003 | PASSED (SQLite/local scope) | 27 Django tests in `apps/api/tests/test_catalog.py` |
-| API-004 | BLOCKED_EXTERNAL | Local/S3 readiness passed; native PostgreSQL + Compose required |
+| API-001, API-002, API-003 | PASSED | 28 Django tests, plus the native Compose run in `PH-01/compose-20261019.md` |
+| API-004 | PASSED | Native PostgreSQL, authenticated S3 Range probe, Django readiness and Next.js are healthy in Compose (`PH-01/compose-20261019.md`) |
 | CAT-001 | PASSED (HTML5) | `PH-02/test-run.txt`: catalog → download → install → play |
 | CAT-002 | NOT_VERIFIED | Error/empty visual E2E matrix remains |
-| DL-001 | PASSED (small asset) | Real HTTP 206 in backend and browser install evidence |
+| DL-001 | PASSED (small asset) | Real HTTP 206 through authenticated S3 and the same-origin launcher gateway; browser install evidence in `PH-01/compose-20261019.md` |
 | DL-002, DL-005, DL-006, DL-007, DL-008 | NOT_VERIFIED | Interrupted/reload/two-tab/crash browser tests outstanding |
 | DL-003, DL-004 | PASSED (transport only) | Backend tests reject/handle 200 and 416; browser fault path outstanding |
 | DL-009, DL-010, DL-011, DL-012, DL-013 | NOT_VERIFIED | Version/hash/quota/cancel/1 GiB acceptance suite outstanding |
@@ -26,19 +26,19 @@
 | SAV-001 | PASSED (HTML5) | Real frame state save/load across offline reload |
 | SAV-002, SAV-003 | NOT_VERIFIED | Deletion and invalid-import acceptance tests outstanding |
 | SEC-001 | PASSED (scoped) | Web source/build scan found no server secret variable identifiers |
-| SEC-002 | PASSED (headers/S3 scope) | Browser COOP/COEP headers and real Garage CORS/range evidence |
+| SEC-002 | PASSED (headers/S3 scope) | Browser COOP/COEP headers, authenticated SeaweedFS S3 Range, and same-origin gateway evidence |
 | SEC-003 | PASSED | Backend publication/license tests |
 | SEC-004 | NOT_VERIFIED | HTML sandbox storage-escape acceptance test outstanding |
 | UX-001 | PASSED (360px Chromium) | `catalog-mobile.png`, overflow assertion |
 | UX-002 | PASSED (basic Chromium) | Keyboard focus assertion; full a11y audit outstanding |
-| DEP-001 | BLOCKED_EXTERNAL | Docker 28.4/Compose 2.40 are available and configuration validates, but build containers cannot resolve the required platform proxy hostname for pinned PyPI/GitHub downloads |
-| DEP-002 | NOT_VERIFIED | Local README sequence passed; Docker clean-clone sequence outstanding |
+| DEP-001 | PASSED | Docker Compose built and ran native PostgreSQL, persistent S3-compatible SeaweedFS, Django and Next.js; live storage probe and Chromium E2E passed (`PH-01/compose-20261019.md`) |
+| DEP-002 | PASSED (workspace scope) | `scripts/compose.sh` resolves the injected Docker proxy at runtime, passes its CA as a BuildKit secret, and the README sequence was executed successfully |
 
 ## Gate verdicts
 
 | Gate | Verdict |
 |---|---|
-| G01 | BLOCKED_EXTERNAL — real Garage S3 and PGlite PostgreSQL-protocol evidence exist; native PostgreSQL/Docker Compose absent |
+| G01 | PASSED — native PostgreSQL, persistent authenticated S3-compatible storage, Django and Next.js ran in Compose with browser E2E evidence |
 | G02–G04 | NOT_VERIFIED — implemented and browser-tested for the legal HTML5 release; recovery/fault suite pending |
 | G05 | NOT_VERIFIED — real Genesis core boot only; PS1 and PSP prevent pass |
 | G06–G10 | NOT_VERIFIED — implementation exists, acceptance suite/device coverage incomplete |

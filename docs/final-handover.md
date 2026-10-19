@@ -1,6 +1,6 @@
 # Implementation handover — incomplete delivery
 
-Date: 2026-10-18. The project is a working implementation with verified slices, but it is **not COMPLETE** under PDR RBG-PDR-001.
+Date: 2026-10-19. The project is a working implementation with verified slices, but it is **not COMPLETE** under PDR RBG-PDR-001.
 
 ## What is implemented
 
@@ -9,7 +9,7 @@ Date: 2026-10-18. The project is a working implementation with verified slices, 
 - Dedicated-worker Range downloader with Web Locks, OPFS synchronous writes, IndexedDB chunk journal, retry/backoff, ETag/content-range validation, full streaming SHA-256 verification, pause/delete/recovery states and quota checks.
 - Service-worker shell/core cache, installation audit, offline library/player flow, HTML5 iframe isolation, local saves/export/import/autosave, keyboard/gamepad router and configurable touch layout.
 - Pinned EmulatorJS 4.2.3 runtime, Genesis/SMS/PS1/PSP adapter registry, thread/isolation gate for PSP, 47-byte core lock verification, and a real Chromium Genesis core boot test.
-- Docker Compose now includes PostgreSQL, S3-compatible object storage, API and Next standalone web image. It has not been executed because Docker is unavailable here.
+- Docker Compose now includes PostgreSQL, persistent S3-compatible SeaweedFS storage, API and Next standalone web image. The native stack has been built and exercised successfully.
 
 ## Verified evidence
 
@@ -23,20 +23,20 @@ Date: 2026-10-18. The project is a working implementation with verified slices, 
 | 360 px responsive layout and keyboard focus | `docs/test-evidence/PH-02/test-run.txt`, `catalog-mobile.png` |
 | Actual legal Genesis ROM boot through vendored Genesis Plus GX/EmulatorJS | `docs/test-evidence/PH-05/test-run.txt`, `genesis-core-boot.png` |
 | Core package integrity | `scripts/verify-core-lock.py`, 47 files |
+| Native Docker Compose | `test-evidence/PH-01/compose-20261019.md`: PostgreSQL, SeaweedFS S3, Django and Next health checks; authenticated 1 MiB S3 Range probe; Chromium install/save/offline flow |
 
 ## Mandatory gaps
 
-1. **G01 is BLOCKED_EXTERNAL.** Docker 28.4 and Compose 2.40 are available in this execution environment, but image build containers cannot resolve the platform proxy hostname for the pinned PyPI and MinIO GitHub downloads. A PGlite PostgreSQL-protocol run and real Garage S3 run are useful integration evidence but do not replace a native PostgreSQL + Compose acceptance run.
+1. **G01 is passed.** Docker Compose now builds through the injected proxy without weakening TLS: the CA is a BuildKit secret and the wrapper dynamically maps the host proxy only for build networking. Native PostgreSQL, persistent S3-compatible storage, Django and Next.js passed health, authenticated Range, and Chromium E2E checks.
 2. **PS1 and PSP are not accepted.** No legally clean PS1 bundled-disc fixture with a verified compatible multi-file adapter has been completed. PSP requires a verified legal PBP/ISO bundle, real threaded browser gameplay, and the large-local-access test. These are P0 requirements, therefore their absence prevents COMPLETE.
 3. **Download recovery/performance remains unverified.** The 100 MiB interrupted/reload test, two-tab race, crash-before-journal-commit, changed-manifest, quota failure, and 1 GiB bounded-memory run are not passed.
 4. **Offline coverage is partial.** HTML5 offline launch/save/reload is passed. Offline console-core launch and cache-eviction/SW-update fault cases are not passed.
 5. **No physical device/browser matrix is claimed.** Chromium headless was used; Firefox/WebKit, Android, iOS/Safari, gamepad hardware, and touch hardware are NOT_VERIFIED.
-6. **No remote CI run or production deployment occurred.** The Compose build and clean-clone deployment commands need a Docker-capable host.
+6. **No remote CI run or production deployment occurred.** This is no longer needed for native Compose acceptance, but a remote production deployment has not occurred.
 
 ## Reproducible next acceptance run
 
-1. Run the Compose commands in README on a Docker-capable host and collect PostgreSQL, API, MinIO and web health logs.
-2. Add licensed, auditable PS1 and PSP fixtures through the existing importer; implement the required multi-file disc/PBP bundle handling before publishing either release.
-3. Execute fault-injection browser tests for the download cases in `docs/acceptance-matrix.md`; capture real browser memory and reload evidence.
-4. Test actual Chromium, Firefox, Android Chrome and iOS Safari devices; record physical controller/touch outcomes.
-5. Re-run the full matrix from a clean clone and mark only real passes. Tag a release only if all P0 MUST rows pass.
+1. Add licensed, auditable PS1 and PSP fixtures through the existing importer; implement the required multi-file disc/PBP bundle handling before publishing either release.
+2. Execute fault-injection browser tests for the download cases in `docs/acceptance-matrix.md`; capture real browser memory and reload evidence.
+3. Test actual Chromium, Firefox, Android Chrome and iOS Safari devices; record physical controller/touch outcomes.
+4. Re-run the full matrix from a clean clone and mark only real passes. Tag a release only if all P0 MUST rows pass.

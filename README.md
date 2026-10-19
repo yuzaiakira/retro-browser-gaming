@@ -56,12 +56,12 @@ cd apps/web && GENESIS_FIXTURE=mit-genesis-pong.bin node tests/core-smoke.cjs
 Copy `.env.example` to `.env`, replace the development-only placeholders, then run:
 
 ```bash
-docker compose up --build -d
-docker compose exec api python manage.py verify_storage
-docker compose exec api python manage.py test tests -v 2
+./scripts/compose.sh up --build -d
+./scripts/compose.sh exec -T api python manage.py verify_storage
+./scripts/compose.sh exec -T api python manage.py test tests -v 2
 ```
 
-Compose contains PostgreSQL, a source-built S3-compatible MinIO development service, Django, and the Next standalone web image on `http://localhost:3000`. It is Docker-ready but **not executed in this environment** because Docker is unavailable. `docs/deployment.md` describes the production boundary.
+Compose contains PostgreSQL, persistent S3-compatible SeaweedFS development storage, Django, and the Next standalone web image on `http://localhost:3000`. The wrapper detects an injected host proxy for Docker build containers and supplies its trust anchor only as a BuildKit secret; it does not write proxy addresses, credentials, or certificates into images. The native stack, S3 Range probe, and Chromium HTML5 offline flow were executed on 2026-10-19. `docs/deployment.md` describes the production boundary.
 
 ## Assets and licenses
 

@@ -76,6 +76,7 @@ if STORAGE_BACKEND == "local" and not DEBUG:
     raise ImproperlyConfigured("Local asset transport is development-only")
 S3_ENDPOINT_URL = os.getenv("S3_ENDPOINT_URL", "http://object-store:9000")
 S3_PUBLIC_ENDPOINT_URL = os.getenv("S3_PUBLIC_ENDPOINT_URL", "http://localhost:9000")
+S3_BROWSER_PROXY = os.getenv("S3_BROWSER_PROXY", "false").lower() == "true"
 S3_BUCKET = os.getenv("S3_BUCKET", "retro-demo")
 S3_ACCESS_KEY_ID = os.getenv("S3_ACCESS_KEY_ID", "")
 S3_SECRET_ACCESS_KEY = os.getenv("S3_SECRET_ACCESS_KEY", "")
