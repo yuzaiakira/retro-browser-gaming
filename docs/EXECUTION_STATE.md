@@ -22,8 +22,9 @@ Complete every mandatory P0 gate in `docs/PDR.md`; the release is **not complete
 
 - Do not use commercial ROMs or BIOS. Fixtures need source, license, build command and SHA-256.
 - `FrameAdapter` currently Blob-copies games into EmulatorJS; its 256 MiB protection remains until a compatible virtual filesystem is proven.
+- PS1 CUE companion loading is implemented and unit-tested. `Player` reads referenced OPFS tracks, rejects unsafe/missing/duplicate references, and the frame maps them through `EJS_externalFiles`; it is not gameplay evidence. PSn00bSDK `5d9aa2d3dfc7d6e51c2eb942ab4cdbae5571a40a` was inspected but its own legal-gray notice and absent MIPS toolchain prevent using it as a distributable fixture without further review.
 - Firefox/WebKit and physical-device results remain unverified unless executed and recorded.
 
 ## Evidence and next task
 
-Read `docs/acceptance-matrix.md` and `docs/test-evidence.md` before modifying status. Next actionable task: inspect the Player/frame adapter and core packages, then implement the PS1 multi-file bundle contract alongside a reproducible legal homebrew fixture build or record a concrete toolchain/asset blocker while continuing other independent acceptance tests.
+Read `docs/acceptance-matrix.md` and `docs/test-evidence.md` before modifying status. Next actionable task: obtain or build a cleanly licensed PS1 homebrew fixture with a compatible MIPS toolchain and prove PCSX ReARmed gameplay; meanwhile implement the next independent download fault case rather than waiting on that asset.

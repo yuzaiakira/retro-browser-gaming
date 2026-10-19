@@ -4,6 +4,7 @@ import { db, setting, setSetting } from "@/lib/db";
 import { assetFile } from "@/lib/storage";
 import { auditInstallation } from "./offline";
 import { createAdapter } from "@/emulators/registry";
+import { loadLaunchMedia } from "@/emulators/media";
 import type { EmulatorAdapter } from "@/emulators/contracts";
 import type { Installation } from "@/lib/types";
 import { defaultKeys, InputRouter } from "./input";
@@ -51,16 +52,14 @@ export default function Player({ id }: { id: string }) {
       setMessage("Starting the local runtime…");
       runtime = createAdapter(host.current!, item.release);
       adapter.current = runtime;
-      const source = item.manifest.assets.find(
-        (a) => a.filename === item.manifest.entryFile,
-      )!;
-      const file = await assetFile(source);
+      const media = await loadLaunchMedia(item.manifest, assetFile);
       const biosAsset = item.manifest.assets.find((a) => a.role === "bios");
       const bios = biosAsset ? await assetFile(biosAsset) : undefined;
-      await runtime.load(new File([file], source.filename), {
+      await runtime.load(media.entry, {
         core: item.manifest.core.code,
-        name: source.filename,
+        name: item.manifest.entryFile,
         bios,
+        companions: media.companions,
       });
       if (disposed) {
         runtime.dispose();

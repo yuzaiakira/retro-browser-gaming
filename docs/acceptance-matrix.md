@@ -20,7 +20,7 @@
 | OFF-002, OFF-003 | PASSED (HTML5) | Offline boot/save + three reloads in `PH-02/test-run.txt` |
 | OFF-004, OFF-005 | NOT_VERIFIED | Core eviction and SW update fault tests outstanding |
 | EMU-001 | NOT_VERIFIED | `PH-05/genesis-gameplay-20261019.md` proves real gameplay, command input, save/load, and post-load offline runtime; physical audio and installed-release restart evidence remain outstanding |
-| EMU-002 | BLOCKED_EXTERNAL_ASSET | Legal reviewed PS1 disc bundle plus multi-file adapter validation unavailable |
+| EMU-002 | BLOCKED_EXTERNAL_ASSET | CUE/BIN companion mapping and safety validation are unit-tested (`PH-05/ps1-multifile-adapter-20261019.md`); a legally reviewed bootable multi-track disc and real PCSX ReARmed gameplay run remain unavailable |
 | EMU-003, EMU-004 | BLOCKED_EXTERNAL_ASSET | Legal PSP fixture/threaded gameplay and large-file run unavailable |
 | EMU-005, EMU-006 | NOT_VERIFIED | Lifecycle stress and negative E2E outstanding |
 | CMP-001, CMP-002 | PASSED (unit) | `compatibility.test.ts` accurately blocks threads / limits unknown quota |
