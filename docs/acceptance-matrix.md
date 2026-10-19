@@ -9,9 +9,10 @@
 | CAT-001 | PASSED (HTML5) | `PH-02/test-run.txt`: catalog → download → install → play |
 | CAT-002 | NOT_VERIFIED | Error/empty visual E2E matrix remains |
 | DL-001 | PASSED (small asset) | Real HTTP 206 through authenticated S3 and the same-origin launcher gateway; browser install evidence in `PH-01/compose-20261019.md` |
-| DL-002, DL-006, DL-008 | NOT_VERIFIED | Multi-chunk truncation, browser-restart recovery, and crash-before-journal-commit remain outstanding |
+| DL-002, DL-008 | NOT_VERIFIED | Multi-chunk truncation and crash-before-journal-commit remain outstanding |
+| DL-006 | PASSED (100 MiB browser restart) | Browser process termination after two journaled OPFS chunks recovered in a new Chromium process without re-fetching those chunks (`PH-03/download-faults-20261019.md`) |
 | DL-003, DL-004 | PASSED (browser fault injection) | Real download worker rejects injected HTTP 200 and 416 without installing (`PH-03/download-faults-20261019.md`) |
-| DL-005 | PASSED (small asset) | A real worker retried an injected connection reset and verified the installed asset (`PH-03/download-faults-20261019.md`) |
+| DL-005 | PASSED (100 MiB) | A real worker retried an injected connection reset during a 100 MiB multi-range transfer, then recovered across browser restart and final SHA-256 verification (`PH-03/download-faults-20261019.md`) |
 | DL-007 | PASSED (small asset) | Two Chromium tabs contended for the real Web Lock; one writer installed and the other received `DOWNLOAD_BUSY_OTHER_TAB` |
 | DL-009, DL-011, DL-012, DL-013 | NOT_VERIFIED | Changed version, quota, cancel/delete, and 1 GiB bounded-memory acceptance remain outstanding |
 | DL-010 | PASSED (browser fault injection) | Altered bytes in a valid 206 fail final streaming SHA-256 and remain non-installed |

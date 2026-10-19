@@ -23,7 +23,7 @@ Date: 2026-10-19. The project is a working implementation with verified slices, 
 | 360 px responsive layout and keyboard focus | `docs/test-evidence/PH-02/test-run.txt`, `catalog-mobile.png` |
 | Actual legal Genesis ROM boot through vendored Genesis Plus GX/EmulatorJS | `docs/test-evidence/PH-05/test-run.txt`, `genesis-core-boot.png` |
 | Actual legal Genesis Breakout gameplay, left input, save/load and post-load offline execution | `docs/test-evidence/PH-05/genesis-gameplay-20261019.md`, `genesis-gameplay.png` |
-| Browser download fault handling | `docs/test-evidence/PH-03/download-faults-20261019.md`: retry, HTTP 200/416 rejection, SHA-256 rejection and two-tab Web Lock exclusion |
+| Browser download fault handling | `docs/test-evidence/PH-03/download-faults-20261019.md`: 100 MiB interruption plus browser restart recovery, HTTP 200/416 rejection, SHA-256 rejection and two-tab Web Lock exclusion |
 | Core package integrity | `scripts/verify-core-lock.py`, 47 files |
 | Native Docker Compose | `test-evidence/PH-01/compose-20261019.md`: PostgreSQL, SeaweedFS S3, Django and Next health checks; authenticated 1 MiB S3 Range probe; Chromium install/save/offline flow |
 
@@ -31,7 +31,7 @@ Date: 2026-10-19. The project is a working implementation with verified slices, 
 
 1. **G01 is passed.** Docker Compose now builds through the injected proxy without weakening TLS: the CA is a BuildKit secret and the wrapper dynamically maps the host proxy only for build networking. Native PostgreSQL, persistent S3-compatible storage, Django and Next.js passed health, authenticated Range, and Chromium E2E checks.
 2. **PS1 and PSP are not accepted.** No legally clean PS1 bundled-disc fixture with a verified compatible multi-file adapter has been completed. PSP requires a verified legal PBP/ISO bundle, real threaded browser gameplay, and the large-local-access test. These are P0 requirements, therefore their absence prevents COMPLETE.
-3. **Download recovery/performance remains partially unverified.** A real browser worker now passes retry, HTTP 200/416, SHA-256, and two-tab lock fault tests. The 100 MiB interrupted/reload test, crash-before-journal-commit, changed-manifest, quota failure, cancellation/deletion, and 1 GiB bounded-memory run are not passed.
+3. **Download recovery/performance remains partially unverified.** A real browser worker now passes a 100 MiB interrupted transfer with browser-restart recovery, HTTP 200/416, SHA-256, and two-tab lock fault tests. Crash-before-journal-commit, changed-manifest, quota failure, cancellation/deletion, and the 1 GiB bounded-memory run are not passed.
 4. **Offline coverage is partial.** HTML5 offline launch/save/reload is passed. Offline console-core launch and cache-eviction/SW-update fault cases are not passed.
 5. **No physical device/browser matrix is claimed.** Chromium headless was used; Firefox/WebKit, Android, iOS/Safari, gamepad hardware, and touch hardware are NOT_VERIFIED.
 6. **No remote CI run or production deployment occurred.** This is no longer needed for native Compose acceptance, but a remote production deployment has not occurred.

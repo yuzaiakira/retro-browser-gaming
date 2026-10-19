@@ -1,4 +1,8 @@
 const { chromium } = require('@playwright/test');
+const { createHash } = require('node:crypto');
+const { mkdtemp, rm } = require('node:fs/promises');
+const { tmpdir } = require('node:os');
+const { join } = require('node:path');
 
 const baseUrl = process.env.RETRO_TEST_BASE_URL || 'http://127.0.0.1:3000';
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
@@ -9,10 +13,11 @@ async function downloads(page) {
     return await new Promise((resolve, reject) => {
       request.onerror = () => reject(request.error);
       request.onsuccess = () => {
-        const transaction = request.result.transaction(['downloads', 'installations']);
+        const database = request.result;
+        const transaction = database.transaction(['downloads', 'installations']);
         const downloadRequest = transaction.objectStore('downloads').getAll();
         const installRequest = transaction.objectStore('installations').getAll();
-        transaction.oncomplete = () => resolve({ downloads: downloadRequest.result, installations: installRequest.result });
+        transaction.oncomplete = () => { const value = { downloads: downloadRequest.result, installations: installRequest.result }; database.close(); resolve(value); };
       };
     });
   });
@@ -30,10 +35,72 @@ async function trigger(page) {
 }
 
 async function expectFailure(page, error, state) {
-  await page.getByText(error, { exact: false }).waitFor({ timeout: 15000 });
-  const result = await downloads(page);
-  if (result.installations.length) throw new Error(`${error} marked a damaged download installed`);
-  if (result.downloads.length !== 1 || result.downloads[0].state !== state) throw new Error(`${error} recorded unexpected download state`);
+  await page.waitForFunction(async ({ expectedError, expectedState }) => {
+    const request = indexedDB.open('retro-library');
+    const current = await new Promise((resolve, reject) => {
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => {
+        const database = request.result;
+        const transaction = database.transaction(['downloads', 'installations']);
+        const download = transaction.objectStore('downloads').getAll();
+        const installations = transaction.objectStore('installations').getAll();
+        transaction.oncomplete = () => { const value = { download: download.result[0], installations: installations.result }; database.close(); resolve(value); };
+      };
+    });
+    return current.installations.length === 0 && current.download?.state === expectedState && String(current.download.error || '').includes(expectedError);
+  }, { expectedError: error, expectedState: state }, { timeout: 30000 });
+}
+
+function syntheticBytes(start, end) {
+  const body = Buffer.allocUnsafe(end - start + 1);
+  for (let index = 0; index < body.length; index += 1) body[index] = (start + index) % 251;
+  return body;
+}
+
+function syntheticHash(byteSize, chunkSize) {
+  const hash = createHash('sha256');
+  for (let start = 0; start < byteSize; start += chunkSize) {
+    hash.update(syntheticBytes(start, Math.min(byteSize - 1, start + chunkSize - 1)));
+  }
+  return hash.digest('hex');
+}
+
+function largeAsset() {
+  const byteSize = 100 * 1024 * 1024;
+  const chunkSize = 8 * 1024 * 1024;
+  return {
+    id: 'b4a2c856-bbd8-4334-9ae7-38d50c627a46',
+    role: 'html_bundle',
+    filename: 'interruption-fixture.bin',
+    url: '/dev-assets/b4a2c856-bbd8-4334-9ae7-38d50c627a46/',
+    byteSize,
+    sha256: syntheticHash(byteSize, chunkSize),
+    version: 'interruption-test-v1',
+    etag: 'interruption-test-v1',
+    rangeSupported: true,
+  };
+}
+
+async function routeLargeManifest(context, asset) {
+  await context.route('**/api/v1/releases/*/download-manifest/', async (route) => {
+    const upstream = await route.fetch();
+    const manifest = await upstream.json();
+    manifest.assets = [asset];
+    manifest.entryFile = asset.filename;
+    manifest.requiredFiles = [asset.filename];
+    await route.fulfill({ response: upstream, json: manifest });
+  });
+}
+
+function range(context, handler) {
+  return context.route('**/dev-assets/b4a2c856-bbd8-4334-9ae7-38d50c627a46/', async (route) => {
+    const header = route.request().headers().range;
+    const match = /^bytes=(\d+)-(\d+)$/.exec(header || '');
+    if (!match) throw new Error(`missing synthetic fixture Range header: ${header}`);
+    const start = Number(match[1]);
+    const end = Number(match[2]);
+    await handler(route, start, end);
+  });
 }
 
 async function run() {
@@ -128,6 +195,67 @@ async function run() {
       if (result.installations.length !== 1 || result.downloads.length !== 1 || result.downloads[0].state !== 'verified') throw new Error('two-tab download produced an invalid installation state');
       console.log('DOWNLOAD_TWO_TAB_LOCK_PASS');
       await context.close();
+    }
+
+    // This is an actual 100 MiB download through the browser worker. It sees
+    // a reset on its second range, persists the successful retry, then the
+    // browser process is terminated while requesting the third chunk. A fresh
+    // process must rehash those two OPFS chunks and fetch only the tail.
+    {
+      const asset = largeAsset();
+      const profile = await mkdtemp(join(tmpdir(), 'retro-download-restart-'));
+      let firstContext;
+      try {
+        firstContext = await chromium.launchPersistentContext(profile, { executablePath, headless: true, args: ['--no-sandbox'] });
+        await routeLargeManifest(firstContext, asset);
+        let requests = 0;
+        let thirdRequest;
+        const thirdRequested = new Promise((resolve) => { thirdRequest = resolve; });
+        await range(firstContext, async (route, start, end) => {
+          requests += 1;
+          if (requests === 2) return route.abort('connectionreset');
+          if (requests === 4) thirdRequest();
+          await route.fulfill({
+            status: 206,
+            headers: { 'Content-Range': `bytes ${start}-${end}/${asset.byteSize}`, 'Content-Length': String(end - start + 1), ETag: '"interruption-test-v1"' },
+            body: syntheticBytes(start, end),
+          });
+        });
+        const first = await gamePage(firstContext);
+        await trigger(first);
+        await thirdRequested;
+        const beforeRestart = await downloads(first);
+        if (beforeRestart.downloads[0]?.bytesVerified !== 16 * 1024 * 1024) throw new Error('successful retried chunks were not journaled before browser termination');
+        await firstContext.close();
+        firstContext = undefined;
+
+        const resumed = await chromium.launchPersistentContext(profile, { executablePath, headless: true, args: ['--no-sandbox'] });
+        try {
+          await routeLargeManifest(resumed, asset);
+          const resumedRanges = [];
+          await range(resumed, async (route, start, end) => {
+            resumedRanges.push(start);
+            await route.fulfill({
+              status: 206,
+              headers: { 'Content-Range': `bytes ${start}-${end}/${asset.byteSize}`, 'Content-Length': String(end - start + 1), ETag: '"interruption-test-v1"' },
+              body: syntheticBytes(start, end),
+            });
+          });
+          const page = await resumed.newPage();
+          await page.goto(`${baseUrl}/downloads`);
+          await page.getByRole('button', { name: 'Resume / retry' }).click();
+          await page.getByText('Ready offline. Your game is stored on this device.').waitFor({ timeout: 120000 });
+          const result = await downloads(page);
+          if (result.installations.length !== 1 || result.downloads[0]?.state !== 'verified') throw new Error('100 MiB recovery did not produce a verified installation');
+          if (resumedRanges.length !== 11 || resumedRanges.some((start) => start < 16 * 1024 * 1024)) throw new Error(`browser restart re-fetched journaled bytes: ${resumedRanges.join(',')}`);
+          console.log('DOWNLOAD_100M_INTERRUPTION_AND_BROWSER_RESTART_PASS');
+        } finally {
+          await resumed.close();
+        }
+      } finally {
+        if (firstContext) await firstContext.close();
+        await rm(profile, { recursive: true, force: true });
+      }
     }
   } finally {
     await browser.close();
