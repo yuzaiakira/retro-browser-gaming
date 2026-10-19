@@ -1,0 +1,18 @@
+HTTP/1.1 200 OK
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Embedder-Policy: require-corp
+Cross-Origin-Resource-Policy: same-origin
+X-Content-Type-Options: nosniff
+Referrer-Policy: same-origin
+Permissions-Policy: camera=(), microphone=(), geolocation=()
+Cache-Control: public, max-age=31536000, immutable
+Accept-Ranges: bytes
+Last-Modified: Sun, 18 Oct 2026 19:38:04 GMT
+ETag: W/"479c-1a15085700b"
+Content-Type: application/javascript; charset=UTF-8
+Content-Length: 18332
+Vary: Accept-Encoding
+Date: Sun, 18 Oct 2026 19:38:05 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+

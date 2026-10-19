@@ -1,0 +1,186 @@
+"use client";
+import { useEffect, useState } from "react";
+import { db, setting, setSetting } from "@/lib/db";
+import { commands, defaultKeys } from "./input";
+import { benchmark, inspectDevice, type Device } from "./compatibility";
+import { candidates } from "@/emulators/registry";
+export default function Settings({
+  diagnostics = false,
+}: {
+  diagnostics?: boolean;
+}) {
+  const [device, setDevice] = useState<Device>();
+  const [keys, setKeys] = useState(defaultKeys);
+  const [command, setCommand] = useState(0);
+  const [message, setMessage] = useState("");
+  const [benchmarkResult, setBenchmarkResult] = useState(
+    "Not run. This optional estimate does not predict game FPS.",
+  );
+  useEffect(() => {
+    inspectDevice().then(setDevice);
+    setting("keymap", defaultKeys).then(setKeys);
+  }, []);
+  async function persist() {
+    try {
+      setMessage(
+        (await navigator.storage.persist())
+          ? "Persistent storage granted."
+          : "The browser declined persistent storage; keep save backups.",
+      );
+    } catch (e) {
+      setMessage(String(e));
+    }
+  }
+  return (
+    <section>
+      <span className="eyebrow">MAKE IT YOURS</span>
+      <h1>{diagnostics ? "Device diagnostics" : "Settings & controls"}</h1>
+      <div className="settings-grid">
+        <div className="panel">
+          <h2>On-device storage</h2>
+          <p>
+            {device?.quota
+              ? `${((device.usage ?? 0) / 1048576).toFixed(1)} MiB used of ${(device.quota / 1073741824).toFixed(1)} GiB estimated quota`
+              : "Storage quota unavailable."}
+          </p>
+          <button onClick={persist}>Request persistent storage</button>
+          <p role="status">{message}</p>
+          <p>
+            Browser cleanup can remove local data. Export important saves.
+            Downloads resume when you return; they do not continue with the
+            browser fully closed.
+          </p>
+        </div>
+        <div className="panel">
+          <h2>Keyboard mapping</h2>
+          <label>
+            Action
+            <select
+              value={command}
+              onChange={(e) => setCommand(+e.target.value)}
+            >
+              {Object.entries(commands).map(([name, n]) => (
+                <option key={name} value={n}>
+                  {name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Press a key
+            <input
+              readOnly
+              placeholder="Focus here and press a key"
+              onKeyDown={(e) => {
+                e.preventDefault();
+                const next = { ...keys, [e.code]: command };
+                setKeys(next);
+                setSetting("keymap", next);
+              }}
+            />
+          </label>
+          <div className="keymap">
+            {Object.entries(keys).map(([key, n]) => (
+              <span key={key}>
+                <kbd>{key}</kbd>{" "}
+                {Object.keys(commands).find((k) => commands[k] === n)}{" "}
+                <button
+                  aria-label={`Remove ${key}`}
+                  className="text-button"
+                  onClick={() => {
+                    const next = { ...keys };
+                    delete next[key];
+                    setKeys(next);
+                    setSetting("keymap", next);
+                  }}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+          <button
+            className="secondary"
+            onClick={() => {
+              setKeys(defaultKeys);
+              setSetting("keymap", defaultKeys);
+            }}
+          >
+            Restore keyboard defaults
+          </button>
+        </div>
+        <div className="panel">
+          <h2>Device capabilities</h2>
+          {device && (
+            <dl>
+              {Object.entries(device)
+                .filter(
+                  ([key]) => !["userAgent", "quota", "usage"].includes(key),
+                )
+                .map(([key, value]) => (
+                  <div key={key}>
+                    <dt>{key}</dt>
+                    <dd>{value ? "Available" : "Unavailable"}</dd>
+                  </div>
+                ))}
+            </dl>
+          )}
+          <p className="small">{device?.userAgent}</p>
+        </div>
+        <div className="panel">
+          <h2>Optional performance check</h2>
+          <p>{benchmarkResult}</p>
+          <button
+            onClick={async () => {
+              try {
+                const result = await benchmark();
+                await setSetting("benchmark", result);
+                setBenchmarkResult(
+                  `${result.iterations.toLocaleString()} integer operations in ${result.milliseconds.toFixed(0)} ms. Game performance still requires an actual play test.`,
+                );
+              } catch (e) {
+                setBenchmarkResult(String(e));
+              }
+            }}
+          >
+            Run 250 ms worker benchmark
+          </button>
+          <p>Skipping this check does not block play.</p>
+        </div>
+      </div>
+      <div className="panel">
+        <h2>Save management</h2>
+        <p>
+          Deleting a game does not delete saves. This action explicitly deletes
+          all local save states and backups.
+        </p>
+        <button
+          className="danger"
+          onClick={async () => {
+            if (confirm("Permanently delete all save states and backups?")) {
+              await (await db()).clear("saves");
+              setMessage("All save states deleted.");
+            }
+          }}
+        >
+          Delete all saves…
+        </button>
+      </div>
+      <details className="panel">
+        <summary>Expansion & experimental systems</summary>
+        <p>
+          These are research candidates. They cannot be launched as supported
+          systems.
+        </p>
+        <div className="candidate-grid">
+          {candidates.map((c) => (
+            <span key={c.id}>
+              {c.name}
+              <small>RESEARCH</small>
+            </span>
+          ))}
+        </div>
+      </details>
+    </section>
+  );
+}

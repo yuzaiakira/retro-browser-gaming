@@ -1,0 +1,1 @@
+{"status": "PASS", "transport": "real HTTP socket; local disk; SQLite", "checks": ["API-001", "API-003", "API-004 storage/DB ready", "DL-001 server ranges only", "DL-004 server 416 only", "SEC-002 HTTP headers only"], "verifiedBytes": 2955, "sha256": "f59132561856d5a3f4620c6a4fd96a01307edfb89b20025abc6ee1cf68cc3c79", "seedRuns": 2}

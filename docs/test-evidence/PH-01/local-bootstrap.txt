@@ -1,0 +1,6 @@
+Operations to perform:
+  Apply all migrations: admin, auth, catalog, contenttypes, sessions
+Running migrations:
+  Applying catalog.0002_alter_gameasset_object_key... OK
+{"gameId": "50ed10d3-5666-4279-85ed-37393038eac0", "releaseId": "25bc8aa6-cf25-49ff-ab5d-bc1d911c8312", "assetCount": 1, "dryRun": false}
+System check identified no issues (0 silenced).

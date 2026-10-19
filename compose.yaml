@@ -1,0 +1,63 @@
+services:
+  db:
+    image: postgres:17.6-bookworm
+    env_file: .env
+    volumes: ["postgres-data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  object-store:
+    build:
+      context: .
+      dockerfile: infra/docker/object-store.Dockerfile
+    environment:
+      MINIO_ROOT_USER: ${S3_ACCESS_KEY_ID:?Run scripts/init-env.py}
+      MINIO_ROOT_PASSWORD: ${S3_SECRET_ACCESS_KEY:?Run scripts/init-env.py}
+    command: ["server", "/data", "--address", ":9000"]
+    ports: ["127.0.0.1:9000:9000"]
+    volumes: ["object-data:/data"]
+  api:
+    build:
+      context: .
+      dockerfile: infra/docker/api.Dockerfile
+    env_file: .env
+    depends_on:
+      db: {condition: service_healthy}
+      object-store: {condition: service_started}
+    command: ["sh", "-c", "python manage.py migrate && python manage.py init_storage && python manage.py seed_demo --safe-assets-only && python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2"]
+    ports: ["127.0.0.1:8000:8000"]
+    volumes: ["api-static:/app/staticfiles"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/ready', timeout=5)"]
+      interval: 10s
+      timeout: 6s
+      retries: 20
+  web:
+    build:
+      context: .
+      dockerfile: infra/docker/web.Dockerfile
+    environment:
+      API_INTERNAL_URL: http://api:8000
+      NODE_ENV: production
+    depends_on:
+      api: {condition: service_healthy}
+    ports: ["127.0.0.1:3000:3000"]
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/').then(r => { if (!r.ok) process.exit(1) })"]
+      interval: 10s
+      timeout: 6s
+      retries: 20
+  admin-static:
+    image: nginx:1.28.0-alpine
+    profiles: ["admin"]
+    volumes:
+      - api-static:/usr/share/nginx/html/static:ro
+      - ./infra/reverse-proxy/local.conf:/etc/nginx/conf.d/default.conf:ro
+    ports: ["127.0.0.1:8080:8080"]
+    depends_on: [api]
+volumes:
+  postgres-data:
+  object-data:
+  api-static:

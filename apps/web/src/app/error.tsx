@@ -1,0 +1,1 @@
+"use client";export default function ErrorPage({reset}:{reset:()=>void}){return <main><h1>Something interrupted the arcade.</h1><p>Your saved games are kept separately.</p><button onClick={reset}>Try again</button><a href="/library">Open library</a></main>}

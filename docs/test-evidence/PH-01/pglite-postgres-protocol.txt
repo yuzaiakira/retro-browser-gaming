@@ -1,0 +1,6 @@
+Operations to perform:
+  Apply all migrations: admin, auth, catalog, contenttypes, sessions
+Running migrations:
+  No migrations to apply.
+{"gameId": "df0fdec3-9d4c-4462-8fa4-63202b569228", "releaseId": "1d506c61-89ec-4fd2-b1d1-5c0505db9f74", "assetCount": 1, "dryRun": false}
+System check identified no issues (0 silenced).

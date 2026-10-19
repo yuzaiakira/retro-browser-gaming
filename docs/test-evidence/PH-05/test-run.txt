@@ -1,0 +1,4 @@
+GENESIS_CORE_READY {"saveState":true,"audio":true,"analog":false}
+
+2026-10-19 rerun: `CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/core-smoke.cjs`
+System Chromium 154.0.8037.57: PASS — the vendored Genesis Plus GX core reached `onGameStart` with the MIT fixture. This remains boot evidence only; it is not gameplay or physical-controller evidence.

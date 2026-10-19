@@ -1,0 +1,12 @@
+// Adapter bridge pinned to EmulatorJS e150dc0491ae747028919fb82d6598954976ede6.
+// Internal methods are isolated here, audited against the vendored source and runtime-tested.
+let session,started=false;const urls=[];const reply=(data)=>parent.postMessage({...data,session},location.origin);
+addEventListener('error',e=>reply({type:'error',error:e.message}));
+addEventListener('message',async event=>{if(event.source!==parent||event.origin!==location.origin)return;const d=event.data;
+ if(d.type==='init'&&!session){session=d.session;const url=URL.createObjectURL(d.file);urls.push(url);window.EJS_player='#game';window.EJS_core=d.core;window.EJS_gameUrl=url;window.EJS_gameName=d.name;window.EJS_pathtodata='/cores/ejs-4.2.3/';window.EJS_DEBUG_XX=true;window.EJS_startOnLoaded=true;window.EJS_threads=d.core==='ppsspp';window.EJS_disableDatabases=true;window.EJS_disableLocalStorage=true;window.EJS_disableAutoLang=true;window.EJS_language='en-US';window.EJS_volume=.4;window.EJS_color='#9885f8';window.EJS_backgroundColor='#10131d';window.EJS_defaultOptions={webgl2Enabled:'enabled'};window.EJS_Buttons={settings:{visible:false},netplay:{visible:false},saveState:{visible:false},loadState:{visible:false},saveSavFiles:{visible:false},loadSavFiles:{visible:false}};
+ if(d.bios){window.EJS_biosUrl=URL.createObjectURL(d.bios);urls.push(window.EJS_biosUrl);}window.EJS_onGameStart=()=>{started=true;const gm=window.EJS_emulator.gameManager;reply({type:'ready',capabilities:{saveState:!!gm.functions.supportsStates(),audio:true,analog:d.core==='ppsspp'||d.core==='pcsx_rearmed'}});};const script=document.createElement('script');script.src='/cores/ejs-4.2.3/loader.js';script.onerror=()=>reply({type:'error',error:'CORE_LOADER_FAILED'});document.body.append(script);return;}
+ if(d.session!==session||!started)return;const e=window.EJS_emulator,g=e.gameManager;
+ if(d.type==='input'){g.simulateInput(0,d.command,d.value);return;}if(d.type!=='command')return;
+ try{let value=null;switch(d.method){case'start':case'resume':e.play();break;case'pause':e.pause();break;case'reset':g.restart();break;case'volume':e.setVolume(Math.min(1,Math.max(0,d.value)));break;case'save':value=g.getState();break;case'load':g.loadState(new Uint8Array(d.value));break;default:throw new Error('UNSUPPORTED_OPERATION');}reply({type:'reply',id:d.id,value});}catch(error){reply({type:'reply',id:d.id,error:String(error)});}
+});
+addEventListener('pagehide',()=>{for(const url of urls)URL.revokeObjectURL(url);});

@@ -1,0 +1,1 @@
+self.onmessage=()=>{const start=performance.now();let n=0,acc=0;while(performance.now()-start<250){for(let i=0;i<10000;i++)acc=Math.imul(acc+1,1664525)+1013904223;n+=10000;}self.postMessage({milliseconds:performance.now()-start,iterations:n,checksum:acc});};export {};

@@ -1,0 +1,58 @@
+name: Retro browser gaming verification
+on: [push, pull_request]
+jobs:
+  backend:
+    runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgres:17.6-bookworm
+        env:
+          POSTGRES_PASSWORD: ci-only
+          POSTGRES_USER: retro
+          POSTGRES_DB: retro
+        ports: ['5432:5432']
+        options: --health-cmd "pg_isready -U retro" --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m venv .venv
+      - run: .venv/bin/pip install --require-hashes -r apps/api/requirements-dev.lock
+      - run: bash scripts/test-backend.sh
+        env:
+          TEST_DATABASE_URL: postgresql://retro:ci-only@localhost:5432/retro
+      - run: .venv/bin/python scripts/check-migrations.py
+  contracts:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm ci && npm run generate && npm run typecheck && git diff --exit-code
+        working-directory: packages/contracts
+  frontend-quality:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '24'}
+      - run: npm ci
+        working-directory: apps/web
+      - run: npm test && npm run lint && npm run typecheck && npm run build
+        working-directory: apps/web
+      - run: python3 scripts/verify-core-lock.py
+  browser-html5:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: actions/setup-node@v4
+        with: {node-version: '24'}
+      - run: python -m venv .venv && .venv/bin/pip install --require-hashes -r apps/api/requirements-dev.lock
+      - run: npm ci && npm run build && npx playwright install --with-deps chromium
+        working-directory: apps/web
+      - run: ./scripts/browser-smoke.sh
+      - run: GENESIS_FIXTURE=mit-genesis-pong.bin node tests/core-smoke.cjs
+        working-directory: apps/web
+# This workflow is supplied but has not been run remotely. It is not a complete PDR release gate.

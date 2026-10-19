@@ -1,0 +1,699 @@
+openapi: 3.0.3
+info:
+  title: Retro Browser Gaming API
+  version: 1.0.0
+paths:
+  /api/v1/compatibility/:
+    get:
+      operationId: api_v1_compatibility_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCompatibilityList'
+          description: ''
+  /api/v1/compatibility/{id}/:
+    get:
+      operationId: api_v1_compatibility_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this compatibility report.
+        required: true
+      tags:
+      - api
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Compatibility'
+          description: ''
+  /api/v1/consoles/:
+    get:
+      operationId: api_v1_consoles_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedConsoleList'
+          description: ''
+  /api/v1/consoles/{id}/:
+    get:
+      operationId: api_v1_consoles_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this console.
+        required: true
+      tags:
+      - api
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Console'
+          description: ''
+  /api/v1/emulators/:
+    get:
+      operationId: api_v1_emulators_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCoreList'
+          description: ''
+  /api/v1/emulators/{id}/:
+    get:
+      operationId: api_v1_emulators_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this emulator core.
+        required: true
+      tags:
+      - api
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core'
+          description: ''
+  /api/v1/games/:
+    get:
+      operationId: api_v1_games_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedGameList'
+          description: ''
+  /api/v1/games/{slug}/:
+    get:
+      operationId: api_v1_games_retrieve
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+          description: ''
+  /api/v1/releases/{id}/:
+    get:
+      operationId: api_v1_releases_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this game release.
+        required: true
+      tags:
+      - api
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Release'
+          description: ''
+  /api/v1/releases/{id}/download-manifest/:
+    get:
+      operationId: api_v1_releases_download_manifest_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this game release.
+        required: true
+      tags:
+      - api
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manifest'
+          description: ''
+  /api/v1/releases/{id}/launch-config/:
+    get:
+      operationId: api_v1_releases_launch_config_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this game release.
+        required: true
+      tags:
+      - api
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Launch'
+          description: ''
+  /health/live:
+    get:
+      operationId: health_live_retrieve
+      tags:
+      - health
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+          description: ''
+  /health/ready:
+    get:
+      operationId: health_ready_retrieve
+      tags:
+      - health
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+          description: ''
+components:
+  schemas:
+    AvailabilityStatus:
+      enum:
+      - available
+      - unsupported
+      - research
+      type: string
+      description: |-
+        * `available` - available
+        * `unsupported` - unsupported
+        * `research` - research
+    Compatibility:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        release:
+          type: string
+          format: uuid
+        core:
+          type: string
+          format: uuid
+        core_version:
+          type: string
+          maxLength: 80
+        browser_family:
+          type: string
+          maxLength: 80
+        os_family:
+          type: string
+          maxLength: 80
+        device_class:
+          type: string
+          maxLength: 80
+        status:
+          $ref: '#/components/schemas/CompatibilityStatus'
+        evidence_link:
+          type: string
+          format: uri
+          maxLength: 200
+        fps_notes:
+          type: string
+        tested_at:
+          type: string
+          format: date-time
+      required:
+      - core
+      - core_version
+      - evidence_link
+      - id
+      - release
+    CompatibilityStatus:
+      enum:
+      - compatible
+      - limited
+      - unsupported
+      - unknown
+      type: string
+      description: |-
+        * `compatible` - compatible
+        * `limited` - limited
+        * `unsupported` - unsupported
+        * `unknown` - unknown
+    Console:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        slug:
+          type: string
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        name:
+          type: string
+          maxLength: 100
+        manufacturer:
+          type: string
+          maxLength: 100
+        generation:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          nullable: true
+        status:
+          $ref: '#/components/schemas/AvailabilityStatus'
+      required:
+      - id
+      - name
+      - slug
+    Core:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        code:
+          type: string
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        version:
+          type: string
+          maxLength: 80
+        status:
+          $ref: '#/components/schemas/AvailabilityStatus'
+        runtime_type:
+          $ref: '#/components/schemas/RuntimeTypeEnum'
+        min_capabilities: {}
+        supported_extensions: {}
+        licensed_asset_manifest: {}
+      required:
+      - code
+      - id
+      - runtime_type
+      - version
+    CoreIdentity:
+      type: object
+      properties:
+        code:
+          type: string
+        version:
+          type: string
+      required:
+      - code
+      - version
+    Game:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        slug:
+          type: string
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        title:
+          type: string
+          maxLength: 180
+        description:
+          type: string
+        genre:
+          type: string
+          maxLength: 80
+        published:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        releases:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+          readOnly: true
+      required:
+      - created_at
+      - description
+      - genre
+      - id
+      - releases
+      - slug
+      - title
+      - updated_at
+    Health:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+      - status
+    Launch:
+      type: object
+      properties:
+        releaseId:
+          type: string
+          format: uuid
+        core:
+          $ref: '#/components/schemas/Core'
+        requiredBios:
+          type: array
+          items:
+            type: string
+        entryFile:
+          type: string
+        requiredFiles:
+          type: array
+          items:
+            type: string
+        display: {}
+        audio: {}
+        controls: {}
+        verifiedStatus:
+          type: string
+      required:
+      - audio
+      - controls
+      - core
+      - display
+      - entryFile
+      - releaseId
+      - requiredBios
+      - requiredFiles
+      - verifiedStatus
+    Manifest:
+      type: object
+      properties:
+        manifestVersion:
+          type: integer
+        releaseId:
+          type: string
+          format: uuid
+        revision:
+          type: string
+        core:
+          $ref: '#/components/schemas/CoreIdentity'
+        assets:
+          type: array
+          items:
+            $ref: '#/components/schemas/ManifestAsset'
+        requiredFiles:
+          type: array
+          items:
+            type: string
+        entryFile:
+          type: string
+        offlineRequirements:
+          type: array
+          items:
+            type: string
+        requiredCapabilities:
+          type: array
+          items:
+            type: string
+      required:
+      - assets
+      - core
+      - entryFile
+      - manifestVersion
+      - offlineRequirements
+      - releaseId
+      - requiredCapabilities
+      - requiredFiles
+      - revision
+    ManifestAsset:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        role:
+          type: string
+        filename:
+          type: string
+        url:
+          type: string
+          format: uri
+        byteSize:
+          type: integer
+        sha256:
+          type: string
+        version:
+          type: string
+        etag:
+          type: string
+        rangeSupported:
+          type: boolean
+        licenseEvidenceId:
+          type: string
+          format: uuid
+      required:
+      - byteSize
+      - etag
+      - filename
+      - id
+      - licenseEvidenceId
+      - rangeSupported
+      - role
+      - sha256
+      - url
+      - version
+    PaginatedCompatibilityList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Compatibility'
+    PaginatedConsoleList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Console'
+    PaginatedCoreList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Core'
+    PaginatedGameList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Game'
+    Release:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        console:
+          $ref: '#/components/schemas/Console'
+        region:
+          type: string
+          maxLength: 30
+        revision:
+          type: string
+          maxLength: 80
+        recommended_core:
+          $ref: '#/components/schemas/Core'
+        status:
+          $ref: '#/components/schemas/ReleaseStatus'
+        compatibility_note:
+          type: string
+      required:
+      - console
+      - id
+      - recommended_core
+      - revision
+    ReleaseStatus:
+      enum:
+      - draft
+      - ready
+      - experimental
+      - unsupported
+      type: string
+      description: |-
+        * `draft` - draft
+        * `ready` - ready
+        * `experimental` - experimental
+        * `unsupported` - unsupported
+    RuntimeTypeEnum:
+      enum:
+      - native
+      - wasm
+      type: string
+      description: |-
+        * `native` - native
+        * `wasm` - wasm

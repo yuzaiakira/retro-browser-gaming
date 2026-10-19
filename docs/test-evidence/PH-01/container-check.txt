@@ -1,0 +1,6 @@
+Command: command -v docker; test -S /var/run/docker.sock
+Exit: 1
+Stdout: 
+Stderr: 
+Docker executable and daemon socket absent. Container gate NOT_VERIFIED.
+Alternative pgserver 0.1.4 attempted during discovery; failed useradd (exit 1). No permissions bypass attempted.
