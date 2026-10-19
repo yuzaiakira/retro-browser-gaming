@@ -8,16 +8,15 @@ Date: 2026-10-19. The project is a working implementation with verified slices, 
 - Next.js App Router application: discovery, filters, details, library, downloads, settings, diagnostics, player, offline fallback, errors and responsive retro UI.
 - Dedicated-worker Range downloader with Web Locks, OPFS synchronous writes, IndexedDB chunk journal, retry/backoff, ETag/content-range validation, full streaming SHA-256 verification, pause/delete/recovery states and quota checks.
 - Service-worker shell/core cache, installation audit, offline library/player flow, HTML5 iframe isolation, local saves/export/import/autosave, keyboard/gamepad router and configurable touch layout.
-- Pinned EmulatorJS 4.2.3 runtime, Genesis/SMS/PS1/PSP adapter registry, thread/isolation gate for PSP, 47-byte core lock verification, and a real Chromium Genesis core boot test.
+- Pinned EmulatorJS 4.2.3 runtime, Genesis/SMS/PS1/PSP adapter registry, thread/isolation gate for PSP, 47-file core lock verification, and a real Chromium Genesis gameplay test.
 - Docker Compose now includes PostgreSQL, persistent S3-compatible SeaweedFS storage, API and Next standalone web image. The native stack has been built and exercised successfully.
 
 ## Verified evidence
 
 | Result | Evidence |
 |---|---|
-| 27 Django integration/security/range tests | `docs/test-evidence/PH-01/` and `apps/api/tests/test_catalog.py` |
-| Real Garage 2.4.1 S3 PUT, metadata, signed Range 206, CORS GET/preflight | command output recorded in `docs/test-evidence/PH-01/s3-garage.md`; provider proof in continuation environment |
-| Django migration/seed over PostgreSQL protocol using PGlite | `docs/test-evidence/PH-01/pglite-postgres-protocol.txt` |
+| 28 Django integration/security/range tests | `docs/test-evidence.md` and `apps/api/tests/test_catalog.py` |
+| Native PostgreSQL and SeaweedFS S3-compatible storage | `docs/test-evidence/PH-01/compose-20261019.md`: migrations, health, authenticated Range and browser flow |
 | Frontend lint, typecheck, build, 5 unit tests | commands in README; latest run output in the session evidence |
 | Catalog → actual range download → OPFS/IndexedDB → HTML5 launch/save/load → offline library → three offline player reloads | `docs/test-evidence/PH-02/test-run.txt`, screenshots |
 | 360 px responsive layout and keyboard focus | `docs/test-evidence/PH-02/test-run.txt`, `catalog-mobile.png` |
