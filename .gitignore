@@ -11,3 +11,10 @@ node_modules/
 .runtime/
 staticfiles/
 *.log
+fixtures/*/build/
+fixtures/*/*.o
+fixtures/*/src/*.o
+fixtures/*/*.elf
+fixtures/*/EBOOT.PBP
+fixtures/*/PARAM.SFO
+fixtures/*/assets/tone.wav

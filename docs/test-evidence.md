@@ -13,10 +13,12 @@
 | Standalone static file serving | PASS | `test-evidence/PH-02/standalone-static.txt` |
 | Core byte lock | PASS, 47 files | `scripts/verify-core-lock.py` |
 | Genesis real gameplay + seekable load | PASS, scoped | `test-evidence/PH-05/genesis-gameplay-20261019.md`, `bounded-memory-20261020.md` |
+| PS1 real gameplay + multi-FILE CUE companions | PASS, scoped | `test-evidence/PH-05/ps1-gameplay-20261020.md` |
+| PSP threaded gameplay + SAB/COOP/COEP | PASS, scoped | `test-evidence/PH-05/psp-gameplay-20261020.md` |
 | Bounded-memory media slices | PASS, scoped | `test-evidence/PH-05/bounded-memory-20261020.md`, `apps/web/tests/seekable-media.cjs` |
 | Browser download faults | PASS | `test-evidence/PH-03/download-faults-20261020.md`: truncation, crash-before-journal, identity, quota, cancel/delete, 100 MiB restart, 1 GiB bounded memory |
 | Client secret scan / Compose YAML parse | PASS, scoped | No secret variable identifiers in web sources/build; required service graph parses |
 | Docker Compose / native PostgreSQL | PASS | `test-evidence/PH-01/compose-20261019.md`; healthy re-check 2026-10-20 |
-| PS1 / PSP / physical devices | NOT_VERIFIED or BLOCKED_EXTERNAL_ASSET | `docs/acceptance-matrix.md` |
+| EMU-004 large-ISO VFS / physical devices | NOT_VERIFIED | `docs/acceptance-matrix.md` |
 
 The browser evidence uses Playwright Chromium (and Firefox for catalog smoke) with actual OPFS, IndexedDB, worker, service worker and emulator core when relevant. Network interception may inject faults but does not replace the component under test.
