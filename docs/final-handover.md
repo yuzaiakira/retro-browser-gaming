@@ -1,19 +1,19 @@
 # Implementation handover — RELEASE CANDIDATE / NOT COMPLETE
 
-Date: 2026-10-20. Local HEAD includes automated P0 closure plus Android USB physical PH-08 evidence. **Do not declare COMPLETE** until AUD-001 (human listen), physical gamepad, and real iOS Safari pass.
+Date: 2026-10-20. Local HEAD includes automated P0 closure plus Android USB physical PH-08 evidence including human-heard AUD-001. **Do not declare COMPLETE** until physical gamepad and real iOS Safari pass.
 
 ## Verdict
 
 **RELEASE CANDIDATE / NOT COMPLETE**
 
-Software-side mandatory automated gates and **Android Chrome physical** multitouch/layout/blur/fullscreen/orientation plus reverse-removed offline cold-start are evidenced (`PH-08/android-physical-*`, `android-offline-cold-*`). Remaining external blockers: human-heard audio (AUD-001), physical gamepad, real iOS Safari.
+Software-side mandatory automated gates and **Android Chrome physical** multitouch/layout/blur/fullscreen/orientation, reverse-removed offline cold-start, and **AUD-001** (human-heard Genesis Breakout) are evidenced (`PH-08/android-physical-*`, `android-offline-cold-*`, `aud001-human-listen-20261020.md`). Remaining external blockers: physical gamepad, real iOS Safari.
 
 ## What is implemented
 
 - Django/DRF catalog, Admin, immutable release/asset identity, rights validation, manifest API, local range transport, S3 adapter, importer and health endpoints.
 - Next.js App Router application: discovery, filters, details, library, downloads, settings, diagnostics, player, offline fallback, errors and responsive retro UI.
 - Dedicated-worker Range downloader with Web Locks, OPFS synchronous writes, IndexedDB chunk journal, retry/backoff, ETag/content-range validation, full streaming SHA-256 verification, pause/delete/recovery states and quota checks.
-- Service-worker shell/core cache (`retro-shell-v3`), installation audit, offline library/player flow, HTML5 iframe isolation (SEC-004), local saves/export/import/autosave, keyboard/gamepad router and configurable touch layout.
+- Service-worker shell/core cache (`retro-shell-v4`), installation audit, offline library/player flow, HTML5 iframe isolation (SEC-004), local saves/export/import/autosave, keyboard/gamepad router and configurable touch layout.
 - Pinned EmulatorJS 4.2.3, Genesis/SMS/PS1/PSP adapters, BlobFS on-demand media, native Compose (PostgreSQL + SeaweedFS + API + Next).
 
 ## Verified evidence (selected)
@@ -39,7 +39,6 @@ Playwright WebKit reports `navigator.storage` undefined → OPFS unavailable →
 | Blocker | Dependency | PH-08 IDs |
 |---|---|---|
 | Physical gamepad | USB/BT controller + Chromium | IN-002-P, IN-002-D |
-| Human-heard audio | Listener on phone speakers (or host USB audio) | AUD-001 |
 | iOS Safari | Real iPhone/iPad or authorized farm | IOS-001 |
 
 Android IN-003-P / IN-004-P / IN-005-P / UX-FS / UX-OR: **PASSED** on USB device. Prep: `PH-08/physical-env-prep.md`, `scripts/physical-android-forward.sh`, `apps/web/tests/android-physical.cjs`.

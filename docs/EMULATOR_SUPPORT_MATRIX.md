@@ -6,20 +6,20 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 
 | Family | System | Core | Play | Status | Online | Offline | Install | Saves | Input | Browser | Priority | Limitations / evidence / next action |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Browser | HTML5 / JavaScript | Native isolated iframe | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/V*/V | Chromium + Firefox + Android Chrome; WebKit catalog | P0 | SEC-004 OK; Playwright WebKit has no OPFS so install stays disabled; Android touch/offline physical PASSED (`PH-08/android-physical-*`, `android-offline-cold-*`); iOS/gamepad/AUD-001 open. |
+| Browser | HTML5 / JavaScript | Native isolated iframe | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/V*/V | Chromium + Firefox + Android Chrome; WebKit catalog | P0 | SEC-004 OK; Playwright WebKit has no OPFS so install stays disabled; Android touch/offline/AUD-001 PASSED (`PH-08`); iOS/gamepad open. |
 | Browser | Flash / Ruffle | Ruffle candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Select a pinned browser build and legal SWF fixture. |
 | Browser | WASM game ports | Per-port native runtime | [ ] | PLANNED | — | — | — | — | — | — | P1 | Require license review and iframe adapter. |
 | Classic Mobile Phones / Java ME | J2ME / MIDP 1.0–2.0 | No selected compliant runtime | [ ] | BLOCKED | — | — | — | — | — | — | P1 | `PH-06/j2me-runtime-assessment-20261020.md`; FreeJ2ME-Web requires proprietary online CheerpJ; PluotSorbet needs a current offline/runtime-asset validation. |
 | Sega | SG-1000 | SMS Plus candidate | [ ] | PLANNED | — | — | — | I | I/I/I | — | P1 | Add legal fixture and adapter/core validation. |
 | Sega | Master System | SMS Plus | [ ] | IMPLEMENTED_UNVERIFIED | I | — | I | I | I/I/I | — | P0 | Adapter exists; legal ROM gameplay/offline evidence needed. |
 | Sega | Game Gear | Genesis Plus GX | [ ] | IMPLEMENTED_UNVERIFIED | I | — | I | I | I/I/I | — | P0 | Adapter exists; legal ROM gameplay/offline evidence needed. |
-| Sega | Mega Drive / Genesis | Genesis Plus GX / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium 154 + Android Chrome 155 | P0 | Desktop + Android physical install/play (`PH-08/android-physical-20261020.txt`); offline reverse-removed library; **AUD-001 human listen** and physical gamepad remain open. |
+| Sega | Mega Drive / Genesis | Genesis Plus GX / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium 154 + Android Chrome 155 | P0 | Desktop + Android physical install/play + **AUD-001 human-heard** (`PH-08/aud001-human-listen-20261020.md`); `segaMD` control scheme forced in `frame.js`; physical gamepad remains open. |
 | Sega | Sega CD / Mega-CD | PicoDrive candidate | [ ] | PLANNED | — | — | — | — | — | — | P1 | Multi-file disc and BIOS/legal asset review required. |
 | Sega | Sega 32X | PicoDrive candidate | [ ] | PLANNED | — | — | — | — | — | — | P1 | Legal fixture and core validation required. |
 | Sega | Saturn | Mednafen/Beetle candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P2 | Browser performance/BIOS and large-disc constraints. |
 | Sega | Dreamcast | Flycast WASM candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P2 | WebGL/performance and legal firmware/assets required. |
-| Sony | PlayStation 1 | PCSX ReARMed / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium 154 + Android Chrome 155 | P0 | Desktop + Android physical play-ok (`PH-08/android-physical-20261020.txt`); AUD-001/gamepad open. |
-| Sony | PlayStation Portable | PPSSPP threaded / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium 154 + Android Chrome 155 | P0 | Desktop + Android physical play-ok (`PH-08/android-physical-20261020.txt`); SAB/COI OK on phone; AUD-001/gamepad/iOS open. |
+| Sony | PlayStation 1 | PCSX ReARMed / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium 154 + Android Chrome 155 | P0 | Desktop + Android physical play-ok (`PH-08/android-physical-20261020.txt`); gamepad open; console AUD-001 closed via Genesis human listen on same device. |
+| Sony | PlayStation Portable | PPSSPP threaded / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium 154 + Android Chrome 155 | P0 | Desktop + Android physical play-ok (`PH-08/android-physical-20261020.txt`); SAB/COI OK on phone; gamepad/iOS open. |
 | Sony | PlayStation 2 | Play! Web candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P2 | PDR experimental only; never blocks release. |
 | Sony | PS Vita | None selected | [ ] | NOT_FEASIBLE | — | — | — | — | — | — | P3 | No supported browser-core plan. |
 | Nintendo | NES / Famicom | FCEUmm candidate | [ ] | PLANNED | — | — | — | — | — | — | P1 | Legal homebrew fixture and core lock required. |

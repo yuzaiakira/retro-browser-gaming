@@ -49,7 +49,24 @@ addEventListener('message', async (event) => {
     window.EJS_volume = 0.4;
     window.EJS_color = '#9885f8';
     window.EJS_backgroundColor = '#10131d';
-    window.EJS_defaultOptions = { webgl2Enabled: 'enabled' };
+    // EmulatorJS maps genesis_plus_gx → segaMS first (buttons labeled "1"/"2").
+    // Force Mega Drive scheme for Genesis so controls/audio match the ROM family.
+    const controlSchemeByCore = {
+      genesis_plus_gx: 'segaMD',
+      smsplus: 'segaMS',
+      pcsx_rearmed: 'psx',
+      ppsspp: 'psp',
+    };
+    if (controlSchemeByCore[d.core]) {
+      window.EJS_controlScheme = controlSchemeByCore[d.core];
+    }
+    // Rewind supplies its own TouchControls; EmulatorJS Fast/Slow virtual pads
+    // on mobile can leave a stuck continuous tone on Android Chrome.
+    window.EJS_defaultOptions = {
+      webgl2Enabled: 'enabled',
+      'virtual-gamepad': 'disabled',
+      fastForward: 'disabled',
+    };
     window.EJS_Buttons = {
       settings: { visible: false },
       netplay: { visible: false },
@@ -64,7 +81,19 @@ addEventListener('message', async (event) => {
     }
     window.EJS_onGameStart = () => {
       started = true;
-      const gm = window.EJS_emulator.gameManager;
+      const emu = window.EJS_emulator;
+      try {
+        emu.changeSettingOption?.('virtual-gamepad', 'disabled');
+        emu.changeSettingOption?.('fastForward', 'disabled');
+        emu.toggleVirtualGamepad?.(false);
+        if (emu.isFastForward) {
+          emu.isFastForward = false;
+          emu.gameManager?.toggleFastForward?.(0);
+        }
+      } catch {
+        /* best-effort; launch still proceeds */
+      }
+      const gm = emu.gameManager;
       const seekable = seekableBridge?.stats?.() || null;
       reply({
         type: 'ready',

@@ -3,7 +3,7 @@ import { verifyAsset } from '@/lib/storage';
 import type { Installation, Release } from '@/lib/types';
 
 /** Must match `VERSION` in `public/sw.js`. */
-export const SHELL = 'retro-shell-v3';
+export const SHELL = 'retro-shell-v4';
 
 const SHELL_PATHS = [
   '/',
