@@ -6,7 +6,7 @@
 
 ## Core-test fixtures only
 
-The following tracked fixtures are used by core smoke tests (`core-smoke.cjs`, `sms-smoke.cjs`, `gg-smoke.cjs`, `nes-smoke.cjs`, PS1/PSP smokes). Catalog seed with `--with-console-fixtures` may publish matching engineering titles; they are not commercial ROMs.
+The following tracked fixtures are used by core smoke tests (`core-smoke.cjs`, `sms-smoke.cjs`, `gg-smoke.cjs`, `nes-smoke.cjs`, `libretro-family-smoke.cjs`, PS1/PSP smokes). Catalog seed with `--with-console-fixtures` may publish matching engineering titles; they are not commercial ROMs.
 
 | File | SHA-256 | Source | License |
 |---|---|---|---|
@@ -19,10 +19,14 @@ The following tracked fixtures are used by core smoke tests (`core-smoke.cjs`, `
 | `.fixtures/mit-sms-ninjagirl.sms` | `9eb439b9aa883d53411ff1785600bb370edc45e10436b96c216502ac162f1c06` | SMS Power `NinjaGirl-SMS-2024-04-09.zip`; upstream `pw32x/ninjagirl` | MIT, `LICENSES/ninjagirl-SMS-MIT.txt` |
 | `.fixtures/mit-gg-waternet.gg` | `ab9f288e2b556263cddd7856deb67269cfe08ac1e6729ca9e44c5e2c19bb1d8c` | `joyrider3774/waternet` release `v1.0` `Waternet.Sega.Game.Gear.zip` | MIT, `LICENSES/waternet-GG-MIT.txt` |
 | `.fixtures/mit-nes-table-tennis.nes` | `05122457672f95fcf2ee518c3f37e506617725c2d031100b1b1c8b7785068ea3` | `mike42/8bit-table-tennis` release `v1.0` `table_tennis_v1.0.nes` | MIT, `LICENSES/table-tennis-NES-MIT.txt` |
+| `.fixtures/mit-snes-gothicvania.sfc` | `11d32045c69839309490676fe2dd46e3385806f79c8dad279c2d1f4ffa6027df` | `donth77/snes-homebrew` release `v1.0.0` `gothicvania.sfc` | MIT, `LICENSES/gothicvania-SNES-MIT.txt` |
+| `.fixtures/mit-gb-dot.gb` | `3d37551b0b313de84cc5467e794ebd675589c50d19a8179b76211b3534632330` | First-party `fixtures/gb-dot/` (GBDK 4.3.0) | MIT, `LICENSES/gb-dot-MIT.txt` |
+| `.fixtures/mit-gbc-waternet.gbc` | `76bfa37e0db237d5d50a3084fca9a876592aaabfd6a9533adadd2d356998423d` | `joyrider3774/waternet` release `v1.0` GBC zip | MIT, `LICENSES/waternet-GBC-MIT.txt` |
+| `.fixtures/mit-gba-dino.gba` | `5942beac698ecee57c4d93da042b37ce632121f3500804cf3679d5edd642663d` | `fritzem/Google-Dino-GBA` release `1.0.1` | MIT, `LICENSES/dino-GBA-MIT.txt` |
 
-Genesis fixtures come from `monteslu/retro-homebrew-games` release `build-27` (MIT unless a game directory says otherwise). Master System Ninja Girl is MIT homebrew from SMS Power / `pw32x/ninjagirl`. Game Gear Waternet is MIT homebrew from `joyrider3774/waternet`. NES Table Tennis is MIT homebrew from `mike42/8bit-table-tennis`. PS1/PSP Dot fixtures are original first-party MIT homebrew; toolchains are used only to build and are not vendored into this repository. No Sony BIOS or commercial firmware is redistributed.
+Genesis fixtures come from `monteslu/retro-homebrew-games` release `build-27` (MIT unless a game directory says otherwise). Master System Ninja Girl is MIT homebrew from SMS Power / `pw32x/ninjagirl`. Game Gear / GBC Waternet is MIT homebrew from `joyrider3774/waternet`. NES Table Tennis is MIT from `mike42/8bit-table-tennis`. SNES Gothicvania is MIT from `donth77/snes-homebrew`. GB Dot and PS1/PSP Dot are first-party MIT homebrew; GBDK/PSn00bSDK/pspdev toolchains are used only to build and are not vendored. GBA Dino is MIT from `fritzem/Google-Dino-GBA`. No Sony/Nintendo BIOS or commercial firmware is redistributed.
 
-FCEUmm EmulatorJS core packages (`fceumm-wasm.data`, `fceumm-legacy-wasm.data`, `reports/fceumm.json`) are vendored from `https://cdn.emulatorjs.org/4.2.3/data/cores/` and recorded in `docs/core-package-lock.json` (GPL-3.0; core-specific upstream notices apply).
+EmulatorJS core packages for `fceumm`, `snes9x`, `gambatte`, and `mgba` (wasm + legacy + reports) are vendored from `https://cdn.emulatorjs.org/4.2.3/data/cores/` and recorded in `docs/core-package-lock.json` (59 files; GPL-3.0; core-specific upstream notices apply).
 
 ## Emulator runtime
 

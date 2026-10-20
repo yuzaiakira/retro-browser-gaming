@@ -56,6 +56,9 @@ addEventListener('message', async (event) => {
       genesis_plus_gx: romName.endsWith('.gg') ? 'segaGG' : 'segaMD',
       smsplus: 'segaMS',
       fceumm: 'nes',
+      snes9x: 'snes',
+      gambatte: 'gb',
+      mgba: 'gba',
       pcsx_rearmed: 'psx',
       ppsspp: 'psp',
     };
