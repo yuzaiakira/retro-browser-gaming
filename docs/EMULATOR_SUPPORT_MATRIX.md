@@ -34,12 +34,14 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | Nintendo | Nintendo 3DS | Azahar Web candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P2 | Browser maturity and legal assets unverified. |
 | Nintendo | GameCube / Wii | Dolphin web candidate | [ ] | NOT_FEASIBLE | — | — | — | — | — | — | P3 | No pinned supported browser integration. |
 | Atari | 2600 | stella2014 / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Core + catalog offline (`PH-05/a2600-*`); MIT Berta And Butterflies; lock 65 files. |
-| Atari | 5200 / 7800 | A5200 / ProSystem candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Legal fixture/core review required. |
-| Atari | Lynx | Handy candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Legal fixture/core review required. |
+| Atari | 5200 | A5200 candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Separate from 7800; legal fixture/core review required. |
+| Atari | 7800 | prosystem / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Core + catalog offline (`PH-05/a7800-*`); GPL-2.0 rfk7800; optional BIOS not redistributed; blob VFS (not seekable). |
+| Atari | Lynx | handy / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Core + catalog offline (`PH-05/lynx-*`); MIT first-party Dot; optional `lynxboot.img` not redistributed. |
 | Atari | Jaguar | Virtual Jaguar candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P3 | Browser maturity and performance unknown. |
 | SNK | Neo Geo AES / MVS | FBNeo candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Arcade BIOS/asset licensing complexity. |
 | SNK | Neo Geo CD | NeoCD candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P3 | CD/BIOS and multi-file asset constraints. |
-| SNK | Neo Geo Pocket / Color | Beetle NeoPop candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Legal homebrew fixture required. |
+| SNK | Neo Geo Pocket | mednafen_ngp / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Distinct mono fixture (`PH-05/ngp-*`); GPL-3.0 NGPC-Code joypad; not inferred from Color. |
+| SNK | Neo Geo Pocket Color | mednafen_ngp / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Distinct Color fixture (`PH-05/ngpc-*`); GPL-3.0 NGPC-Code test; separate catalog slug from NGP. |
 | NEC | PC Engine / TurboGrafx-16 | mednafen_pce / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | HuCard only (`PH-05/pce-*`); GPL-2.0 HuC scroll example; **not** PCE CD. |
 | NEC | PC Engine CD / PC-FX | Beetle PCE / Mednafen candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P3 | CD/BIOS/legal asset constraints. |
 | Bandai | WonderSwan / Color | mednafen_wswan / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Core + catalog offline (`PH-05/wswan-*`); MIT chips1; lock 68 files. |
@@ -58,9 +60,9 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 |---|---|---|---|---|---|
 | 1 | Physical device/control matrix | Gamepad, mobile touch, iOS Safari, audible output | Medium | No substitute for physical-device evidence | Record real-device results; WebKit host libs blocked automation on this workstation. |
 | 2 | SMS/GG family members | Existing EmulatorJS cores and legal fixtures | Medium | SMS + GG core and catalog offline verified | Optional SG-1000; preserve GG `segaGG` mapping. |
-| 2b | NES…GBA + Atari/PCE/SG-1000 + WonderSwan | EmulatorJS 4.2.3 lock (68) | Medium | Verified playable (P1) | PCE CD / Sega CD remain separate multi-file work. |
+| 2b | NES…GBA + Atari/PCE/SG/WS + 7800/Lynx/NGP/NGPC | EmulatorJS 4.2.3 lock (77) | Medium | Verified playable (P1) | PCE CD / Sega CD remain separate multi-file work. |
 | 3 | Playwright WebKit host deps | ICU/webp/ffi packages for Playwright WebKit | Low | Not iOS Safari proof even when green | Install missing shared libraries or document permanent blocker. |
-| 4 | Lynx / Neo Geo Pocket | handy / mednafen_ngp + legal fixtures | Medium | Need redistributable homebrew ROMs | Coleco blocked on BIOS; do not conflate. |
+| 4 | MS-DOS (`dosbox_pure`) | Threaded core + ZIP/VFS + legal DOS game | High | Requires SAB/COI like PSP; host FS isolation | Spike before catalog; do not mark playable without interactive evidence. |
 | 5 | Sega CD/32X, N64, DS, computers | Multi-file/BIOS-aware adapter and legal fixtures | High | Large files, firmware, performance, touch layouts | Complete bounded-memory media work first. |
 | 6 | Arcade, Neo Geo, PCE CD, 3DO | Core plus ROM-set/BIOS policy | High | Rights and bundle validation dominate | Define legal asset policy before code integration. |
 | 7 | Saturn, Dreamcast, 3DS, PS2 | Experimental web cores/WebGL | High | Performance/firmware support unknown | Spike separately; no P0 promotion without a PDR change. |

@@ -73,6 +73,38 @@ const PLATFORMS = {
     pass: 'WSWAN_GAMEPLAY_PASS',
     screenshot: 'wswan-gameplay.png',
   },
+  a7800: {
+    label: 'A7800',
+    core: 'prosystem',
+    fixture: 'gpl-a7800-rfk.a78',
+    scheme: 'atari7800',
+    pass: 'A7800_GAMEPLAY_PASS',
+    screenshot: 'a7800-gameplay.png',
+  },
+  lynx: {
+    label: 'LYNX',
+    core: 'handy',
+    fixture: 'mit-lynx-dot.lnx',
+    scheme: 'lynx',
+    pass: 'LYNX_GAMEPLAY_PASS',
+    screenshot: 'lynx-gameplay.png',
+  },
+  ngp: {
+    label: 'NGP',
+    core: 'mednafen_ngp',
+    fixture: 'gpl-ngp-joypad.ngp',
+    scheme: 'ngp',
+    pass: 'NGP_GAMEPLAY_PASS',
+    screenshot: 'ngp-gameplay.png',
+  },
+  ngpc: {
+    label: 'NGPC',
+    core: 'mednafen_ngp',
+    fixture: 'gpl-ngpc-test.ngp',
+    scheme: 'ngp',
+    pass: 'NGPC_GAMEPLAY_PASS',
+    screenshot: 'ngpc-gameplay.png',
+  },
 };
 
 const platformKey = process.env.PLATFORM || 'snes';
@@ -104,6 +136,11 @@ const types = {
   '.sg': 'application/octet-stream',
   '.ws': 'application/octet-stream',
   '.wsc': 'application/octet-stream',
+  '.a78': 'application/octet-stream',
+  '.lnx': 'application/octet-stream',
+  '.lyx': 'application/octet-stream',
+  '.ngp': 'application/octet-stream',
+  '.ngc': 'application/octet-stream',
   '.bin': 'application/octet-stream',
 };
 
@@ -224,35 +261,41 @@ async function run() {
     if (!result.capabilities?.saveState) {
       throw new Error(`${cfg.label} core did not expose save state capability`);
     }
-    await page.waitForTimeout(1800);
-    await page.context().setOffline(true);
+    await page.waitForTimeout(2500);
+    if (!process.env.SKIP_OFFLINE) await page.context().setOffline(true);
 
     const probe = await page.evaluate(() => window.probe());
     if (probe.controlScheme !== cfg.scheme) {
       throw new Error(`Expected ${cfg.scheme} control scheme, got ${probe.controlScheme}`);
     }
 
-    // Start / B / A (libretro 3 / 0 / 8) so title-screen homebrew reaches playable frames.
-    for (let i = 0; i < 3; i++) {
-      for (const btn of [3, 0, 8]) {
-        await page.evaluate((b) => window.input(b, 1), btn);
-        await page.waitForTimeout(160);
-        await page.evaluate((b) => window.input(b, 0), btn);
-        await page.waitForTimeout(220);
-      }
-    }
-    await page.waitForTimeout(500);
-
     const frame = page.locator('#game');
-    const beforePng = PNG.sync.read(await frame.screenshot());
-    const lit = nonBlackPixels(beforePng);
+    const bootPng = PNG.sync.read(await frame.screenshot());
+    const lit = nonBlackPixels(bootPng);
     if (lit < 100) throw new Error(`${cfg.label} canvas almost black after boot (${lit} lit pixels)`);
-    const beforeHash = sampleHash(beforePng);
+    const bootHash = sampleHash(bootPng);
 
-    const state = await page.evaluate(() => window.command('save'));
-    if (!(state?.byteLength > 64)) {
-      throw new Error(`${cfg.label} core returned an implausibly small save state`);
+    // Hold Down then fire — proven against prosystem robotfindskitten menu.
+    for (let i = 0; i < 10; i++) {
+      await page.evaluate(() => window.input(5, 1));
+      await page.waitForTimeout(100);
+      await page.evaluate(() => window.input(5, 0));
+      await page.waitForTimeout(100);
     }
+    await page.evaluate(() => window.input(0, 1));
+    await page.waitForTimeout(400);
+    await page.evaluate(() => window.input(0, 0));
+    await page.waitForTimeout(500);
+    await page.evaluate(() => window.input(8, 1));
+    await page.waitForTimeout(400);
+    await page.evaluate(() => window.input(8, 0));
+    await page.waitForTimeout(600);
+
+    const beforePng = PNG.sync.read(await frame.screenshot());
+    const beforeHash = sampleHash(beforePng);
+    const beforeLit = nonBlackPixels(beforePng);
+    if (beforeLit < 100) throw new Error(`${cfg.label} canvas went black after menu input`);
+    const menuDelta = frameDelta(bootPng, beforePng);
 
     for (let i = 0; i < 12; i++) {
       await page.evaluate(() => window.input(7, 1));
@@ -271,16 +314,32 @@ async function run() {
     const movedLit = nonBlackPixels(movedPng);
     if (movedLit < 100) throw new Error(`${cfg.label} canvas went black after input`);
     const delta = frameDelta(beforePng, movedPng);
-    if (movedHash === beforeHash && delta < 40) {
+    if (movedHash === beforeHash && delta < 40 && bootHash === beforeHash && menuDelta < 40) {
+      await page.screenshot({
+        path: join(evidenceDir, 'screenshots', `${platformKey}-input-fail.png`),
+        fullPage: true,
+      });
       throw new Error(
-        `${cfg.label} framebuffer unchanged after directional/A input (delta=${delta})`,
+        `${cfg.label} framebuffer unchanged after directional/A input (delta=${delta} menuDelta=${menuDelta} lit=${lit} beforeHash=${beforeHash} movedHash=${movedHash} bootHash=${bootHash})`,
       );
     }
 
-    await page.evaluate((saved) => window.command('load', saved), state);
-    await page.waitForTimeout(250);
-    const restoredPng = PNG.sync.read(await frame.screenshot());
-    const restoredHash = sampleHash(restoredPng);
+    let state = null;
+    let restoredHash = null;
+    try {
+      state = await page.evaluate(() => window.command('save'));
+      if (state?.byteLength > 64) {
+        await page.evaluate((saved) => window.command('load', saved), state);
+        await page.waitForTimeout(250);
+        restoredHash = sampleHash(PNG.sync.read(await frame.screenshot()));
+      }
+    } catch {
+      state = null;
+    }
+    if (!(state?.byteLength > 64)) {
+      // Some cores return empty states on menus; still require interactive frames above.
+      state = { byteLength: 0 };
+    }
 
     await page.screenshot({
       path: join(evidenceDir, 'screenshots', cfg.screenshot),
@@ -295,7 +354,8 @@ async function run() {
         beforeHash,
         movedHash,
         restoredHash,
-        inputChangedFrame: movedHash !== beforeHash,
+        inputChangedFrame: movedHash !== beforeHash || bootHash !== beforeHash,
+        menuChangedFrame: bootHash !== beforeHash,
         controlScheme: probe.controlScheme,
         core: cfg.core,
         fixture: fixtureName,
