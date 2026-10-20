@@ -62,6 +62,7 @@ addEventListener('message', async (event) => {
       mgba: 'gba',
       stella2014: 'atari2600',
       mednafen_pce: 'pce',
+      mednafen_wswan: 'ws',
       pcsx_rearmed: 'psx',
       ppsspp: 'psp',
     };

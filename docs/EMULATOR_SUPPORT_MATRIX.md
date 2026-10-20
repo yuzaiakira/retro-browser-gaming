@@ -42,7 +42,7 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | SNK | Neo Geo Pocket / Color | Beetle NeoPop candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Legal homebrew fixture required. |
 | NEC | PC Engine / TurboGrafx-16 | mednafen_pce / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | HuCard only (`PH-05/pce-*`); GPL-2.0 HuC scroll example; **not** PCE CD. |
 | NEC | PC Engine CD / PC-FX | Beetle PCE / Mednafen candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P3 | CD/BIOS/legal asset constraints. |
-| Bandai | WonderSwan / Color | Beetle Cygne candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Legal fixture/core review required. |
+| Bandai | WonderSwan / Color | mednafen_wswan / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Core + catalog offline (`PH-05/wswan-*`); MIT chips1; lock 68 files. |
 | Other | Panasonic 3DO | Opera candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P3 | BIOS and large-disc constraints. |
 | Other | ColecoVision / Intellivision / Vectrex | BlueMSX / FreeIntv / VecX candidates | [ ] | PLANNED | — | — | — | — | — | — | P2 | Add separately only after legal fixtures/core locks. |
 | Arcade | MAME / FBNeo / CPS / Neo Geo Arcade | MAME / FBNeo candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | ROM-set and BIOS licensing require strict bundle policy. |
@@ -57,9 +57,9 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 |---|---|---|---|---|---|
 | 1 | Physical device/control matrix | Gamepad, mobile touch, iOS Safari, audible output | Medium | No substitute for physical-device evidence | Record real-device results; WebKit host libs blocked automation on this workstation. |
 | 2 | SMS/GG family members | Existing EmulatorJS cores and legal fixtures | Medium | SMS + GG core and catalog offline verified | Optional SG-1000; preserve GG `segaGG` mapping. |
-| 2b | NES…GBA + Atari 2600 + PCE HuCard + SG-1000 | EmulatorJS 4.2.3 lock (65) | Medium | Verified playable (P1) | PCE CD / Sega CD remain separate multi-file work. |
+| 2b | NES…GBA + Atari/PCE/SG-1000 + WonderSwan | EmulatorJS 4.2.3 lock (68) | Medium | Verified playable (P1) | PCE CD / Sega CD remain separate multi-file work. |
 | 3 | Playwright WebKit host deps | ICU/webp/ffi packages for Playwright WebKit | Low | Not iOS Safari proof even when green | Install missing shared libraries or document permanent blocker. |
-| 4 | WonderSwan / Lynx / Neo Geo Pocket | Beetle candidates + legal fixtures | Medium | Each needs redistributable homebrew | Add one system at a time with real evidence. |
+| 4 | Lynx / Neo Geo Pocket / ColecoVision | handy / mednafen_ngp / gearcoleco + legal fixtures | Medium | Each needs redistributable homebrew | Add one system at a time with real evidence. |
 | 5 | Sega CD/32X, N64, DS, computers | Multi-file/BIOS-aware adapter and legal fixtures | High | Large files, firmware, performance, touch layouts | Complete bounded-memory media work first. |
 | 6 | Arcade, Neo Geo, PCE CD, 3DO | Core plus ROM-set/BIOS policy | High | Rights and bundle validation dominate | Define legal asset policy before code integration. |
 | 7 | Saturn, Dreamcast, 3DS, PS2 | Experimental web cores/WebGL | High | Performance/firmware support unknown | Spike separately; no P0 promotion without a PDR change. |

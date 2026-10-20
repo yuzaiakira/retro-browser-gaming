@@ -23,6 +23,7 @@ SYSTEMS = [
     ("gba", "Game Boy Advance", "handheld"),
     ("atari-2600", "Atari 2600", "console"),
     ("pce", "PC Engine / TurboGrafx-16", "console"),
+    ("wswan", "WonderSwan / Color", "handheld"),
     ("ps1", "PlayStation", "console"),
     ("psp", "PlayStation Portable", "handheld"),
 ]
@@ -36,6 +37,7 @@ WASM_CORES = [
     ("mgba", ["gba"], ["wasm", "secureContext"]),
     ("stella2014", ["a26", "bin"], ["wasm", "secureContext"]),
     ("mednafen_pce", ["pce"], ["wasm", "secureContext"]),
+    ("mednafen_wswan", ["ws", "wsc"], ["wasm", "secureContext"]),
     ("pcsx_rearmed", ["cue", "chd", "bin"], ["wasm", "secureContext"]),
     ("ppsspp", ["iso", "cso", "pbp"], ["wasm", "threads", "webgl2", "secureContext"]),
 ]
@@ -52,6 +54,7 @@ CONSOLE_FIXTURE_SLUGS = {
     "atari-2600",
     "pce",
     "sega-sg1000",
+    "wswan",
     "ps1",
     "psp",
 }
@@ -403,6 +406,26 @@ class Command(BaseCommand):
             evidence=(
                 "visrealm/retropipe release v0.2 retropipe_v0-2-0_sc3000.sg "
                 "(https://github.com/visrealm/retropipe)"
+            ),
+        )
+        results["wswan"] = self._import_files(
+            fixtures,
+            slug="mit-wswan-chips1",
+            title="MIT WonderSwan chips1",
+            description=(
+                "MIT-licensed WonderSwan CHIP-8 emulator (chips1) homebrew fixture for "
+                "engineering acceptance only. Not a commercial ROM."
+            ),
+            console="wswan",
+            core={"code": "mednafen_wswan", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-wswan-chips1.wsc",
+            files=[("mit-wswan-chips1.wsc", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/chips1-WSWAN-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "asiekierka/chips1 release v0.1 chips1.wsc "
+                "(https://github.com/asiekierka/chips1)"
             ),
         )
         results["ps1"] = self._import_files(
