@@ -13,7 +13,7 @@
 | OFF-001–OFF-003 | PASSED (HTML5) | Persistent-profile cold-start (`PH-02/offline-pwa-20261020.md`) |
 | OFF-004 | PASSED (wasm core) | Deleted `/cores/.../genesis_plus_gx-wasm.data` offline; OPFS retained; recoverable reinstall (`PH-02/offline-pwa-off004-core-20261020.md`) |
 | OFF-005 | PASSED | Waiting SW does not disrupt Save state |
-| EMU-001–EMU-004 | PASSED (scoped) | Gameplay + BlobFS + catalog offline; physical audio open |
+| EMU-001–EMU-004 | PASSED (scoped) | Gameplay + BlobFS + catalog offline; Android AUD-001 human-heard Genesis |
 | EMU-005, EMU-006 | PASSED | Lifecycle + unsupported core (`PH-07/acceptance-gates-20261020.md`) |
 | CMP-001, CMP-002 | PASSED (unit) | `compatibility.test.ts` |
 | IN-001 | PASSED (Chromium) | Keyboard → InputRouter command mapping |
@@ -25,7 +25,7 @@
 | SEC-004 | PASSED | Hostile sandboxed HTML denied launcher IndexedDB |
 | UX-001, UX-002 | PASSED (basic + Android) | Mobile layout + keyboard focus; Android fullscreen/orientation (`PH-08`) |
 | DEP-001, DEP-002 | PASSED | Compose stack + proxy build path |
-| PH-08 Android extras | PASSED (scoped) | Offline reverse-removed cold-start; Genesis/PS1/PSP on phone; AUD-001 human listen open |
+| PH-08 Android extras | PASSED (scoped) | Offline reverse-removed cold-start; Genesis/PS1/PSP on phone; AUD-001 human-heard PASSED |
 
 ## Gate verdicts
 
@@ -33,8 +33,8 @@
 |---|---|
 | G01 | PASSED — native Compose stack |
 | G02–G04 | PASSED — download recovery/performance (heap scoped; RSS unavailable) |
-| G05 | PASSED (scoped) — console gameplay + catalog offline; **AUD-001 human listen still open** |
-| G06–G10 | PARTIAL — Chromium/Firefox + Android Chrome physical; WebKit catalog (no OPFS install); gamepad/iOS/human audio open (`PH-08`) |
-| G11 | PARTIAL — Android PH-08 largely closed; AUD-001 + gamepad + iOS remain |
+| G05 | PASSED (scoped) — console gameplay + catalog offline; Android AUD-001 human-heard Genesis |
+| G06–G10 | PARTIAL — Chromium/Firefox + Android Chrome physical (incl. AUD-001); WebKit catalog (no OPFS install); gamepad/iOS open (`PH-08`) |
+| G11 | PARTIAL — Android PH-08 + AUD-001 closed; physical gamepad + iOS remain |
 
-**RELEASE CANDIDATE / NOT COMPLETE** — see `docs/final-handover.md`. Remaining blockers: AUD-001, physical gamepad, real iOS Safari.
+**RELEASE CANDIDATE / NOT COMPLETE** — see `docs/final-handover.md`. Remaining blockers: physical gamepad, real iOS Safari.

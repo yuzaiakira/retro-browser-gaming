@@ -151,7 +151,7 @@ async function run() {
     // --- OFF-005: waiting SW must not disrupt active gameplay ---
     const swPath = join(__dirname, '..', 'public', 'sw.js');
     const originalSw = readFileSync(swPath, 'utf8');
-    const bumped = originalSw.replace(/retro-shell-v3/g, 'retro-shell-v3-waiting-test');
+    const bumped = originalSw.replace(/retro-shell-v4/g, 'retro-shell-v4-waiting-test');
     const backup = `${swPath}.bak-offline-test`;
     writeFileSync(backup, originalSw);
     writeFileSync(swPath, bumped);

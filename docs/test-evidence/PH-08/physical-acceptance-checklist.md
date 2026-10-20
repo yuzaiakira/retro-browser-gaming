@@ -11,7 +11,7 @@ Physical evidence requires a real device session. Automated CDP runs against the
 | IN-005-P | App blur / tab switch | Android Chrome | Inputs released on hide | **PASSED** — visibilitychange+blur+pagehide release on physical Chrome session |
 | UX-FS | Fullscreen enter/exit | Android Chrome | Emulator continues; layout usable | **PASSED** — `requestFullscreen` on `.player-stage` entered then exited |
 | UX-OR | Orientation change | Android Chrome | Portrait↔landscape; controls remain usable | **PASSED** — fullscreen + `orientation.lock` → `landscape-primary` 839×303 |
-| AUD-001 | Real audio output | Device speakers | Human hears Genesis/PS1/PSP audio | **NOT_VERIFIED** — AudioContext `running` @ 48 kHz after gesture; **human listen required** |
+| AUD-001 | Real audio output | Android Chrome speakers | Human hears Genesis/PS1/PSP audio | **PASSED** — human confirmed audible MIT Genesis Breakout after `segaMD` control-scheme fix (`aud001-human-listen-20261020.md`) |
 | IOS-001 | iOS Safari catalog + offline | Real iPhone/iPad | Catalog, install, offline; note PSP SAB limits | **BLOCKED_EXTERNAL** — `idevice_id` empty |
 
 ## Android session extras (same PH-08 run)
@@ -30,6 +30,7 @@ Physical evidence requires a real device session. Automated CDP runs against the
 | 2026-10-20 | automated agent | none for phone/pad/gamepad | blocked | Discovery in `physical-env-prep.md`; C-Media USB audio available for AUD-001 when a human listens |
 | 2026-10-20 | automated agent | Playwright WebKit container | N/A | Orbit install disabled: no OPFS (`webkit-orbit-capability-20261020.txt`) |
 | 2026-10-20 | automated agent | Android 15 + Chrome 155 USB (`2303CRA44A`) | Android PH-08 mostly PASSED | CDP suite + reverse-removed offline; AUD-001 / gamepad / iOS remain |
+| 2026-10-20 | human + agent | Android 15 + Chrome 155 | AUD-001 PASSED | Listener confirmed game audio; root cause was `segaMS` BUTTON 2 stuck-tone → fixed `segaMD` |
 
 ## How to run (actionable)
 
