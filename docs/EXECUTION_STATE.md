@@ -2,7 +2,7 @@
 
 ## Verdict
 
-**RELEASE CANDIDATE / NOT COMPLETE** — IN-002/IOS-001 remain BLOCKED_EXTERNAL. P1 expansion added Atari 2600, PC Engine HuCard, SG-1000, and WonderSwan. J2ME still BLOCKED (no RMS). See `docs/RELEASE_CANDIDATE.md`.
+**RELEASE CANDIDATE / NOT COMPLETE** — IN-002/IOS-001 remain BLOCKED_EXTERNAL. P1 expansion added Atari 7800, Lynx, Neo Geo Pocket, and Neo Geo Pocket Color (independently verified). J2ME still BLOCKED (no RMS). ColecoVision remains BIOS-blocked. See `docs/RELEASE_CANDIDATE.md`.
 
 ## Deferred physical acceptance (do not rediscover)
 
@@ -13,27 +13,32 @@
 
 | Item | Status |
 |---|---|
-| Prior Sega/Nintendo/Sony set | VERIFIED_PLAYABLE (through `9d6c490`) |
-| Atari 2600 `stella2014` + MIT Berta | VERIFIED_PLAYABLE (`PH-05/a2600-*`) |
-| PC Engine HuCard `mednafen_pce` + HuC scroll | VERIFIED_PLAYABLE (`PH-05/pce-*`; not CD) |
-| SG-1000 `smsplus` + MIT RetroPIPE | VERIFIED_PLAYABLE (`PH-05/sg1000-*`) |
-| WonderSwan `mednafen_wswan` + MIT chips1 | VERIFIED_PLAYABLE (`PH-05/wswan-*`) |
-| Core lock | **68 files** |
+| Prior Sega/Nintendo/Sony + A2600/PCE/SG/WSWAN set | VERIFIED_PLAYABLE (through `77b08ee`) |
+| Atari 7800 `prosystem` + GPL rfk7800 | VERIFIED_PLAYABLE (`PH-05/a7800-*`) |
+| Atari Lynx `handy` + MIT lynx-dot | VERIFIED_PLAYABLE (`PH-05/lynx-*`) |
+| Neo Geo Pocket `mednafen_ngp` + GPL joypad | VERIFIED_PLAYABLE (`PH-05/ngp-*`; not NGPC) |
+| Neo Geo Pocket Color `mednafen_ngp` + GPL test | VERIFIED_PLAYABLE (`PH-05/ngpc-*`; not NGP) |
+| Core lock | **77 files** |
+| ColecoVision | BLOCKED — proprietary `colecovision.rom` (`PH-05/coleco-gearcoleco-bios-blocker-20261020.md`) |
 | J2ME | BLOCKED — RMS still missing (`PH-06/j2me-blocker-resolution-spike-20261020.md`) |
+| MS-DOS | INVESTIGATING — `dosbox_pure` threaded; no gameplay PASS yet |
 
 ## Exact commands
 
 ```bash
 python3 scripts/verify-core-lock.py
-PLATFORM=wswan CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/libretro-family-smoke.cjs
+PLATFORM=a7800 CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/libretro-family-smoke.cjs
+PLATFORM=lynx CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/libretro-family-smoke.cjs
+PLATFORM=ngp CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/libretro-family-smoke.cjs
+PLATFORM=ngpc CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/libretro-family-smoke.cjs
 RETRO_TEST_BASE_URL=http://127.0.0.1:13000 CHROMIUM_EXECUTABLE=/usr/bin/chromium \
-  CATALOG_OFFLINE_ONLY=wswan node apps/web/tests/catalog-console-offline.cjs
+  CATALOG_OFFLINE_ONLY=a7800 node apps/web/tests/catalog-console-offline.cjs
+# likewise CATALOG_OFFLINE_ONLY=lynx|ngp|ngpc
 ```
 
 ## Next action
 
-1. Optional: Lynx (`handy`) or Neo Geo Pocket (`mednafen_ngp`) with legal fixtures.
-2. ColecoVision blocked on proprietary `colecovision.rom` BIOS (`PH-05/coleco-gearcoleco-bios-blocker-20261020.md`).
-3. Optional: PCE CD only after multi-file/BIOS policy (do not conflate with HuCard).
-4. J2ME only after RMS + legal MIDlet offline PoC.
-5. Physical IN-002/IOS-001 when hardware exists — do not declare P0 COMPLETE before then.
+1. MS-DOS: pin `dosbox_pure` threaded artifacts, legal ZIP fixture, isolated VFS, prove interactive gameplay before catalog.
+2. J2ME: time-boxed minimal RecordStore PoC + automated tests; leave production BLOCKED until offline legal MIDlet evidence.
+3. ColecoVision stays blocked without authorized OS-7-compatible firmware.
+4. Physical IN-002/IOS-001 when hardware exists — do not declare P0 COMPLETE before then.

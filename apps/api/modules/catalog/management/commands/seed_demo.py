@@ -22,8 +22,12 @@ SYSTEMS = [
     ("gbc", "Game Boy Color", "handheld"),
     ("gba", "Game Boy Advance", "handheld"),
     ("atari-2600", "Atari 2600", "console"),
+    ("atari-7800", "Atari 7800", "console"),
+    ("lynx", "Atari Lynx", "handheld"),
     ("pce", "PC Engine / TurboGrafx-16", "console"),
     ("wswan", "WonderSwan / Color", "handheld"),
+    ("ngp", "Neo Geo Pocket", "handheld"),
+    ("ngpc", "Neo Geo Pocket Color", "handheld"),
     ("ps1", "PlayStation", "console"),
     ("psp", "PlayStation Portable", "handheld"),
 ]
@@ -36,8 +40,11 @@ WASM_CORES = [
     ("gambatte", ["gb", "gbc"], ["wasm", "secureContext"]),
     ("mgba", ["gba"], ["wasm", "secureContext"]),
     ("stella2014", ["a26", "bin"], ["wasm", "secureContext"]),
+    ("prosystem", ["a78", "bin"], ["wasm", "secureContext"]),
+    ("handy", ["lnx", "lyx"], ["wasm", "secureContext"]),
     ("mednafen_pce", ["pce"], ["wasm", "secureContext"]),
     ("mednafen_wswan", ["ws", "wsc"], ["wasm", "secureContext"]),
+    ("mednafen_ngp", ["ngp", "ngc", "ngpc"], ["wasm", "secureContext"]),
     ("pcsx_rearmed", ["cue", "chd", "bin"], ["wasm", "secureContext"]),
     ("ppsspp", ["iso", "cso", "pbp"], ["wasm", "threads", "webgl2", "secureContext"]),
 ]
@@ -52,9 +59,13 @@ CONSOLE_FIXTURE_SLUGS = {
     "gbc",
     "gba",
     "atari-2600",
+    "atari-7800",
+    "lynx",
     "pce",
     "sega-sg1000",
     "wswan",
+    "ngp",
+    "ngpc",
     "ps1",
     "psp",
 }
@@ -426,6 +437,83 @@ class Command(BaseCommand):
             evidence=(
                 "asiekierka/chips1 release v0.1 chips1.wsc "
                 "(https://github.com/asiekierka/chips1)"
+            ),
+        )
+        results["a7800"] = self._import_files(
+            fixtures,
+            slug="gpl-a7800-rfk",
+            title="GPL Atari 7800 robotfindskitten",
+            description=(
+                "GPL-2.0 Atari 7800 robotfindskitten homebrew fixture for engineering "
+                "acceptance only. Not a commercial ROM. Optional 7800 BIOS not redistributed."
+            ),
+            console="atari-7800",
+            core={"code": "prosystem", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="gpl-a7800-rfk.a78",
+            files=[("gpl-a7800-rfk.a78", "rom", "application/octet-stream")],
+            license_ref="GPL-2.0; LICENSES/rfk7800-GPL-2.0.txt",
+            provenance="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
+            evidence=(
+                "rfk7800 6.502.20050619 binary (SourceForge rfk7800); "
+                "COPYING mirrored in fixtures/a7800-rfk/"
+            ),
+        )
+        results["lynx"] = self._import_files(
+            fixtures,
+            slug="mit-lynx-dot",
+            title="MIT Lynx Dot",
+            description=(
+                "First-party MIT Atari Lynx Dot homebrew fixture for engineering acceptance "
+                "only. Optional lynxboot.img BIOS not redistributed."
+            ),
+            console="lynx",
+            core={"code": "handy", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-lynx-dot.lnx",
+            files=[("mit-lynx-dot.lnx", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/lynx-dot-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence="Built with cc65 V2.19; sources in fixtures/lynx-dot/",
+        )
+        results["ngp"] = self._import_files(
+            fixtures,
+            slug="gpl-ngp-joypad",
+            title="GPL NGP Joypad",
+            description=(
+                "GPL-3.0 Neo Geo Pocket joypad test homebrew fixture for engineering "
+                "acceptance only (distinct from NGPC). Not a commercial ROM."
+            ),
+            console="ngp",
+            core={"code": "mednafen_ngp", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="gpl-ngp-joypad.ngp",
+            files=[("gpl-ngp-joypad.ngp", "rom", "application/octet-stream")],
+            license_ref="GPL-3.0; LICENSES/NGPC-Code-GPL-3.0.txt",
+            provenance="https://www.gnu.org/licenses/gpl-3.0.html",
+            evidence=(
+                "NeoGeoFreak2004/NGPC-Code joypad/joypad.ngp "
+                "(https://github.com/NeoGeoFreak2004/NGPC-Code)"
+            ),
+        )
+        results["ngpc"] = self._import_files(
+            fixtures,
+            slug="gpl-ngpc-test",
+            title="GPL NGPC Test",
+            description=(
+                "GPL-3.0 Neo Geo Pocket Color test homebrew fixture for engineering "
+                "acceptance only (distinct from mono NGP). Not a commercial ROM."
+            ),
+            console="ngpc",
+            core={"code": "mednafen_ngp", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="gpl-ngpc-test.ngp",
+            files=[("gpl-ngpc-test.ngp", "rom", "application/octet-stream")],
+            license_ref="GPL-3.0; LICENSES/NGPC-Code-GPL-3.0.txt",
+            provenance="https://www.gnu.org/licenses/gpl-3.0.html",
+            evidence=(
+                "NeoGeoFreak2004/NGPC-Code test/test.ngp "
+                "(https://github.com/NeoGeoFreak2004/NGPC-Code)"
             ),
         )
         results["ps1"] = self._import_files(

@@ -28,6 +28,10 @@ const GAMES = [
   { slug: 'huc-pce-scroll', title: 'HuC PCE Scroll', platform: 'pce' },
   { slug: 'mit-sg1000-retropipe', title: 'MIT SG-1000 RetroPIPE', platform: 'sg1000' },
   { slug: 'mit-wswan-chips1', title: 'MIT WonderSwan chips1', platform: 'wswan' },
+  { slug: 'gpl-a7800-rfk', title: 'GPL Atari 7800 robotfindskitten', platform: 'a7800' },
+  { slug: 'mit-lynx-dot', title: 'MIT Lynx Dot', platform: 'lynx' },
+  { slug: 'gpl-ngp-joypad', title: 'GPL NGP Joypad', platform: 'ngp' },
+  { slug: 'gpl-ngpc-test', title: 'GPL NGPC Test', platform: 'ngpc' },
   { slug: 'mit-ps1-dot', title: 'MIT PS1 Dot', platform: 'ps1' },
   { slug: 'mit-psp-dot', title: 'MIT PSP Dot', platform: 'psp' },
 ].filter((g) => !only.length || only.includes(g.platform));

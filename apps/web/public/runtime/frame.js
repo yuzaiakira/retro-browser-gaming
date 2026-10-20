@@ -12,7 +12,11 @@ function revoke() {
   seekableBridge = undefined;
 }
 
-function preferSeekable(file, companions) {
+function preferSeekable(file, companions, core) {
+  // Multi-file discs always use seekable VFS. A few EmulatorJS cores
+  // (prosystem/handy/mednafen_ngp) only accept simulateInput reliably via blob URLs.
+  if (['prosystem', 'handy', 'mednafen_ngp'].includes(core)) return false;
+  if ((companions || []).length > 0) return true;
   const total = [file, ...(companions || [])].reduce((sum, item) => sum + (item?.size || 0), 0);
   return total > 0;
 }
@@ -63,6 +67,9 @@ addEventListener('message', async (event) => {
       stella2014: 'atari2600',
       mednafen_pce: 'pce',
       mednafen_wswan: 'ws',
+      prosystem: 'atari7800',
+      handy: 'lynx',
+      mednafen_ngp: 'ngp',
       pcsx_rearmed: 'psx',
       ppsspp: 'psp',
     };
@@ -117,7 +124,7 @@ addEventListener('message', async (event) => {
     };
 
     const boot = () => {
-      if (preferSeekable(d.file, companions) && seekableReady()) {
+      if (preferSeekable(d.file, companions, d.core) && seekableReady()) {
         const files = { ['/' + d.file.name]: d.file };
         for (const file of companions) files['/' + file.name] = file;
         window.EJS_gameUrl = d.file.name;
@@ -145,7 +152,7 @@ addEventListener('message', async (event) => {
       document.body.append(script);
     };
 
-    if (preferSeekable(d.file, companions)) {
+    if (preferSeekable(d.file, companions, d.core)) {
       const seekable = document.createElement('script');
       seekable.src = '/runtime/seekable-fs.js';
       seekable.onload = boot;
