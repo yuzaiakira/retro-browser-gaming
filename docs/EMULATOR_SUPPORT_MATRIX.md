@@ -9,10 +9,10 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | Browser | HTML5 / JavaScript | Native isolated iframe | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/V*/V | Chromium + Firefox + Android Chrome; WebKit catalog | P0 | SEC-004 OK; Playwright WebKit has no OPFS so install stays disabled; Android touch/offline/AUD-001 PASSED (`PH-08`); iOS/gamepad open. |
 | Browser | Flash / Ruffle | Ruffle candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Select a pinned browser build and legal SWF fixture. |
 | Browser | WASM game ports | Per-port native runtime | [ ] | PLANNED | — | — | — | — | — | — | P1 | Require license review and iframe adapter. |
-| Classic Mobile Phones / Java ME | J2ME / MIDP 1.0–2.0 | No selected compliant runtime | [ ] | BLOCKED | — | — | — | — | — | — | P1 | `PH-06/j2me-runtime-assessment-20261020.md`; FreeJ2ME-Web requires proprietary online CheerpJ; PluotSorbet needs a current offline/runtime-asset validation. |
+| Classic Mobile Phones / Java ME | J2ME / MIDP 1.0–2.0 | No selected compliant runtime | [ ] | BLOCKED | — | — | — | — | — | — | P1 | Revisit `PH-06/j2me-runtime-assessment-20261020.md`; FreeJ2ME-Web/CheerpJ rejected; `J2ME-For-Web` leading unverified self-host candidate; no gameplay PoC. |
 | Sega | SG-1000 | SMS Plus candidate | [ ] | PLANNED | — | — | — | I | I/I/I | — | P1 | Add legal fixture and adapter/core validation. |
-| Sega | Master System | SMS Plus / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | I | I | V | V/I/I | Chromium | P0 | Core gameplay + save/load + offline-after-load (`PH-05/sms-gameplay-20261020.md`); MIT Ninja Girl fixture; catalog seed `mit-sms-ninjagirl` available; catalog offline cold-start still open. |
-| Sega | Game Gear | Genesis Plus GX | [ ] | IMPLEMENTED_UNVERIFIED | I | — | I | I | I/I/I | — | P0 | Adapter exists; legal ROM gameplay/offline evidence needed. |
+| Sega | Master System | SMS Plus / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P0 | Core + catalog offline (`PH-05/sms-gameplay-20261020.md`, `PH-05/catalog-sms-offline-20261020.md`); MIT Ninja Girl; keyboard/touch via catalog player. |
+| Sega | Game Gear | Genesis Plus GX / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P0 | Core + catalog offline (`PH-05/gg-gameplay-20261020.md`, `PH-05/catalog-gg-offline-20261020.md`); MIT Waternet; `segaGG` from `.gg`; same pinned `genesis_plus_gx`. |
 | Sega | Mega Drive / Genesis | Genesis Plus GX / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium 154 + Android Chrome 155 | P0 | Desktop + Android physical install/play + **AUD-001 human-heard** (`PH-08/aud001-human-listen-20261020.md`); `segaMD` control scheme forced in `frame.js`; physical gamepad remains open. |
 | Sega | Sega CD / Mega-CD | PicoDrive candidate | [ ] | PLANNED | — | — | — | — | — | — | P1 | Multi-file disc and BIOS/legal asset review required. |
 | Sega | Sega 32X | PicoDrive candidate | [ ] | PLANNED | — | — | — | — | — | — | P1 | Legal fixture and core validation required. |
@@ -22,7 +22,7 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | Sony | PlayStation Portable | PPSSPP threaded / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium 154 + Android Chrome 155 | P0 | Desktop + Android physical play-ok (`PH-08/android-physical-20261020.txt`); SAB/COI OK on phone; gamepad/iOS open. |
 | Sony | PlayStation 2 | Play! Web candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P2 | PDR experimental only; never blocks release. |
 | Sony | PS Vita | None selected | [ ] | NOT_FEASIBLE | — | — | — | — | — | — | P3 | No supported browser-core plan. |
-| Nintendo | NES / Famicom | FCEUmm candidate | [ ] | PLANNED | — | — | — | — | — | — | P1 | Legal homebrew fixture and core lock required. |
+| Nintendo | NES / Famicom | FCEUmm / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Core + catalog offline (`PH-05/nes-gameplay-20261020.md`, `PH-05/catalog-nes-offline-20261020.md`); `fceumm` pinned from EmulatorJS 4.2.3 CDN into lock (50 files); MIT Table Tennis. |
 | Nintendo | Famicom Disk System | FCEUmm candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Disk BIOS/legal constraints. |
 | Nintendo | SNES / Super Famicom | Snes9x candidate | [ ] | PLANNED | — | — | — | — | — | — | P1 | Legal fixture and browser core validation. |
 | Nintendo | Game Boy | Gambatte candidate | [ ] | PLANNED | — | — | — | — | — | — | P1 | Legal fixture and core lock required. |
@@ -56,7 +56,8 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | Order | Platform | Core and dependencies | Complexity | Browser/legal limits | Required acceptance and next step |
 |---|---|---|---|---|---|
 | 1 | Physical device/control matrix | Gamepad, mobile touch, iOS Safari, audible output | Medium | No substitute for physical-device evidence | Record real-device results; WebKit host libs blocked automation on this workstation. |
-| 2 | SMS/GG family members | Existing EmulatorJS cores and legal fixtures | Medium | SMS Ninja Girl core gameplay verified; GG + SMS catalog offline still open | Add Game Gear MIT fixture; catalog offline proofs per system. |
+| 2 | SMS/GG family members | Existing EmulatorJS cores and legal fixtures | Medium | SMS + GG core and catalog offline verified | Optional SG-1000; preserve GG `segaGG` mapping. |
+| 2b | NES (done this session) | `fceumm` EmulatorJS 4.2.3 | Medium | Verified playable (P1) | Continue SNES/GB with same pin/lock/fixture pattern. |
 | 3 | Playwright WebKit host deps | ICU/webp/ffi packages for Playwright WebKit | Low | Not iOS Safari proof even when green | Install missing shared libraries or document permanent blocker. |
 | 4 | NES/SNES/GB/GBC/GBA | Pinned mature Libretro/browser cores, adapter and core lock | Medium | Each needs redistributable fixture | Add one system at a time with real online/offline/save/control evidence. |
 | 5 | Sega CD/32X, N64, DS, computers | Multi-file/BIOS-aware adapter and legal fixtures | High | Large files, firmware, performance, touch layouts | Complete bounded-memory media work first. |

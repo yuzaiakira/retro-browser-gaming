@@ -1,0 +1,3 @@
+CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
+CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
+GG_GAMEPLAY_PASS {"capabilities":{"saveState":true,"audio":true,"analog":false,"seekableMedia":true,"onDemandMedia":false},"stateBytes":1036312,"lit":546293,"beforeHash":631188049,"movedHash":3137104232,"restoredHash":3137104232,"inputChangedFrame":true,"controlScheme":"segaGG","fileName":"mit-gg-waternet.gg","canvas":"960x640","display":"960x640","aspect":null,"fixture":"mit-gg-waternet.gg"}
