@@ -1,10 +1,12 @@
 import hashlib
 import json
+import shutil
 import tempfile
 from pathlib import Path
 
 from django.core.management.base import BaseCommand
 
+from modules.catalog.core_lock import manifest_for_core
 from modules.catalog.importer import import_bundle
 from modules.catalog.models import Console, EmulatorCore, Game, PlatformCategory
 
@@ -17,26 +19,48 @@ SYSTEMS = [
     ("psp", "PlayStation Portable", "handheld"),
 ]
 
+WASM_CORES = [
+    ("genesis_plus_gx", ["md", "bin"], ["wasm", "secureContext"]),
+    ("smsplus", ["sms"], ["wasm", "secureContext"]),
+    ("pcsx_rearmed", ["cue", "chd", "bin"], ["wasm", "secureContext"]),
+    ("ppsspp", ["iso", "cso", "pbp"], ["wasm", "threads", "webgl2", "secureContext"]),
+]
+
+CORE_VERSION = "ejs-4.2.3"
+
 
 class Command(BaseCommand):
-    help = "Idempotent safe seed: research console metadata plus an original HTML5 game."
+    help = "Idempotent safe seed: HTML5 demo plus optional MIT console fixtures."
 
     def add_arguments(self, parser):
         parser.add_argument("--safe-assets-only", action="store_true")
+        parser.add_argument(
+            "--with-console-fixtures",
+            action="store_true",
+            help="Publish MIT Genesis/PS1/PSP engineering fixtures into the catalog.",
+        )
 
     def handle(self, *args, **options):
+        with_consoles = options["with_console_fixtures"]
         for slug, name, category in SYSTEMS:
             cat, _ = PlatformCategory.objects.get_or_create(
                 code=category, defaults={"name": category.title()}
             )
-            Console.objects.get_or_create(
+            available = slug == "browser" or (
+                with_consoles and slug in {"sega-md", "ps1", "psp"}
+            )
+            console, _ = Console.objects.get_or_create(
                 slug=slug,
                 defaults={
                     "name": name,
                     "category": cat,
-                    "status": "available" if slug == "browser" else "research",
+                    "status": "available" if available else "research",
                 },
             )
+            if available and console.status != "available":
+                console.status = "available"
+                console.save(update_fields=["status"])
+
         EmulatorCore.objects.get_or_create(
             code="native-html",
             version="1.1.0",
@@ -46,22 +70,31 @@ class Command(BaseCommand):
                 "supported_extensions": ["html"],
             },
         )
-        for code, ext, cap in [
-            ("genesis_plus_gx", ["md", "bin"], ["wasm"]),
-            ("smsplus", ["sms"], ["wasm"]),
-            ("pcsx_rearmed", ["cue", "chd"], ["wasm"]),
-            ("ppsspp", ["iso", "cso"], ["wasm", "threads", "webgl2"]),
-        ]:
+        for code, ext, cap in WASM_CORES:
             EmulatorCore.objects.get_or_create(
                 code=code,
-                version="candidate-unverified",
+                version=CORE_VERSION,
                 defaults={
                     "runtime_type": "wasm",
-                    "status": "research",
+                    "status": "available" if with_consoles else "research",
                     "supported_extensions": ext,
                     "min_capabilities": cap,
+                    "licensed_asset_manifest": manifest_for_core(code),
                 },
             )
+            if with_consoles:
+                core = EmulatorCore.objects.get(code=code, version=CORE_VERSION)
+                if core.status != "available":
+                    # Status is mutable; identity fields are not.
+                    core.status = "available"
+                    core.licensed_asset_manifest = manifest_for_core(code)
+                    core.save(update_fields=["status", "licensed_asset_manifest"])
+
+        self._seed_orbit()
+        if with_consoles:
+            self._seed_console_fixtures()
+
+    def _seed_orbit(self) -> None:
         source = Path(__file__).resolve().parents[3] / "demo" / "orbit.html"
         content = source.read_bytes()
         description = (
@@ -112,4 +145,129 @@ class Command(BaseCommand):
             path = root / "manifest.json"
             path.write_text(json.dumps(manifest))
             result = import_bundle(path, approve=True, publish_game=True)
-        self.stdout.write(json.dumps(result))
+        self.stdout.write(json.dumps({"orbit": result}))
+
+    def _seed_console_fixtures(self) -> None:
+        fixtures = self._fixtures_dir()
+        results = {}
+        results["genesis"] = self._import_files(
+            fixtures,
+            slug="mit-genesis-breakout",
+            title="MIT Genesis Breakout",
+            description=(
+                "MIT-licensed Genesis Breakout homebrew fixture for engineering "
+                "acceptance only. Not a commercial ROM."
+            ),
+            console="sega-md",
+            core={"code": "genesis_plus_gx", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-genesis-breakout.bin",
+            files=[("mit-genesis-breakout.bin", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/retro-homebrew-games-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence="Tracked .fixtures/mit-genesis-breakout.bin from monteslu/retro-homebrew-games build-27",
+        )
+        results["ps1"] = self._import_files(
+            fixtures,
+            slug="mit-ps1-dot",
+            title="MIT PS1 Dot",
+            description="First-party MIT PS1 multi-FILE CUE/BIN Dot homebrew fixture.",
+            console="ps1",
+            core={"code": "pcsx_rearmed", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-ps1-dot.cue",
+            files=[
+                ("mit-ps1-dot.cue", "disk", "application/x-cue"),
+                ("dot_track01.bin", "disk", "application/octet-stream"),
+                ("dot_track02.bin", "disk", "application/octet-stream"),
+            ],
+            license_ref="MIT; fixtures/ps1-dot/LICENSE.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence="Built with PSn00bSDK; sources in fixtures/ps1-dot/",
+        )
+        results["psp"] = self._import_files(
+            fixtures,
+            slug="mit-psp-dot",
+            title="MIT PSP Dot",
+            description="First-party MIT PSP EBOOT Dot homebrew fixture for threaded PPSSPP.",
+            console="psp",
+            core={"code": "ppsspp", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-psp-dot.pbp",
+            files=[("mit-psp-dot.pbp", "rom", "application/octet-stream")],
+            license_ref="MIT; fixtures/psp-dot/LICENSE.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence="Built with ghcr.io/pspdev/pspdev; sources in fixtures/psp-dot/",
+        )
+        self.stdout.write(json.dumps({"consoles": results}))
+
+    def _fixtures_dir(self) -> Path:
+        """Resolve .fixtures from a monorepo checkout or /app/.fixtures in the API image."""
+        here = Path(__file__).resolve()
+        for parent in here.parents:
+            candidate = parent / ".fixtures"
+            if candidate.is_dir():
+                return candidate
+        raise FileNotFoundError(
+            ".fixtures directory not found; mount or COPY engineering fixtures into the API image."
+        )
+
+    def _import_files(
+        self,
+        fixtures: Path,
+        *,
+        slug: str,
+        title: str,
+        description: str,
+        console: str,
+        core: dict,
+        revision: str,
+        entry: str,
+        files: list[tuple[str, str, str]],
+        license_ref: str,
+        provenance: str,
+        evidence: str,
+    ) -> dict:
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            assets = []
+            for filename, kind, content_type in files:
+                source = fixtures / filename
+                if not source.is_file():
+                    raise FileNotFoundError(source)
+                dest = root / filename
+                shutil.copy2(source, dest)
+                content = dest.read_bytes()
+                assets.append(
+                    {
+                        "file": filename,
+                        "kind": kind,
+                        "contentType": content_type,
+                        "sha256": hashlib.sha256(content).hexdigest(),
+                        "byteSize": len(content),
+                        "version": revision,
+                        "provenance": provenance,
+                        "license": license_ref,
+                        "distributionEvidence": evidence,
+                        "sourceType": "first-party" if "First-party" in evidence or "fixtures/" in evidence else "upstream",
+                    }
+                )
+            manifest = {
+                "schemaVersion": 1,
+                "game": {
+                    "slug": slug,
+                    "title": title,
+                    "description": description,
+                    "genre": "Homebrew",
+                },
+                "console": console,
+                "core": core,
+                "revision": revision,
+                "entryFile": entry,
+                "assets": assets,
+            }
+            path = root / "manifest.json"
+            path.write_text(json.dumps(manifest))
+            if Game.objects.filter(slug=slug).exists():
+                return {"slug": slug, "status": "already-present"}
+            return import_bundle(path, approve=True, publish_game=True)

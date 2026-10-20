@@ -6,7 +6,7 @@
 |---|---|---|
 | API-001, API-002, API-003 | PASSED | 28 Django tests, plus the native Compose run in `PH-01/compose-20261019.md`; re-run 2026-10-20 via Compose `manage.py test` |
 | API-004 | PASSED | Native PostgreSQL, authenticated S3 Range probe, Django readiness and Next.js are healthy in Compose (`PH-01/compose-20261019.md`) |
-| CAT-001 | PASSED (HTML5) | `PH-02/test-run.txt`: catalog → download → install → play; Firefox catalog discovery in `PH-02/firefox-catalog-20261020.md` |
+| CAT-001 | PASSED (HTML5 + consoles) | HTML5 in `PH-02/test-run.txt`; Genesis/PS1/PSP catalog install in `PH-05/catalog-console-offline-20261020.md`; Firefox install/offline library in `PH-02/browser-matrix-20261020.md` |
 | CAT-002 | NOT_VERIFIED | Error/empty visual E2E matrix remains |
 | DL-001 | PASSED (small asset) | Real HTTP 206 through authenticated S3 and the same-origin launcher gateway; browser install evidence in `PH-01/compose-20261019.md` |
 | DL-002 | PASSED (browser fault injection) | Truncated Range body rejected as `TRUNCATED_CHUNK` (`PH-03/download-faults-20261020.md`) |
@@ -20,19 +20,19 @@
 | DL-011 | PASSED (browser fault injection) | Worker rejects with `QUOTA_INSUFFICIENT` before Range requests (`PH-03/download-faults-20261020.md`) |
 | DL-012 | PASSED (browser fault injection) | Pause then cancel/delete clears journal, downloads, and OPFS (`PH-03/download-faults-20261020.md`) |
 | DL-013 | PASSED (1 GiB browser) | Deterministic 1 GiB Range download verified; page JS heap growth ~2.4 MiB (`PH-03/download-faults-20261020.md`) |
-| OFF-001 | NOT_VERIFIED | Offline library passed, full cached catalog reload not yet proven |
-| OFF-002, OFF-003 | PASSED (HTML5) | Offline boot/save + three reloads in `PH-02/test-run.txt` |
-| OFF-004, OFF-005 | NOT_VERIFIED | Core eviction and SW update fault tests outstanding |
-| EMU-001 | NOT_VERIFIED | `PH-05/genesis-gameplay-20261019.md` plus seekable re-run `PH-05/bounded-memory-20261020.md` prove real gameplay with chunked media load; physical audio and installed-release restart evidence remain outstanding |
-| EMU-002 | PASSED (core-smoke) | Legal multi-FILE CUE/BIN Dot homebrew + PCSX ReARMed HLE Chromium gameplay/input/save + fresh-process offline input (`PH-05/ps1-gameplay-20261020.md`); catalog SW cold-start and physical audio remain open |
-| EMU-003 | PASSED (core-smoke) | Legal PSP EBOOT + threaded PPSSPP under COOP/COEP/SAB; framebuffer input/save + fresh-process offline input (`PH-05/psp-gameplay-20261020.md`) |
-| EMU-004 | PASSED (scoped) | On-demand BlobFS (≤8 MiB SAB windows): 512 MiB + 1 GiB random-access + PSP Dot gameplay without MEMFS full-file copy (`PH-05/ondemand-media-20261020.md`); Playwright PID/RSS sampling unavailable here; catalog SW cold-start still open |
+| OFF-001 | PASSED (HTML5 cold-start) | Fresh Chromium process, network off before navigate; offline library + Orbit Catch (`PH-02/offline-pwa-20261020.md`) |
+| OFF-002, OFF-003 | PASSED (HTML5) | Offline boot/save cold-start + prior three-reload evidence (`PH-02/offline-pwa-20261020.md`, `PH-02/test-run.txt`) |
+| OFF-004, OFF-005 | PASSED (HTML5 fault) | OPFS eviction fails closed; waiting SW does not disrupt Save state (`PH-02/offline-pwa-20261020.md`) |
+| EMU-001 | PASSED (scoped) | Gameplay + chunked load (`PH-05/genesis-gameplay-20261019.md`, `bounded-memory-20261020.md`) plus catalog install + fresh-process offline save/load (`PH-05/catalog-console-offline-20261020.md`); physical audio remains open |
+| EMU-002 | PASSED (scoped) | Core-smoke gameplay/input/save (`PH-05/ps1-gameplay-20261020.md`) plus catalog install + fresh-process offline save/load (`PH-05/catalog-console-offline-20261020.md`); physical audio remains open |
+| EMU-003 | PASSED (scoped) | Core-smoke gameplay/input/save (`PH-05/psp-gameplay-20261020.md`) plus catalog install + fresh-process offline save/load (`PH-05/catalog-console-offline-20261020.md`); physical audio remains open |
+| EMU-004 | PASSED (scoped) | On-demand BlobFS (≤8 MiB SAB windows): 512 MiB + 1 GiB random-access + PSP Dot gameplay without MEMFS full-file copy (`PH-05/ondemand-media-20261020.md`); Playwright PID/RSS sampling unavailable here |
 | EMU-005, EMU-006 | NOT_VERIFIED | Lifecycle stress and negative E2E outstanding |
 | CMP-001, CMP-002 | PASSED (unit) | `compatibility.test.ts` accurately blocks threads / limits unknown quota; large discs require isolation |
 | IN-001 | NOT_VERIFIED | Mapping unit test only; visual game-control proof outstanding |
 | IN-002 | NOT_VERIFIED | No physical/simulated browser gamepad acceptance pass |
 | IN-003, IN-004, IN-005 | NOT_VERIFIED | Mobile touch and lifecycle E2E outstanding |
-| SAV-001 | PASSED (HTML5) | Real frame state save/load across offline reload |
+| SAV-001 | PASSED (HTML5 + consoles) | HTML5 offline reload (`PH-02/test-run.txt`); Genesis/PS1/PSP catalog offline load (`PH-05/catalog-console-offline-20261020.md`) |
 | SAV-002, SAV-003 | NOT_VERIFIED | Deletion and invalid-import acceptance tests outstanding |
 | SEC-001 | PASSED (scoped) | Web source/build scan found no server secret variable identifiers |
 | SEC-002 | PASSED (headers/S3 scope) | Browser COOP/COEP headers, authenticated SeaweedFS S3 Range, and same-origin gateway evidence |
@@ -49,6 +49,6 @@
 |---|---|
 | G01 | PASSED — native PostgreSQL, persistent authenticated S3-compatible storage, Django and Next.js ran in Compose with browser E2E evidence |
 | G02–G04 | PASSED (download recovery/performance) — truncated chunk, crash-before-journal resume, identity change, quota, cancel/delete, and 1 GiB bounded-memory browser evidence recorded 2026-10-20 |
-| G05 | PARTIAL — Genesis/PS1/PSP gameplay + EMU-004 on-demand BlobFS verified; catalog-installed offline cold-start and device matrix remain open |
-| G06–G10 | NOT_VERIFIED — Firefox catalog smoke only; device/control/offline-fault coverage incomplete |
-| G11 | PARTIAL — EMU-002/003/004 scoped passes recorded; OFF-004/005, physical device/gamepad/touch, and catalog SW cold-start still block full P0 closeout |
+| G05 | PASSED (scoped) — Genesis/PS1/PSP gameplay + BlobFS + catalog-installed fresh-process offline save/load verified; physical audio/controllers remain open |
+| G06–G10 | PARTIAL — Chromium + Playwright Firefox catalog/install/offline library passed; Playwright WebKit blocked by host libs; physical gamepad/touch/iOS Safari NOT_VERIFIED (`PH-02/browser-matrix-20261020.md`) |
+| G11 | PARTIAL — OFF-001–005 and catalog console offline cold-start passed; physical device/gamepad/touch/WebKit host deps and optional PID/RSS sampling still open |

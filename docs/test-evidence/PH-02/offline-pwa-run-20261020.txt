@@ -1,0 +1,7 @@
+OFFLINE_PWA_INSTALL_PASS
+OFF_001_COLD_START_LIBRARY_PASS
+OFF_002_COLD_START_BOOT_PASS
+OFF_003_COLD_START_SAVE_PASS
+OFF_004_CORE_EVICTION_PASS {"ok":true,"removedAssets":1,"removedCores":0,"shell":"retro-shell-v3"}
+OFF_005_SW_UPDATE_NO_DISRUPT_PASS
+OFFLINE_PWA_PASS {"coldStart":true,"off004":{"ok":true,"removedAssets":1,"removedCores":0,"shell":"retro-shell-v3"},"off005":true}

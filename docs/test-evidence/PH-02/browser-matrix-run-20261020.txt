@@ -1,0 +1,20 @@
+MATRIX_CHROMIUM_CATALOG_PASS
+MATRIX_FIREFOX_CATALOG_PASS
+MATRIX_FIREFOX_INSTALL_OFFLINE_PASS
+MATRIX_WEBKIT_CATALOG_FAIL browserType.launch: 
+╔══════════════════════════════════════════════════════╗
+║ Host system is missing dependencies to run browsers. ║
+║ Missing libraries:                                   ║
+║     libicudata.so.66                                 ║
+║     libicui18n.so.66                                 ║
+║     libicuuc.so.66                                   ║
+║     libwebp.so.6                                     ║
+║     libffi.so.7                                      ║
+╚══════════════════════════════════════════════════════╝
+    at catalogSmoke (/home/akira/Projects/git-contribute/retro-browser-gaming/apps/web/tests/browser-matrix-smoke.cjs:13:37)
+    at run (/home/akira/Projects/git-contribute/retro-browser-gaming/apps/web/tests/browser-matrix-smoke.cjs:86:11) {
+  name: 'Error'
+}
+BROWSER_MATRIX_DONE {"physicalHardware":"NOT_VERIFIED — no connected gamepad/mobile/iOS Safari in this session","playwrightWebKitNote":"Playwright WebKit is not proof of real iOS Safari compatibility","chromiumCatalog":true,"firefoxCatalog":true,"firefoxInstallOffline":{"ok":true,"offlineLibrary":true},"webkitCatalog":"NOT_VERIFIED: Error: browserType.launch: \n╔══════════════════════════════════════════════════════╗\n║ Host system is missing dependencies to run browsers. ║\n║ Missing libraries:                                   ║\n║     libicudata.so.66                                 ║\n║     libicui18n.so.66                                 ║\n║     libicuuc.so.66                                   ║\n║     libwebp.so.6                                     ║\n║     libffi.so.7                                      ║\n╚══════════════════════════════════════════════════════╝"}
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+WEBKIT_STILL_BLOCKED browserType.launch: Target page, context or browser has been closed
