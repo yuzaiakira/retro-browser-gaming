@@ -44,7 +44,8 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | NEC | PC Engine CD / PC-FX | Beetle PCE / Mednafen candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P3 | CD/BIOS/legal asset constraints. |
 | Bandai | WonderSwan / Color | mednafen_wswan / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Core + catalog offline (`PH-05/wswan-*`); MIT chips1; lock 68 files. |
 | Other | Panasonic 3DO | Opera candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P3 | BIOS and large-disc constraints. |
-| Other | ColecoVision / Intellivision / Vectrex | BlueMSX / FreeIntv / VecX candidates | [ ] | PLANNED | — | — | — | — | — | — | P2 | Add separately only after legal fixtures/core locks. |
+| Other | ColecoVision | gearcoleco (EmulatorJS) | [ ] | BLOCKED | — | — | — | — | — | — | P2 | MIT RetroPIPE ROM exists; **proprietary `colecovision.rom` BIOS required** (`PH-05/coleco-gearcoleco-bios-blocker-20261020.md`). |
+| Other | Intellivision / Vectrex | FreeIntv / VecX candidates | [ ] | PLANNED | — | — | — | — | — | — | P2 | Add separately only after legal fixtures/core locks. |
 | Arcade | MAME / FBNeo / CPS / Neo Geo Arcade | MAME / FBNeo candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | ROM-set and BIOS licensing require strict bundle policy. |
 | Computer | MS-DOS | DOSBox candidate | [ ] | PLANNED | — | — | — | — | — | — | P1 | Package legal shareware/homebrew and virtual filesystem adapter. |
 | Computer | Commodore 64 / Amiga | VICE / PUAE candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Firmware/legal assets and keyboard UX. |
@@ -59,7 +60,7 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | 2 | SMS/GG family members | Existing EmulatorJS cores and legal fixtures | Medium | SMS + GG core and catalog offline verified | Optional SG-1000; preserve GG `segaGG` mapping. |
 | 2b | NES…GBA + Atari/PCE/SG-1000 + WonderSwan | EmulatorJS 4.2.3 lock (68) | Medium | Verified playable (P1) | PCE CD / Sega CD remain separate multi-file work. |
 | 3 | Playwright WebKit host deps | ICU/webp/ffi packages for Playwright WebKit | Low | Not iOS Safari proof even when green | Install missing shared libraries or document permanent blocker. |
-| 4 | Lynx / Neo Geo Pocket / ColecoVision | handy / mednafen_ngp / gearcoleco + legal fixtures | Medium | Each needs redistributable homebrew | Add one system at a time with real evidence. |
+| 4 | Lynx / Neo Geo Pocket | handy / mednafen_ngp + legal fixtures | Medium | Need redistributable homebrew ROMs | Coleco blocked on BIOS; do not conflate. |
 | 5 | Sega CD/32X, N64, DS, computers | Multi-file/BIOS-aware adapter and legal fixtures | High | Large files, firmware, performance, touch layouts | Complete bounded-memory media work first. |
 | 6 | Arcade, Neo Geo, PCE CD, 3DO | Core plus ROM-set/BIOS policy | High | Rights and bundle validation dominate | Define legal asset policy before code integration. |
 | 7 | Saturn, Dreamcast, 3DS, PS2 | Experimental web cores/WebGL | High | Performance/firmware support unknown | Spike separately; no P0 promotion without a PDR change. |
