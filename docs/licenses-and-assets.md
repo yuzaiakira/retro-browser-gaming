@@ -12,14 +12,18 @@ The following tracked fixtures are used only by `apps/web/tests/core-smoke.cjs`.
 |---|---|---|---|
 | `.fixtures/mit-genesis-breakout.bin` | `8263cc413eb701e40fb5286ca18ebe37f2a120fc2c9b16b4795f8866ee5c59eb` | `monteslu/retro-homebrew-games`, release `build-27` | MIT, `LICENSES/retro-homebrew-games-MIT.txt` |
 | `.fixtures/mit-genesis-pong.bin` | `4f077c764972b23c6f2ea6056ebc3b8bf1da972d95f400259de676f787f1061d` | `monteslu/retro-homebrew-games`, release `build-27` | MIT, `LICENSES/retro-homebrew-games-MIT.txt` |
+| `.fixtures/mit-ps1-dot.cue` | `83d980c4a51822ffb05838d3292722ee0a19079da7a2b12e6fcd310bd3e3f302` | First-party `fixtures/ps1-dot/` (PSn00bSDK build) | MIT, `fixtures/ps1-dot/LICENSE.txt` |
+| `.fixtures/dot_track01.bin` | `23ab460d425b94f2e9a8269e2933fb59ffc4739e2aae026b46772076d1265206` | First-party `fixtures/ps1-dot/` | MIT, `fixtures/ps1-dot/LICENSE.txt` |
+| `.fixtures/dot_track02.bin` | `fd3e68b001470f2cbd0cfa193d84d76ad2267b49ca4fcee031b15cd647ceaa05` | First-party `fixtures/ps1-dot/` (generated CDDA tone) | MIT, `fixtures/ps1-dot/LICENSE.txt` |
+| `.fixtures/mit-psp-dot.pbp` | `0b4bae0155a8648bfb019b84278db973fcb9aaa8f8b7ec8003b6113b742fa1a7` | First-party `fixtures/psp-dot/` (`ghcr.io/pspdev/pspdev` build) | MIT, `fixtures/psp-dot/LICENSE.txt` |
 
-The tested source says the collection’s games are MIT unless a game directory says otherwise. Before a public catalog release, retain the upstream release URL, exact commit/release evidence, and perform a fresh human license review.
+Genesis fixtures come from `monteslu/retro-homebrew-games` release `build-27` (MIT unless a game directory says otherwise). PS1/PSP Dot fixtures are original first-party MIT homebrew; toolchains are used only to build and are not vendored into this repository. No Sony BIOS or commercial firmware is redistributed.
 
 ## Emulator runtime
 
 EmulatorJS source is pinned to commit `e150dc0491ae747028919fb82d6598954976ede6` (runtime 4.2.3). The vendored launcher source license is GPL-3.0 in `LICENSES/EmulatorJS-GPL-3.0.txt`. `docs/core-package-lock.json` records SHA-256/size/source for 47 vendored runtime files; `scripts/verify-core-lock.py` verifies them.
 
-Core-level redistribution terms need a separate audit before publishing a core-backed release. The presence of a core file and a successful local test do **not** approve it for public distribution. The current Genesis test is therefore an engineering evidence fixture, not a catalog release. PS1/PSP assets are deliberately absent because their full asset/BIOS/provenance requirements are unverified.
+Core-level redistribution terms need a separate audit before publishing a core-backed release. The presence of a core file and a successful local test do **not** approve it for public distribution. Genesis/PS1/PSP core-smoke fixtures are engineering evidence only, not catalog releases.
 
 ## Storage and dependencies
 

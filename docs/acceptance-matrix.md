@@ -24,8 +24,9 @@
 | OFF-002, OFF-003 | PASSED (HTML5) | Offline boot/save + three reloads in `PH-02/test-run.txt` |
 | OFF-004, OFF-005 | NOT_VERIFIED | Core eviction and SW update fault tests outstanding |
 | EMU-001 | NOT_VERIFIED | `PH-05/genesis-gameplay-20261019.md` plus seekable re-run `PH-05/bounded-memory-20261020.md` prove real gameplay with chunked media load; physical audio and installed-release restart evidence remain outstanding |
-| EMU-002 | BLOCKED_EXTERNAL_ASSET | CUE/BIN companion mapping unit-tested; no cleanly licensed bootable multi-track disc + MIPS toolchain on this host for PCSX ReARmed gameplay |
-| EMU-003, EMU-004 | BLOCKED_EXTERNAL_ASSET | Legal PSP fixture/threaded gameplay and large-ISO on-demand VFS unavailable; chunked JS load path is implemented (`PH-05/bounded-memory-20261020.md`) but does not replace a seekable large-ISO proof |
+| EMU-002 | PASSED (core-smoke) | Legal multi-FILE CUE/BIN Dot homebrew + PCSX ReARMed HLE Chromium gameplay/input/save + fresh-process offline input (`PH-05/ps1-gameplay-20261020.md`); catalog SW cold-start and physical audio remain open |
+| EMU-003 | PASSED (core-smoke) | Legal PSP EBOOT + threaded PPSSPP under COOP/COEP/SAB; framebuffer input/save + fresh-process offline input (`PH-05/psp-gameplay-20261020.md`) |
+| EMU-004 | NOT_VERIFIED | Chunked ≤8 MiB MEMFS load verified for the small PBP; true on-demand large-ISO VFS and trustworthy total process/WASM memory bounds remain unproven |
 | EMU-005, EMU-006 | NOT_VERIFIED | Lifecycle stress and negative E2E outstanding |
 | CMP-001, CMP-002 | PASSED (unit) | `compatibility.test.ts` accurately blocks threads / limits unknown quota; large discs require isolation |
 | IN-001 | NOT_VERIFIED | Mapping unit test only; visual game-control proof outstanding |
@@ -48,6 +49,6 @@
 |---|---|
 | G01 | PASSED — native PostgreSQL, persistent authenticated S3-compatible storage, Django and Next.js ran in Compose with browser E2E evidence |
 | G02–G04 | PASSED (download recovery/performance) — truncated chunk, crash-before-journal resume, identity change, quota, cancel/delete, and 1 GiB bounded-memory browser evidence recorded 2026-10-20 |
-| G05 | NOT_VERIFIED — Genesis gameplay + bounded JS media load verified; PS1 and PSP prevent pass |
+| G05 | PARTIAL — Genesis/PS1/PSP core-smoke gameplay verified; EMU-004 large-ISO bound and catalog-installed offline cold-start remain open |
 | G06–G10 | NOT_VERIFIED — Firefox catalog smoke only; device/control/offline-fault coverage incomplete |
-| G11 | BLOCKED — mandatory P0 PS1/PSP gameplay requirements have not passed |
+| G11 | PARTIAL — EMU-002/EMU-003 core-smoke passed; EMU-004 and remaining device/offline-fault gates still block full P0 closeout |

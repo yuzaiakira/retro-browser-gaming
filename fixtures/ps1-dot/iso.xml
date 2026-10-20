@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Multi-track PS1 disc for Retro Browser Gaming acceptance:
+  track 1 = data (SYSTEM.CNF + DOT.EXE), track 2 = short PCM audio.
+-->
+<iso_project image_name="dot.bin" cue_sheet="dot.cue">
+	<track type="data">
+		<identifiers
+			system="PLAYSTATION"
+			volume="RBG_DOT"
+			volume_set="RBG_DOT"
+			publisher="RETRO_BROWSER_GAMING"
+			data_preparer="PSN00BSDK"
+			application="PLAYSTATION"
+			copyright="README.TXT;1"
+		/>
+		<directory_tree>
+			<file name="SYSTEM.CNF" type="data" source="${PROJECT_SOURCE_DIR}/system.cnf" />
+			<file name="DOT.EXE" type="data" source="dot.exe" />
+			<file name="README.TXT" type="data" source="${PROJECT_SOURCE_DIR}/README.TXT" />
+			<dummy sectors="64"/>
+		</directory_tree>
+	</track>
+	<track type="audio" source="${PROJECT_SOURCE_DIR}/assets/tone.wav" />
+</iso_project>

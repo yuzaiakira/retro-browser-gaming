@@ -2,7 +2,7 @@
 
 Browser-based retro launcher built from `docs/PDR.md`. It provides a Django/DRF catalog and rights-checked asset manifests, a Next.js PWA, OPFS + IndexedDB installation, real HTTP Range downloads, local saves, configurable input, and a version-pinned EmulatorJS adapter.
 
-**Delivery status: incomplete.** The legal HTML5 title is fully installed, launched, saved, and re-opened offline in Chromium. Legal Genesis Breakout gameplay, input, save/load, post-load offline runtime, and chunked media loading are verified. The browser download fault suite including 1 GiB bounded-memory transfer is verified. Native Docker Compose with PostgreSQL, SeaweedFS S3-compatible storage, Django, and Next.js is verified. PS1 and PSP gameplay and the physical device/browser matrix remain open. See `docs/final-handover.md` and `docs/acceptance-matrix.md`.
+**Delivery status: incomplete.** The legal HTML5 title is fully installed, launched, saved, and re-opened offline in Chromium. Legal Genesis, PS1 (multi-FILE CUE/BIN), and PSP (threaded PPSSPP) homebrew gameplay, input, save/load, and fresh-process offline input are verified under Chromium core-smoke. Chunked media loading and the browser download fault suite including 1 GiB bounded-memory transfer are verified. Native Docker Compose with PostgreSQL, SeaweedFS S3-compatible storage, Django, and Next.js is verified. Large-ISO on-demand VFS (EMU-004), catalog-installed console offline cold-start, and the physical device/browser matrix remain open. See `docs/final-handover.md` and `docs/acceptance-matrix.md`.
 
 ## Run locally
 
@@ -47,9 +47,11 @@ DJANGO_SECRET_KEY='local-test-only-012345678901234567890123456789' DJANGO_DEBUG=
 cd apps/web && npm test && npm run lint && npm run typecheck && npm run build
 cd ../.. && python3 scripts/verify-core-lock.py
 cd apps/web && GENESIS_FIXTURE=mit-genesis-pong.bin node tests/core-smoke.cjs
+cd apps/web && CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/ps1-smoke.cjs
+cd apps/web && CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/psp-smoke.cjs
 ```
 
-`core-smoke.cjs` uses the tracked, legal fixture in `.fixtures/`, not a mocked emulator. It runs the vendored Genesis Plus GX core in Chromium with COOP/COEP and stores a screenshot in `docs/test-evidence/PH-05/screenshots/`.
+`core-smoke.cjs`, `ps1-smoke.cjs`, and `psp-smoke.cjs` use tracked legal fixtures in `.fixtures/`, not mocked emulators. They run the vendored Genesis Plus GX, PCSX ReARMed, and threaded PPSSPP cores in Chromium with COOP/COEP and store screenshots under `docs/test-evidence/PH-05/screenshots/`.
 
 ## Docker Compose
 
@@ -65,7 +67,7 @@ Compose contains PostgreSQL, persistent S3-compatible SeaweedFS development stor
 
 ## Assets and licenses
 
-The user-facing seed contains only the first-party MIT game `Orbit Catch`. The repository also includes two MIT Genesis homebrew fixtures solely for reproducible core tests, from `monteslu/retro-homebrew-games` release `build-27`; their SHA-256 values and the MIT notice are in `docs/licenses-and-assets.md` and `LICENSES/retro-homebrew-games-MIT.txt`.
+The user-facing seed contains only the first-party MIT game `Orbit Catch`. The repository also includes MIT Genesis, PS1, and PSP homebrew fixtures solely for reproducible core tests; SHA-256 values and notices are in `docs/licenses-and-assets.md`.
 
 EmulatorJS data is vendored at the pinned source revision recorded in `docs/core-package-lock.json`; `scripts/verify-core-lock.py` verifies all 47 files. No commercial ROM or BIOS is included. Do not publish any console catalog release until the core’s redistribution license and every required game/BIOS asset have been reviewed and approved.
 
