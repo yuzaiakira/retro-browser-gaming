@@ -11,5 +11,6 @@ export type DownloadState='queued'|'checking-space'|'downloading'|'paused'|'veri
 export interface Download {id:string;asset:Asset;state:DownloadState;bytesVerified:number;chunkSize:number;error?:string;updatedAt:number;speed:number}
 export interface Chunk {id:string;downloadId:string;index:number;start:number;length:number;sha256:string}
 export interface Save {id:string;releaseId:string;core:string;version:string;slot:number;kind:'state';bytes:Uint8Array;sha256:string;createdAt:number}
-export const assetKey=(a:Asset)=>`${a.id}-${a.sha256}`;
+/** Identity includes version so a catalog republish cannot resume stale chunks. */
+export const assetKey=(a:Asset)=>`${a.id}-${a.version}-${a.sha256}`;
 export const formatBytes=(n:number)=>n<1048576?`${(n/1024).toFixed(1)} KiB`:`${(n/1048576).toFixed(1)} MiB`;

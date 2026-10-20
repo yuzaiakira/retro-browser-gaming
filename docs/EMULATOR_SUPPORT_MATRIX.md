@@ -13,13 +13,13 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | Sega | SG-1000 | SMS Plus candidate | [ ] | PLANNED | — | — | — | I | I/I/I | — | P1 | Add legal fixture and adapter/core validation. |
 | Sega | Master System | SMS Plus | [ ] | IMPLEMENTED_UNVERIFIED | I | — | I | I | I/I/I | — | P0 | Adapter exists; legal ROM gameplay/offline evidence needed. |
 | Sega | Game Gear | Genesis Plus GX | [ ] | IMPLEMENTED_UNVERIFIED | I | — | I | I | I/I/I | — | P0 | Adapter exists; legal ROM gameplay/offline evidence needed. |
-| Sega | Mega Drive / Genesis | Genesis Plus GX / EmulatorJS | [x] | PARTIAL | V | P | — | V | V/I/I | Chromium 154 | P0 | `PH-05/genesis-gameplay-20261019.md`; installed-offline restart/audio/device evidence remains. |
+| Sega | Mega Drive / Genesis | Genesis Plus GX / EmulatorJS | [x] | PARTIAL | V | P | — | V | V/I/I | Chromium 154 | P0 | `PH-05/genesis-gameplay-20261019.md`, `bounded-memory-20261020.md` (chunked load); installed-offline restart/audio/device evidence remains. |
 | Sega | Sega CD / Mega-CD | PicoDrive candidate | [ ] | PLANNED | — | — | — | — | — | — | P1 | Multi-file disc and BIOS/legal asset review required. |
 | Sega | Sega 32X | PicoDrive candidate | [ ] | PLANNED | — | — | — | — | — | — | P1 | Legal fixture and core validation required. |
 | Sega | Saturn | Mednafen/Beetle candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P2 | Browser performance/BIOS and large-disc constraints. |
 | Sega | Dreamcast | Flycast WASM candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P2 | WebGL/performance and legal firmware/assets required. |
-| Sony | PlayStation 1 | PCSX ReARMed / EmulatorJS | [ ] | IMPLEMENTED_UNVERIFIED | I | — | I | I | I/I/I | — | P0 | CUE/BIN companion mapping unit-tested in `PH-05/ps1-multifile-adapter-20261019.md`; legal bootable disc and gameplay required. |
-| Sony | PlayStation Portable | PPSSPP threaded / EmulatorJS | [ ] | BLOCKED | I | — | I | I | I/I/I | — | P0 | Requires legal PBP/ISO, threaded runtime gameplay, offline and large-file proof. |
+| Sony | PlayStation 1 | PCSX ReARMed / EmulatorJS | [ ] | IMPLEMENTED_UNVERIFIED | I | — | I | I | I/I/I | — | P0 | CUE/BIN companion mapping unit-tested; chunked media load available; legal bootable disc + MIPS toolchain still required for gameplay. |
+| Sony | PlayStation Portable | PPSSPP threaded / EmulatorJS | [ ] | BLOCKED | I | — | I | I | I/I/I | — | P0 | Requires legal PBP/ISO, threaded runtime gameplay, offline proof; chunked JS load exists but large-ISO on-demand VFS unproven. |
 | Sony | PlayStation 2 | Play! Web candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P2 | PDR experimental only; never blocks release. |
 | Sony | PS Vita | None selected | [ ] | NOT_FEASIBLE | — | — | — | — | — | — | P3 | No supported browser-core plan. |
 | Nintendo | NES / Famicom | FCEUmm candidate | [ ] | PLANNED | — | — | — | — | — | — | P1 | Legal homebrew fixture and core lock required. |
@@ -55,8 +55,8 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 
 | Order | Platform | Core and dependencies | Complexity | Browser/legal limits | Required acceptance and next step |
 |---|---|---|---|---|---|
-| 1 | PS1 | PCSX ReARMed, current CUE companion adapter, legal bootable multi-track fixture | High | No commercial BIOS/disc; current Blob path has 256 MiB cap | Chromium gameplay/input/save/offline restart; build or acquire a clean fixture/toolchain. |
-| 2 | PSP | PPSSPP thread core, COOP/COEP, SharedArrayBuffer, seekable large-file design | High | Legal PBP/ISO and actual threaded performance required | Verify thread assets, legal fixture, gameplay/save/offline and bounded memory. |
+| 1 | PS1 | PCSX ReARMed, current CUE companion adapter, legal bootable multi-track fixture | High | No commercial BIOS/disc; host lacks MIPS toolchain | Chromium gameplay/input/save/offline restart; build or acquire a clean fixture/toolchain. |
+| 2 | PSP | PPSSPP thread core, COOP/COEP, SharedArrayBuffer, large-file design | High | Legal PBP/ISO and actual threaded performance required; host lacks pspdev | Verify thread assets, legal fixture, gameplay/save/offline and on-demand large ISO. |
 | 3 | Genesis/SMS/GG | Existing EmulatorJS cores and legal fixtures | Medium | Physical audio/controllers/browser matrix unverified | Complete installed-offline restart and controls before promoting family members. |
 | 4 | NES/SNES/GB/GBC/GBA | Pinned mature Libretro/browser cores, adapter and core lock | Medium | Each needs redistributable fixture | Add one system at a time with real online/offline/save/control evidence. |
 | 5 | Sega CD/32X, N64, DS, computers | Multi-file/BIOS-aware adapter and legal fixtures | High | Large files, firmware, performance, touch layouts | Complete bounded-memory media work first. |

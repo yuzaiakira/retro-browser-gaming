@@ -22,4 +22,10 @@ describe('capability classification', () => {
   it('keeps an unknown quota limited instead of inventing storage capacity', () => {
     expect(probe({ ...device, quota: undefined }, nativeRelease)).toMatchObject({ status: 'limited' });
   });
+
+  it('allows large WASM discs only when cross-origin isolation threads are present', () => {
+    const large = 300 * 1024 * 1024;
+    expect(probe(device, pspRelease, large).status).toBe('limited');
+    expect(probe({ ...device, threads: false }, { recommended_core: { code: 'pcsx_rearmed', runtime_type: 'wasm', min_capabilities: ['wasm'] } } as unknown as Release, large)).toMatchObject({ status: 'unsupported' });
+  });
 });

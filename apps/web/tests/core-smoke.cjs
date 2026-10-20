@@ -77,6 +77,10 @@ async function run() {
     await page.goto(`http://127.0.0.1:${port}/`);
     const result = await page.evaluate(() => window.result);
     if (!result.capabilities?.saveState) throw new Error('Genesis core did not expose save state capability');
+    if (!result.capabilities?.seekableMedia) throw new Error('Seekable media mount was not active under COOP/COEP');
+    const seekable = await page.evaluate(() => window.command('seekableStats'));
+    if (!seekable || seekable.payloadCapacity !== 8 * 1024 * 1024) throw new Error(`unexpected seekable stats: ${JSON.stringify(seekable)}`);
+    if (seekable.peakPayload > 8 * 1024 * 1024) throw new Error(`seekable peak payload exceeded bound: ${seekable.peakPayload}`);
     // The core and legal ROM are already loaded. Gameplay must not need the
     // local HTTP server after this point.
     await page.context().setOffline(true);
