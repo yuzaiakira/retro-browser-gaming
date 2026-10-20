@@ -2,7 +2,7 @@
 
 Browser-based retro launcher built from `docs/PDR.md`. It provides a Django/DRF catalog and rights-checked asset manifests, a Next.js PWA, OPFS + IndexedDB installation, real HTTP Range downloads, local saves, configurable input, and a version-pinned EmulatorJS adapter.
 
-**Delivery status: incomplete.** The legal HTML5 title is fully installed, launched, saved, and re-opened offline in Chromium. Legal Genesis, PS1 (multi-FILE CUE/BIN), and PSP (threaded PPSSPP) homebrew gameplay, input, save/load, and fresh-process offline input are verified under Chromium core-smoke. Chunked media loading and the browser download fault suite including 1 GiB bounded-memory transfer are verified. Native Docker Compose with PostgreSQL, SeaweedFS S3-compatible storage, Django, and Next.js is verified. Large-ISO on-demand VFS (EMU-004), catalog-installed console offline cold-start, and the physical device/browser matrix remain open. See `docs/final-handover.md` and `docs/acceptance-matrix.md`.
+**Delivery status: incomplete.** The legal HTML5 title is fully installed, launched, saved, and re-opened offline in Chromium. Legal Genesis, PS1 (multi-FILE CUE/BIN), and PSP (threaded PPSSPP) homebrew gameplay, input, save/load, and fresh-process offline input are verified under Chromium core-smoke. On-demand BlobFS large-media access (EMU-004: 512 MiB / 1 GiB windows without MEMFS full-file copy) is verified. Chunked media loading and the browser download fault suite including 1 GiB bounded-memory transfer are verified. Native Docker Compose with PostgreSQL, SeaweedFS S3-compatible storage, Django, and Next.js is verified. Catalog-installed console offline cold-start, OFF-004/005, and the physical device/browser matrix remain open. See `docs/final-handover.md` and `docs/acceptance-matrix.md`.
 
 ## Run locally
 
@@ -49,9 +49,10 @@ cd ../.. && python3 scripts/verify-core-lock.py
 cd apps/web && GENESIS_FIXTURE=mit-genesis-pong.bin node tests/core-smoke.cjs
 cd apps/web && CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/ps1-smoke.cjs
 cd apps/web && CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/psp-smoke.cjs
+cd apps/web && CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/ondemand-media.cjs
 ```
 
-`core-smoke.cjs`, `ps1-smoke.cjs`, and `psp-smoke.cjs` use tracked legal fixtures in `.fixtures/`, not mocked emulators. They run the vendored Genesis Plus GX, PCSX ReARMed, and threaded PPSSPP cores in Chromium with COOP/COEP and store screenshots under `docs/test-evidence/PH-05/screenshots/`.
+`core-smoke.cjs`, `ps1-smoke.cjs`, `psp-smoke.cjs`, and `ondemand-media.cjs` use tracked legal fixtures / synthetic large Files, not mocked emulators. They run the vendored Genesis Plus GX, PCSX ReARMed, and threaded PPSSPP cores in Chromium with COOP/COEP and store screenshots under `docs/test-evidence/PH-05/screenshots/`.
 
 ## Docker Compose
 

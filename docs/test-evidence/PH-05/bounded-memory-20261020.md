@@ -22,4 +22,4 @@ GENESIS_GAMEPLAY_PASS {"capabilities":{"saveState":true,"audio":true,"analog":fa
 
 ## Limits
 
-After chunked load, RetroArch MEMFS still owns the media bytes in the WASM heap. This change satisfies the PDR prohibition on building a JavaScript `ArrayBuffer` the size of the whole disc during load. It is **not** a streaming on-demand VFS that keeps only a window of bytes in WASM for multi-gigabyte ISOs. PS1/PSP large-disc gameplay remains blocked on legal fixtures.
+After chunked load, RetroArch MEMFS still owns the media bytes in the WASM heap. This change satisfies the PDR prohibition on building a JavaScript `ArrayBuffer` the size of the whole disc during load. For PS1/PSP and large Files, the later BlobFS path in `seekable-fs.js` mounts without a MEMFS full-file copy — see `ondemand-media-20261020.md` (EMU-004).

@@ -65,6 +65,7 @@ addEventListener('message', async (event) => {
     window.EJS_onGameStart = () => {
       started = true;
       const gm = window.EJS_emulator.gameManager;
+      const seekable = seekableBridge?.stats?.() || null;
       reply({
         type: 'ready',
         capabilities: {
@@ -72,6 +73,7 @@ addEventListener('message', async (event) => {
           audio: true,
           analog: d.core === 'ppsspp' || d.core === 'pcsx_rearmed',
           seekableMedia: !!seekableBridge,
+          onDemandMedia: !!(seekable && seekable.onDemand),
         },
       });
     };
@@ -82,7 +84,7 @@ addEventListener('message', async (event) => {
         for (const file of companions) files['/' + file.name] = file;
         window.EJS_gameUrl = d.file.name;
         window.EJS_externalFiles = {};
-        seekableBridge = window.RetroSeekableFS.installSeekableLoader(files);
+        seekableBridge = window.RetroSeekableFS.installSeekableLoader(files, { core: d.core });
       } else {
         const total = [d.file, ...companions].reduce((sum, item) => sum + item.size, 0);
         if (total > 256 * 1024 * 1024) {

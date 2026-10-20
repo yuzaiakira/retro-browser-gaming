@@ -26,7 +26,7 @@
 | EMU-001 | NOT_VERIFIED | `PH-05/genesis-gameplay-20261019.md` plus seekable re-run `PH-05/bounded-memory-20261020.md` prove real gameplay with chunked media load; physical audio and installed-release restart evidence remain outstanding |
 | EMU-002 | PASSED (core-smoke) | Legal multi-FILE CUE/BIN Dot homebrew + PCSX ReARMed HLE Chromium gameplay/input/save + fresh-process offline input (`PH-05/ps1-gameplay-20261020.md`); catalog SW cold-start and physical audio remain open |
 | EMU-003 | PASSED (core-smoke) | Legal PSP EBOOT + threaded PPSSPP under COOP/COEP/SAB; framebuffer input/save + fresh-process offline input (`PH-05/psp-gameplay-20261020.md`) |
-| EMU-004 | NOT_VERIFIED | Chunked ≤8 MiB MEMFS load verified for the small PBP; true on-demand large-ISO VFS and trustworthy total process/WASM memory bounds remain unproven |
+| EMU-004 | PASSED (scoped) | On-demand BlobFS (≤8 MiB SAB windows): 512 MiB + 1 GiB random-access + PSP Dot gameplay without MEMFS full-file copy (`PH-05/ondemand-media-20261020.md`); Playwright PID/RSS sampling unavailable here; catalog SW cold-start still open |
 | EMU-005, EMU-006 | NOT_VERIFIED | Lifecycle stress and negative E2E outstanding |
 | CMP-001, CMP-002 | PASSED (unit) | `compatibility.test.ts` accurately blocks threads / limits unknown quota; large discs require isolation |
 | IN-001 | NOT_VERIFIED | Mapping unit test only; visual game-control proof outstanding |
@@ -49,6 +49,6 @@
 |---|---|
 | G01 | PASSED — native PostgreSQL, persistent authenticated S3-compatible storage, Django and Next.js ran in Compose with browser E2E evidence |
 | G02–G04 | PASSED (download recovery/performance) — truncated chunk, crash-before-journal resume, identity change, quota, cancel/delete, and 1 GiB bounded-memory browser evidence recorded 2026-10-20 |
-| G05 | PARTIAL — Genesis/PS1/PSP core-smoke gameplay verified; EMU-004 large-ISO bound and catalog-installed offline cold-start remain open |
+| G05 | PARTIAL — Genesis/PS1/PSP gameplay + EMU-004 on-demand BlobFS verified; catalog-installed offline cold-start and device matrix remain open |
 | G06–G10 | NOT_VERIFIED — Firefox catalog smoke only; device/control/offline-fault coverage incomplete |
-| G11 | PARTIAL — EMU-002/EMU-003 core-smoke passed; EMU-004 and remaining device/offline-fault gates still block full P0 closeout |
+| G11 | PARTIAL — EMU-002/003/004 scoped passes recorded; OFF-004/005, physical device/gamepad/touch, and catalog SW cold-start still block full P0 closeout |

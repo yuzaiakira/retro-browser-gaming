@@ -19,6 +19,7 @@
 | Browser download faults | PASS | `test-evidence/PH-03/download-faults-20261020.md`: truncation, crash-before-journal, identity, quota, cancel/delete, 100 MiB restart, 1 GiB bounded memory |
 | Client secret scan / Compose YAML parse | PASS, scoped | No secret variable identifiers in web sources/build; required service graph parses |
 | Docker Compose / native PostgreSQL | PASS | `test-evidence/PH-01/compose-20261019.md`; healthy re-check 2026-10-20 |
-| EMU-004 large-ISO VFS / physical devices | NOT_VERIFIED | `docs/acceptance-matrix.md` |
+| EMU-004 on-demand BlobFS (512MiB/1GiB + PSP play) | PASS, scoped | `test-evidence/PH-05/ondemand-media-20261020.md` |
+| Physical devices / OFF-004/005 | NOT_VERIFIED | `docs/acceptance-matrix.md` |
 
 The browser evidence uses Playwright Chromium (and Firefox for catalog smoke) with actual OPFS, IndexedDB, worker, service worker and emulator core when relevant. Network interception may inject faults but does not replace the component under test.
