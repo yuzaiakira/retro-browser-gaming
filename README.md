@@ -76,4 +76,5 @@ EmulatorJS data is vendored at the pinned source revision recorded in `docs/core
 - `docs/browser-support.md` — support and physical-device status
 - `docs/licenses-and-assets.md` — provenance and restrictions
 - `docs/acceptance-matrix.md` — every PDR acceptance ID
+- `docs/EMULATOR_SUPPORT_MATRIX.md` — evidence-based platform inventory and emulator roadmap
 - `docs/final-handover.md` — verified results, blockers, and next acceptance run

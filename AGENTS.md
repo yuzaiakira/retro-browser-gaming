@@ -8,6 +8,8 @@ Deliver the PDR-defined browser launcher: Django/DRF, PostgreSQL, SeaweedFS S3-c
 
 Read `docs/EXECUTION_STATE.md`, the relevant acceptance-matrix IDs, and the matching skill in `.agents/skills/`. Inspect code and existing evidence before editing. Preserve the `main` history, native Compose stack, and working boundaries. Do not reorganize code solely for style.
 
+For every emulator-related change, also read and update `docs/EMULATOR_SUPPORT_MATRIX.md`. Its checkbox represents real interactive browser gameplay only; retain separate capability/status fields and evidence links.
+
 ## Repository map
 
 - `apps/api/`: Django/DRF catalog, importer, range transport, S3 integration, tests.

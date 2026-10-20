@@ -28,3 +28,5 @@ Complete every mandatory P0 gate in `docs/PDR.md`; the release is **not complete
 ## Evidence and next task
 
 Read `docs/acceptance-matrix.md` and `docs/test-evidence.md` before modifying status. Next actionable task: obtain or build a cleanly licensed PS1 homebrew fixture with a compatible MIPS toolchain and prove PCSX ReARmed gameplay; meanwhile implement the next independent download fault case rather than waiting on that asset.
+
+`docs/EMULATOR_SUPPORT_MATRIX.md` is the permanent platform inventory. Keep it synchronized on every emulator/core, gameplay, offline, save, control, browser, or acceptance change; only Genesis and HTML5 currently have checked browser-gameplay rows.
