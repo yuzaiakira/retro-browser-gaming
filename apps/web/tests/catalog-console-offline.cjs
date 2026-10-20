@@ -1,6 +1,6 @@
 /**
- * Catalog-installed Genesis/SMS/GG/NES/PS1/PSP: download via launcher, then fresh-process
- * offline cold-start with save/load. Complements core-smoke gameplay proofs.
+ * Catalog-installed Genesis/SMS/GG/NES/SNES/GB/GBC/GBA/PS1/PSP: download via launcher,
+ * then fresh-process offline cold-start with save/load.
  */
 const { chromium } = require('@playwright/test');
 const { mkdtempSync, rmSync, mkdirSync, writeFileSync } = require('node:fs');
@@ -20,6 +20,10 @@ const GAMES = [
   { slug: 'mit-sms-ninjagirl', title: 'MIT SMS Ninja Girl', platform: 'sms' },
   { slug: 'mit-gg-waternet', title: 'MIT GG Waternet', platform: 'gg' },
   { slug: 'mit-nes-table-tennis', title: 'MIT NES Table Tennis', platform: 'nes' },
+  { slug: 'mit-snes-gothicvania', title: 'MIT SNES Gothicvania', platform: 'snes' },
+  { slug: 'mit-gb-dot', title: 'MIT GB Dot', platform: 'gb' },
+  { slug: 'mit-gbc-waternet', title: 'MIT GBC Waternet', platform: 'gbc' },
+  { slug: 'mit-gba-dino', title: 'MIT GBA Dino', platform: 'gba' },
   { slug: 'mit-ps1-dot', title: 'MIT PS1 Dot', platform: 'ps1' },
   { slug: 'mit-psp-dot', title: 'MIT PSP Dot', platform: 'psp' },
 ].filter((g) => !only.length || only.includes(g.platform));

@@ -2,26 +2,23 @@
 
 ## Feasibility snapshot
 
-| Target | Priority | Feasibility now | Status |
-|---|---|---|---|
-| Master System (`smsplus`) | P0 gap | Core vendored + locked | **DONE** — MIT Ninja Girl; core + catalog offline (`PH-05/sms-*`, `catalog-sms-offline-*`) |
-| Game Gear | P0 gap | Same `genesis_plus_gx`; `.gg` + `segaGG` | **DONE** — MIT Waternet; core + catalog offline (`PH-05/gg-*`, `catalog-gg-offline-*`) |
-| NES / Famicom | P1 | `fceumm` from EmulatorJS 4.2.3 CDN + lock | **DONE** — MIT Table Tennis; core + catalog offline (`PH-05/nes-*`, `catalog-nes-offline-*`) |
-| J2ME | P1 | No verified offline MIDP runtime | **BLOCKED** — assessment revisited; FreeJ2ME-Web/CheerpJ rejected; `J2ME-For-Web` leading unverified candidate (`PH-06/j2me-runtime-assessment-20261020.md`) |
-| SNES | P1 | Needs `snes9x` (or peer) wasm package | Next optional expansion |
-| GB / GBC | P1 | Needs `gambatte` wasm package | Same pattern |
-| GBA | P1 | Needs `mgba` wasm package | Same pattern |
+| Target | Priority | Status |
+|---|---|---|
+| Master System / Game Gear / NES | P0/P1 | **DONE** (commit `7656f03` and earlier) |
+| SNES (`snes9x`) | P1 | **DONE** — MIT Gothicvania; core + catalog offline |
+| Game Boy (`gambatte` + `.gb`) | P1 | **DONE** — first-party MIT Dot; verified separately from GBC |
+| Game Boy Color (`gambatte` + `.gbc`) | P1 | **DONE** — MIT Waternet GBC; separate catalog slug |
+| GBA (`mgba`) | P1 | **DONE** — MIT Google Dino |
+| J2ME | P1 | **BLOCKED** — `PH-06/j2me-for-web-spike-20261020.md` (builds, no CheerpJ, **no RMS**, no legal offline PoC) |
+| SG-1000 / SNES-adjacent / Atari | P1–P2 | Next optional |
 
-## Architecture reminder
+## Architecture notes from this pass
 
-Player talks only through `FrameAdapter` / `contracts.ts`. New systems must:
+- Control schemes in `frame.js`: `snes9x→snes`, `gambatte→gb`, `mgba→gba`.
+- GB vs GBC share `gambatte` but use **distinct** fixtures, consoles (`gb`/`gbc`), and evidence rows.
+- Core lock grown to **59** EmulatorJS 4.2.3 packages from `cdn.emulatorjs.org/4.2.3`.
+- Parameterized smoke: `apps/web/tests/libretro-family-smoke.cjs` (`PLATFORM=snes|gb|gbc|gba`).
 
-1. Add core code to `supported` in `registry.ts` only after lock + license docs.
-2. Set `EJS_controlScheme` in `runtime/frame.js` when EmulatorJS defaults are wrong (`.gg` → `segaGG`; `fceumm` → `nes`).
-3. Track fixture SHA-256 in `docs/licenses-and-assets.md`.
-4. Leave support-matrix `[x]` unchecked until interactive Chromium evidence exists.
-5. Widen `EmulatorCore.supported_extensions` only as a superset via seed `QuerySet.update` (identity fields are immutable via `Model.save`).
+## Deferred physical
 
-## Deferred physical (non-blocking for expansion)
-
-Gamepad IN-002 and iOS IOS-001: `docs/test-evidence/PH-08/deferred-physical-acceptance.md`.
+Gamepad IN-002 and iOS IOS-001 remain BLOCKED_EXTERNAL and still block complete P0.

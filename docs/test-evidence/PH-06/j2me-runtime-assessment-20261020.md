@@ -30,6 +30,8 @@ P1 research only. No J2ME adapter, core bytes, or game fixture were added to the
 
 ## Result
 
-Still **no** runtime that has passed this repository’s full gate set. J2ME remains **BLOCKED** in `docs/EMULATOR_SUPPORT_MATRIX.md`. Next spike (time-boxed): pin `J2ME-For-Web` commit + hashes; prove a MIT JAR boots offline in Chromium with keypad + RMS restart; only then design an isolated adapter.
+Still **no** runtime that has passed this repository’s full gate set. J2ME remains **BLOCKED** in `docs/EMULATOR_SUPPORT_MATRIX.md`.
+
+Follow-up spike completed: `PH-06/j2me-for-web-spike-20261020.md` — `J2ME-For-Web` builds under GPL-2.0 without CheerpJ, but **RMS is missing** and no legal Chromium offline gameplay PoC was produced. Do not integrate.
 
 Insecure workarounds (proxying CheerpJ, shipping proprietary blobs, marking playable without gameplay) are forbidden.

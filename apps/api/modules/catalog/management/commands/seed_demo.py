@@ -16,6 +16,10 @@ SYSTEMS = [
     ("sega-ms", "Sega Master System", "console"),
     ("sega-gg", "Sega Game Gear", "handheld"),
     ("nes", "NES / Famicom", "console"),
+    ("snes", "Super Nintendo", "console"),
+    ("gb", "Game Boy", "handheld"),
+    ("gbc", "Game Boy Color", "handheld"),
+    ("gba", "Game Boy Advance", "handheld"),
     ("ps1", "PlayStation", "console"),
     ("psp", "PlayStation Portable", "handheld"),
 ]
@@ -24,9 +28,25 @@ WASM_CORES = [
     ("genesis_plus_gx", ["md", "bin", "gg"], ["wasm", "secureContext"]),
     ("smsplus", ["sms"], ["wasm", "secureContext"]),
     ("fceumm", ["nes"], ["wasm", "secureContext"]),
+    ("snes9x", ["sfc", "smc"], ["wasm", "secureContext"]),
+    ("gambatte", ["gb", "gbc"], ["wasm", "secureContext"]),
+    ("mgba", ["gba"], ["wasm", "secureContext"]),
     ("pcsx_rearmed", ["cue", "chd", "bin"], ["wasm", "secureContext"]),
     ("ppsspp", ["iso", "cso", "pbp"], ["wasm", "threads", "webgl2", "secureContext"]),
 ]
+
+CONSOLE_FIXTURE_SLUGS = {
+    "sega-md",
+    "sega-ms",
+    "sega-gg",
+    "nes",
+    "snes",
+    "gb",
+    "gbc",
+    "gba",
+    "ps1",
+    "psp",
+}
 
 CORE_VERSION = "ejs-4.2.3"
 
@@ -39,7 +59,10 @@ class Command(BaseCommand):
         parser.add_argument(
             "--with-console-fixtures",
             action="store_true",
-            help="Publish MIT Genesis/Master System/Game Gear/NES/PS1/PSP engineering fixtures into the catalog.",
+            help=(
+                "Publish MIT Genesis/Master System/Game Gear/NES/SNES/GB/GBC/GBA/"
+                "PS1/PSP engineering fixtures into the catalog."
+            ),
         )
 
     def handle(self, *args, **options):
@@ -48,10 +71,7 @@ class Command(BaseCommand):
             cat, _ = PlatformCategory.objects.get_or_create(
                 code=category, defaults={"name": category.title()}
             )
-            available = slug == "browser" or (
-                with_consoles
-                and slug in {"sega-md", "sega-ms", "sega-gg", "nes", "ps1", "psp"}
-            )
+            available = slug == "browser" or (with_consoles and slug in CONSOLE_FIXTURE_SLUGS)
             console, _ = Console.objects.get_or_create(
                 slug=slug,
                 defaults={
@@ -237,6 +257,83 @@ class Command(BaseCommand):
             evidence=(
                 "mike42/8bit-table-tennis release v1.0 table_tennis_v1.0.nes "
                 "(https://github.com/mike42/8bit-table-tennis)"
+            ),
+        )
+        results["snes"] = self._import_files(
+            fixtures,
+            slug="mit-snes-gothicvania",
+            title="MIT SNES Gothicvania",
+            description=(
+                "MIT-licensed SNES Gothicvania homebrew fixture for engineering "
+                "acceptance only. Not a commercial ROM."
+            ),
+            console="snes",
+            core={"code": "snes9x", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-snes-gothicvania.sfc",
+            files=[("mit-snes-gothicvania.sfc", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/gothicvania-SNES-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "donth77/snes-homebrew release v1.0.0 gothicvania.sfc "
+                "(https://github.com/donth77/snes-homebrew)"
+            ),
+        )
+        results["gb"] = self._import_files(
+            fixtures,
+            slug="mit-gb-dot",
+            title="MIT GB Dot",
+            description=(
+                "First-party MIT Game Boy DMG Dot homebrew fixture for engineering "
+                "acceptance only. Not a commercial ROM."
+            ),
+            console="gb",
+            core={"code": "gambatte", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-gb-dot.gb",
+            files=[("mit-gb-dot.gb", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/gb-dot-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence="Built with GBDK 4.3.0; sources in fixtures/gb-dot/",
+        )
+        results["gbc"] = self._import_files(
+            fixtures,
+            slug="mit-gbc-waternet",
+            title="MIT GBC Waternet",
+            description=(
+                "MIT-licensed Game Boy Color Waternet homebrew fixture for engineering "
+                "acceptance only. Not a commercial ROM."
+            ),
+            console="gbc",
+            core={"code": "gambatte", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-gbc-waternet.gbc",
+            files=[("mit-gbc-waternet.gbc", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/waternet-GBC-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "joyrider3774/waternet release v1.0 Waternet.Nintendo.Game.Boy.Color.zip "
+                "(https://github.com/joyrider3774/waternet)"
+            ),
+        )
+        results["gba"] = self._import_files(
+            fixtures,
+            slug="mit-gba-dino",
+            title="MIT GBA Dino",
+            description=(
+                "MIT-licensed Game Boy Advance Google Dino homebrew fixture for engineering "
+                "acceptance only. Not a commercial ROM."
+            ),
+            console="gba",
+            core={"code": "mgba", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-gba-dino.gba",
+            files=[("mit-gba-dino.gba", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/dino-GBA-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "fritzem/Google-Dino-GBA release 1.0.1 Google-Dino-Advance.gba "
+                "(https://github.com/fritzem/Google-Dino-GBA)"
             ),
         )
         results["ps1"] = self._import_files(
