@@ -51,6 +51,7 @@ CONSOLE_FIXTURE_SLUGS = {
     "gba",
     "atari-2600",
     "pce",
+    "sega-sg1000",
     "ps1",
     "psp",
 }
@@ -68,7 +69,7 @@ class Command(BaseCommand):
             action="store_true",
             help=(
                 "Publish MIT/GPL engineering console fixtures (Genesis through Atari 2600, "
-                "PC Engine HuCard, PS1/PSP) into the catalog."
+                "PC Engine HuCard, SG-1000, PS1/PSP) into the catalog."
             ),
         )
 
@@ -382,6 +383,26 @@ class Command(BaseCommand):
             evidence=(
                 "Built from BlockoS/huc examples/scroll/scroll.c; "
                 "sources mirrored in fixtures/pce-scroll/"
+            ),
+        )
+        results["sg1000"] = self._import_files(
+            fixtures,
+            slug="mit-sg1000-retropipe",
+            title="MIT SG-1000 RetroPIPE",
+            description=(
+                "MIT-licensed SG-1000/SC-3000 RetroPIPE homebrew fixture for engineering "
+                "acceptance only (distinct from Master System). Not a commercial ROM."
+            ),
+            console="sega-sg1000",
+            core={"code": "smsplus", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-sg1000-retropipe.sg",
+            files=[("mit-sg1000-retropipe.sg", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/retropipe-SG1000-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "visrealm/retropipe release v0.2 retropipe_v0-2-0_sc3000.sg "
+                "(https://github.com/visrealm/retropipe)"
             ),
         )
         results["ps1"] = self._import_files(
