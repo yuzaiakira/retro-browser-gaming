@@ -4,12 +4,12 @@ Prepared 2026-10-20 on workstation `CodeLab`. Security settings (COOP/COEP, TLS 
 
 ## Device discovery (this workstation)
 
-| Resource | Result |
+| Resource | Result (updated 2026-10-20) |
 |---|---|
-| Android / `adb` | **Unavailable** — `adb` not installed; no devices |
+| Android / `adb` | **Available** — `/usr/bin/adb`; authorized USB device (`2303CRA44A`, Android 15, Chrome 155). See `android-device-discovery-20261020.md`. |
 | iOS / `idevice_id` | **No device** — `ERROR: Unable to retrieve device list!` |
 | Physical gamepad (`/dev/input/js*`) | **None** — only keyboard/mouse HID |
-| Audio sinks | PipeWire: HDMI + **C-Media USB Audio** present |
+| Audio sinks | PipeWire: HDMI + **C-Media USB Audio** present; phone speakers for AUD-001 |
 | Chromium / Firefox | Installed |
 | Playwright WebKit | Via `retro-webkit-test` container only |
 
