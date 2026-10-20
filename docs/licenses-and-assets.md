@@ -6,7 +6,7 @@
 
 ## Core-test fixtures only
 
-The following tracked fixtures are used only by `apps/web/tests/core-smoke.cjs`. They are not seeded or published through the catalog.
+The following tracked fixtures are used by core smoke tests (`core-smoke.cjs`, `sms-smoke.cjs`, PS1/PSP smokes). Catalog seed with `--with-console-fixtures` may publish matching engineering titles; they are not commercial ROMs.
 
 | File | SHA-256 | Source | License |
 |---|---|---|---|
@@ -16,8 +16,9 @@ The following tracked fixtures are used only by `apps/web/tests/core-smoke.cjs`.
 | `.fixtures/dot_track01.bin` | `23ab460d425b94f2e9a8269e2933fb59ffc4739e2aae026b46772076d1265206` | First-party `fixtures/ps1-dot/` | MIT, `fixtures/ps1-dot/LICENSE.txt` |
 | `.fixtures/dot_track02.bin` | `fd3e68b001470f2cbd0cfa193d84d76ad2267b49ca4fcee031b15cd647ceaa05` | First-party `fixtures/ps1-dot/` (generated CDDA tone) | MIT, `fixtures/ps1-dot/LICENSE.txt` |
 | `.fixtures/mit-psp-dot.pbp` | `0b4bae0155a8648bfb019b84278db973fcb9aaa8f8b7ec8003b6113b742fa1a7` | First-party `fixtures/psp-dot/` (`ghcr.io/pspdev/pspdev` build) | MIT, `fixtures/psp-dot/LICENSE.txt` |
+| `.fixtures/mit-sms-ninjagirl.sms` | `9eb439b9aa883d53411ff1785600bb370edc45e10436b96c216502ac162f1c06` | SMS Power `NinjaGirl-SMS-2024-04-09.zip`; upstream `pw32x/ninjagirl` | MIT, `LICENSES/ninjagirl-SMS-MIT.txt` |
 
-Genesis fixtures come from `monteslu/retro-homebrew-games` release `build-27` (MIT unless a game directory says otherwise). PS1/PSP Dot fixtures are original first-party MIT homebrew; toolchains are used only to build and are not vendored into this repository. No Sony BIOS or commercial firmware is redistributed.
+Genesis fixtures come from `monteslu/retro-homebrew-games` release `build-27` (MIT unless a game directory says otherwise). Master System Ninja Girl is MIT homebrew from SMS Power / `pw32x/ninjagirl`. PS1/PSP Dot fixtures are original first-party MIT homebrew; toolchains are used only to build and are not vendored into this repository. No Sony BIOS or commercial firmware is redistributed.
 
 ## Emulator runtime
 

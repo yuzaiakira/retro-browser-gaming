@@ -4,15 +4,15 @@ Physical evidence requires a real device session. Automated CDP runs against the
 
 | ID | Scenario | Device | Pass criteria | Status |
 |---|---|---|---|---|
-| IN-002-P | Physical gamepad connect | USB/BT controller + Chromium | Buttons map; character/menu responds | **BLOCKED_EXTERNAL** — no `/dev/input/js*` / no controller (2026-10-20 rediscovery) |
-| IN-002-D | Physical gamepad disconnect mid-play | Same | Pressed state released; no stuck input | **BLOCKED_EXTERNAL** — no controller |
+| IN-002-P | Physical gamepad connect | USB/BT controller + Chromium | Buttons map; character/menu responds | **BLOCKED_EXTERNAL** — deferred; owner has no controller (`deferred-physical-acceptance.md`) |
+| IN-002-D | Physical gamepad disconnect mid-play | Same | Pressed state released; no stuck input | **BLOCKED_EXTERNAL** — deferred; owner has no controller |
 | IN-003-P | Multitouch dpad+action | Android Chrome | Simultaneous Left + A registered | **PASSED** — dual pointer Left+A on device Chrome CDP (`android-physical-20261020.txt`) |
 | IN-004-P | Custom touch layout survives reload | Android Chrome | Position/size/opacity retained after reload | **PASSED** — layout size 58 retained in IDB after reload |
 | IN-005-P | App blur / tab switch | Android Chrome | Inputs released on hide | **PASSED** — visibilitychange+blur+pagehide release on physical Chrome session |
 | UX-FS | Fullscreen enter/exit | Android Chrome | Emulator continues; layout usable | **PASSED** — `requestFullscreen` on `.player-stage` entered then exited |
 | UX-OR | Orientation change | Android Chrome | Portrait↔landscape; controls remain usable | **PASSED** — fullscreen + `orientation.lock` → `landscape-primary` 839×303 |
 | AUD-001 | Real audio output | Android Chrome speakers | Human hears Genesis/PS1/PSP audio | **PASSED** — human confirmed audible MIT Genesis Breakout after `segaMD` control-scheme fix (`aud001-human-listen-20261020.md`) |
-| IOS-001 | iOS Safari catalog + offline | Real iPhone/iPad | Catalog, install, offline; note PSP SAB limits | **BLOCKED_EXTERNAL** — `idevice_id` empty |
+| IOS-001 | iOS Safari catalog + offline | Real iPhone/iPad | Catalog, install, offline; note PSP SAB limits | **BLOCKED_EXTERNAL** — deferred; no iOS device (`deferred-physical-acceptance.md`) |
 
 ## Android session extras (same PH-08 run)
 

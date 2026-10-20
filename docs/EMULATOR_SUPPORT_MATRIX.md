@@ -11,7 +11,7 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | Browser | WASM game ports | Per-port native runtime | [ ] | PLANNED | — | — | — | — | — | — | P1 | Require license review and iframe adapter. |
 | Classic Mobile Phones / Java ME | J2ME / MIDP 1.0–2.0 | No selected compliant runtime | [ ] | BLOCKED | — | — | — | — | — | — | P1 | `PH-06/j2me-runtime-assessment-20261020.md`; FreeJ2ME-Web requires proprietary online CheerpJ; PluotSorbet needs a current offline/runtime-asset validation. |
 | Sega | SG-1000 | SMS Plus candidate | [ ] | PLANNED | — | — | — | I | I/I/I | — | P1 | Add legal fixture and adapter/core validation. |
-| Sega | Master System | SMS Plus | [ ] | IMPLEMENTED_UNVERIFIED | I | — | I | I | I/I/I | — | P0 | Adapter exists; legal ROM gameplay/offline evidence needed. |
+| Sega | Master System | SMS Plus / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | I | I | V | V/I/I | Chromium | P0 | Core gameplay + save/load + offline-after-load (`PH-05/sms-gameplay-20261020.md`); MIT Ninja Girl fixture; catalog seed `mit-sms-ninjagirl` available; catalog offline cold-start still open. |
 | Sega | Game Gear | Genesis Plus GX | [ ] | IMPLEMENTED_UNVERIFIED | I | — | I | I | I/I/I | — | P0 | Adapter exists; legal ROM gameplay/offline evidence needed. |
 | Sega | Mega Drive / Genesis | Genesis Plus GX / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium 154 + Android Chrome 155 | P0 | Desktop + Android physical install/play + **AUD-001 human-heard** (`PH-08/aud001-human-listen-20261020.md`); `segaMD` control scheme forced in `frame.js`; physical gamepad remains open. |
 | Sega | Sega CD / Mega-CD | PicoDrive candidate | [ ] | PLANNED | — | — | — | — | — | — | P1 | Multi-file disc and BIOS/legal asset review required. |
@@ -56,7 +56,7 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | Order | Platform | Core and dependencies | Complexity | Browser/legal limits | Required acceptance and next step |
 |---|---|---|---|---|---|
 | 1 | Physical device/control matrix | Gamepad, mobile touch, iOS Safari, audible output | Medium | No substitute for physical-device evidence | Record real-device results; WebKit host libs blocked automation on this workstation. |
-| 2 | SMS/GG family members | Existing EmulatorJS cores and legal fixtures | Medium | Only Genesis Breakout has catalog offline evidence | Add legal fixtures and catalog offline proofs per system. |
+| 2 | SMS/GG family members | Existing EmulatorJS cores and legal fixtures | Medium | SMS Ninja Girl core gameplay verified; GG + SMS catalog offline still open | Add Game Gear MIT fixture; catalog offline proofs per system. |
 | 3 | Playwright WebKit host deps | ICU/webp/ffi packages for Playwright WebKit | Low | Not iOS Safari proof even when green | Install missing shared libraries or document permanent blocker. |
 | 4 | NES/SNES/GB/GBC/GBA | Pinned mature Libretro/browser cores, adapter and core lock | Medium | Each needs redistributable fixture | Add one system at a time with real online/offline/save/control evidence. |
 | 5 | Sega CD/32X, N64, DS, computers | Multi-file/BIOS-aware adapter and legal fixtures | High | Large files, firmware, performance, touch layouts | Complete bounded-memory media work first. |

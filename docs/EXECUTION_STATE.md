@@ -2,42 +2,34 @@
 
 ## Verdict
 
-**RELEASE CANDIDATE / NOT COMPLETE** — Android PH-08 including human-heard **AUD-001** PASSED on USB Chrome; physical gamepad and real iOS Safari remain open.
+**RELEASE CANDIDATE / NOT COMPLETE** — Android PH-08 (incl. AUD-001) verified; IN-002/IOS-001 deferred as external; Master System core gameplay newly evidenced. See `docs/RELEASE_CANDIDATE.md`.
 
-## Device discovery (2026-10-20, rediscovered)
+## Deferred physical acceptance (do not rediscover)
 
-- `adb` at `/usr/bin/adb`; authorized USB device `device` (model `2303CRA44A`, Android 15).
-- Chrome `155.0.8059.39`; CDP via `chrome_devtools_remote`; reverse `13000`/`18000`.
-- No joystick nodes; no iOS (`idevice_id` empty).
-- Evidence: `PH-08/android-device-discovery-20261020.md`.
+Owner has **no gamepad** and **no iOS device**. Keep **BLOCKED_EXTERNAL**:
 
-## Android physical acceptance
+- IN-002-P / IN-002-D
+- IOS-001
 
-| ID | Status | Evidence |
-|---|---|---|
-| IN-003-P | PASSED | Simultaneous Left+A (`android-physical-20261020.txt`) |
-| IN-004-P | PASSED | Touch layout retained after reload |
-| IN-005-P | PASSED | Blur/visibility release on device Chrome |
-| UX-FS | PASSED | Fullscreen enter/exit on player stage |
-| UX-OR | PASSED | Portrait → landscape via fullscreen + orientation.lock |
-| Offline cold-start | PASSED | Reverse removed; API unreachable; 4 READY OFFLINE; offline play (`android-offline-cold-20261020.txt`) |
-| Genesis / PS1 / PSP install+play | PASSED | Same physical suite on phone |
-| AUD-001 | **PASSED** | Human heard Genesis Breakout on phone speakers after `segaMD` fix (`aud001-human-listen-20261020.md`) |
-| IN-002-P/D | BLOCKED_EXTERNAL | No gamepad |
-| IOS-001 | BLOCKED_EXTERNAL | No iOS device |
+Instructions: `docs/test-evidence/PH-08/deferred-physical-acceptance.md`. Do not mark PASSED, remove from PDR, or invent evidence.
 
-## Runtime fix shipped with AUD-001
+## Android PH-08 (already PASSED — do not redo)
 
-- `frame.js`: force `EJS_controlScheme` per core (`genesis_plus_gx` → `segaMD`); disable EmulatorJS virtual-gamepad/fast-forward by default.
-- Shell cache `retro-shell-v4` so phones pick up the new runtime assets.
+IN-003-P … UX-OR, offline reverse-removed cold-start, Genesis/PS1/PSP on phone, AUD-001 human-heard Genesis. Commits through `53645e2` (segaMD) preserved.
 
-## Remaining external blockers
+## Platform expansion (this session)
 
-1. Physical gamepad (IN-002-P/D)
-2. Real iOS Safari (IOS-001) — never substitute Playwright WebKit
+| Item | Status |
+|---|---|
+| RC checkpoint doc | `docs/RELEASE_CANDIDATE.md` |
+| Master System `smsplus` + MIT Ninja Girl | **VERIFIED_PLAYABLE** core smoke (`PH-05/sms-gameplay-20261020.md`) |
+| Catalog seed `mit-sms-ninjagirl` | Seed command updated; requires API image with new fixture + `seed_demo.py` |
+| J2ME | Still BLOCKED (CheerpJ / no offline runtime) |
+| NES/SNES/GB/GBA | Not started — need core packages + fixtures (`docs/progress/platform-expansion-20261020.md`) |
 
 ## Next action
 
-1. Attach a gamepad when available for IN-002-P/D.
-2. Attach iOS hardware or an authorized real-device lab for IOS-001.
-3. Do not re-loop Android discovery while the same USB device remains authorized.
+1. Rebuild/redeploy API image so `.fixtures/mit-sms-ninjagirl.sms` and updated `seed_demo` are baked in; confirm catalog slug online.
+2. Optional: Game Gear MIT fixture + smoke (same `genesis_plus_gx` family).
+3. Begin NES: pin `fceumm` from EmulatorJS, lock, MIT ROM, smoke — **P1**, not P0.
+4. When gamepad or iPhone arrives, run deferred physical rows only.

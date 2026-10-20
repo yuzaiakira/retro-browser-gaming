@@ -37,7 +37,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "--with-console-fixtures",
             action="store_true",
-            help="Publish MIT Genesis/PS1/PSP engineering fixtures into the catalog.",
+            help="Publish MIT Genesis/Master System/PS1/PSP engineering fixtures into the catalog.",
         )
 
     def handle(self, *args, **options):
@@ -47,7 +47,7 @@ class Command(BaseCommand):
                 code=category, defaults={"name": category.title()}
             )
             available = slug == "browser" or (
-                with_consoles and slug in {"sega-md", "ps1", "psp"}
+                with_consoles and slug in {"sega-md", "sega-ms", "ps1", "psp"}
             )
             console, _ = Console.objects.get_or_create(
                 slug=slug,
@@ -166,6 +166,27 @@ class Command(BaseCommand):
             license_ref="MIT; LICENSES/retro-homebrew-games-MIT.txt",
             provenance="https://spdx.org/licenses/MIT.html",
             evidence="Tracked .fixtures/mit-genesis-breakout.bin from monteslu/retro-homebrew-games build-27",
+        )
+        results["sms"] = self._import_files(
+            fixtures,
+            slug="mit-sms-ninjagirl",
+            title="MIT SMS Ninja Girl",
+            description=(
+                "MIT-licensed Master System Ninja Girl homebrew fixture for engineering "
+                "acceptance only. Not a commercial ROM."
+            ),
+            console="sega-ms",
+            core={"code": "smsplus", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-sms-ninjagirl.sms",
+            files=[("mit-sms-ninjagirl.sms", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/ninjagirl-SMS-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "SMS Power Homebrew NinjaGirl-SMS-2024-04-09.zip "
+                "(https://www.smspower.org/Homebrew/NinjaGirl-SMS); "
+                "upstream https://github.com/pw32x/ninjagirl"
+            ),
         )
         results["ps1"] = self._import_files(
             fixtures,
