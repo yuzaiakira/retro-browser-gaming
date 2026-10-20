@@ -1,24 +1,24 @@
 # Platform expansion notes — 2026-10-20
 
-## Feasibility snapshot
+## Consolidated status (single roadmap)
 
 | Target | Priority | Status |
 |---|---|---|
-| Master System / Game Gear / NES | P0/P1 | **DONE** (commit `7656f03` and earlier) |
-| SNES (`snes9x`) | P1 | **DONE** — MIT Gothicvania; core + catalog offline |
-| Game Boy (`gambatte` + `.gb`) | P1 | **DONE** — first-party MIT Dot; verified separately from GBC |
-| Game Boy Color (`gambatte` + `.gbc`) | P1 | **DONE** — MIT Waternet GBC; separate catalog slug |
-| GBA (`mgba`) | P1 | **DONE** — MIT Google Dino |
-| J2ME | P1 | **BLOCKED** — `PH-06/j2me-for-web-spike-20261020.md` (builds, no CheerpJ, **no RMS**, no legal offline PoC) |
-| SG-1000 / SNES-adjacent / Atari | P1–P2 | Next optional |
+| Genesis / SMS / GG / PS1 / PSP | P0 | VERIFIED (prior) |
+| NES / SNES / GB / GBC / GBA | P1 | VERIFIED (`9d6c490`) |
+| Atari 2600 | P1 | **DONE** — `stella2014` + MIT Berta; catalog offline |
+| PC Engine HuCard | P1 | **DONE** — `mednafen_pce` + GPL HuC scroll; **not CD** |
+| SG-1000 | P1 | **FEASIBLE** on `smsplus`; blocked on redistributable license |
+| J2ME | P1 | **BLOCKED** — no RMS / no legal offline PoC |
+| PCE CD / Sega CD / higher | P1–P2 | Unchanged — need multi-file/BIOS policy |
 
-## Architecture notes from this pass
+## Architecture notes
 
-- Control schemes in `frame.js`: `snes9x→snes`, `gambatte→gb`, `mgba→gba`.
-- GB vs GBC share `gambatte` but use **distinct** fixtures, consoles (`gb`/`gbc`), and evidence rows.
-- Core lock grown to **59** EmulatorJS 4.2.3 packages from `cdn.emulatorjs.org/4.2.3`.
-- Parameterized smoke: `apps/web/tests/libretro-family-smoke.cjs` (`PLATFORM=snes|gb|gbc|gba`).
+- New cores in lock (65): `stella2014`, `mednafen_pce`.
+- `frame.js` schemes: `stella2014→atari2600`, `mednafen_pce→pce`; SG would reuse `smsplus→segaMS`.
+- `smsplus` seed extensions widened to `["sms","sg"]` for future SG fixture.
+- Do not treat Master System evidence as SG-1000 proof.
 
 ## Deferred physical
 
-Gamepad IN-002 and iOS IOS-001 remain BLOCKED_EXTERNAL and still block complete P0.
+IN-002 / IOS-001 remain BLOCKED_EXTERNAL and still block complete P0.

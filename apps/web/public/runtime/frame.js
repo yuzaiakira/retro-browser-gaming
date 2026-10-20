@@ -54,11 +54,14 @@ addEventListener('message', async (event) => {
     const romName = String(d.name || d.file?.name || '').toLowerCase();
     const controlSchemeByCore = {
       genesis_plus_gx: romName.endsWith('.gg') ? 'segaGG' : 'segaMD',
+      // SG-1000 ROMs (.sg) also use smsplus; EmulatorJS has no separate sg1000 scheme.
       smsplus: 'segaMS',
       fceumm: 'nes',
       snes9x: 'snes',
       gambatte: 'gb',
       mgba: 'gba',
+      stella2014: 'atari2600',
+      mednafen_pce: 'pce',
       pcsx_rearmed: 'psx',
       ppsspp: 'psp',
     };
