@@ -1,24 +1,31 @@
 /**
- * Bounded-memory media loader for EmulatorJS.
+ * On-demand media VFS for EmulatorJS / Emscripten MEMFS.
  *
- * EmulatorJS normally materialises the whole game as one ArrayBuffer, then
- * copies it into MEMFS. This module streams File/Blob bytes in ≤8 MiB slices
- * directly into the Emscripten FS so the JavaScript heap never holds a
- * full-file ArrayBuffer. Random-access proof helpers exercise the same
- * slice window without retaining the whole payload.
+ * Strategy:
+ * - Small files (< ON_DEMAND_THRESHOLD): stream into MEMFS in ≤8 MiB slices
+ *   so the JavaScript heap never holds a full-file ArrayBuffer.
+ * - Large files, or PS1/PSP cores when SharedArrayBuffer is available: mount
+ *   Blob-backed nodes that read windows through a dedicated worker into a
+ *   SharedArrayBuffer. The WASM heap never receives a full-file copy at mount
+ *   time; cores issue random-access reads through FS stream_ops.
  *
- * Note: after load, RetroArch MEMFS still owns the bytes in the WASM heap —
- * that is required by the pinned cores. The PDR gate this satisfies is the
- * prohibition on building a JavaScript ArrayBuffer the size of the whole disc.
+ * createLazyFile in the pinned cores requires ENVIRONMENT_IS_WORKER + sync
+ * XHR, so it is not usable from the EmulatorJS iframe main thread. WORKERFS
+ * is not compiled into the vendored cores. WasmFS/OPFS backends would need a
+ * core rebuild; File objects from OPFS already work with this BlobFS path.
  */
 (function (global) {
   const PAYLOAD_BYTES = 8 * 1024 * 1024;
+  const ON_DEMAND_THRESHOLD = 16 * 1024 * 1024;
+  const SAB_HEADER = 16;
+  const READ_TIMEOUT_MS = 60000;
+  const ON_DEMAND_CORES = new Set(['ppsspp', 'pcsx_rearmed']);
 
   async function writeFileChunked(FS, absolutePath, file) {
     const size = file.size;
     if (size === 0) {
       FS.writeFile(absolutePath, new Uint8Array(0));
-      return { bytesWritten: 0, peakPayload: 0, chunks: 0 };
+      return { bytesWritten: 0, peakPayload: 0, chunks: 0, mode: 'memfs-chunked' };
     }
     let peakPayload = 0;
     let chunks = 0;
@@ -29,7 +36,7 @@
     chunks = 1;
     FS.writeFile(absolutePath, first);
     offset = first.length;
-    if (offset >= size) return { bytesWritten: size, peakPayload, chunks };
+    if (offset >= size) return { bytesWritten: size, peakPayload, chunks, mode: 'memfs-chunked' };
 
     const stream = FS.open(absolutePath, 'r+');
     try {
@@ -45,7 +52,7 @@
     } finally {
       FS.close(stream);
     }
-    return { bytesWritten: size, peakPayload, chunks };
+    return { bytesWritten: size, peakPayload, chunks, mode: 'memfs-chunked' };
   }
 
   async function readSlice(file, offset, length) {
@@ -55,8 +62,274 @@
     return new Uint8Array(await file.slice(offset, end).arrayBuffer());
   }
 
-  function installSeekableLoader(filesByPath) {
-    const stats = { bytesRead: 0, bytesWritten: 0, peakPayload: 0, payloadCapacity: PAYLOAD_BYTES, mounts: 0, chunks: 0 };
+  function ensureDirs(FS, absolutePath) {
+    const parts = absolutePath.split('/').filter(Boolean);
+    parts.pop();
+    let current = '';
+    for (const part of parts) {
+      current += `/${part}`;
+      if (!FS.analyzePath(current).exists) FS.mkdir(current);
+    }
+  }
+
+  function createBlobReader() {
+    if (typeof SharedArrayBuffer === 'undefined') return null;
+    const sab = new SharedArrayBuffer(SAB_HEADER + PAYLOAD_BYTES);
+    const control = new Int32Array(sab, 0, 4);
+    const payload = new Uint8Array(sab, SAB_HEADER);
+    let worker;
+    try {
+      worker = new Worker('/runtime/blob-reader.worker.js');
+    } catch (error) {
+      console.error('Blob reader worker unavailable', error);
+      return null;
+    }
+    let nextId = 1;
+    let ready = false;
+    let lastError = null;
+    const stats = { bytesRead: 0, peakPayload: 0, reads: 0, spinMs: 0 };
+    const pendingReady = [];
+
+    worker.onerror = (event) => {
+      lastError = event.message || 'WORKER_ERROR';
+      ready = false;
+      while (pendingReady.length) pendingReady.shift()(new Error(lastError));
+    };
+    worker.onmessage = (event) => {
+      const message = event.data || {};
+      if (message.type === 'ready') {
+        ready = true;
+        while (pendingReady.length) pendingReady.shift()(null);
+      }
+      if (message.type === 'error') lastError = message.error;
+    };
+    worker.postMessage({ type: 'init', sab });
+
+    function waitReady() {
+      if (ready) return;
+      // Allow the worker's 'ready' message to land: yield via Atomics.wait is
+      // illegal on the main thread, so callers that need sync must first await
+      // ensureReady() from an async context.
+      throw new Error('BLOB_READER_NOT_READY');
+    }
+
+    function ensureReady() {
+      if (ready) return Promise.resolve();
+      return new Promise((resolve, reject) => {
+        const timer = setTimeout(() => reject(new Error('BLOB_READER_INIT_TIMEOUT')), 10000);
+        pendingReady.push((error) => {
+          clearTimeout(timer);
+          if (error) reject(error);
+          else resolve();
+        });
+      });
+    }
+
+    function acquire() {
+      const start = performance.now();
+      while (Atomics.compareExchange(control, 2, 0, 1) !== 0) {
+        if (performance.now() - start > READ_TIMEOUT_MS) throw new Error('BLOB_LOCK_TIMEOUT');
+      }
+    }
+
+    function release() {
+      Atomics.store(control, 2, 0);
+    }
+
+    function register(file) {
+      waitReady();
+      const id = nextId++;
+      worker.postMessage({ type: 'register', id, file });
+      return id;
+    }
+
+    function unregister(id) {
+      worker.postMessage({ type: 'unregister', id });
+    }
+
+    function readInto(id, offset, length, dest, destOffset) {
+      if (length <= 0) return 0;
+      if (length > PAYLOAD_BYTES) throw new Error('BLOB_READ_TOO_LARGE');
+      waitReady();
+      acquire();
+      try {
+        Atomics.store(control, 0, 0);
+        Atomics.store(control, 1, 0);
+        lastError = null;
+        worker.postMessage({ type: 'read', id, offset, length });
+        const start = performance.now();
+        while (Atomics.load(control, 0) === 0) {
+          if (lastError) throw new Error(lastError);
+          if (performance.now() - start > READ_TIMEOUT_MS) throw new Error('BLOB_READ_TIMEOUT');
+        }
+        stats.spinMs += performance.now() - start;
+        if (Atomics.load(control, 0) < 0) throw new Error(lastError || 'BLOB_READ_FAILED');
+        const n = Atomics.load(control, 1);
+        if (n > 0) dest.set(payload.subarray(0, n), destOffset || 0);
+        stats.bytesRead += n;
+        stats.reads += 1;
+        if (n > stats.peakPayload) stats.peakPayload = n;
+        return n;
+      } finally {
+        release();
+      }
+    }
+
+    function readSync(id, offset, length) {
+      if (length > PAYLOAD_BYTES) throw new Error('BLOB_READ_TOO_LARGE');
+      const out = new Uint8Array(Math.max(0, length));
+      const n = readInto(id, offset, out.length, out, 0);
+      return n === out.length ? out : out.subarray(0, n);
+    }
+
+    function dispose() {
+      try {
+        worker.terminate();
+      } catch {
+        /* ignore */
+      }
+    }
+
+    return {
+      ensureReady,
+      register,
+      unregister,
+      readInto,
+      readSync,
+      dispose,
+      stats: () => ({ ...stats }),
+      sabByteLength: sab.byteLength,
+    };
+  }
+
+  function createBlobBackedFile(FS, absolutePath, file, reader, mountStats) {
+    ensureDirs(FS, absolutePath);
+    const name = absolutePath.split('/').pop();
+    const parentPath = absolutePath.slice(0, absolutePath.lastIndexOf('/')) || '/';
+    if (FS.analyzePath(absolutePath).exists) FS.unlink(absolutePath);
+
+    const id = reader.register(file);
+    // Mirror Emscripten createLazyFile: a contents object with length + get(),
+    // plus stream_ops.read that performs windowed copies.
+    const contents = {
+      length: file.size,
+      chunkSize: PAYLOAD_BYTES,
+      get(index) {
+        if (index < 0 || index >= file.size) return undefined;
+        const got = reader.readSync(id, index, 1);
+        return got.length ? got[0] : undefined;
+      },
+    };
+
+    const node = FS.createFile(parentPath, name, { isDevice: false, contents }, true, false);
+    node.contents = contents;
+    node.timestamp = Date.now();
+    node.blobReaderId = id;
+    Object.defineProperty(node, 'usedBytes', {
+      get() {
+        return file.size;
+      },
+    });
+
+    function writeChunks(stream, buffer, offset, length, position) {
+      if (position >= file.size || length <= 0) return 0;
+      let remaining = Math.min(length, file.size - position);
+      let written = 0;
+      while (remaining > 0) {
+        const want = Math.min(PAYLOAD_BYTES, remaining);
+        const dest = buffer instanceof Uint8Array
+          ? buffer
+          : new Uint8Array(buffer.buffer || buffer, buffer.byteOffset || 0, buffer.length || length);
+        const n = reader.readInto(id, position + written, want, dest, offset + written);
+        if (n <= 0) break;
+        written += n;
+        remaining -= n;
+        mountStats.bytesRead += n;
+        mountStats.reads += 1;
+        if (n > mountStats.peakPayload) mountStats.peakPayload = n;
+      }
+      return written;
+    }
+
+    const streamOps = {};
+    for (const key of Object.keys(node.stream_ops || {})) {
+      const original = node.stream_ops[key];
+      streamOps[key] = (...args) => original(...args);
+    }
+    streamOps.read = (stream, buffer, offset, length, position) =>
+      writeChunks(stream, buffer, offset, length, position);
+    streamOps.llseek = (stream, offset, whence) => {
+      let position = offset;
+      if (whence === 1) position += stream.position;
+      else if (whence === 2) position += file.size;
+      if (position < 0) throw new FS.ErrnoError(28);
+      stream.position = position;
+      return position;
+    };
+    streamOps.mmap = (stream, length, position) => {
+      // Allow small mmaps (headers/probes). Reject multi-hundred-MiB maps so a
+      // core cannot pull an entire disc into the WASM heap through mmap.
+      if (length > 16 * 1024 * 1024) throw new FS.ErrnoError(48);
+      const alloc = FS.mmapAlloc || global.mmapAlloc;
+      const ptr = alloc ? alloc(length) : 0;
+      if (!ptr) throw new FS.ErrnoError(48);
+      const heap =
+        (typeof global.GROWABLE_HEAP_U8 === 'function' && global.GROWABLE_HEAP_U8()) ||
+        (typeof global.GROWABLE_HEAP_I8 === 'function' && global.GROWABLE_HEAP_I8()) ||
+        global.HEAPU8 ||
+        global.HEAP8;
+      writeChunks(stream, heap, ptr, length, position);
+      return { ptr, allocated: true };
+    };
+    streamOps.write = () => {
+      throw new FS.ErrnoError(2);
+    };
+    node.stream_ops = streamOps;
+
+    const nodeOps = Object.assign({}, node.node_ops);
+    nodeOps.getattr = (n) => ({
+      dev: 1,
+      ino: n.id,
+      mode: n.mode,
+      nlink: 1,
+      uid: 0,
+      gid: 0,
+      rdev: 0,
+      size: file.size,
+      atime: new Date(n.timestamp),
+      mtime: new Date(n.timestamp),
+      ctime: new Date(n.timestamp),
+      blksize: 4096,
+      blocks: Math.ceil(file.size / 4096) || 1,
+    });
+    node.node_ops = nodeOps;
+    return id;
+  }
+
+  function preferOnDemand(core, file) {
+    if (typeof SharedArrayBuffer === 'undefined') return false;
+    if (ON_DEMAND_CORES.has(core)) return true;
+    return (file?.size || 0) >= ON_DEMAND_THRESHOLD;
+  }
+
+  function installSeekableLoader(filesByPath, options = {}) {
+    const core = options.core || '';
+    const stats = {
+      bytesRead: 0,
+      bytesWritten: 0,
+      peakPayload: 0,
+      payloadCapacity: PAYLOAD_BYTES,
+      mounts: 0,
+      chunks: 0,
+      reads: 0,
+      mode: 'pending',
+      onDemand: false,
+      wasmHeapBefore: 0,
+      wasmHeapAfterMount: 0,
+      modes: [],
+    };
+    const registeredIds = [];
+    let reader = null;
 
     const preferEntry = () => {
       for (const path of Object.keys(filesByPath)) {
@@ -69,6 +342,18 @@
       return first.startsWith('/') ? first : `/${first}`;
     };
 
+    const measureHeap = (Module) => {
+      try {
+        if (Module?.HEAPU8?.length) return Module.HEAPU8.length;
+        if (Module?.HEAP8?.length) return Module.HEAP8.length;
+        if (Module?.wasmMemory?.buffer?.byteLength) return Module.wasmMemory.buffer.byteLength;
+        if (Module?.asm?.memory?.buffer?.byteLength) return Module.asm.memory.buffer.byteLength;
+      } catch {
+        /* ignore */
+      }
+      return 0;
+    };
+
     const apply = (EmulatorJS) => {
       EmulatorJS.prototype.downloadFiles = function patchedDownloadFiles() {
         (async () => {
@@ -79,25 +364,47 @@
             await this.gameManager.loadPpssppAssets();
           }
           const FS = this.gameManager.FS;
-          for (const [path, file] of Object.entries(filesByPath)) {
-            const absolute = path.startsWith('/') ? path : `/${path}`;
-            const parts = absolute.split('/').filter(Boolean);
-            parts.pop();
-            let current = '';
-            for (const part of parts) {
-              current += `/${part}`;
-              if (!FS.analyzePath(current).exists) FS.mkdir(current);
-            }
-            const result = await writeFileChunked(FS, absolute, file);
-            stats.bytesWritten += result.bytesWritten;
-            stats.chunks += result.chunks;
-            stats.mounts += 1;
-            if (result.peakPayload > stats.peakPayload) stats.peakPayload = result.peakPayload;
+          stats.wasmHeapBefore = measureHeap(this.Module);
+          const activeCore = this.getCore() || core;
+
+          const entries = Object.entries(filesByPath);
+          const anyOnDemand = entries.some(([, file]) => preferOnDemand(activeCore, file));
+          if (anyOnDemand) {
+            reader = createBlobReader();
+            if (!reader) throw new Error('BLOB_READER_UNAVAILABLE');
+            await reader.ensureReady();
+            stats.onDemand = true;
           }
+
+          for (const [path, file] of entries) {
+            const absolute = path.startsWith('/') ? path : `/${path}`;
+            if (preferOnDemand(activeCore, file) && reader) {
+              const id = createBlobBackedFile(FS, absolute, file, reader, stats);
+              registeredIds.push(id);
+              stats.mounts += 1;
+              stats.modes.push('blobfs-ondemand');
+              stats.mode = 'blobfs-ondemand';
+            } else {
+              const result = await writeFileChunked(FS, absolute, file);
+              stats.bytesWritten += result.bytesWritten;
+              stats.chunks += result.chunks;
+              stats.mounts += 1;
+              if (result.peakPayload > stats.peakPayload) stats.peakPayload = result.peakPayload;
+              stats.modes.push(result.mode);
+              if (stats.mode === 'pending') stats.mode = result.mode;
+            }
+          }
+
+          if (reader) {
+            const readerStats = reader.stats();
+            if (readerStats.peakPayload > stats.peakPayload) stats.peakPayload = readerStats.peakPayload;
+          }
+
+          stats.wasmHeapAfterMount = measureHeap(this.Module);
           const entryPath = preferEntry();
           this.fileName = entryPath.replace(/^\//, '');
           this.config.gameUrl = this.fileName;
-          global.__RETRO_SEEKABLE_STATS__ = () => ({ ...stats });
+          global.__RETRO_SEEKABLE_STATS__ = () => ({ ...stats, reader: reader ? reader.stats() : null });
           await this.downloadBios();
           await this.downloadStartState();
           await this.downloadGameParent();
@@ -124,9 +431,21 @@
     });
 
     return {
-      stats: () => ({ ...stats }),
-      dispose() {},
+      stats: () => ({ ...stats, reader: reader ? reader.stats() : null }),
+      dispose() {
+        for (const id of registeredIds) {
+          try {
+            reader?.unregister(id);
+          } catch {
+            /* ignore */
+          }
+        }
+        registeredIds.length = 0;
+        reader?.dispose();
+        reader = null;
+      },
       PAYLOAD_BYTES,
+      ON_DEMAND_THRESHOLD,
     };
   }
 
@@ -134,6 +453,9 @@
     installSeekableLoader,
     writeFileChunked,
     readSlice,
+    createBlobReader,
+    preferOnDemand,
     PAYLOAD_BYTES,
+    ON_DEMAND_THRESHOLD,
   };
 })(window);
