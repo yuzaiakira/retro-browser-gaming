@@ -1,8 +1,4 @@
 {
-  "genesisInstall": true,
-  "ps1Install": true,
-  "pspInstall": true,
-  "genesisOffline": true,
-  "ps1Offline": true,
-  "pspOffline": true
+  "nesInstall": true,
+  "nesOffline": true
 }

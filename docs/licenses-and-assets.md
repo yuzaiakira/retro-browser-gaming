@@ -6,7 +6,7 @@
 
 ## Core-test fixtures only
 
-The following tracked fixtures are used by core smoke tests (`core-smoke.cjs`, `sms-smoke.cjs`, PS1/PSP smokes). Catalog seed with `--with-console-fixtures` may publish matching engineering titles; they are not commercial ROMs.
+The following tracked fixtures are used by core smoke tests (`core-smoke.cjs`, `sms-smoke.cjs`, `gg-smoke.cjs`, `nes-smoke.cjs`, PS1/PSP smokes). Catalog seed with `--with-console-fixtures` may publish matching engineering titles; they are not commercial ROMs.
 
 | File | SHA-256 | Source | License |
 |---|---|---|---|
@@ -17,8 +17,12 @@ The following tracked fixtures are used by core smoke tests (`core-smoke.cjs`, `
 | `.fixtures/dot_track02.bin` | `fd3e68b001470f2cbd0cfa193d84d76ad2267b49ca4fcee031b15cd647ceaa05` | First-party `fixtures/ps1-dot/` (generated CDDA tone) | MIT, `fixtures/ps1-dot/LICENSE.txt` |
 | `.fixtures/mit-psp-dot.pbp` | `0b4bae0155a8648bfb019b84278db973fcb9aaa8f8b7ec8003b6113b742fa1a7` | First-party `fixtures/psp-dot/` (`ghcr.io/pspdev/pspdev` build) | MIT, `fixtures/psp-dot/LICENSE.txt` |
 | `.fixtures/mit-sms-ninjagirl.sms` | `9eb439b9aa883d53411ff1785600bb370edc45e10436b96c216502ac162f1c06` | SMS Power `NinjaGirl-SMS-2024-04-09.zip`; upstream `pw32x/ninjagirl` | MIT, `LICENSES/ninjagirl-SMS-MIT.txt` |
+| `.fixtures/mit-gg-waternet.gg` | `ab9f288e2b556263cddd7856deb67269cfe08ac1e6729ca9e44c5e2c19bb1d8c` | `joyrider3774/waternet` release `v1.0` `Waternet.Sega.Game.Gear.zip` | MIT, `LICENSES/waternet-GG-MIT.txt` |
+| `.fixtures/mit-nes-table-tennis.nes` | `05122457672f95fcf2ee518c3f37e506617725c2d031100b1b1c8b7785068ea3` | `mike42/8bit-table-tennis` release `v1.0` `table_tennis_v1.0.nes` | MIT, `LICENSES/table-tennis-NES-MIT.txt` |
 
-Genesis fixtures come from `monteslu/retro-homebrew-games` release `build-27` (MIT unless a game directory says otherwise). Master System Ninja Girl is MIT homebrew from SMS Power / `pw32x/ninjagirl`. PS1/PSP Dot fixtures are original first-party MIT homebrew; toolchains are used only to build and are not vendored into this repository. No Sony BIOS or commercial firmware is redistributed.
+Genesis fixtures come from `monteslu/retro-homebrew-games` release `build-27` (MIT unless a game directory says otherwise). Master System Ninja Girl is MIT homebrew from SMS Power / `pw32x/ninjagirl`. Game Gear Waternet is MIT homebrew from `joyrider3774/waternet`. NES Table Tennis is MIT homebrew from `mike42/8bit-table-tennis`. PS1/PSP Dot fixtures are original first-party MIT homebrew; toolchains are used only to build and are not vendored into this repository. No Sony BIOS or commercial firmware is redistributed.
+
+FCEUmm EmulatorJS core packages (`fceumm-wasm.data`, `fceumm-legacy-wasm.data`, `reports/fceumm.json`) are vendored from `https://cdn.emulatorjs.org/4.2.3/data/cores/` and recorded in `docs/core-package-lock.json` (GPL-3.0; core-specific upstream notices apply).
 
 ## Emulator runtime
 

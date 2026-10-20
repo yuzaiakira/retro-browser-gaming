@@ -1,5 +1,5 @@
 /**
- * Catalog-installed Genesis/PS1/PSP: download via launcher, then fresh-process
+ * Catalog-installed Genesis/SMS/GG/NES/PS1/PSP: download via launcher, then fresh-process
  * offline cold-start with save/load. Complements core-smoke gameplay proofs.
  */
 const { chromium } = require('@playwright/test');
@@ -10,20 +10,72 @@ const { tmpdir } = require('node:os');
 const baseUrl = process.env.RETRO_TEST_BASE_URL || 'http://127.0.0.1:3000';
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
 const evidenceDir = join(__dirname, '..', '..', '..', 'docs', 'test-evidence', 'PH-05');
+const only = (process.env.CATALOG_OFFLINE_ONLY || '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean);
 
 const GAMES = [
   { slug: 'mit-genesis-breakout', title: 'MIT Genesis Breakout', platform: 'genesis' },
+  { slug: 'mit-sms-ninjagirl', title: 'MIT SMS Ninja Girl', platform: 'sms' },
+  { slug: 'mit-gg-waternet', title: 'MIT GG Waternet', platform: 'gg' },
+  { slug: 'mit-nes-table-tennis', title: 'MIT NES Table Tennis', platform: 'nes' },
   { slug: 'mit-ps1-dot', title: 'MIT PS1 Dot', platform: 'ps1' },
   { slug: 'mit-psp-dot', title: 'MIT PSP Dot', platform: 'psp' },
-];
+].filter((g) => !only.length || only.includes(g.platform));
 
 async function installGame(page, game) {
   await page.goto(`${baseUrl}/games/${game.slug}`);
   await page.getByRole('heading', { name: game.title }).waitFor({ timeout: 30000 });
-  await page.getByRole('button', { name: 'Download & try on this device' }).click();
-  await page.getByRole('link', { name: '▶ Play game' }).waitFor({ timeout: 300000 });
-  await page.getByRole('link', { name: '▶ Play game' }).click();
+  const play = page.getByRole('link', { name: '▶ Play game' });
+  if (await play.count()) {
+    await play.click();
+  } else {
+    await page.getByRole('button', { name: 'Download & try on this device' }).click();
+    await play.waitFor({ timeout: 300000 });
+    await play.click();
+  }
   await page.getByRole('button', { name: 'Save state', exact: true }).waitFor({ timeout: 180000 });
+
+  // Keyboard input while catalog player is live (libretro Left)
+  await page.evaluate(() => {
+    window.__retroInputLog = [];
+    window.addEventListener('retro-input', (e) => window.__retroInputLog.push(e.detail));
+    window.dispatchEvent(
+      new KeyboardEvent('keydown', { code: 'ArrowLeft', key: 'ArrowLeft', bubbles: true }),
+    );
+  });
+  await page.waitForTimeout(80);
+  await page.evaluate(() => {
+    window.dispatchEvent(
+      new KeyboardEvent('keyup', { code: 'ArrowLeft', key: 'ArrowLeft', bubbles: true }),
+    );
+  });
+  const keyHit = await page.evaluate(
+    () => (window.__retroInputLog || []).some((e) => e.command === 6 && e.value === 1),
+  );
+  if (!keyHit) throw new Error(`${game.slug}: keyboard Left did not reach InputRouter`);
+
+  // Touch overlay when present
+  const touchToggle = page.getByRole('button', { name: /touch controls/i });
+  if (await touchToggle.count()) {
+    const label = await touchToggle.textContent();
+    if (label?.includes('Show')) await touchToggle.click();
+  }
+  const touchLeft = page.getByRole('button', { name: 'Touch Left' });
+  if (await touchLeft.count()) {
+    await page.evaluate(() => {
+      window.__retroInputLog = [];
+    });
+    await touchLeft.dispatchEvent('pointerdown', { pointerId: 41, bubbles: true });
+    await page.waitForTimeout(50);
+    await touchLeft.dispatchEvent('pointerup', { pointerId: 41, bubbles: true });
+    const touchHit = await page.evaluate(
+      () => (window.__retroInputLog || []).some((e) => e.command === 6 && e.value === 1),
+    );
+    if (!touchHit) throw new Error(`${game.slug}: Touch Left did not reach InputRouter`);
+  }
+
   await page.getByRole('button', { name: 'Save state', exact: true }).click();
   await page.getByText('State saved on this device', { exact: true }).waitFor({ timeout: 30000 });
   const controlled = await page.evaluate(async () => {
@@ -31,6 +83,10 @@ async function installGame(page, game) {
     return !!navigator.serviceWorker.controller;
   });
   if (!controlled) throw new Error(`${game.slug}: service worker not controlling after install`);
+
+  // Lifecycle: leave player (dispose path) before offline cold-start reopen
+  await page.goto(`${baseUrl}/library`, { waitUntil: 'domcontentloaded' });
+  await page.getByRole('heading', { name: game.title }).waitFor({ timeout: 60000 });
 }
 
 async function offlineColdBoot(page, game) {

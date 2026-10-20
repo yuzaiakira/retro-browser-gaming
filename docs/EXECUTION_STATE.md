@@ -2,7 +2,7 @@
 
 ## Verdict
 
-**RELEASE CANDIDATE / NOT COMPLETE** — Android PH-08 (incl. AUD-001) verified; IN-002/IOS-001 deferred as external; Master System core gameplay newly evidenced. See `docs/RELEASE_CANDIDATE.md`.
+**RELEASE CANDIDATE / NOT COMPLETE** — Android PH-08 (incl. AUD-001) verified; IN-002/IOS-001 deferred as external; SMS/GG/NES expansion evidenced. See `docs/RELEASE_CANDIDATE.md`.
 
 ## Deferred physical acceptance (do not rediscover)
 
@@ -21,15 +21,27 @@ IN-003-P … UX-OR, offline reverse-removed cold-start, Genesis/PS1/PSP on phone
 
 | Item | Status |
 |---|---|
-| RC checkpoint doc | `docs/RELEASE_CANDIDATE.md` |
-| Master System `smsplus` + MIT Ninja Girl | **VERIFIED_PLAYABLE** core smoke (`PH-05/sms-gameplay-20261020.md`) |
-| Catalog seed `mit-sms-ninjagirl` | Seed command updated; requires API image with new fixture + `seed_demo.py` |
-| J2ME | Still BLOCKED (CheerpJ / no offline runtime) |
-| NES/SNES/GB/GBA | Not started — need core packages + fixtures (`docs/progress/platform-expansion-20261020.md`) |
+| Master System `smsplus` + MIT Ninja Girl | **VERIFIED_PLAYABLE** — core + catalog offline (`PH-05/sms-gameplay-20261020.md`, `PH-05/catalog-sms-offline-20261020.md`) |
+| Game Gear `genesis_plus_gx` + MIT Waternet | **VERIFIED_PLAYABLE** — core + catalog offline (`PH-05/gg-gameplay-20261020.md`, `PH-05/catalog-gg-offline-20261020.md`); `segaGG` scheme from `.gg` |
+| NES `fceumm` + MIT Table Tennis | **VERIFIED_PLAYABLE** — core pinned from EmulatorJS 4.2.3 CDN + lock (50 files); catalog offline (`PH-05/nes-gameplay-20261020.md`, `PH-05/catalog-nes-offline-20261020.md`) |
+| Genesis regression | `core-smoke.cjs` still `GENESIS_GAMEPLAY_PASS` after GG/NES adapter changes |
+| J2ME | Still **BLOCKED** — revisit in `PH-06/j2me-runtime-assessment-20261020.md`; leading research candidate `J2ME-For-Web` (unverified) |
+
+## Exact commands (reproducible)
+
+```bash
+CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/gg-smoke.cjs
+CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/nes-smoke.cjs
+RETRO_TEST_BASE_URL=http://127.0.0.1:13000 CHROMIUM_EXECUTABLE=/usr/bin/chromium \
+  CATALOG_OFFLINE_ONLY=gg node apps/web/tests/catalog-console-offline.cjs
+RETRO_TEST_BASE_URL=http://127.0.0.1:13000 CHROMIUM_EXECUTABLE=/usr/bin/chromium \
+  CATALOG_OFFLINE_ONLY=nes node apps/web/tests/catalog-console-offline.cjs
+python3 scripts/verify-core-lock.py   # CORE_LOCK_OK 50 files
+./scripts/compose.sh exec -T api python manage.py seed_demo --with-console-fixtures
+```
 
 ## Next action
 
-1. Rebuild/redeploy API image so `.fixtures/mit-sms-ninjagirl.sms` and updated `seed_demo` are baked in; confirm catalog slug online.
-2. Optional: Game Gear MIT fixture + smoke (same `genesis_plus_gx` family).
-3. Begin NES: pin `fceumm` from EmulatorJS, lock, MIT ROM, smoke — **P1**, not P0.
-4. When gamepad or iPhone arrives, run deferred physical rows only.
+1. Time-boxed J2ME spike on pinned `lingfeng11111/J2ME-For-Web` + MIT `MIDPlay` JAR **or** continue P1 (SNES/GB) with same core-lock pattern.
+2. When gamepad or iPhone arrives, run deferred physical rows only.
+3. Do **not** declare P0 COMPLETE while IN-002/IOS-001 remain BLOCKED_EXTERNAL.

@@ -50,10 +50,12 @@ addEventListener('message', async (event) => {
     window.EJS_color = '#9885f8';
     window.EJS_backgroundColor = '#10131d';
     // EmulatorJS maps genesis_plus_gx → segaMS first (buttons labeled "1"/"2").
-    // Force Mega Drive scheme for Genesis so controls/audio match the ROM family.
+    // Force Mega Drive / Game Gear schemes from ROM extension so controls match the family.
+    const romName = String(d.name || d.file?.name || '').toLowerCase();
     const controlSchemeByCore = {
-      genesis_plus_gx: 'segaMD',
+      genesis_plus_gx: romName.endsWith('.gg') ? 'segaGG' : 'segaMD',
       smsplus: 'segaMS',
+      fceumm: 'nes',
       pcsx_rearmed: 'psx',
       ppsspp: 'psp',
     };

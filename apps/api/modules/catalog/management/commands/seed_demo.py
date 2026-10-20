@@ -15,13 +15,15 @@ SYSTEMS = [
     ("sega-md", "Sega Mega Drive", "console"),
     ("sega-ms", "Sega Master System", "console"),
     ("sega-gg", "Sega Game Gear", "handheld"),
+    ("nes", "NES / Famicom", "console"),
     ("ps1", "PlayStation", "console"),
     ("psp", "PlayStation Portable", "handheld"),
 ]
 
 WASM_CORES = [
-    ("genesis_plus_gx", ["md", "bin"], ["wasm", "secureContext"]),
+    ("genesis_plus_gx", ["md", "bin", "gg"], ["wasm", "secureContext"]),
     ("smsplus", ["sms"], ["wasm", "secureContext"]),
+    ("fceumm", ["nes"], ["wasm", "secureContext"]),
     ("pcsx_rearmed", ["cue", "chd", "bin"], ["wasm", "secureContext"]),
     ("ppsspp", ["iso", "cso", "pbp"], ["wasm", "threads", "webgl2", "secureContext"]),
 ]
@@ -37,7 +39,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "--with-console-fixtures",
             action="store_true",
-            help="Publish MIT Genesis/Master System/PS1/PSP engineering fixtures into the catalog.",
+            help="Publish MIT Genesis/Master System/Game Gear/NES/PS1/PSP engineering fixtures into the catalog.",
         )
 
     def handle(self, *args, **options):
@@ -47,7 +49,8 @@ class Command(BaseCommand):
                 code=category, defaults={"name": category.title()}
             )
             available = slug == "browser" or (
-                with_consoles and slug in {"sega-md", "sega-ms", "ps1", "psp"}
+                with_consoles
+                and slug in {"sega-md", "sega-ms", "sega-gg", "nes", "ps1", "psp"}
             )
             console, _ = Console.objects.get_or_create(
                 slug=slug,
@@ -89,6 +92,14 @@ class Command(BaseCommand):
                     core.status = "available"
                     core.licensed_asset_manifest = manifest_for_core(code)
                     core.save(update_fields=["status", "licensed_asset_manifest"])
+                # Extension allow-list is identity-immutable via Model.save(); widen via
+                # QuerySet.update when the pinned EmulatorJS core gains formats (e.g. .gg).
+                desired_ext = list(ext)
+                current_ext = list(core.supported_extensions or [])
+                if current_ext != desired_ext and set(current_ext).issubset(set(desired_ext)):
+                    EmulatorCore.objects.filter(pk=core.pk).update(
+                        supported_extensions=desired_ext
+                    )
 
         self._seed_orbit()
         if with_consoles:
@@ -186,6 +197,46 @@ class Command(BaseCommand):
                 "SMS Power Homebrew NinjaGirl-SMS-2024-04-09.zip "
                 "(https://www.smspower.org/Homebrew/NinjaGirl-SMS); "
                 "upstream https://github.com/pw32x/ninjagirl"
+            ),
+        )
+        results["gg"] = self._import_files(
+            fixtures,
+            slug="mit-gg-waternet",
+            title="MIT GG Waternet",
+            description=(
+                "MIT-licensed Game Gear Waternet homebrew fixture for engineering "
+                "acceptance only. Not a commercial ROM."
+            ),
+            console="sega-gg",
+            core={"code": "genesis_plus_gx", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-gg-waternet.gg",
+            files=[("mit-gg-waternet.gg", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/waternet-GG-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "joyrider3774/waternet release v1.0 Waternet.Sega.Game.Gear.zip "
+                "(https://github.com/joyrider3774/waternet)"
+            ),
+        )
+        results["nes"] = self._import_files(
+            fixtures,
+            slug="mit-nes-table-tennis",
+            title="MIT NES Table Tennis",
+            description=(
+                "MIT-licensed NES Table Tennis homebrew fixture for engineering "
+                "acceptance only. Not a commercial ROM."
+            ),
+            console="nes",
+            core={"code": "fceumm", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-nes-table-tennis.nes",
+            files=[("mit-nes-table-tennis.nes", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/table-tennis-NES-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "mike42/8bit-table-tennis release v1.0 table_tennis_v1.0.nes "
+                "(https://github.com/mike42/8bit-table-tennis)"
             ),
         )
         results["ps1"] = self._import_files(

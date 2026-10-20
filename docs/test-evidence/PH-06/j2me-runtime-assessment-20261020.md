@@ -1,14 +1,35 @@
-# J2ME browser runtime assessment — 2026-10-20
+# J2ME browser runtime assessment — 2026-10-20 (revisit)
 
-## Candidates inspected
+P1 research only. No J2ME adapter, core bytes, or game fixture were added to the launcher. Do not mark J2ME playable.
 
-| Runtime | License / delivery | Offline assessment | Decision |
+## Requirements (must all pass before integration)
+
+- Self-hosted, redistributable runtime assets with license + SHA-256 pin
+- Fully offline after install (no proprietary CDN / CheerpJ / remote JRE)
+- Current Chromium (and preferably Firefox) under COOP/COEP
+- JAR/JAD load, MIDP/CLDC subset sufficient for homebrew demos
+- Virtual phone keypad + touch mapping
+- RMS persistence across cold start
+- Isolation of untrusted MIDlets (iframe / worker boundary)
+- Reproducible interactive gameplay evidence
+
+## Candidates re-inspected
+
+| Runtime | License / delivery | Offline / self-host | Decision |
 |---|---|---|---|
-| `zb3/freej2me-web` (current inspected checkout) | GPL-3.0 repository; browser execution uses proprietary CheerpJ | The upstream README explicitly says it will not work without an internet connection. It also requires Range-aware hosting. | Rejected for this PWA: it fails the self-hosted, offline requirement. |
-| Mozilla PluotSorbet / J2ME.js lineage (`46ee3e78a4fd9c3f09026cc5cbdcf76e94b7a398`) | GPL-2.0, JavaScript MIDP VM | Its README describes JAR/JAD and gamepad URL loading, but requires a legacy JRE, CasperJS/SlimerJS test stack and phoneME-era infrastructure. No maintained Chromium/OPFS/PWA validation or audited runtime-asset provenance was demonstrated. | P1 research candidate, not integrated. |
+| `zb3/freej2me-web` | FreeJ2ME fork; browser path uses proprietary CheerpJ | Upstream README: will not work without internet; Range hosting required | **Rejected** — fails offline + proprietary runtime policy |
+| `L1games/J2ME-On-Web` | GPL-3.0 wrapper; CheerpJ + commercial ROM in default tree | Same CheerpJ online dependency | **Rejected** |
+| `Rosabis/J2meJS` | Post-2024-04-28: all rights reserved; no modify/redistribute | N/A | **Rejected** — incompatible redistribution |
+| Mozilla PluotSorbet / J2ME.js (`46ee3e78…`) | GPL-2.0 | Legacy JRE/CasperJS/SlimerJS test stack; no maintained Chromium/OPFS/PWA proof | **Research only** — not integrated |
+| `lingfeng11111/J2ME-For-Web` (GPL-2.0, 2025-11) | TypeScript CLDC 1.1 / MIDP 2.0 **subset** interpreter; claims no CheerpJ/WASM | Appears self-hostable in principle; VM claims “98%”; midlet boot / RMS / keypad / isolation **not verified here** | **Leading research candidate** — requires dedicated spike before any adapter |
+| phoneME / WASM ports | Fragmented / abandoned | No pinned, audited browser package found | **Not viable now** |
+
+## Legal fixture (ready when a runtime passes)
+
+`phd051199/MIDPlay` (MIT) ships CLDC 1.1 / MIDP 2.0 JAR/JAD releases with RMS usage and mock data — suitable engineering fixture **after** a runtime proves offline gameplay. Not vendored yet.
 
 ## Result
 
-No currently assessed runtime satisfies all of this repository's requirements: self-hosted, fully offline, audited redistributable runtime assets, current browser compatibility, isolated JAR execution, RMS persistence, and reproducible gameplay evidence. No J2ME adapter, core bytes, or game fixture was added.
+Still **no** runtime that has passed this repository’s full gate set. J2ME remains **BLOCKED** in `docs/EMULATOR_SUPPORT_MATRIX.md`. Next spike (time-boxed): pin `J2ME-For-Web` commit + hashes; prove a MIT JAR boots offline in Chromium with keypad + RMS restart; only then design an isolated adapter.
 
-If a candidate is reconsidered, first pin its source and all runtime assets with license notices and hashes; build it reproducibly; verify no network request after installation; then add a dedicated adapter with JAR/JAD validation, phone profiles, keypad/touch mapping, RMS migration, Chromium gameplay/save/offline evidence, and a separately labelled mobile-device matrix.
+Insecure workarounds (proxying CheerpJ, shipping proprietary blobs, marking playable without gameplay) are forbidden.
