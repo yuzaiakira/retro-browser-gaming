@@ -12,5 +12,6 @@ Use for `apps/web/src/emulators/`, `runtime/frame.*`, Player, vendored cores, co
 - PS1 fixtures must exercise a real CUE plus all referenced BIN/track files. Resolve paths safely, reject missing/duplicate/traversal companion names, and prove the core loaded the disc and reacted to input.
 - PSP requires cross-origin isolation, `SharedArrayBuffer`, threaded-core evidence, legal PBP/ISO provenance, actual rendered gameplay/input/save evidence, and offline restart. Core initialization is insufficient.
 - Never remove `FrameAdapter`'s 256 MiB guard while its input is Blob-copied. A replacement needs a core-compatible seekable VFS and measured bounded memory/random access/offline gameplay.
+- J2ME is P1. Select only a self-hosted runtime with audited redistributable VM assets and actual offline support. Do not integrate FreeJ2ME-Web while its proprietary CheerpJ dependency requires network access; validate JAR/JAD parsing, MIDP profile, phone screen/keypad mapping, RMS restart, untrusted-JAR isolation, and actual gameplay before marking it playable.
 
 Run the real Chromium core test and preserve screenshots/logs. A core-binary change requires lock regeneration, license review, integrity check and a new gameplay run.

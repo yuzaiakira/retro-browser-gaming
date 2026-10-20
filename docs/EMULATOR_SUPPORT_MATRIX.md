@@ -9,6 +9,7 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | Browser | HTML5 / JavaScript | Native isolated iframe | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/I | Chromium 154 | P0 | `PH-02/test-run.txt`; Firefox/WebKit/device matrix remains. |
 | Browser | Flash / Ruffle | Ruffle candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Select a pinned browser build and legal SWF fixture. |
 | Browser | WASM game ports | Per-port native runtime | [ ] | PLANNED | — | — | — | — | — | — | P1 | Require license review and iframe adapter. |
+| Classic Mobile Phones / Java ME | J2ME / MIDP 1.0–2.0 | No selected compliant runtime | [ ] | BLOCKED | — | — | — | — | — | — | P1 | `PH-06/j2me-runtime-assessment-20261020.md`; FreeJ2ME-Web requires proprietary online CheerpJ; PluotSorbet needs a current offline/runtime-asset validation. |
 | Sega | SG-1000 | SMS Plus candidate | [ ] | PLANNED | — | — | — | I | I/I/I | — | P1 | Add legal fixture and adapter/core validation. |
 | Sega | Master System | SMS Plus | [ ] | IMPLEMENTED_UNVERIFIED | I | — | I | I | I/I/I | — | P0 | Adapter exists; legal ROM gameplay/offline evidence needed. |
 | Sega | Game Gear | Genesis Plus GX | [ ] | IMPLEMENTED_UNVERIFIED | I | — | I | I | I/I/I | — | P0 | Adapter exists; legal ROM gameplay/offline evidence needed. |
@@ -61,5 +62,6 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | 5 | Sega CD/32X, N64, DS, computers | Multi-file/BIOS-aware adapter and legal fixtures | High | Large files, firmware, performance, touch layouts | Complete bounded-memory media work first. |
 | 6 | Arcade, Neo Geo, PCE CD, 3DO | Core plus ROM-set/BIOS policy | High | Rights and bundle validation dominate | Define legal asset policy before code integration. |
 | 7 | Saturn, Dreamcast, 3DS, PS2 | Experimental web cores/WebGL | High | Performance/firmware support unknown | Spike separately; no P0 promotion without a PDR change. |
+| P1 parallel research | J2ME feature phones | A self-hosted MIDP VM, JAR/JAD validator, phone profile/keypad/RMS adapter | High | FreeJ2ME-Web is online-only through proprietary CheerpJ; PluotSorbet is legacy/unverified | Do not integrate until an audited runtime can prove Chromium offline gameplay, RMS restart, and isolated untrusted-JAR handling. |
 
 Review this matrix for every emulator/core, gameplay, offline, save, controller, browser, or acceptance-status change. Evidence links must remain truthful; platform rows are never inherited from another system in the same family.

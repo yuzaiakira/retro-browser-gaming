@@ -24,6 +24,7 @@ Complete every mandatory P0 gate in `docs/PDR.md`; the release is **not complete
 - `FrameAdapter` currently Blob-copies games into EmulatorJS; its 256 MiB protection remains until a compatible virtual filesystem is proven.
 - PS1 CUE companion loading is implemented and unit-tested. `Player` reads referenced OPFS tracks, rejects unsafe/missing/duplicate references, and the frame maps them through `EJS_externalFiles`; it is not gameplay evidence. PSn00bSDK `5d9aa2d3dfc7d6e51c2eb942ab4cdbae5571a40a` was inspected but its own legal-gray notice and absent MIPS toolchain prevent using it as a distributable fixture without further review.
 - Firefox/WebKit and physical-device results remain unverified unless executed and recorded.
+- J2ME is P1 and currently blocked at runtime selection: FreeJ2ME-Web depends on proprietary online CheerpJ; PluotSorbet/J2ME.js requires a current self-hosted offline/runtime-asset validation. See `PH-06/j2me-runtime-assessment-20261020.md`.
 
 ## Evidence and next task
 

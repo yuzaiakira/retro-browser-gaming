@@ -10,6 +10,8 @@ Read `docs/EXECUTION_STATE.md`, the relevant acceptance-matrix IDs, and the matc
 
 For every emulator-related change, also read and update `docs/EMULATOR_SUPPORT_MATRIX.md`. Its checkbox represents real interactive browser gameplay only; retain separate capability/status fields and evidence links.
 
+Treat J2ME as P1. Do not vendor a Java ME runtime or JAR fixture until its runtime assets, license, self-hosted offline behavior, isolation, RMS persistence, and real browser gameplay have been verified. FreeJ2ME-Web's CheerpJ dependency is not acceptable for PWA offline support.
+
 ## Repository map
 
 - `apps/api/`: Django/DRF catalog, importer, range transport, S3 integration, tests.

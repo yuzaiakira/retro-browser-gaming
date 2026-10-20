@@ -12,5 +12,6 @@ Use for every feature completion, test/evidence change, PDR matrix update, or re
 - Browser tests must use real OPFS, IndexedDB, worker, service worker and emulator core when relevant. Network interception may inject faults but must not replace the component under test.
 - Capture commands, versions, outputs, screenshots/measurements, fixture provenance, and limitations under `docs/test-evidence/`. Do not overwrite prior evidence with a claim.
 - `PASSED` means the stated scenario really executed. Mark mocks, partial scope, unavailable browsers and physical hardware truthfully; boot callbacks/screenshots alone are not gameplay.
+- For J2ME, require a legal homebrew JAR, rendered interactive gameplay, keyboard and touch evidence, RMS save/load after browser restart, and complete offline launch. JAR parsing or VM startup is not a pass.
 
 After verification, update acceptance status, handover if material, and `docs/EXECUTION_STATE.md`. Run `git diff --check` before commit.
