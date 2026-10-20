@@ -36,6 +36,6 @@ DOWNLOAD_1GIB_BOUNDED_MEMORY_PASS growth=2517696 peak=7750252 baseline=5232556
 - **DL-009:** `assetKey` now includes `version`. A mid-download identity/version change installed the new asset from byte 0 and did not silently reuse the prior journal.
 - **DL-011:** A 512 GiB manifest fails the worker `QUOTA_INSUFFICIENT` gate before any Range request.
 - **DL-012:** Pause then Cancel & delete clears downloads, chunks, installations, and the OPFS directory.
-- **DL-013:** A deterministic 1 GiB multi-range transfer completed with final SHA-256 verification. Chromium page JS heap growth was ~2.4 MiB (`growth=2517696`), far below the payload size.
+- **DL-013:** A deterministic 1 GiB multi-range transfer completed with final SHA-256 verification. **Scope:** Chromium `Runtime.getHeapUsage` is the **page JS heap only** (not download-worker isolate, not process RSS, not WASM linear memory). Re-run 2026-10-20: `growth=1984592` (~1.9 MiB), `rssKb=unavailable(browser.process null)`, `wasmMemoriesObserved=false` during the transfer (`PH-03/download-faults-rss-20261020.txt`).
 
 Synthetic fixtures use generated deterministic bytes. Status/lock/hash cases still use the legal HTML5 demo asset where a real small object is required.

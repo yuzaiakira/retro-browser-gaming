@@ -6,7 +6,7 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 
 | Family | System | Core | Play | Status | Online | Offline | Install | Saves | Input | Browser | Priority | Limitations / evidence / next action |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Browser | HTML5 / JavaScript | Native isolated iframe | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/I | Chromium 154 | P0 | `PH-02/test-run.txt`; Firefox/WebKit/device matrix remains. |
+| Browser | HTML5 / JavaScript | Native isolated iframe | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/V*/I | Chromium + Firefox; WebKit catalog | P0 | SEC-004 sandbox isolation verified; `*` simulated gamepad; physical touch/audio/iOS open (`PH-07`, `PH-08`). |
 | Browser | Flash / Ruffle | Ruffle candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Select a pinned browser build and legal SWF fixture. |
 | Browser | WASM game ports | Per-port native runtime | [ ] | PLANNED | — | — | — | — | — | — | P1 | Require license review and iframe adapter. |
 | Classic Mobile Phones / Java ME | J2ME / MIDP 1.0–2.0 | No selected compliant runtime | [ ] | BLOCKED | — | — | — | — | — | — | P1 | `PH-06/j2me-runtime-assessment-20261020.md`; FreeJ2ME-Web requires proprietary online CheerpJ; PluotSorbet needs a current offline/runtime-asset validation. |

@@ -1,0 +1,8 @@
+OFFLINE_PWA_INSTALL_PASS
+OFF_001_COLD_START_LIBRARY_PASS
+OFF_002_COLD_START_BOOT_PASS
+OFF_003_COLD_START_SAVE_PASS
+OFF_004_CORE_MISSING_PASS {"ok":true,"deletedPath":"/cores/ejs-4.2.3/cores/genesis_plus_gx-wasm.data","opfsGames":2,"shell":"retro-shell-v3"}
+OFF_004_CORE_RECOVERY_PASS
+OFF_005_SW_UPDATE_NO_DISRUPT_PASS
+OFFLINE_PWA_PASS {"coldStart":true,"off004":{"ok":true,"deletedPath":"/cores/ejs-4.2.3/cores/genesis_plus_gx-wasm.data","opfsGames":2,"shell":"retro-shell-v3","recovered":true,"restoredPath":"/cores/ejs-4.2.3/cores/genesis_plus_gx-wasm.data"},"off005":true}
