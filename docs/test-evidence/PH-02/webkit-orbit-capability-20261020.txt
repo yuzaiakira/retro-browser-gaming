@@ -1,0 +1,34 @@
+{
+  "device": {
+    "secure": true,
+    "wasm": true,
+    "threads": true,
+    "crossOriginIsolated": true,
+    "webgl2": true,
+    "opfs": false,
+    "locks": true,
+    "gamepad": true,
+    "touch": false,
+    "estimate": {
+      "error": "TypeError: undefined is not an object (evaluating 'navigator.storage.estimate')"
+    },
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15",
+    "storage": false
+  },
+  "opfsProbe": {
+    "ok": false,
+    "reason": "no-getDirectory"
+  },
+  "locksProbe": {
+    "ok": true,
+    "held": true
+  },
+  "buttons": [
+    {
+      "text": "↓ Download & try on this device",
+      "disabled": true
+    }
+  ],
+  "notice": "",
+  "compat": "Compatibility · unsupportedThis browser lacks reliable OPFS storage or Web Locks.Core: native-html · 1.1.0Device-specific compatibility has not been verified.Download: 4.4 KiB · 1 verified file · No BIOS asset required"
+}

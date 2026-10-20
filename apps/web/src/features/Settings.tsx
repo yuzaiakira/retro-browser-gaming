@@ -125,6 +125,15 @@ export default function Settings({
                 ))}
             </dl>
           )}
+          {!device?.opfs && (
+            <p role="status">
+              OPFS is unavailable in this browser. Catalog browsing may work,
+              but download/install stays disabled until Origin Private File
+              System is present (Chromium/Firefox desktop and supported mobile
+              browsers). Playwright WebKit often lacks{" "}
+              <code>navigator.storage</code>; that is not proof of real Safari.
+            </p>
+          )}
           <p className="small">{device?.userAgent}</p>
         </div>
         <div className="panel">
