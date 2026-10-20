@@ -2,29 +2,49 @@
 
 ## Verdict
 
-**RELEASE CANDIDATE / NOT COMPLETE** — automated P0 software gates are evidenced; PH-08 physical/iOS/human-audio rows remain open.
+**RELEASE CANDIDATE / NOT COMPLETE** — Android PH-08 physical rows largely PASSED on USB Chrome; AUD-001 (human listen), physical gamepad, and real iOS Safari remain open.
 
-## Device discovery (2026-10-20)
+## Device discovery (2026-10-20, rediscovered)
 
-- No Android (`adb` missing), no iOS (`idevice_id` empty), no joystick nodes.
-- Audio: PipeWire HDMI + C-Media USB present; `audio-gesture.cjs` proves AudioContext running after gesture (`PH-08/audio-gesture-run-20261020.txt`); AUD-001 still needs a human listener.
-- WebKit Orbit install disabled: genuine missing `navigator.storage`/OPFS (`PH-02/webkit-orbit-capability-20261020.txt`); probe messaging split OPFS vs locks.
+- `adb` at `/usr/bin/adb`; authorized USB device `device` (model `2303CRA44A`, Android 15).
+- Chrome `155.0.8059.39`; CDP via `chrome_devtools_remote`; reverse `13000`/`18000`.
+- No joystick nodes; no iOS (`idevice_id` empty).
+- Evidence: `PH-08/android-device-discovery-20261020.md`.
 
-## Software preparation completed
+## Android physical acceptance (completed this session)
 
-- `docs/test-evidence/PH-08/physical-env-prep.md`
-- `scripts/physical-android-forward.sh` (ADB reverse without weakening COOP/COEP)
-- Diagnostics copy when OPFS absent
-- `docs/final-handover.md` RC report
+| ID | Status | Evidence |
+|---|---|---|
+| IN-003-P | PASSED | Simultaneous Left+A (`android-physical-20261020.txt`) |
+| IN-004-P | PASSED | Touch layout retained after reload |
+| IN-005-P | PASSED | Blur/visibility release on device Chrome |
+| UX-FS | PASSED | Fullscreen enter/exit on player stage |
+| UX-OR | PASSED | Portrait → landscape via fullscreen + orientation.lock |
+| Offline cold-start | PASSED | Reverse removed; API unreachable; 4 READY OFFLINE; offline play (`android-offline-cold-20261020.txt`) |
+| Genesis / PS1 / PSP install+play | PASSED | Same physical suite on phone |
+| AUD-001 | NOT_VERIFIED | AudioContext running; needs human ear on device speakers |
+| IN-002-P/D | BLOCKED_EXTERNAL | No gamepad |
+| IOS-001 | BLOCKED_EXTERNAL | No iOS device |
+
+Commands:
+
+```bash
+./scripts/physical-android-forward.sh
+adb forward tcp:9222 localabstract:chrome_devtools_remote
+cd apps/web
+ANDROID_CDP_URL=http://127.0.0.1:9222 node tests/android-physical.cjs
+ANDROID_CDP_URL=http://127.0.0.1:9222 node tests/android-offline-cold.cjs
+```
 
 ## Remaining external blockers
 
-1. Physical gamepad (IN-002-P/D)
-2. Android Chrome multitouch/orientation (IN-003/004, UX-OR) via phone + adb or HTTPS deploy
-3. Human-heard console audio (AUD-001)
-4. Real iOS Safari (IOS-001)
-5. Human desktop blur/fullscreen sessions (IN-005-P, UX-FS) if counted as physical
+1. Human-heard console audio on the phone (**AUD-001**) — please confirm audible Genesis/PS1/PSP output once while Reverse is active.
+2. Physical gamepad (IN-002-P/D)
+3. Real iOS Safari (IOS-001) — never substitute Playwright WebKit
 
 ## Next action
 
-Attach hardware and execute PH-08 checklist rows; update matrix only with dated physical evidence. Do not re-loop unavailable device discovery.
+1. Human: listen for AUD-001 on the connected Android phone (MIT Genesis Breakout).
+2. Attach a gamepad when available for IN-002-P/D.
+3. Attach iOS hardware or an authorized real-device lab for IOS-001.
+4. Do not re-loop Android discovery while the same USB device remains authorized.

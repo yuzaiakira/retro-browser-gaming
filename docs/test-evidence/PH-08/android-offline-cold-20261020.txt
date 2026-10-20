@@ -1,0 +1,91 @@
+{
+  "platform": "Android Chrome over CDP",
+  "baseUrl": "http://127.0.0.1:13000",
+  "note": "Offline proven by removing ADB reverse (not by disabling mobile data alone)",
+  "steps": [
+    {
+      "step": "reverse-on",
+      "list": "UsbFfs tcp:13000 tcp:13000\nUsbFfs tcp:18000 tcp:18000"
+    },
+    {
+      "step": "online-library",
+      "installationCount": 4,
+      "libraryCount": 4,
+      "sw": {
+        "active": true,
+        "scope": "http://127.0.0.1:13000/"
+      }
+    },
+    {
+      "step": "reverse-removed",
+      "list": "(empty)"
+    },
+    {
+      "step": "cold-tab-open",
+      "href": "http://127.0.0.1:13000/library"
+    },
+    {
+      "step": "reverse-restored",
+      "list": "UsbFfs tcp:13000 tcp:13000\nUsbFfs tcp:18000 tcp:18000"
+    }
+  ],
+  "onlineLibrary": {
+    "href": "http://127.0.0.1:13000/library",
+    "online": true,
+    "bodySnippet": "THE ARCADE / LIBRARY\nOnline⚙\nSAVED ON THIS DEVICE\nMy library0\n\nYour downloaded games, ready when you are.\n\n▣\nYour collection starts here\n\nDownload a game from the catalog to play offline.\n\nFind a game\n⌂\nDiscover\n▦\nAll games\n▣\nMy library\n↓\nDownloads\n⚙\nSettings",
+    "installationCount": 4,
+    "libraryCount": 4,
+    "installationIds": [
+      "101e031c-4389-426a-af20-08df0ff65a7a",
+      "1699fc80-d1b6-4008-bb1b-6cc0cc092df3",
+      "c6d13a17-70fc-43cf-841f-f7d6178f6969",
+      "ed2a282c-70e7-4442-aa6b-6c25b00e32d7"
+    ],
+    "serviceWorker": {
+      "active": true,
+      "scope": "http://127.0.0.1:13000/"
+    }
+  },
+  "hostFetchAfterCut": [
+    {
+      "url": "http://127.0.0.1:18000/api/v1/health/",
+      "ok": false,
+      "error": "TypeError: Failed to fetch"
+    },
+    {
+      "url": "http://127.0.0.1:18000/api/v1/games/?limit=1",
+      "ok": false,
+      "error": "TypeError: Failed to fetch"
+    },
+    {
+      "url": "http://127.0.0.1:13000/library",
+      "ok": true,
+      "status": 200,
+      "via": "likely-sw"
+    }
+  ],
+  "apiUnreachable": true,
+  "hostUnreachable": true,
+  "offlineLibrary": {
+    "href": "http://127.0.0.1:13000/library",
+    "online": true,
+    "bodySnippet": "THE ARCADE / LIBRARY\nOnline⚙\nSAVED ON THIS DEVICE\nMy library4\n\nYour downloaded games, ready when you are.\n\n● READY OFFLINE\nOrbit Catch\nPlay game\nVerify\nRepair / reinstall\nDelete game files\n● READY OFFLINE\nMIT PSP Dot\nPlay game\nVerify\nRepair / reinstall\nDelete game files\n● READY OFFLINE\nMIT PS1 Dot\nPlay game\nVerify\nRepair / reinstall\nDelete game files\n● READY OFFLINE\nMIT Genesis Breakout\nPlay game\nVerify\nRepair / reinstall\nDelete game files\n⌂\nDiscover\n▦\nAll games\n▣\nMy library\n↓\nDownloads\n⚙\nSettin",
+    "installationCount": 4,
+    "libraryCount": 4,
+    "installationIds": [
+      "101e031c-4389-426a-af20-08df0ff65a7a",
+      "1699fc80-d1b6-4008-bb1b-6cc0cc092df3",
+      "c6d13a17-70fc-43cf-841f-f7d6178f6969",
+      "ed2a282c-70e7-4442-aa6b-6c25b00e32d7"
+    ],
+    "serviceWorker": {
+      "active": true,
+      "scope": "http://127.0.0.1:13000/"
+    }
+  },
+  "offlinePlay": {
+    "ok": true,
+    "href": "http://127.0.0.1:13000/play/101e031c-4389-426a-af20-08df0ff65a7a"
+  },
+  "genuineOffline": true
+}

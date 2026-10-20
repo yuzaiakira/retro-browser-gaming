@@ -1,12 +1,12 @@
 # Implementation handover — RELEASE CANDIDATE / NOT COMPLETE
 
-Date: 2026-10-20. Local HEAD includes automated P0 closure through `6819550` plus follow-up WebKit/physical-prep commits. **Do not declare COMPLETE** until PH-08 physical rows pass on real hardware.
+Date: 2026-10-20. Local HEAD includes automated P0 closure plus Android USB physical PH-08 evidence. **Do not declare COMPLETE** until AUD-001 (human listen), physical gamepad, and real iOS Safari pass.
 
 ## Verdict
 
 **RELEASE CANDIDATE / NOT COMPLETE**
 
-Software-side mandatory automated gates for catalog, downloads, offline PWA (including corrected OFF-004 core eviction), Genesis/PS1/PSP gameplay + BlobFS, and Chromium/Firefox/WebKit-catalog automation are evidenced. Physical gamepad, Android multitouch/orientation, human-heard audio, and real iOS Safari remain **external blockers**.
+Software-side mandatory automated gates and **Android Chrome physical** multitouch/layout/blur/fullscreen/orientation plus reverse-removed offline cold-start are evidenced (`PH-08/android-physical-*`, `android-offline-cold-*`). Remaining external blockers: human-heard audio (AUD-001), physical gamepad, real iOS Safari.
 
 ## What is implemented
 
@@ -27,6 +27,8 @@ Software-side mandatory automated gates for catalog, downloads, offline PWA (inc
 | Download suite + scoped DL-013 heap | `PH-03/download-faults-20261020.md`, `download-faults-rss-20261020.txt` |
 | Playwright WebKit catalog (container) | `PH-02/webkit-container-20261020.md` |
 | WebKit Orbit install disabled = **no OPFS** | `PH-02/webkit-orbit-capability-20261020.txt` (not a false detection) |
+| Android USB physical (Chrome 155) | `PH-08/android-physical-20261020.txt`, checklist |
+| Android offline reverse-removed | `PH-08/android-offline-cold-20261020.txt` |
 
 ## WebKit / Safari note
 
@@ -37,12 +39,10 @@ Playwright WebKit reports `navigator.storage` undefined → OPFS unavailable →
 | Blocker | Dependency | PH-08 IDs |
 |---|---|---|
 | Physical gamepad | USB/BT controller + Chromium | IN-002-P, IN-002-D |
-| Android Chrome | Phone + `adb` (or HTTPS deploy) | IN-003-P, IN-004-P, UX-OR |
-| Human-heard audio | Listener + speakers (USB audio present on host) | AUD-001 |
+| Human-heard audio | Listener on phone speakers (or host USB audio) | AUD-001 |
 | iOS Safari | Real iPhone/iPad or authorized farm | IOS-001 |
-| Desktop blur/fullscreen human pass | Optional human desktop session | IN-005-P, UX-FS |
 
-Prep docs: `PH-08/physical-env-prep.md`, `scripts/physical-android-forward.sh`.
+Android IN-003-P / IN-004-P / IN-005-P / UX-FS / UX-OR: **PASSED** on USB device. Prep: `PH-08/physical-env-prep.md`, `scripts/physical-android-forward.sh`, `apps/web/tests/android-physical.cjs`.
 
 ## Release-candidate commands
 
