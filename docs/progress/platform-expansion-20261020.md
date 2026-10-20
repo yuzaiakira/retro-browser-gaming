@@ -14,17 +14,18 @@
 | Atari Lynx | P1 | **DONE** — `handy` + MIT lynx-dot |
 | Neo Geo Pocket | P1 | **DONE** — `mednafen_ngp` + GPL joypad (mono) |
 | Neo Geo Pocket Color | P1 | **DONE** — `mednafen_ngp` + GPL test (Color; separate evidence) |
-| MS-DOS | P1 | **INVESTIGATING** — `dosbox_pure` threaded; no PASS yet |
-| J2ME | P1 | **BLOCKED** — no RMS / no legal offline PoC |
+| MS-DOS | P1 | **SPIKE** — cores pinned (lock 80); Floppy Bird fails start (`PH-05/dos-dosbox-pure-spike-20261020.md`) |
+| J2ME | P1 | **BLOCKED** — isolated RMS PoC green; no VM/offline gameplay |
 | ColecoVision | P2 | **BLOCKED** — proprietary OS-7 BIOS (`PH-05/coleco-gearcoleco-bios-blocker-20261020.md`) |
 | PCE CD / Sega CD / higher | P1–P2 | Unchanged — need multi-file/BIOS policy |
 
 ## Architecture notes
 
-- Core lock **77**: prior 68 + `prosystem`, `handy`, `mednafen_ngp` (+ legacy/report companions).
-- `frame.js` schemes: `prosystem→atari7800`, `handy→lynx`, `mednafen_ngp→ngp`.
+- Core lock **80**: 77 console cores + threaded `dosbox_pure` (+ legacy/report).
+- `frame.js` schemes: `prosystem→atari7800`, `handy→lynx`, `mednafen_ngp→ngp`; experimental `dosbox_pure→dos` + threads (not production-supported).
 - `preferSeekable` returns false for `prosystem` / `handy` / `mednafen_ngp` (blob URL) so `simulateInput` works; other cores retain seekable VFS.
 - Keep NGP vs NGPC catalog identities separate; keep WonderSwan mono vs Color distinct if Color is added later.
+- `spikes/j2me-rms/` is research-only; not imported by the web app.
 
 ## Deferred physical
 

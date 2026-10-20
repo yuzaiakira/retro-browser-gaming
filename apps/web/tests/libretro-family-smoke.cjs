@@ -105,6 +105,14 @@ const PLATFORMS = {
     pass: 'NGPC_GAMEPLAY_PASS',
     screenshot: 'ngpc-gameplay.png',
   },
+  dos: {
+    label: 'DOS',
+    core: 'dosbox_pure',
+    fixture: 'mit-dos-floppybird.zip',
+    scheme: 'dos',
+    pass: 'DOS_GAMEPLAY_PASS',
+    screenshot: 'dos-gameplay.png',
+  },
 };
 
 const platformKey = process.env.PLATFORM || 'snes';
@@ -142,6 +150,7 @@ const types = {
   '.ngp': 'application/octet-stream',
   '.ngc': 'application/octet-stream',
   '.bin': 'application/octet-stream',
+  '.zip': 'application/zip',
 };
 
 const outer = `<!doctype html><title>${cfg.label} real-core smoke</title><style>body{margin:0;background:#111}iframe{width:960px;height:640px;border:0}</style><iframe id="game" src="/runtime/frame.html"></iframe><script>
