@@ -566,6 +566,8 @@ async function run() {
     }
 
     // DL-013: 1 GiB synthetic Range download with bounded JS heap and matching SHA-256.
+    // Scope note: Runtime.getHeapUsage is the page JS heap only (not worker/WASM).
+    // When Chromium exposes browser.process(), also record process RSS (VmRSS).
     {
       const asset = gibAsset();
       const context = await browser.newContext();
@@ -574,9 +576,38 @@ async function run() {
       const client = await context.newCDPSession(page);
       await client.send('HeapProfiler.enable');
       const samples = [];
+      const rssSamples = [];
+      const wasmSamples = [];
+      const readRssKb = () => {
+        try {
+          const proc = browser.process?.();
+          if (!proc?.pid) return null;
+          const status = require('node:fs').readFileSync(`/proc/${proc.pid}/status`, 'utf8');
+          const match = status.match(/^VmRSS:\s+(\d+)\s+kB/m);
+          return match ? Number(match[1]) : null;
+        } catch {
+          return null;
+        }
+      };
       const sample = async () => {
         const heap = await client.send('Runtime.getHeapUsage');
         samples.push(heap.usedSize);
+        const rss = readRssKb();
+        if (rss !== null) rssSamples.push(rss);
+        const wasm = await page.evaluate(() => {
+          const memories = [];
+          // Best-effort: any WebAssembly.Memory instances exposed on window for diagnostics.
+          for (const key of Object.keys(window)) {
+            try {
+              const value = window[key];
+              if (value instanceof WebAssembly.Memory) memories.push(value.buffer.byteLength);
+            } catch {
+              /* ignore cross-origin getters */
+            }
+          }
+          return { isolated: crossOriginIsolated, memories };
+        }).catch(() => ({ isolated: false, memories: [] }));
+        wasmSamples.push(wasm);
       };
       await sample();
       await range(context, async (route, start, end) => {
@@ -603,7 +634,14 @@ async function run() {
       // Worker uses ≤8 MiB range buffers plus a 1 MiB hash window. Allow generous
       // headroom for UI/runtime, but never approach the 1 GiB payload size.
       if (growth > 256 * 1024 * 1024) throw new Error(`1 GiB download JS heap grew too much: ${growth} bytes (peak ${peak}, baseline ${baseline})`);
-      console.log(`DOWNLOAD_1GIB_BOUNDED_MEMORY_PASS growth=${growth} peak=${peak} baseline=${baseline}`);
+      const rssNote =
+        rssSamples.length > 0
+          ? ` rssKbBaseline=${rssSamples[0]} rssKbPeak=${Math.max(...rssSamples)}`
+          : ' rssKb=unavailable(browser.process null)';
+      const wasmNote = ` wasmMemoriesObserved=${wasmSamples.some((s) => s.memories?.length)}`;
+      console.log(
+        `DOWNLOAD_1GIB_BOUNDED_MEMORY_PASS growth=${growth} peak=${peak} baseline=${baseline} scope=page-js-heap${rssNote}${wasmNote}`,
+      );
       await context.close();
     }
   } finally {

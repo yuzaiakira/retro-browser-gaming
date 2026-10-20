@@ -80,7 +80,11 @@ export default function TouchControls({
             }}
             onPointerDown={(e) => {
               e.preventDefault();
-              e.currentTarget.setPointerCapture(e.pointerId);
+              try {
+                e.currentTarget.setPointerCapture(e.pointerId);
+              } catch {
+                /* Synthetic/test pointers may lack an active capture id. */
+              }
               if (edit) setSelected(button.name);
               else router?.press(`touch:${e.pointerId}`, commands[button.name]);
             }}
@@ -196,12 +200,18 @@ export default function TouchControls({
               onChange={(e) => change(selected, { opacity: +e.target.value })}
             />
           </label>
-          <button onClick={() => setSetting(key, layout)}>Save layout</button>
+          <button
+            onClick={async () => {
+              await setSetting(key, layout);
+            }}
+          >
+            Save layout
+          </button>
           <button
             className="secondary"
-            onClick={() => {
+            onClick={async () => {
               setLayout(defaults);
-              setSetting(key, defaults);
+              await setSetting(key, defaults);
             }}
           >
             Restore defaults
