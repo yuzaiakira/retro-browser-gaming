@@ -1,0 +1,3 @@
+CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
+CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
+A2600_GAMEPLAY_PASS {"capabilities":{"saveState":true,"audio":true,"analog":false,"seekableMedia":true,"onDemandMedia":false},"stateBytes":512,"lit":491328,"beforeHash":563701446,"movedHash":4239625191,"restoredHash":563701446,"inputChangedFrame":true,"controlScheme":"atari2600","core":"stella2014","fixture":"mit-a2600-berta.a26","platform":"a2600"}

@@ -15,22 +15,27 @@ SYSTEMS = [
     ("sega-md", "Sega Mega Drive", "console"),
     ("sega-ms", "Sega Master System", "console"),
     ("sega-gg", "Sega Game Gear", "handheld"),
+    ("sega-sg1000", "Sega SG-1000", "console"),
     ("nes", "NES / Famicom", "console"),
     ("snes", "Super Nintendo", "console"),
     ("gb", "Game Boy", "handheld"),
     ("gbc", "Game Boy Color", "handheld"),
     ("gba", "Game Boy Advance", "handheld"),
+    ("atari-2600", "Atari 2600", "console"),
+    ("pce", "PC Engine / TurboGrafx-16", "console"),
     ("ps1", "PlayStation", "console"),
     ("psp", "PlayStation Portable", "handheld"),
 ]
 
 WASM_CORES = [
     ("genesis_plus_gx", ["md", "bin", "gg"], ["wasm", "secureContext"]),
-    ("smsplus", ["sms"], ["wasm", "secureContext"]),
+    ("smsplus", ["sms", "sg"], ["wasm", "secureContext"]),
     ("fceumm", ["nes"], ["wasm", "secureContext"]),
     ("snes9x", ["sfc", "smc"], ["wasm", "secureContext"]),
     ("gambatte", ["gb", "gbc"], ["wasm", "secureContext"]),
     ("mgba", ["gba"], ["wasm", "secureContext"]),
+    ("stella2014", ["a26", "bin"], ["wasm", "secureContext"]),
+    ("mednafen_pce", ["pce"], ["wasm", "secureContext"]),
     ("pcsx_rearmed", ["cue", "chd", "bin"], ["wasm", "secureContext"]),
     ("ppsspp", ["iso", "cso", "pbp"], ["wasm", "threads", "webgl2", "secureContext"]),
 ]
@@ -44,6 +49,8 @@ CONSOLE_FIXTURE_SLUGS = {
     "gb",
     "gbc",
     "gba",
+    "atari-2600",
+    "pce",
     "ps1",
     "psp",
 }
@@ -60,8 +67,8 @@ class Command(BaseCommand):
             "--with-console-fixtures",
             action="store_true",
             help=(
-                "Publish MIT Genesis/Master System/Game Gear/NES/SNES/GB/GBC/GBA/"
-                "PS1/PSP engineering fixtures into the catalog."
+                "Publish MIT/GPL engineering console fixtures (Genesis through Atari 2600, "
+                "PC Engine HuCard, PS1/PSP) into the catalog."
             ),
         )
 
@@ -334,6 +341,47 @@ class Command(BaseCommand):
             evidence=(
                 "fritzem/Google-Dino-GBA release 1.0.1 Google-Dino-Advance.gba "
                 "(https://github.com/fritzem/Google-Dino-GBA)"
+            ),
+        )
+        results["a2600"] = self._import_files(
+            fixtures,
+            slug="mit-a2600-berta",
+            title="MIT Atari 2600 Berta",
+            description=(
+                "MIT-licensed Atari 2600 Berta And Butterflies homebrew fixture for "
+                "engineering acceptance only. Not a commercial ROM."
+            ),
+            console="atari-2600",
+            core={"code": "stella2014", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-a2600-berta.a26",
+            files=[("mit-a2600-berta.a26", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/berta-A2600-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "vandalton/BertaAndButterflies release v1.00 "
+                "berta-and-butterflies.v1.00.ntsc.en.bin "
+                "(https://github.com/vandalton/BertaAndButterflies)"
+            ),
+        )
+        results["pce"] = self._import_files(
+            fixtures,
+            slug="huc-pce-scroll",
+            title="HuC PCE Scroll",
+            description=(
+                "GPL-2.0 HuC example scroll HuCard fixture for engineering acceptance "
+                "only (PC Engine HuCard, not CD). Not a commercial ROM."
+            ),
+            console="pce",
+            core={"code": "mednafen_pce", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="huc-pce-scroll.pce",
+            files=[("huc-pce-scroll.pce", "rom", "application/octet-stream")],
+            license_ref="GPL-2.0; LICENSES/HuC-GPL-2.0.txt",
+            provenance="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
+            evidence=(
+                "Built from BlockoS/huc examples/scroll/scroll.c; "
+                "sources mirrored in fixtures/pce-scroll/"
             ),
         )
         results["ps1"] = self._import_files(

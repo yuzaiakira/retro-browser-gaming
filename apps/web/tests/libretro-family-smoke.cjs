@@ -1,6 +1,6 @@
 /**
- * Parameterized real-core smoke for SNES / GB / GBC / GBA.
- * Usage: PLATFORM=snes|gb|gbc|gba CHROMIUM_EXECUTABLE=... node tests/libretro-family-smoke.cjs
+ * Parameterized real-core smoke for SNES / GB / GBC / GBA / Atari 2600 / PCE / SG-1000.
+ * Usage: PLATFORM=... CHROMIUM_EXECUTABLE=... node tests/libretro-family-smoke.cjs
  */
 const { chromium } = require('@playwright/test');
 const { createServer } = require('node:http');
@@ -41,6 +41,22 @@ const PLATFORMS = {
     pass: 'GBA_GAMEPLAY_PASS',
     screenshot: 'gba-gameplay.png',
   },
+  a2600: {
+    label: 'A2600',
+    core: 'stella2014',
+    fixture: 'mit-a2600-berta.a26',
+    scheme: 'atari2600',
+    pass: 'A2600_GAMEPLAY_PASS',
+    screenshot: 'a2600-gameplay.png',
+  },
+  pce: {
+    label: 'PCE',
+    core: 'mednafen_pce',
+    fixture: 'huc-pce-scroll.pce',
+    scheme: 'pce',
+    pass: 'PCE_GAMEPLAY_PASS',
+    screenshot: 'pce-gameplay.png',
+  },
 };
 
 const platformKey = process.env.PLATFORM || 'snes';
@@ -67,6 +83,9 @@ const types = {
   '.gb': 'application/octet-stream',
   '.gbc': 'application/octet-stream',
   '.gba': 'application/octet-stream',
+  '.a26': 'application/octet-stream',
+  '.pce': 'application/octet-stream',
+  '.sg': 'application/octet-stream',
   '.bin': 'application/octet-stream',
 };
 

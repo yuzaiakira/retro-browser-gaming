@@ -1,4 +1,4 @@
 {
-  "gbaInstall": true,
-  "gbaOffline": true
+  "pceInstall": true,
+  "pceOffline": true
 }
