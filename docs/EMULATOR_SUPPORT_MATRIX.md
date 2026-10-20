@@ -13,13 +13,13 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | Sega | SG-1000 | SMS Plus candidate | [ ] | PLANNED | — | — | — | I | I/I/I | — | P1 | Add legal fixture and adapter/core validation. |
 | Sega | Master System | SMS Plus | [ ] | IMPLEMENTED_UNVERIFIED | I | — | I | I | I/I/I | — | P0 | Adapter exists; legal ROM gameplay/offline evidence needed. |
 | Sega | Game Gear | Genesis Plus GX | [ ] | IMPLEMENTED_UNVERIFIED | I | — | I | I | I/I/I | — | P0 | Adapter exists; legal ROM gameplay/offline evidence needed. |
-| Sega | Mega Drive / Genesis | Genesis Plus GX / EmulatorJS | [x] | PARTIAL | V | P | — | V | V/I/I | Chromium 154 | P0 | `PH-05/genesis-gameplay-20261019.md`, `bounded-memory-20261020.md` (chunked load); installed-offline restart/audio/device evidence remains. |
+| Sega | Mega Drive / Genesis | Genesis Plus GX / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/I | Chromium 154 | P0 | Gameplay `PH-05/genesis-gameplay-20261019.md`; catalog install + fresh-process offline save/load `PH-05/catalog-console-offline-20261020.md`; physical audio/gamepad remain open. |
 | Sega | Sega CD / Mega-CD | PicoDrive candidate | [ ] | PLANNED | — | — | — | — | — | — | P1 | Multi-file disc and BIOS/legal asset review required. |
 | Sega | Sega 32X | PicoDrive candidate | [ ] | PLANNED | — | — | — | — | — | — | P1 | Legal fixture and core validation required. |
 | Sega | Saturn | Mednafen/Beetle candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P2 | Browser performance/BIOS and large-disc constraints. |
 | Sega | Dreamcast | Flycast WASM candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P2 | WebGL/performance and legal firmware/assets required. |
-| Sony | PlayStation 1 | PCSX ReARMed / EmulatorJS | [x] | PARTIAL | V | P | — | V | V/I/I | Chromium 154 | P0 | `PH-05/ps1-gameplay-20261020.md` + on-demand BlobFS (`ondemand-media-20261020.md`); catalog SW cold-start/audio/device remain. |
-| Sony | PlayStation Portable | PPSSPP threaded / EmulatorJS | [x] | PARTIAL | V | P | — | V | V/I/I | Chromium 154 | P0 | `PH-05/psp-gameplay-20261020.md` + EMU-004 BlobFS (`ondemand-media-20261020.md`); catalog install/SW cold-start remain. |
+| Sony | PlayStation 1 | PCSX ReARMed / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/I | Chromium 154 | P0 | Gameplay `PH-05/ps1-gameplay-20261020.md` + BlobFS; catalog install + fresh-process offline save/load `PH-05/catalog-console-offline-20261020.md`; physical audio/gamepad remain open. |
+| Sony | PlayStation Portable | PPSSPP threaded / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/I | Chromium 154 | P0 | Gameplay `PH-05/psp-gameplay-20261020.md` + BlobFS; catalog install + fresh-process offline save/load `PH-05/catalog-console-offline-20261020.md`; physical audio/gamepad remain open. |
 | Sony | PlayStation 2 | Play! Web candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P2 | PDR experimental only; never blocks release. |
 | Sony | PS Vita | None selected | [ ] | NOT_FEASIBLE | — | — | — | — | — | — | P3 | No supported browser-core plan. |
 | Nintendo | NES / Famicom | FCEUmm candidate | [ ] | PLANNED | — | — | — | — | — | — | P1 | Legal homebrew fixture and core lock required. |
@@ -55,9 +55,9 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 
 | Order | Platform | Core and dependencies | Complexity | Browser/legal limits | Required acceptance and next step |
 |---|---|---|---|---|---|
-| 1 | PS1/PSP catalog offline | Existing Dot fixtures + importer/PWA install path | Medium | Core-smoke + BlobFS passed; SW cold-start and published catalog rights pending | Import fixtures only after redistribution review; prove installed offline restart. |
-| 2 | OFF-004/005 + device matrix | SW update/eviction faults; Firefox/WebKit/gamepad/touch hardware | Medium | No substitute for physical-device evidence | Run documented fault scripts and record real-device results. |
-| 3 | Genesis/SMS/GG | Existing EmulatorJS cores and legal fixtures | Medium | Physical audio/controllers/browser matrix unverified | Complete installed-offline restart and controls before promoting family members. |
+| 1 | Physical device/control matrix | Gamepad, mobile touch, iOS Safari, audible output | Medium | No substitute for physical-device evidence | Record real-device results; WebKit host libs blocked automation on this workstation. |
+| 2 | SMS/GG family members | Existing EmulatorJS cores and legal fixtures | Medium | Only Genesis Breakout has catalog offline evidence | Add legal fixtures and catalog offline proofs per system. |
+| 3 | Playwright WebKit host deps | ICU/webp/ffi packages for Playwright WebKit | Low | Not iOS Safari proof even when green | Install missing shared libraries or document permanent blocker. |
 | 4 | NES/SNES/GB/GBC/GBA | Pinned mature Libretro/browser cores, adapter and core lock | Medium | Each needs redistributable fixture | Add one system at a time with real online/offline/save/control evidence. |
 | 5 | Sega CD/32X, N64, DS, computers | Multi-file/BIOS-aware adapter and legal fixtures | High | Large files, firmware, performance, touch layouts | Complete bounded-memory media work first. |
 | 6 | Arcade, Neo Geo, PCE CD, 3DO | Core plus ROM-set/BIOS policy | High | Rights and bundle validation dominate | Define legal asset policy before code integration. |

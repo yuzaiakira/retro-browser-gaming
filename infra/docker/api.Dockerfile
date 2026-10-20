@@ -7,6 +7,8 @@ RUN --mount=type=secret,id=proxy_ca,required=false \
     pip install --no-cache-dir --require-hashes -r requirements.lock
 RUN useradd --create-home --uid 10001 retro
 COPY --chown=retro:retro apps/api/ /app/
+COPY --chown=retro:retro docs/core-package-lock.json /app/docs/core-package-lock.json
+COPY --chown=retro:retro .fixtures/ /app/.fixtures/
 RUN mkdir -p /app/staticfiles && chown retro:retro /app/staticfiles
 USER retro
 EXPOSE 8000

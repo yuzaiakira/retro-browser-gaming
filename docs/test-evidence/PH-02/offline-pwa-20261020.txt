@@ -1,0 +1,10 @@
+{
+  "coldStart": true,
+  "off004": {
+    "ok": true,
+    "removedAssets": 1,
+    "removedCores": 0,
+    "shell": "retro-shell-v3"
+  },
+  "off005": true
+}

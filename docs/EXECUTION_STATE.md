@@ -2,38 +2,40 @@
 
 ## Release goal
 
-Complete every mandatory P0 gate in `docs/PDR.md`; the release is **not complete**.
+Complete every mandatory P0 gate in `docs/PDR.md`; the release is **not complete** while physical device/gamepad/touch/iOS Safari and remaining negative/lifecycle gates stay open.
 
 ## Verified baseline
 
-- Native Compose has PostgreSQL, SeaweedFS S3-compatible storage, Django, and Next.js. See `test-evidence/PH-01/compose-20261019.md`.
-- Chromium verified HTML5 install/save/offline; Genesis Breakout gameplay + chunked MEMFS load.
-- PS1 Dot multi-FILE CUE/BIN (PCSX ReARMed HLE) and PSP Dot EBOOT (threaded PPSSPP) gameplay with save/load and fresh-process offline input.
-- EMU-004 on-demand BlobFS: 512 MiB + 1 GiB random-access windows and PSP/PS1 gameplay without MEMFS full-file copies (`PH-05/ondemand-media-20261020.md`).
+- Native Compose: PostgreSQL, SeaweedFS S3-compatible storage, Django, Next.js (`PH-01/compose-20261019.md`); API image now ships `docs/core-package-lock.json` and `.fixtures` for console seeding.
+- OFF-001–005 HTML5 persistent-profile offline cold-start, OPFS eviction fail-closed, waiting SW non-disruption (`PH-02/offline-pwa-20261020.md`, shell `retro-shell-v3`).
+- Catalog-installed Genesis/PS1/PSP + fresh-process offline save/load (`PH-05/catalog-console-offline-20261020.md`).
+- Core-smoke gameplay for Genesis/PS1/PSP + EMU-004 BlobFS (`PH-05/*-gameplay-*`, `ondemand-media-20261020.md`).
 - Download fault suite including 1 GiB bounded-memory transfer (`PH-03/download-faults-20261020.md`).
-- Firefox catalog discovery smoke (`PH-02/firefox-catalog-20261020.md`).
+- Playwright Firefox catalog + Orbit install/offline library; Chromium catalog; WebKit blocked by host libraries (`PH-02/browser-matrix-20261020.md`).
 
 ## Remaining P0 work
 
-1. Catalog-install path for PS1/PSP fixtures (rights review), service-worker cold-start offline launch, console cache eviction (OFF-004), and SW update-during-gameplay (OFF-005).
-2. Physical device/controller/audio matrix: Firefox/WebKit beyond catalog smoke, gamepad, mobile touch — do not mark passed without hardware evidence.
-3. Optional: sample Chromium process VmRSS when Playwright exposes `browser.process()`.
+1. Physical gamepad, mobile touch customization, orientation/fullscreen on real devices, and audible output — do not mark passed without hardware evidence.
+2. Playwright WebKit (host `libicu`/`libwebp`/`libffi`) and real iOS Safari — keep distinct; WebKit automation is not iOS proof.
+3. Optional: CAT-002 empty/error visuals, EMU-005/006 lifecycle stress, IN-*/SAV-002/003, SEC-004 sandbox escape, PID/RSS when `browser.process()` is available.
+4. ~~Rebuild Compose `web` image~~ — done 2026-10-20; `http://127.0.0.1:13000/sw.js` serves `retro-shell-v3`.
 
 ## Decisions and constraints
 
-- BlobFS + SAB reader worker selected over WORKERFS/createLazyFile (unavailable on iframe main thread) and over a core rebuild for WasmFS.
+- Offline cold-start acceptance requires production Next (`next build`/`next start` or Compose web), not Turbopack `next dev`.
+- Cursor AppImage can intercept `.venv/bin/python`; use `env -i` + `/usr/bin/python3.14` + venv `PYTHONPATH` for host Django, or Compose exec.
 - 256 MiB guard remains on the non-isolated Blob fallback path.
-- PS1/PSP Dot fixtures are first-party MIT engineering evidence only, not catalog releases.
-- J2ME remains P1 blocked at runtime selection (`PH-06/j2me-runtime-assessment-20261020.md`).
+- PS1/PSP Dot fixtures are first-party MIT engineering evidence; J2ME remains P1 blocked.
 
 ## Evidence and next task
 
 ```bash
 cd apps/web
-CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/ondemand-media.cjs
-CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/psp-smoke.cjs
-CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/ps1-smoke.cjs
-CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/core-smoke.cjs
+RETRO_TEST_BASE_URL=http://127.0.0.1:3000 CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/offline-pwa.cjs
+RETRO_TEST_BASE_URL=http://127.0.0.1:3000 CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/catalog-console-offline.cjs
+RETRO_TEST_BASE_URL=http://127.0.0.1:3000 CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/browser-matrix-smoke.cjs
+./scripts/compose.sh up --build -d web
+./scripts/compose.sh exec -T api python manage.py seed_demo --safe-assets-only --with-console-fixtures
 ```
 
-Next actionable task: catalog-installed offline cold-start for Dot fixtures and/or OFF-004/005 SW eviction/update faults; record physical-device results when hardware is available.
+Next actionable task: rebuild Compose web to v3 shell; when hardware is available, run physical gamepad/touch/audio matrix and record results without inventing passes.
