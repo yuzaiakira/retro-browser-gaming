@@ -145,6 +145,26 @@ async function run() {
       await context.close();
     }
 
+    // A manifest ETag pins every Range response. A proxy serving a different
+    // object under the same asset URL must be stopped before any install.
+    {
+      const context = await browser.newContext();
+      const page = await gamePage(context);
+      await page.route('**/dev-assets/**', (route) => route.fulfill({
+        status: 206,
+        headers: {
+          'Content-Range': 'bytes 0-4537/4538',
+          'Content-Length': '4538',
+          ETag: '"changed-after-manifest"',
+        },
+        body: Buffer.alloc(4538, 0x5a),
+      }));
+      await trigger(page);
+      await expectFailure(page, 'ETAG_CHANGED', 'recoverable-error');
+      console.log('DOWNLOAD_ETAG_CHANGE_REJECT_PASS');
+      await context.close();
+    }
+
     // A syntactically valid 206 with altered bytes reaches OPFS and then fails
     // the final streaming SHA-256 verification. It must remain non-installed.
     {

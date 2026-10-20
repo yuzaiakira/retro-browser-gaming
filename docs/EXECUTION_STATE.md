@@ -8,7 +8,7 @@ Complete every mandatory P0 gate in `docs/PDR.md`; the release is **not complete
 
 - Native Compose has PostgreSQL, SeaweedFS S3-compatible storage, Django, and Next.js. See `test-evidence/PH-01/compose-20261019.md`.
 - Chromium verified HTML5 install, save/load, offline reloads; Genesis Breakout has real input, save/load, and post-load offline-runtime evidence.
-- OPFS downloader verifies streamed SHA-256 and passed real-browser 100 MiB interruption/browser-restart recovery plus selected protocol, hash, and Web Lock faults.
+- OPFS downloader verifies streamed SHA-256 and passed real-browser 100 MiB interruption/browser-restart recovery plus selected protocol, ETag mismatch, hash, and Web Lock faults.
 - Latest baseline commit before this guidance work: `213574b`.
 
 ## Remaining P0 work

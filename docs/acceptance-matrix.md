@@ -14,7 +14,7 @@
 | DL-003, DL-004 | PASSED (browser fault injection) | Real download worker rejects injected HTTP 200 and 416 without installing (`PH-03/download-faults-20261019.md`) |
 | DL-005 | PASSED (100 MiB) | A real worker retried an injected connection reset during a 100 MiB multi-range transfer, then recovered across browser restart and final SHA-256 verification (`PH-03/download-faults-20261019.md`) |
 | DL-007 | PASSED (small asset) | Two Chromium tabs contended for the real Web Lock; one writer installed and the other received `DOWNLOAD_BUSY_OTHER_TAB` |
-| DL-009, DL-011, DL-012, DL-013 | NOT_VERIFIED | Changed version, quota, cancel/delete, and 1 GiB bounded-memory acceptance remain outstanding |
+| DL-009, DL-011, DL-012, DL-013 | NOT_VERIFIED | ETag-change rejection is browser-tested, but changed version/asset identity, quota, cancel/delete, and 1 GiB bounded-memory acceptance remain outstanding |
 | DL-010 | PASSED (browser fault injection) | Altered bytes in a valid 206 fail final streaming SHA-256 and remain non-installed |
 | OFF-001 | NOT_VERIFIED | Offline library passed, full cached catalog reload not yet proven |
 | OFF-002, OFF-003 | PASSED (HTML5) | Offline boot/save + three reloads in `PH-02/test-run.txt` |
