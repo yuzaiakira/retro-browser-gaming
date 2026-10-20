@@ -2,7 +2,7 @@
 
 Browser-based retro launcher built from `docs/PDR.md`. It provides a Django/DRF catalog and rights-checked asset manifests, a Next.js PWA, OPFS + IndexedDB installation, real HTTP Range downloads, local saves, configurable input, and a version-pinned EmulatorJS adapter.
 
-**Delivery status: incomplete.** The legal HTML5 title is fully installed, launched, saved, and re-opened offline in Chromium. Legal Genesis Breakout gameplay, input, save/load, and post-load offline runtime are verified in a real browser. Native Docker Compose with PostgreSQL, SeaweedFS S3-compatible storage, Django, and Next.js is verified. PS1 and PSP gameplay, bounded large-disc access, the remaining recovery/performance suite, and real-device/browser-matrix gates are not verified. See `docs/final-handover.md` and `docs/acceptance-matrix.md`.
+**Delivery status: incomplete.** The legal HTML5 title is fully installed, launched, saved, and re-opened offline in Chromium. Legal Genesis Breakout gameplay, input, save/load, post-load offline runtime, and chunked media loading are verified. The browser download fault suite including 1 GiB bounded-memory transfer is verified. Native Docker Compose with PostgreSQL, SeaweedFS S3-compatible storage, Django, and Next.js is verified. PS1 and PSP gameplay and the physical device/browser matrix remain open. See `docs/final-handover.md` and `docs/acceptance-matrix.md`.
 
 ## Run locally
 

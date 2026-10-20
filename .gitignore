@@ -1,5 +1,6 @@
 .venv/
 .env
+compose.override.yaml
 *.sqlite3
 __pycache__/
 *.pyc
