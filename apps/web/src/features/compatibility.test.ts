@@ -2,7 +2,20 @@ import { describe, expect, it } from 'vitest';
 import { probe, type Device } from './compatibility';
 import type { Release } from '@/lib/types';
 
-const device: Device = { secure: true, wasm: true, threads: true, webgl2: true, opfs: true, locks: true, gamepad: true, touch: false, quota: 1024 * 1024 * 1024, usage: 0, userAgent: 'test' };
+const device: Device = {
+  secure: true,
+  wasm: true,
+  threads: true,
+  webgl2: true,
+  opfs: true,
+  locks: true,
+  storageManager: true,
+  gamepad: true,
+  touch: false,
+  quota: 1024 * 1024 * 1024,
+  usage: 0,
+  userAgent: 'test',
+};
 const nativeRelease = { recommended_core: { code: 'native-html', runtime_type: 'native', min_capabilities: [] } } as unknown as Release;
 const pspRelease = { recommended_core: { code: 'ppsspp', runtime_type: 'wasm', min_capabilities: ['wasm', 'threads', 'webgl2'] } } as unknown as Release;
 
@@ -26,6 +39,21 @@ describe('capability classification', () => {
   it('allows large WASM discs only when cross-origin isolation threads are present', () => {
     const large = 300 * 1024 * 1024;
     expect(probe(device, pspRelease, large).status).toBe('limited');
-    expect(probe({ ...device, threads: false }, { recommended_core: { code: 'pcsx_rearmed', runtime_type: 'wasm', min_capabilities: ['wasm'] } } as unknown as Release, large)).toMatchObject({ status: 'unsupported' });
+    expect(
+      probe(
+        { ...device, threads: false },
+        {
+          recommended_core: { code: 'pcsx_rearmed', runtime_type: 'wasm', min_capabilities: ['wasm'] },
+        } as unknown as Release,
+        large,
+      ),
+    ).toMatchObject({ status: 'unsupported' });
+  });
+
+  it('reports OPFS absence separately from Web Locks', () => {
+    const result = probe({ ...device, opfs: false, locks: true }, nativeRelease);
+    expect(result.status).toBe('unsupported');
+    expect(result.reasons.some((r) => /OPFS|Origin Private File System/i.test(r))).toBe(true);
+    expect(result.reasons.some((r) => /Web Locks/i.test(r))).toBe(false);
   });
 });
