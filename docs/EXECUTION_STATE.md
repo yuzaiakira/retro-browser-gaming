@@ -2,40 +2,36 @@
 
 ## Release goal
 
-Complete every mandatory P0 gate in `docs/PDR.md`; the release is **not complete** while physical device/gamepad/touch/iOS Safari and remaining negative/lifecycle gates stay open.
+Complete every mandatory P0 gate in `docs/PDR.md`. **Not COMPLETE** — physical gamepad, phone touch/orientation, real audio, and iOS Safari remain open.
 
-## Verified baseline
+## Verified this session (post-`e7cd2dd`)
 
-- Native Compose: PostgreSQL, SeaweedFS S3-compatible storage, Django, Next.js (`PH-01/compose-20261019.md`); API image now ships `docs/core-package-lock.json` and `.fixtures` for console seeding.
-- OFF-001–005 HTML5 persistent-profile offline cold-start, OPFS eviction fail-closed, waiting SW non-disruption (`PH-02/offline-pwa-20261020.md`, shell `retro-shell-v3`).
-- Catalog-installed Genesis/PS1/PSP + fresh-process offline save/load (`PH-05/catalog-console-offline-20261020.md`).
-- Core-smoke gameplay for Genesis/PS1/PSP + EMU-004 BlobFS (`PH-05/*-gameplay-*`, `ondemand-media-20261020.md`).
-- Download fault suite including 1 GiB bounded-memory transfer (`PH-03/download-faults-20261020.md`).
-- Playwright Firefox catalog + Orbit install/offline library; Chromium catalog; WebKit blocked by host libraries (`PH-02/browser-matrix-20261020.md`).
+- GitHub `origin/main` reconciled (local == remote at start; new commits local-only until authorized push).
+- **OFF-004 corrected:** missing wasm core Cache Storage asset + recovery (`PH-02/offline-pwa-off004-core-20261020.md`).
+- **CAT-002, EMU-005/006, IN-001–005 (simulated), SAV-002/003, SEC-004** (`PH-07/acceptance-gates-20261020.md`).
+- **DL-013 scope clarified** + re-run with RSS/WASM notes (`PH-03/download-faults-rss-20261020.txt`).
+- **WebKit** via `infra/docker/webkit-test.Dockerfile` catalog pass; Orbit install button disabled in WebKit.
+- Physical checklist prepared: `PH-08/physical-acceptance-checklist.md`.
+- InputRouter hardened for non-Element key targets; TouchControls awaits layout save / guards pointer capture.
 
-## Remaining P0 work
+## Remaining mandatory blockers
 
-1. Physical gamepad, mobile touch customization, orientation/fullscreen on real devices, and audible output — do not mark passed without hardware evidence.
-2. Playwright WebKit (host `libicu`/`libwebp`/`libffi`) and real iOS Safari — keep distinct; WebKit automation is not iOS proof.
-3. Optional: CAT-002 empty/error visuals, EMU-005/006 lifecycle stress, IN-*/SAV-002/003, SEC-004 sandbox escape, PID/RSS when `browser.process()` is available.
-4. ~~Rebuild Compose `web` image~~ — done 2026-10-20; `http://127.0.0.1:13000/sw.js` serves `retro-shell-v3`.
+1. Physical gamepad connect/disconnect + mapping (`IN-002` physical).
+2. Android Chrome multitouch, orientation, fullscreen, audible Genesis/PS1/PSP output.
+3. Real iOS Safari (distinct from Playwright WebKit).
+4. Optional nicety: Chromium `browser.process()` RSS when Playwright exposes PID.
 
-## Decisions and constraints
-
-- Offline cold-start acceptance requires production Next (`next build`/`next start` or Compose web), not Turbopack `next dev`.
-- Cursor AppImage can intercept `.venv/bin/python`; use `env -i` + `/usr/bin/python3.14` + venv `PYTHONPATH` for host Django, or Compose exec.
-- 256 MiB guard remains on the non-isolated Blob fallback path.
-- PS1/PSP Dot fixtures are first-party MIT engineering evidence; J2ME remains P1 blocked.
-
-## Evidence and next task
+## Commands
 
 ```bash
-cd apps/web
-RETRO_TEST_BASE_URL=http://127.0.0.1:3000 CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/offline-pwa.cjs
-RETRO_TEST_BASE_URL=http://127.0.0.1:3000 CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/catalog-console-offline.cjs
-RETRO_TEST_BASE_URL=http://127.0.0.1:3000 CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/browser-matrix-smoke.cjs
-./scripts/compose.sh up --build -d web
+./scripts/compose.sh up -d
 ./scripts/compose.sh exec -T api python manage.py seed_demo --safe-assets-only --with-console-fixtures
+# production Next or Compose :13000
+RETRO_TEST_BASE_URL=http://127.0.0.1:3000 CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/offline-pwa.cjs
+RETRO_TEST_BASE_URL=http://127.0.0.1:3000 CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/acceptance-gates.cjs
+docker build -f infra/docker/webkit-test.Dockerfile -t retro-webkit-test .
+docker run --rm --network host -v "$PWD/apps/web:/work" -w /work \
+  -e RETRO_TEST_BASE_URL=http://127.0.0.1:13000 retro-webkit-test node tests/browser-matrix-smoke.cjs
 ```
 
-Next actionable task: rebuild Compose web to v3 shell; when hardware is available, run physical gamepad/touch/audio matrix and record results without inventing passes.
+Next actionable task: execute `PH-08` physical checklist when hardware is available; do not mark COMPLETE without it.

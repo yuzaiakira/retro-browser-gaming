@@ -1,0 +1,14 @@
+CAT_002_EMPTY_PASS
+CAT_002_ERROR_PASS
+CAT_002_OFFLINE_PASS
+SEC_004_ISOLATION_PASS {"ok":false,"reason":"SecurityError: Failed to execute 'open' on 'IDBFactory': access to the Indexed Database API is denied in this context."}
+IN_001_KEYBOARD_PASS {"keyboardDispatched":true,"command":6,"value":1,"source":"key:ArrowLeft"}
+IN_002_SIMULATED_GAMEPAD_PASS
+IN_003_MULTITOUCH_PASS {"leftCmd":true,"aCmd":true,"simultaneous":true}
+IN_004_LAYOUT_PERSIST_PASS layout:browser:landscape
+IN_005_BLUR_RELEASE_PASS
+SAV_002_DELETE_KEEPS_SAVES_PASS {"saveCount":1,"installCount":0,"saveIds":["101e031c-4389-426a-af20-08df0ff65a7a:native-html:1.1.0:state:0"]}
+SAV_003_INVALID_IMPORT_PASS {"ok":true,"rejected":true,"priorSha":"ffd3d11a3a372f739c8c084761b04ac126ea6193e946e9ccf2fd7dc615214ba4","stillSha":"ffd3d11a3a372f739c8c084761b04ac126ea6193e946e9ccf2fd7dc615214ba4"}
+EMU_005_LIFECYCLE_PASS
+EMU_006_UNSUPPORTED_CORE_PASS
+ACCEPTANCE_GATES_PASS {"physicalGamepad":"NOT_VERIFIED — simulated Gamepad API only in this run","physicalTouchDevice":"NOT_VERIFIED — Playwright touch simulation, not a phone","cat002Empty":true,"cat002Error":true,"cat002Offline":true,"sec004":{"ok":false,"reason":"SecurityError: Failed to execute 'open' on 'IDBFactory': access to the Indexed Database API is denied in this context."},"in001":{"keyboardDispatched":true,"command":6,"value":1,"source":"key:ArrowLeft"},"in002":{"simulated":true},"in003":{"leftCmd":true,"aCmd":true,"simultaneous":true},"in004":{"layoutKey":"layout:browser:landscape","retained":true,"sized":true},"in005":true,"sav002":{"saveCount":1,"installCount":0,"saveIds":["101e031c-4389-426a-af20-08df0ff65a7a:native-html:1.1.0:state:0"]},"sav003":{"ok":true,"rejected":true,"priorSha":"ffd3d11a3a372f739c8c084761b04ac126ea6193e946e9ccf2fd7dc615214ba4","stillSha":"ffd3d11a3a372f739c8c084761b04ac126ea6193e946e9ccf2fd7dc615214ba4"},"emu005":true,"emu006":true}
