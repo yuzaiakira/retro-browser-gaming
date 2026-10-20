@@ -10,7 +10,7 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | Browser | Flash / Ruffle | Ruffle candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Select a pinned browser build and legal SWF fixture. |
 | Browser | WASM game ports | Per-port native runtime | [ ] | PLANNED | — | — | — | — | — | — | P1 | Require license review and iframe adapter. |
 | Classic Mobile Phones / Java ME | J2ME / MIDP 1.0–2.0 | No selected compliant runtime | [ ] | BLOCKED | — | — | — | — | — | — | P1 | Blockers unchanged: no RMS, no legal offline PoC (`PH-06/j2me-for-web-spike-20261020.md`, `PH-06/j2me-blocker-resolution-spike-20261020.md`). |
-| Sega | SG-1000 | smsplus (EmulatorJS) | [ ] | FEASIBLE_UNLICENSED | I | — | — | I | I/I/I | Chromium (lab) | P1 | `smsplus` runs `.sg` in lab (`PH-05/sg1000-smsplus-feasibility-20261020.md`); **no redistributable fixture with citable license** — not seeded. |
+| Sega | SG-1000 | smsplus / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Distinct from SMS (`PH-05/sg1000-*`, `catalog-sg1000-offline-*`); MIT RetroPIPE `.sg`; `segaMS` scheme. |
 | Sega | Master System | SMS Plus / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P0 | Core + catalog offline (`PH-05/sms-gameplay-20261020.md`, `PH-05/catalog-sms-offline-20261020.md`); MIT Ninja Girl; keyboard/touch via catalog player. |
 | Sega | Game Gear | Genesis Plus GX / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P0 | Core + catalog offline (`PH-05/gg-gameplay-20261020.md`, `PH-05/catalog-gg-offline-20261020.md`); MIT Waternet; `segaGG` from `.gg`; same pinned `genesis_plus_gx`. |
 | Sega | Mega Drive / Genesis | Genesis Plus GX / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium 154 + Android Chrome 155 | P0 | Desktop + Android physical install/play + **AUD-001 human-heard** (`PH-08/aud001-human-listen-20261020.md`); `segaMD` control scheme forced in `frame.js`; physical gamepad remains open. |
@@ -57,9 +57,9 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 |---|---|---|---|---|---|
 | 1 | Physical device/control matrix | Gamepad, mobile touch, iOS Safari, audible output | Medium | No substitute for physical-device evidence | Record real-device results; WebKit host libs blocked automation on this workstation. |
 | 2 | SMS/GG family members | Existing EmulatorJS cores and legal fixtures | Medium | SMS + GG core and catalog offline verified | Optional SG-1000; preserve GG `segaGG` mapping. |
-| 2b | NES…GBA + Atari 2600 + PCE HuCard | EmulatorJS 4.2.3 lock (65) | Medium | Verified playable (P1) | SG-1000 needs licensed `.sg`; PCE CD separate. |
+| 2b | NES…GBA + Atari 2600 + PCE HuCard + SG-1000 | EmulatorJS 4.2.3 lock (65) | Medium | Verified playable (P1) | PCE CD / Sega CD remain separate multi-file work. |
 | 3 | Playwright WebKit host deps | ICU/webp/ffi packages for Playwright WebKit | Low | Not iOS Safari proof even when green | Install missing shared libraries or document permanent blocker. |
-| 4 | SG-1000 (licensed fixture) | Existing `smsplus` + redistributable `.sg` | Low–Medium | Lab OK; redistribution license missing | Vendor MIT/CC0 `.sg` then catalog offline; do not reuse SMS evidence. |
+| 4 | WonderSwan / Lynx / Neo Geo Pocket | Beetle candidates + legal fixtures | Medium | Each needs redistributable homebrew | Add one system at a time with real evidence. |
 | 5 | Sega CD/32X, N64, DS, computers | Multi-file/BIOS-aware adapter and legal fixtures | High | Large files, firmware, performance, touch layouts | Complete bounded-memory media work first. |
 | 6 | Arcade, Neo Geo, PCE CD, 3DO | Core plus ROM-set/BIOS policy | High | Rights and bundle validation dominate | Define legal asset policy before code integration. |
 | 7 | Saturn, Dreamcast, 3DS, PS2 | Experimental web cores/WebGL | High | Performance/firmware support unknown | Spike separately; no P0 promotion without a PDR change. |

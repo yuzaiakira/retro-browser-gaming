@@ -26,6 +26,7 @@ const GAMES = [
   { slug: 'mit-gba-dino', title: 'MIT GBA Dino', platform: 'gba' },
   { slug: 'mit-a2600-berta', title: 'MIT Atari 2600 Berta', platform: 'a2600' },
   { slug: 'huc-pce-scroll', title: 'HuC PCE Scroll', platform: 'pce' },
+  { slug: 'mit-sg1000-retropipe', title: 'MIT SG-1000 RetroPIPE', platform: 'sg1000' },
   { slug: 'mit-ps1-dot', title: 'MIT PS1 Dot', platform: 'ps1' },
   { slug: 'mit-psp-dot', title: 'MIT PSP Dot', platform: 'psp' },
 ].filter((g) => !only.length || only.includes(g.platform));

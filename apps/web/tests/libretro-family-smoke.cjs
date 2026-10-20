@@ -57,6 +57,14 @@ const PLATFORMS = {
     pass: 'PCE_GAMEPLAY_PASS',
     screenshot: 'pce-gameplay.png',
   },
+  sg1000: {
+    label: 'SG1000',
+    core: 'smsplus',
+    fixture: 'mit-sg1000-retropipe.sg',
+    scheme: 'segaMS',
+    pass: 'SG1000_GAMEPLAY_PASS',
+    screenshot: 'sg1000-gameplay.png',
+  },
 };
 
 const platformKey = process.env.PLATFORM || 'snes';
