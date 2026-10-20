@@ -32,7 +32,8 @@ RETRO_TEST_BASE_URL=http://127.0.0.1:13000 CHROMIUM_EXECUTABLE=/usr/bin/chromium
 
 ## Next action
 
-1. Optional: Lynx (`handy`), Neo Geo Pocket (`mednafen_ngp`), or ColecoVision (`gearcoleco`) with legal fixtures.
-2. Optional: PCE CD only after multi-file/BIOS policy (do not conflate with HuCard).
-3. J2ME only after RMS + legal MIDlet offline PoC.
-4. Physical IN-002/IOS-001 when hardware exists — do not declare P0 COMPLETE before then.
+1. Optional: Lynx (`handy`) or Neo Geo Pocket (`mednafen_ngp`) with legal fixtures.
+2. ColecoVision blocked on proprietary `colecovision.rom` BIOS (`PH-05/coleco-gearcoleco-bios-blocker-20261020.md`).
+3. Optional: PCE CD only after multi-file/BIOS policy (do not conflate with HuCard).
+4. J2ME only after RMS + legal MIDlet offline PoC.
+5. Physical IN-002/IOS-001 when hardware exists — do not declare P0 COMPLETE before then.

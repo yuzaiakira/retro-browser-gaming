@@ -11,6 +11,7 @@
 | SG-1000 | P1 | **DONE** — `smsplus` + MIT RetroPIPE |
 | WonderSwan | P1 | **DONE** — `mednafen_wswan` + MIT chips1 |
 | J2ME | P1 | **BLOCKED** — no RMS / no legal offline PoC |
+| ColecoVision | P2 | **BLOCKED** — proprietary OS-7 BIOS (`PH-05/coleco-gearcoleco-bios-blocker-20261020.md`) |
 | PCE CD / Sega CD / higher | P1–P2 | Unchanged — need multi-file/BIOS policy |
 
 ## Architecture notes
