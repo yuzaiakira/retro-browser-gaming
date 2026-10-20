@@ -1,45 +1,59 @@
-# Implementation handover — incomplete delivery
+# Implementation handover — RELEASE CANDIDATE / NOT COMPLETE
 
-Date: 2026-10-20. The project is a working implementation with verified slices, but it is **not COMPLETE** under PDR RBG-PDR-001.
+Date: 2026-10-20. Local HEAD includes automated P0 closure through `6819550` plus follow-up WebKit/physical-prep commits. **Do not declare COMPLETE** until PH-08 physical rows pass on real hardware.
+
+## Verdict
+
+**RELEASE CANDIDATE / NOT COMPLETE**
+
+Software-side mandatory automated gates for catalog, downloads, offline PWA (including corrected OFF-004 core eviction), Genesis/PS1/PSP gameplay + BlobFS, and Chromium/Firefox/WebKit-catalog automation are evidenced. Physical gamepad, Android multitouch/orientation, human-heard audio, and real iOS Safari remain **external blockers**.
 
 ## What is implemented
 
 - Django/DRF catalog, Admin, immutable release/asset identity, rights validation, manifest API, local range transport, S3 adapter, importer and health endpoints.
 - Next.js App Router application: discovery, filters, details, library, downloads, settings, diagnostics, player, offline fallback, errors and responsive retro UI.
-- Dedicated-worker Range downloader with Web Locks, OPFS synchronous writes, IndexedDB chunk journal, retry/backoff, ETag/content-range validation, full streaming SHA-256 verification, pause/delete/recovery states and quota checks. Download identity keys include asset version.
-- Service-worker shell/core cache, installation audit, offline library/player flow, HTML5 iframe isolation, local saves/export/import/autosave, keyboard/gamepad router and configurable touch layout.
-- Pinned EmulatorJS 4.2.3 runtime, Genesis/SMS/PS1/PSP adapter registry, thread/isolation gate for PSP, chunked ≤8 MiB MEMFS media loading (no full-file JS ArrayBuffer), 47-file core lock verification, and real Chromium Genesis/PS1/PSP homebrew gameplay with seekable-media capability.
-- Docker Compose includes PostgreSQL, persistent S3-compatible SeaweedFS storage, API and Next standalone web image. The native stack has been built and exercised successfully.
+- Dedicated-worker Range downloader with Web Locks, OPFS synchronous writes, IndexedDB chunk journal, retry/backoff, ETag/content-range validation, full streaming SHA-256 verification, pause/delete/recovery states and quota checks.
+- Service-worker shell/core cache (`retro-shell-v3`), installation audit, offline library/player flow, HTML5 iframe isolation (SEC-004), local saves/export/import/autosave, keyboard/gamepad router and configurable touch layout.
+- Pinned EmulatorJS 4.2.3, Genesis/SMS/PS1/PSP adapters, BlobFS on-demand media, native Compose (PostgreSQL + SeaweedFS + API + Next).
 
-## Verified evidence
+## Verified evidence (selected)
 
 | Result | Evidence |
 |---|---|
-| 28 Django integration/security/range tests | Compose `manage.py test` 2026-10-20; `apps/api/tests/test_catalog.py` |
-| Native PostgreSQL and SeaweedFS S3-compatible storage | `docs/test-evidence/PH-01/compose-20261019.md` |
-| Frontend lint, typecheck, build, 8 unit tests | commands in README; session evidence |
-| Catalog → range download → OPFS/IndexedDB → HTML5 launch/save/load → offline library → three offline player reloads | `docs/test-evidence/PH-02/test-run.txt` |
-| Firefox catalog discovery | `docs/test-evidence/PH-02/firefox-catalog-20261020.md` |
-| Legal Genesis Breakout gameplay, input, save/load, offline runtime, chunked media load | `docs/test-evidence/PH-05/genesis-gameplay-20261019.md`, `bounded-memory-20261020.md` |
-| Legal PS1 multi-FILE CUE/BIN Dot gameplay (PCSX ReARMed HLE) | `docs/test-evidence/PH-05/ps1-gameplay-20261020.md` |
-| Legal PSP EBOOT Dot threaded PPSSPP gameplay (COOP/COEP/SAB) | `docs/test-evidence/PH-05/psp-gameplay-20261020.md` |
-| EMU-004 on-demand BlobFS (512 MiB / 1 GiB access + PSP/PS1 play) | `docs/test-evidence/PH-05/ondemand-media-20261020.md` |
-| Full download fault suite including 1 GiB bounded memory | `docs/test-evidence/PH-03/download-faults-20261020.md` |
-| Core package integrity | `scripts/verify-core-lock.py`, 47 files |
-| Native Docker Compose | `test-evidence/PH-01/compose-20261019.md`; healthy re-check 2026-10-20 |
+| Django 28 tests + Compose stack | `PH-01/compose-20261019.md` |
+| OFF-001–005 including **wasm core** eviction | `PH-02/offline-pwa-off004-core-20261020.md` |
+| Catalog Genesis/PS1/PSP offline cold-start | `PH-05/catalog-console-offline-20261020.md` |
+| CAT-002, EMU-005/006, IN/SAV/SEC automated | `PH-07/acceptance-gates-20261020.md` |
+| Download suite + scoped DL-013 heap | `PH-03/download-faults-20261020.md`, `download-faults-rss-20261020.txt` |
+| Playwright WebKit catalog (container) | `PH-02/webkit-container-20261020.md` |
+| WebKit Orbit install disabled = **no OPFS** | `PH-02/webkit-orbit-capability-20261020.txt` (not a false detection) |
 
-## Mandatory gaps
+## WebKit / Safari note
 
-1. **G01 is passed.** Native Compose with PostgreSQL, SeaweedFS, Django and Next.js remains healthy.
-2. **EMU-002/EMU-003/EMU-004 scoped passes** with first-party MIT Dot fixtures and on-demand BlobFS (`PH-05/ondemand-media-20261020.md`). Fixtures are not catalog-published.
-3. **Download recovery/performance is passed** for the exercised browser suite (truncation, crash-before-journal, identity, quota, cancel/delete, 100 MiB restart, 1 GiB).
-4. **Offline coverage is partial.** HTML5 offline launch/save/reload is passed. Console core-smoke proves post-load and fresh-process offline input; catalog-installed SW cold-start, cache-eviction, and SW-update fault cases are not passed.
-5. **Device matrix is partial.** Chromium headless + Firefox catalog smoke only; Android, iOS/Safari/WebKit, gamepad hardware, and touch hardware are NOT_VERIFIED.
-6. **No remote CI run or production deployment occurred.**
+Playwright WebKit reports `navigator.storage` undefined → OPFS unavailable → install correctly disabled. Messaging now separates OPFS vs Web Locks. **This is not iOS Safari proof** and must not force-enable installs without OPFS.
 
-## Reproducible next acceptance run
+## Remaining blockers (exact)
 
-1. Import Dot fixtures after redistribution review; prove catalog-installed SW cold-start offline launch.
-2. Complete offline WASM installed-restart and cache-eviction/SW-update fault tests; capture evidence.
-3. Test actual Android Chrome and iOS Safari devices; record physical controller/touch outcomes.
-4. Re-run the full matrix from a clean clone and mark only real passes. Tag a release only if all P0 MUST rows pass.
+| Blocker | Dependency | PH-08 IDs |
+|---|---|---|
+| Physical gamepad | USB/BT controller + Chromium | IN-002-P, IN-002-D |
+| Android Chrome | Phone + `adb` (or HTTPS deploy) | IN-003-P, IN-004-P, UX-OR |
+| Human-heard audio | Listener + speakers (USB audio present on host) | AUD-001 |
+| iOS Safari | Real iPhone/iPad or authorized farm | IOS-001 |
+| Desktop blur/fullscreen human pass | Optional human desktop session | IN-005-P, UX-FS |
+
+Prep docs: `PH-08/physical-env-prep.md`, `scripts/physical-android-forward.sh`.
+
+## Release-candidate commands
+
+```bash
+./scripts/compose.sh up -d
+./scripts/compose.sh exec -T api python manage.py seed_demo --safe-assets-only --with-console-fixtures
+cd apps/web && npm test && npm run typecheck
+RETRO_TEST_BASE_URL=http://127.0.0.1:13000 CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/offline-pwa.cjs
+RETRO_TEST_BASE_URL=http://127.0.0.1:13000 CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/acceptance-gates.cjs
+docker run --rm --network host -v "$PWD/apps/web:/work" -w /work \
+  -e RETRO_TEST_BASE_URL=http://127.0.0.1:13000 retro-webkit-test node tests/browser-matrix-smoke.cjs
+```
+
+Tag a release only after PH-08 physical rows are genuinely PASSED with dated evidence.

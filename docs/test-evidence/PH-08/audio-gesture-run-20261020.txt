@@ -1,0 +1,2 @@
+AUDIO_GESTURE_PASS {"ok":true,"before":"running","after":"running","sampleRate":48000}
+AUD_001_HUMAN_STILL_REQUIRED

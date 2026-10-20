@@ -33,7 +33,7 @@
 | G01 | PASSED — native Compose stack |
 | G02–G04 | PASSED — download recovery/performance (heap scoped; RSS unavailable) |
 | G05 | PASSED (scoped) — console gameplay + catalog offline; physical audio open |
-| G06–G10 | PARTIAL — Chromium/Firefox + container WebKit catalog; WebKit install disabled; physical gamepad/touch/iOS Safari open (`PH-08`) |
-| G11 | PARTIAL — automated P0 gates closed except physical-device / audible / iOS Safari rows |
+| G06–G10 | PARTIAL — Chromium/Firefox + container WebKit catalog; WebKit install correctly disabled (no OPFS); physical gamepad/touch/iOS/human audio open (`PH-02/webkit-orbit-capability-*`, `PH-08`) |
+| G11 | PARTIAL — automated P0 closed; PH-08 physical/iOS/AUD-001 remain |
 
-**Release is not COMPLETE** until physical checklist rows that the PDR requires are either passed on hardware or the PDR explicitly excludes them (it does not).
+**RELEASE CANDIDATE / NOT COMPLETE** — see `docs/final-handover.md`. Physical PH-08 rows are blockers until hardware evidence exists.
