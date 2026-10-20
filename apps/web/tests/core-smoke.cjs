@@ -40,7 +40,8 @@ async function handler(request, response) {
   const headers = { 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Embedder-Policy': 'require-corp', 'Cross-Origin-Resource-Policy': 'same-origin' };
   if (request.url === '/') return response.writeHead(200, { ...headers, 'content-type': 'text/html' }).end(outer);
   try {
-    const requested = request.url === '/fixture.bin' ? fixture : join(root, normalize(request.url).replace(/^[/\\]+/, ''));
+    const pathname = (request.url || '/').split('?')[0];
+    const requested = pathname === '/fixture.bin' ? fixture : join(root, normalize(pathname).replace(/^[/\\]+/, ''));
     const bytes = await readFile(requested);
     response.writeHead(200, { ...headers, 'content-type': types[extname(requested)] || 'application/octet-stream', 'content-length': bytes.length });
     response.end(bytes);

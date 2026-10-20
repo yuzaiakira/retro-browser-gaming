@@ -1,12 +1,12 @@
 # Implementation handover — RELEASE CANDIDATE / NOT COMPLETE
 
-Date: 2026-10-20. Local HEAD includes automated P0 closure plus Android USB physical PH-08 evidence including human-heard AUD-001. **Do not declare COMPLETE** until physical gamepad and real iOS Safari pass.
+Date: 2026-10-20. Local HEAD includes automated P0 closure, Android USB PH-08 (incl. AUD-001), deferred gamepad/iOS documentation, and Master System core gameplay evidence. **Do not declare COMPLETE** until deferred physical rows pass (or PDR changes). See `docs/RELEASE_CANDIDATE.md`.
 
 ## Verdict
 
 **RELEASE CANDIDATE / NOT COMPLETE**
 
-Software-side mandatory automated gates and **Android Chrome physical** multitouch/layout/blur/fullscreen/orientation, reverse-removed offline cold-start, and **AUD-001** (human-heard Genesis Breakout) are evidenced (`PH-08/android-physical-*`, `android-offline-cold-*`, `aud001-human-listen-20261020.md`). Remaining external blockers: physical gamepad, real iOS Safari.
+Software-side mandatory automated gates and **Android Chrome physical** (incl. AUD-001) are evidenced. Gamepad and iOS are **deferred BLOCKED_EXTERNAL** (`PH-08/deferred-physical-acceptance.md`) — not PASSED. Expansion continues: Master System `smsplus` gameplay verified (`PH-05/sms-gameplay-20261020.md`).
 
 ## What is implemented
 
@@ -55,4 +55,4 @@ docker run --rm --network host -v "$PWD/apps/web:/work" -w /work \
   -e RETRO_TEST_BASE_URL=http://127.0.0.1:13000 retro-webkit-test node tests/browser-matrix-smoke.cjs
 ```
 
-Tag a release only after PH-08 physical rows are genuinely PASSED with dated evidence.
+Tag a complete P0 release only after deferred physical rows are genuinely PASSED with dated evidence (or an explicit PDR change). RC checkpoint: `docs/RELEASE_CANDIDATE.md`.

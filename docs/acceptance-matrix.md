@@ -37,4 +37,4 @@
 | G06–G10 | PARTIAL — Chromium/Firefox + Android Chrome physical (incl. AUD-001); WebKit catalog (no OPFS install); gamepad/iOS open (`PH-08`) |
 | G11 | PARTIAL — Android PH-08 + AUD-001 closed; physical gamepad + iOS remain |
 
-**RELEASE CANDIDATE / NOT COMPLETE** — see `docs/final-handover.md`. Remaining blockers: physical gamepad, real iOS Safari.
+**RELEASE CANDIDATE / NOT COMPLETE** — see `docs/RELEASE_CANDIDATE.md`. Remaining mandatory physical blockers (deferred): gamepad IN-002, iOS Safari IOS-001. Master System core gameplay newly evidenced (`PH-05/sms-gameplay-20261020.md`).
