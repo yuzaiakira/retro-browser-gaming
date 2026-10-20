@@ -45,5 +45,5 @@ Independent expansion work may proceed without waiting for gamepad/iOS:
 
 1. **P0 software Sega gaps closed** (SMS/GG); physical gamepad/iOS still block complete P0.
 2. **P1:** Nintendo set + Atari 2600/7800 + Lynx + PCE HuCard + SG-1000 + WonderSwan + NGP/NGPC verified (`PH-05/*`).
-3. **P1 research:** MS-DOS (`dosbox_pure`) investigating; J2ME still blocked — RMS gap (`PH-06/j2me-blocker-resolution-spike-20261020.md`).
+3. **P1 research:** MS-DOS `dosbox_pure` spike failed gameplay start (`PH-05/dos-dosbox-pure-spike-20261020.md`); J2ME still blocked — RMS PoC only (`PH-06/j2me-rms-poc-20261020.md`).
 4. Higher roadmap items (PCE CD, etc.) remain unchecked until evidenced.

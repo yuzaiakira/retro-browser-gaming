@@ -45,7 +45,7 @@ addEventListener('message', async (event) => {
     window.EJS_pathtodata = '/cores/ejs-4.2.3/';
     window.EJS_DEBUG_XX = true;
     window.EJS_startOnLoaded = true;
-    window.EJS_threads = d.core === 'ppsspp';
+    window.EJS_threads = d.core === 'ppsspp' || d.core === 'dosbox_pure';
     window.EJS_disableDatabases = true;
     window.EJS_disableLocalStorage = true;
     window.EJS_disableAutoLang = true;
@@ -72,6 +72,7 @@ addEventListener('message', async (event) => {
       mednafen_ngp: 'ngp',
       pcsx_rearmed: 'psx',
       ppsspp: 'psp',
+      dosbox_pure: 'dos',
     };
     if (controlSchemeByCore[d.core]) {
       window.EJS_controlScheme = controlSchemeByCore[d.core];
