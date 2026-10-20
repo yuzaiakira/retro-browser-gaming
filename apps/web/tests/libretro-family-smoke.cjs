@@ -65,6 +65,14 @@ const PLATFORMS = {
     pass: 'SG1000_GAMEPLAY_PASS',
     screenshot: 'sg1000-gameplay.png',
   },
+  wswan: {
+    label: 'WSWAN',
+    core: 'mednafen_wswan',
+    fixture: 'mit-wswan-chips1.wsc',
+    scheme: 'ws',
+    pass: 'WSWAN_GAMEPLAY_PASS',
+    screenshot: 'wswan-gameplay.png',
+  },
 };
 
 const platformKey = process.env.PLATFORM || 'snes';
@@ -94,6 +102,8 @@ const types = {
   '.a26': 'application/octet-stream',
   '.pce': 'application/octet-stream',
   '.sg': 'application/octet-stream',
+  '.ws': 'application/octet-stream',
+  '.wsc': 'application/octet-stream',
   '.bin': 'application/octet-stream',
 };
 

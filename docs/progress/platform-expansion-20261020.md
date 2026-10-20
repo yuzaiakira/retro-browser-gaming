@@ -8,16 +8,16 @@
 | NES / SNES / GB / GBC / GBA | P1 | VERIFIED (`9d6c490`) |
 | Atari 2600 | P1 | **DONE** — `stella2014` + MIT Berta |
 | PC Engine HuCard | P1 | **DONE** — `mednafen_pce` + GPL HuC scroll; **not CD** |
-| SG-1000 | P1 | **DONE** — `smsplus` + MIT RetroPIPE (distinct from SMS) |
+| SG-1000 | P1 | **DONE** — `smsplus` + MIT RetroPIPE |
+| WonderSwan | P1 | **DONE** — `mednafen_wswan` + MIT chips1 |
 | J2ME | P1 | **BLOCKED** — no RMS / no legal offline PoC |
 | PCE CD / Sega CD / higher | P1–P2 | Unchanged — need multi-file/BIOS policy |
 
 ## Architecture notes
 
-- Cores in lock (65): includes `stella2014`, `mednafen_pce`.
-- `frame.js` schemes: `stella2014→atari2600`, `mednafen_pce→pce`; SG uses `smsplus→segaMS`.
-- `smsplus` extensions `["sms","sg"]`; SG catalog console `sega-sg1000`.
-- Do not treat Master System evidence as SG-1000 proof (separate fixture + offline runs).
+- Core lock **68**: includes `stella2014`, `mednafen_pce`, `mednafen_wswan`.
+- `frame.js` schemes: `stella2014→atari2600`, `mednafen_pce→pce`, `mednafen_wswan→ws`; SG uses `smsplus→segaMS`.
+- Do not treat Master System evidence as SG-1000 proof.
 
 ## Deferred physical
 
