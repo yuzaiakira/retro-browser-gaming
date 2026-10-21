@@ -26,3 +26,22 @@ The frontend sends COOP `same-origin` and COEP `require-corp`, enabling threaded
 Use a maintained native PostgreSQL service, maintained S3 provider, TLS termination, secret manager, explicit CORS origin, health monitoring, encrypted backups plus restore tests, log retention, resource limits, and a release migration job. Keep debug off, set `DJANGO_ALLOWED_HOSTS`, `CSRF_TRUSTED_ORIGINS`, `TRUST_PROXY=true` only behind a trusted proxy, and create a least-privilege storage identity.
 
 Do not expose Django development assets, the object-store API, or an unauthenticated Admin publicly. Review core redistribution licenses and game evidence before publishing any console release.
+
+## J2ME dedicated-origin recovery
+
+| Scenario | Expected behavior |
+| --- | --- |
+| Partial / failed runtime precache | Staging cache discarded; previous active runtime retained |
+| Corrupted cached asset | Offline launch fails VERIFY with actionable error; online reinstall repairs; RMS preserved |
+| SW update during gameplay | New worker stays waiting until install surface sends `ACTIVATE_UPDATE` |
+| Cutover rollback | Export dedicated RMS → prefer-newer merge into launcher **before** setting `NEXT_PUBLIC_J2ME_DEDICATED_ORIGIN=false` and rebuilding |
+| Unknown Host | Edge returns 421; do not fall through to launcher |
+| J2ME hostname `/api/*` | Middleware 403 |
+
+Regenerate integrity digests after editing runtime public assets:
+
+```bash
+python3 scripts/generate-j2me-runtime-manifest.py
+```
+
+HTTPS dual-host staging remains a production prerequisite and is documented as NOT_VERIFIED until exercised with real certificates.

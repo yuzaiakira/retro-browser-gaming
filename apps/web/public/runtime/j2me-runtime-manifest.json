@@ -1,0 +1,52 @@
+{
+  "version": "j2me-runtime-v3",
+  "generated": "2026-10-21",
+  "policy": {
+    "excludeServiceWorkerScript": true,
+    "integrity": "sha256+byteSize",
+    "atomicPromote": true,
+    "activateOnlyOnInstallSurface": true
+  },
+  "entries": [
+    {
+      "path": "/runtime/j2me-isolated/j2me-frame-isolated.html",
+      "sha256": "275945f194a1a9fb96a6d9d85b139e93820d90877bc1d7e1ad796b27d74302e9",
+      "byteSize": 3641
+    },
+    {
+      "path": "/runtime/j2me-isolated/j2me-frame-isolated.js",
+      "sha256": "83e8cad3c8bb0f1d689cea64e4266beb84b932d4b1183bf6b2703d57eb03d410",
+      "byteSize": 17194
+    },
+    {
+      "path": "/runtime/j2me-boot.js",
+      "sha256": "e65919c5f0b4ebd21bdcfbc8955dd0f8ea851d0b120cd7f01d4f7388d221f4a7",
+      "byteSize": 493
+    },
+    {
+      "path": "/runtime/j2me-rms-idb.js",
+      "sha256": "ca56fc278764fa58e7756ef1ea9bc6695c8f8889a86cf77941f622e7abd380ec",
+      "byteSize": 4161
+    },
+    {
+      "path": "/runtime/j2me-secure.js",
+      "sha256": "6b9d134c5a4de2ec98c1c161e88656a2f9bce595859171a805cf3a57551833e2",
+      "byteSize": 12806
+    },
+    {
+      "path": "/runtime/j2me-allowlist.json",
+      "sha256": "d3af37c68357063a318afb8816e02925257e6519ebe9cd06e1ab17dc1bfa029d",
+      "byteSize": 360
+    },
+    {
+      "path": "/runtime/frame.css",
+      "sha256": "3d189756a0e7045e89679222b27cbab8fd1ba432e4045256a17de887bc4aea70",
+      "byteSize": 83
+    },
+    {
+      "path": "/j2me-install.html",
+      "sha256": "5aca590777ca734e81a639c5c6d0effb494bddd8148237682fa494a9a5bf4ede",
+      "byteSize": 8066
+    }
+  ]
+}

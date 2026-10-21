@@ -1,0 +1,11 @@
+{
+  "at": "2026-10-21T08:46:26.705Z",
+  "j2meOrigin": "http://j2me.localhost:45277",
+  "assertions": {
+    "staleLauncherKeptDedicated": true,
+    "dedicatedScorePreserved": true,
+    "rollbackImportedNewerDedicated": true,
+    "newerLauncherProtected": true
+  },
+  "passed": true
+}

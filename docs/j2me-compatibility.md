@@ -2,7 +2,7 @@
 
 This table tracks **tested** first-party MIDlets only. Success of one title does **not** imply support for other JARs.
 
-Runtime: self-hosted MIT **js2me** (`apps/web/public/cores/js2me/`, commit in `SOURCE_COMMIT.txt`) via `/runtime/j2me-frame.html`.
+Runtime: self-hosted MIT **js2me** (`apps/web/public/cores/js2me/`, commit in `SOURCE_COMMIT.txt`) on dedicated origin `j2me.localhost` via `/runtime/j2me-isolated/j2me-frame-isolated.html` (same-origin `/runtime/j2me-frame.html` remains the cutover-off path).
 
 ## Tested MIDlets
 
