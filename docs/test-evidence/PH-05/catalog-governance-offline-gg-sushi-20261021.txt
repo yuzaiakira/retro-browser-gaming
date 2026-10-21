@@ -1,0 +1,5 @@
+CATALOG_INSTALL_START gg-sushi
+CATALOG_INSTALL_PASS gg-sushi
+CATALOG_OFFLINE_START gg-sushi
+CATALOG_OFFLINE_PASS gg-sushi
+CATALOG_CONSOLE_OFFLINE_PASS {"gg-sushiInstall":true,"gg-sushiOffline":true}

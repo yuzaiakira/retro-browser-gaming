@@ -21,11 +21,25 @@ python3 scripts/init-env.py
 
 The frontend sends COOP `same-origin` and COEP `require-corp`, enabling threaded cores only in an isolated context. All core, shell, and game resources must therefore be same-origin or send compatible CORP/CORS headers.
 
+## Catalog publication policy
+
+Three independent layers (never treat one as another):
+
+| Layer | Mechanism | Meaning |
+| --- | --- | --- |
+| DISTRIBUTION_APPROVED | Per-asset `LicenseEvidence.approved_for_distribution` | Redistribution rights reviewed |
+| ENGINEERING (demo) | `Game.published=True` via seed/Admin publish | Graph ready for local/QA catalog |
+| PRODUCT_APPROVED | `Game.product_approval_status=approved` via Admin | Product owner authorized public availability |
+
+Server setting `CATALOG_ALLOW_ENGINEERING` (default **false**) controls whether engineering-published but product-pending titles appear in discovery, release, launch-config, download-manifest, and `/dev-assets/` routes. Local Compose `.env` sets `CATALOG_ALLOW_ENGINEERING=true` for demo QA. Production must leave it unset/false. Client query params cannot override this policy.
+
+`seed_demo --with-console-fixtures` still distribution-approves and engineering-publishes fixtures; it **never** sets product approval.
+
 ## Production requirements
 
-Use a maintained native PostgreSQL service, maintained S3 provider, TLS termination, secret manager, explicit CORS origin, health monitoring, encrypted backups plus restore tests, log retention, resource limits, and a release migration job. Keep debug off, set `DJANGO_ALLOWED_HOSTS`, `CSRF_TRUSTED_ORIGINS`, `TRUST_PROXY=true` only behind a trusted proxy, and create a least-privilege storage identity.
+Use a maintained native PostgreSQL service, maintained S3 provider, TLS termination, secret manager, explicit CORS origin, health monitoring, encrypted backups plus restore tests, log retention, resource limits, and a release migration job. Keep debug off, set `DJANGO_ALLOWED_HOSTS`, `CSRF_TRUSTED_ORIGINS`, `TRUST_PROXY=true` only behind a trusted proxy, leave `CATALOG_ALLOW_ENGINEERING` false/unset, and create a least-privilege storage identity.
 
-Do not expose Django development assets, the object-store API, or an unauthenticated Admin publicly. Review core redistribution licenses and game evidence before publishing any console release.
+Do not expose Django development assets, the object-store API, or an unauthenticated Admin publicly. Review core redistribution licenses and game evidence, then use Django Admin **Approve for public product catalog** before any console title is considered publicly product-authorized.
 
 ## J2ME dedicated-origin recovery
 

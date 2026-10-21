@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .models import CompatibilityReport, Console, EmulatorCore, Game, GameRelease
+from .services import catalog_scope
 
 
 class ConsoleSerializer(serializers.ModelSerializer):
@@ -43,6 +44,7 @@ class ReleaseSerializer(serializers.ModelSerializer):
 
 class GameSerializer(serializers.ModelSerializer):
     releases = serializers.SerializerMethodField()
+    catalog_scope = serializers.SerializerMethodField()
 
     class Meta:
         model = Game
@@ -53,6 +55,7 @@ class GameSerializer(serializers.ModelSerializer):
             "description",
             "genre",
             "published",
+            "catalog_scope",
             "created_at",
             "updated_at",
             "releases",
@@ -62,6 +65,10 @@ class GameSerializer(serializers.ModelSerializer):
         return ReleaseSerializer(
             [r for r in obj.releases.all() if r.status == "ready"], many=True
         ).data
+
+    def get_catalog_scope(self, obj) -> str:
+        # "engineering-demo" is operational context for local QA — not marketing copy.
+        return catalog_scope(obj)
 
 
 class CompatibilitySerializer(serializers.ModelSerializer):

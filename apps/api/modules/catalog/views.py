@@ -22,7 +22,7 @@ from .serializers import (
     ManifestSerializer,
     ReleaseSerializer,
 )
-from .services import catalog_queryset, is_public, public_release
+from .services import catalog_queryset, is_catalog_visible, public_release
 from .storage import LocalStorage, S3Storage, storage
 
 
@@ -37,26 +37,29 @@ class GameViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = catalog_queryset()
 
     def get_queryset(self):
-        # Publication is re-evaluated after revocation, including writes made outside Admin.
+        # Visibility is re-evaluated after revocation, including writes made outside Admin.
         query = catalog_queryset()
         text = self.request.query_params.get("search", "")[:180]
         console = self.request.query_params.get("console", "")[:50]
+        genre = self.request.query_params.get("genre", "")[:80]
         if text:
             query = query.filter(title__icontains=text)
         if console:
             query = query.filter(
                 releases__console__slug=console, releases__status="ready"
             ).distinct()
+        if genre:
+            query = query.filter(genre__iexact=genre)
         return query
 
     def list(self, request, *args, **kwargs):
-        visible = [game for game in self.get_queryset() if is_public(game)]
+        visible = [game for game in self.get_queryset() if is_catalog_visible(game)]
         page = self.paginate_queryset(visible)
         return self.get_paginated_response(self.get_serializer(page, many=True).data)
 
     def retrieve(self, request, *args, **kwargs):
         obj = self.get_object()
-        if not is_public(obj):
+        if not is_catalog_visible(obj):
             raise Http404
         return Response(self.get_serializer(obj).data)
 
@@ -64,6 +67,7 @@ class GameViewSet(viewsets.ReadOnlyModelViewSet):
 class ConsoleViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Console.objects.order_by("name")
     serializer_class = ConsoleSerializer
+    pagination_class = None
 
 
 class CoreViewSet(viewsets.ReadOnlyModelViewSet):
@@ -149,7 +153,7 @@ class CompatibilityViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CompatibilitySerializer
 
     def get_queryset(self):
-        ids = [g.pk for g in catalog_queryset() if is_public(g)]
+        ids = [g.pk for g in catalog_queryset() if is_catalog_visible(g)]
         return self.queryset.filter(release__game_id__in=ids, release__status="ready")
 
 

@@ -6,6 +6,7 @@ import { db, setSetting } from "@/lib/db";
 import {
   assetKey,
   formatBytes,
+  type ConsoleInfo,
   type Download,
   type Game,
   type Installation,
@@ -34,15 +35,19 @@ export default function App({ route }: { route: string[] }) {
   const [consoleFilter, setConsoleFilter] = useState(
     route[0] === "consoles" ? route[1] : "",
   );
+  const [genreFilter, setGenreFilter] = useState("");
+  const [consoles, setConsoles] = useState<ConsoleInfo[]>([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
+  const [detailError, setDetailError] = useState("");
   const [offline, setOffline] = useState(false);
   const [installs, setInstalls] = useState<Installation[]>([]);
   const [downloads, setDownloads] = useState<Download[]>([]);
   const [busy, setBusy] = useState(false);
   const [refresh, setRefresh] = useState(0);
   const [compat, setCompat] = useState<{ status: string; reasons: string[] }>();
+  const engineeringDemo = games.some((g) => g.catalog_scope === "engineering-demo");
   useEffect(() => {
     const update = () => setOffline(!navigator.onLine);
     update();
@@ -73,6 +78,18 @@ export default function App({ route }: { route: string[] }) {
     };
   }, [refresh]);
   useEffect(() => {
+    if (!navigator.onLine) return;
+    const abort = new AbortController();
+    api<ConsoleInfo[]>("consoles/", abort.signal)
+      .then((list) => {
+        setConsoles(
+          (Array.isArray(list) ? list : []).filter((c) => c.status === "available"),
+        );
+      })
+      .catch(() => {});
+    return () => abort.abort();
+  }, []);
+  useEffect(() => {
     if (!["home", "games", "consoles"].includes(page)) {
       setLoading(false);
       return;
@@ -83,14 +100,31 @@ export default function App({ route }: { route: string[] }) {
       try {
         if (!navigator.onLine) {
           const cached = await (await db()).getAll("library");
-          setGames(cached);
-          setCount(cached.length);
+          const filtered = cached.filter((g) => {
+            if (
+              consoleFilter &&
+              !g.releases.some((r) => r.console.slug === consoleFilter)
+            )
+              return false;
+            if (genreFilter && g.genre.toLowerCase() !== genreFilter.toLowerCase())
+              return false;
+            if (
+              search &&
+              !g.title.toLowerCase().includes(search.toLowerCase())
+            )
+              return false;
+            return true;
+          });
+          setGames(filtered);
+          setCount(filtered.length);
           setMessage("Offline catalog · showing games saved on this device");
         } else {
-          const data = await api<Catalog>(
-            `games/?search=${encodeURIComponent(search)}&console=${encodeURIComponent(consoleFilter)}&page=${pageNumber}`,
-            abort.signal,
-          );
+          const params = new URLSearchParams();
+          if (search) params.set("search", search);
+          if (consoleFilter) params.set("console", consoleFilter);
+          if (genreFilter) params.set("genre", genreFilter);
+          params.set("page", String(pageNumber));
+          const data = await api<Catalog>(`games/?${params}`, abort.signal);
           setGames(data.results);
           setCount(data.count);
           setMessage("");
@@ -107,40 +141,53 @@ export default function App({ route }: { route: string[] }) {
       clearTimeout(timer);
       abort.abort();
     };
-  }, [page, search, consoleFilter, pageNumber, refresh, offline]);
+  }, [page, search, consoleFilter, genreFilter, pageNumber, refresh, offline]);
   useEffect(() => {
     if (page !== "games" || !route[1]) return;
     let cancel = false;
     (async () => {
       setLoading(true);
+      setDetailError("");
+      setDetail(undefined);
       setDetailManifest(undefined);
-      const game = navigator.onLine
-        ? await api<Game>(`games/${encodeURIComponent(route[1])}/`)
-        : (await (await db()).getAll("library")).find(
-            (g) => g.slug === route[1],
+      try {
+        const game = navigator.onLine
+          ? await api<Game>(`games/${encodeURIComponent(route[1])}/`)
+          : (await (await db()).getAll("library")).find(
+              (g) => g.slug === route[1],
+            );
+        if (!game) {
+          throw new Error(
+            navigator.onLine
+              ? "This game is not available in the current catalog."
+              : "Game metadata is not available offline. Open My library.",
           );
-      if (!game)
-        throw new Error(
-          "Game metadata is not available offline. Open My library.",
+        }
+        if (cancel) return;
+        setDetail(game);
+        await (await db()).put("library", game);
+        const release = game.releases[0];
+        if (!release) {
+          throw new Error("This title has no ready release to launch.");
+        }
+        const manifest = navigator.onLine
+          ? await getManifest(release.id)
+          : undefined;
+        if (cancel) return;
+        setDetailManifest(manifest);
+        const result = probe(
+          await inspectDevice(),
+          release,
+          manifest?.assets.reduce((total, asset) => total + asset.byteSize, 0) ??
+            0,
         );
-      if (cancel) return;
-      setDetail(game);
-      await (await db()).put("library", game);
-      const manifest = navigator.onLine
-        ? await getManifest(game.releases[0].id)
-        : undefined;
-      if (cancel) return;
-      setDetailManifest(manifest);
-      const result = probe(
-        await inspectDevice(),
-        game.releases[0],
-        manifest?.assets.reduce((total, asset) => total + asset.byteSize, 0) ??
-          0,
-      );
-      setCompat(result);
-    })()
-      .catch((e) => setMessage(String(e)))
-      .finally(() => setLoading(false));
+        setCompat(result);
+      } catch (e) {
+        if (!cancel) setDetailError(String(e instanceof Error ? e.message : e));
+      } finally {
+        if (!cancel) setLoading(false);
+      }
+    })();
     return () => {
       cancel = true;
     };
@@ -215,6 +262,10 @@ export default function App({ route }: { route: string[] }) {
   }
   const card = (game: Game) => {
     const release = game.releases[0];
+    const ready = installs.some(
+      (i) => i.game.id === game.id && i.state === "ready-offline",
+    );
+    const blurb = game.description.split(".")[0]?.trim();
     return (
       <article className="game-card" key={game.id}>
         <a href={"/games/" + game.slug} className="card-art">
@@ -223,19 +274,13 @@ export default function App({ route }: { route: string[] }) {
         </a>
         <div className="card-content">
           <div className="tags">
-            <span>{game.genre}</span>
-            <span>
-              {installs.some(
-                (i) => i.game.id === game.id && i.state === "ready-offline",
-              )
-                ? "● INSTALLED"
-                : "ON-DEVICE PLAY"}
-            </span>
+            <span>{game.genre || "Homebrew"}</span>
+            <span>{ready ? "● READY OFFLINE" : "DOWNLOAD TO PLAY"}</span>
           </div>
           <a href={"/games/" + game.slug}>
             <h3>{game.title}</h3>
           </a>
-          <p>{game.description.split(".")[0]}.</p>
+          <p>{blurb ? `${blurb}.` : "Open for controls and install options."}</p>
           <a className="card-link" href={"/games/" + game.slug}>
             View game <span>↗</span>
           </a>
@@ -243,6 +288,25 @@ export default function App({ route }: { route: string[] }) {
       </article>
     );
   };
+  const genreOptions = Array.from(
+    new Set(
+      [
+        ...games.map((g) => g.genre).filter(Boolean),
+        genreFilter,
+        "Action",
+        "Puzzle",
+        "Platformer",
+        "Sports",
+        "Card",
+        "Arcade",
+        "Homebrew",
+      ].filter(Boolean),
+    ),
+  ).sort((a, b) => a.localeCompare(b));
+  const consoleOptions: [string, string][] = [
+    ["", "All systems"],
+    ...consoles.map((c): [string, string] => [c.slug, c.name]),
+  ];
   return (
     <div className="app">
       <aside className="sidebar">
@@ -442,89 +506,120 @@ export default function App({ route }: { route: string[] }) {
             </section>
           ) : page === "games" && route[1] ? (
             <section>
+              <a className="back" href="/games">
+                ← Back to games
+              </a>
               {loading ? (
                 <p role="status">Loading game…</p>
-              ) : (
-                detail && (
-                  <>
-                    <a className="back" href="/games">
-                      ← Back to games
-                    </a>
-                    <div className="detail-grid">
-                      <Art large kind={detail.releases[0].console.slug} />
-                      <div>
-                        <span className="eyebrow">
-                          {detail.releases[0].console.name} / {detail.genre}
-                        </span>
-                        <h1>{detail.title}</h1>
-                        <p className="lead">{detail.description}</p>
-                        <div className="panel">
-                          <strong>
-                            Compatibility · {compat?.status ?? "checking"}
-                          </strong>
-                          {compat?.reasons.map((r) => <p key={r}>{r}</p>)}
-                          <p>
-                            Core: {detail.releases[0].recommended_core.code} ·{" "}
-                            {detail.releases[0].recommended_core.version}
-                          </p>
-                          <p>
-                            {detail.releases[0].compatibility_note ||
-                              "Device-specific compatibility has not been verified."}
-                          </p>
-                          {detailManifest && (
-                            <p>
-                              Download:{" "}
-                              {formatBytes(
-                                detailManifest.assets.reduce(
-                                  (total, asset) => total + asset.byteSize,
-                                  0,
-                                ),
-                              )}{" "}
-                              · {detailManifest.assets.length} verified file
-                              {detailManifest.assets.length === 1 ? "" : "s"} ·{" "}
-                              {detailManifest.assets.some(
-                                (asset) => asset.role === "bios",
-                              )
-                                ? "BIOS included"
-                                : "No BIOS asset required"}
-                            </p>
-                          )}
-                        </div>
-                        {installs.some(
-                          (i) =>
-                            i.id === detail.releases[0].id &&
-                            i.state === "ready-offline",
-                        ) ? (
-                          <a
-                            className="button"
-                            href={"/play/" + detail.releases[0].id}
-                          >
-                            ▶ Play game
-                          </a>
-                        ) : (
-                          <button
-                            disabled={
-                              busy ||
-                              compat?.status === "unsupported" ||
-                              offline
-                            }
-                            onClick={() => doInstall(detail)}
-                          >
-                            ↓{" "}
-                            {busy
-                              ? "Downloading…"
-                              : "Download & try on this device"}
-                          </button>
-                        )}
+              ) : detailError ? (
+                <div className="empty" role="alert">
+                  <h2>Game unavailable</h2>
+                  <p>{detailError}</p>
+                  <a className="button secondary" href="/games">
+                    Browse catalog
+                  </a>
+                </div>
+              ) : detail && detail.releases[0] ? (
+                <>
+                  <div className="detail-grid">
+                    <Art large kind={detail.releases[0].console.slug} />
+                    <div>
+                      <span className="eyebrow">
+                        {detail.releases[0].console.name} / {detail.genre}
+                      </span>
+                      <h1>{detail.title}</h1>
+                      <p className="lead">{detail.description}</p>
+                      {detail.releases.length > 1 && (
                         <p className="small">
-                          No account needed. Game files and saves stay on this
-                          device. Downloads verify every file before install.
+                          {detail.releases.length} ready releases on this title.
+                          Launch uses the primary ready release listed below.
                         </p>
-                        <a href="/downloads">Open download manager →</a>
+                      )}
+                      <div className="panel">
+                        <strong>
+                          Compatibility · {compat?.status ?? "checking"}
+                        </strong>
+                        {compat?.reasons.map((r) => <p key={r}>{r}</p>)}
+                        <p>
+                          Core: {detail.releases[0].recommended_core.code} ·{" "}
+                          {detail.releases[0].recommended_core.version}
+                        </p>
+                        <p>
+                          {detail.releases[0].compatibility_note ||
+                            "Device-specific compatibility notes are not recorded for this release yet."}
+                        </p>
+                        <p>
+                          Install state:{" "}
+                          {installs.some(
+                            (i) =>
+                              i.id === detail.releases[0].id &&
+                              i.state === "ready-offline",
+                          )
+                            ? "Ready offline on this device"
+                            : offline
+                              ? "Not installed · connect to download"
+                              : "Not installed on this device"}
+                        </p>
+                        {detailManifest && (
+                          <p>
+                            Download:{" "}
+                            {formatBytes(
+                              detailManifest.assets.reduce(
+                                (total, asset) => total + asset.byteSize,
+                                0,
+                              ),
+                            )}{" "}
+                            · {detailManifest.assets.length} verified file
+                            {detailManifest.assets.length === 1 ? "" : "s"} ·{" "}
+                            {detailManifest.assets.some(
+                              (asset) => asset.role === "bios",
+                            )
+                              ? "BIOS included"
+                              : "No BIOS asset required"}
+                          </p>
+                        )}
                       </div>
+                      {installs.some(
+                        (i) =>
+                          i.id === detail.releases[0].id &&
+                          i.state === "ready-offline",
+                      ) ? (
+                        <a
+                          className="button"
+                          href={"/play/" + detail.releases[0].id}
+                        >
+                          ▶ Play game
+                        </a>
+                      ) : (
+                        <button
+                          disabled={
+                            busy ||
+                            compat?.status === "unsupported" ||
+                            offline
+                          }
+                          onClick={() => doInstall(detail)}
+                        >
+                          ↓{" "}
+                          {busy
+                            ? "Downloading…"
+                            : offline
+                              ? "Online required to download"
+                              : "Download & try on this device"}
+                        </button>
+                      )}
+                      <p className="small">
+                        No account needed. Game files and saves stay on this
+                        device. Downloads verify every file before install.
+                      </p>
+                      <a href="/downloads">Open download manager →</a>
                     </div>
-                  </>
-                )
+                  </div>
+                </>
+              ) : (
+                <div className="empty" role="status">
+                  <h2>Game not found</h2>
+                  <p>Choose another title from the catalog.</p>
+                </div>
               )}
             </section>
           ) : ["home", "games", "consoles"].includes(page) ? (
@@ -582,16 +677,17 @@ export default function App({ route }: { route: string[] }) {
                     />
                   </label>
                 </div>
-                <div className="filters">
-                  {[
-                    ["", "All systems"],
-                    ["browser", "HTML5"],
-                    ["sega-md", "Sega"],
-                    ["ps1", "PlayStation"],
-                    ["psp", "PSP"],
-                  ].map(([slug, label]) => (
+                {engineeringDemo && (
+                  <p className="small" role="note">
+                    Local engineering demo catalog — titles here are for QA and
+                    are not product-authorized for public marketing.
+                  </p>
+                )}
+                <div className="filters" role="group" aria-label="Filter by system">
+                  {consoleOptions.map(([slug, label]) => (
                     <button
-                      key={slug}
+                      key={slug || "all"}
+                      type="button"
                       className={
                         consoleFilter === slug ? "selected" : "secondary"
                       }
@@ -604,6 +700,33 @@ export default function App({ route }: { route: string[] }) {
                     </button>
                   ))}
                 </div>
+                <div className="filters" role="group" aria-label="Filter by genre">
+                  <button
+                    type="button"
+                    className={genreFilter === "" ? "selected" : "secondary"}
+                    onClick={() => {
+                      setGenreFilter("");
+                      setPageNumber(1);
+                    }}
+                  >
+                    All genres
+                  </button>
+                  {genreOptions.map((genre) => (
+                    <button
+                      key={genre}
+                      type="button"
+                      className={
+                        genreFilter === genre ? "selected" : "secondary"
+                      }
+                      onClick={() => {
+                        setGenreFilter(genre);
+                        setPageNumber(1);
+                      }}
+                    >
+                      {genre}
+                    </button>
+                  ))}
+                </div>
                 {loading ? (
                   <div className="empty" role="status">
                     Loading your next adventure…
@@ -613,12 +736,19 @@ export default function App({ route }: { route: string[] }) {
                 ) : (
                   <div className="empty">
                     <h2>No games in this corner yet.</h2>
-                    <p>Try a different system or search.</p>
+                    <p>
+                      {message
+                        ? message
+                        : "Try a different system, genre, or search."}
+                    </p>
                     <button
                       className="secondary"
+                      type="button"
                       onClick={() => {
                         setSearch("");
                         setConsoleFilter("");
+                        setGenreFilter("");
+                        setPageNumber(1);
                       }}
                     >
                       Reset filters

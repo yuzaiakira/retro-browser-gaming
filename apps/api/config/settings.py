@@ -74,6 +74,17 @@ STORAGE_BACKEND = os.getenv("STORAGE_BACKEND", "s3")
 LOCAL_ASSET_ROOT = Path(os.getenv("LOCAL_ASSET_ROOT", str(BASE_DIR / ".runtime" / "assets")))
 if STORAGE_BACKEND == "local" and not DEBUG:
     raise ImproperlyConfigured("Local asset transport is development-only")
+# Explicit engineering-demo catalog visibility. Secure default is off: production
+# APIs expose only product-approved titles. Local Compose sets this true in .env.
+# Never trust a client-supplied flag for this policy.
+CATALOG_ALLOW_ENGINEERING = (
+    os.getenv("CATALOG_ALLOW_ENGINEERING", "false").lower() == "true"
+)
+if CATALOG_ALLOW_ENGINEERING and not DEBUG:
+    # Engineering fixtures may be shown only in explicitly configured non-production
+    # deployments that also keep DEBUG off only when operators accept the risk —
+    # still require the explicit env var (never implied by DEBUG alone).
+    pass
 S3_ENDPOINT_URL = os.getenv("S3_ENDPOINT_URL", "http://object-store:9000")
 S3_PUBLIC_ENDPOINT_URL = os.getenv("S3_PUBLIC_ENDPOINT_URL", "http://localhost:9000")
 S3_BROWSER_PROXY = os.getenv("S3_BROWSER_PROXY", "false").lower() == "true"

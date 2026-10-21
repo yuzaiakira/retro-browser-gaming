@@ -2,7 +2,7 @@
 
 ## User-facing seed
 
-`apps/api/modules/demo/orbit.html` is a first-party HTML5 game under `LICENSES/orbit-MIT.txt`. Its importer record contains the exact SHA-256 at seed time, first-party evidence, and a distribution approval. No commercial game or BIOS is part of the seed.
+`apps/api/modules/demo/orbit.html` is a first-party HTML5 game under `LICENSES/orbit-MIT.txt`. Its importer record contains the exact SHA-256 at seed time, first-party evidence, and a **distribution** approval. Seed engineering-publishes titles for local demo when `CATALOG_ALLOW_ENGINEERING=true`; it does **not** set product approval. See `docs/catalog-product-approval-report-20261021.md` and `docs/deployment.md`. No commercial game or BIOS is part of the seed.
 
 ## Core-test fixtures only
 
