@@ -29,6 +29,7 @@ SYSTEMS = [
     ("ngp", "Neo Geo Pocket", "handheld"),
     ("ngpc", "Neo Geo Pocket Color", "handheld"),
     ("dos", "MS-DOS", "computer"),
+    ("j2me", "Java ME / J2ME", "handheld"),
     ("ps1", "PlayStation", "console"),
     ("psp", "PlayStation Portable", "handheld"),
 ]
@@ -49,6 +50,7 @@ WASM_CORES = [
     ("pcsx_rearmed", ["cue", "chd", "bin"], ["wasm", "secureContext"]),
     ("ppsspp", ["iso", "cso", "pbp"], ["wasm", "threads", "webgl2", "secureContext"]),
     ("jsdos", ["zip"], ["wasm", "secureContext"]),
+    ("js2me", ["jar"], ["secureContext"]),
 ]
 
 CONSOLE_FIXTURE_SLUGS = {
@@ -69,6 +71,7 @@ CONSOLE_FIXTURE_SLUGS = {
     "ngp",
     "ngpc",
     "dos",
+    "j2me",
     "ps1",
     "psp",
 }
@@ -119,12 +122,18 @@ class Command(BaseCommand):
             },
         )
         for code, ext, cap in WASM_CORES:
-            core_version = "jsdos-8.3.8" if code == "jsdos" else CORE_VERSION
+            if code == "jsdos":
+                core_version = "jsdos-8.3.8"
+            elif code == "js2me":
+                core_version = "js2me-szymor"
+            else:
+                core_version = CORE_VERSION
+            runtime_type = "js" if code == "js2me" else "wasm"
             EmulatorCore.objects.get_or_create(
                 code=code,
                 version=core_version,
                 defaults={
-                    "runtime_type": "wasm",
+                    "runtime_type": runtime_type,
                     "status": "available" if with_consoles else "research",
                     "supported_extensions": ext,
                     "min_capabilities": cap,
@@ -536,6 +545,23 @@ class Command(BaseCommand):
             license_ref="MIT; LICENSES/floppybird-MIT.txt",
             provenance="https://github.com/icebreaker/floppybird",
             evidence="build/flpybird.com + AUTORUN.BAT; sources mirrored under fixtures/dos-floppybird/",
+        )
+        results["j2me"] = self._import_files(
+            fixtures,
+            slug="mit-j2me-dot",
+            title="MIT J2ME Dot",
+            description=(
+                "First-party MIT Java ME MIDlet (CLDC/MIDP) for js2me self-hosted runtime. "
+                "Score persists via MIDP RecordStore → IndexedDB. Not a commercial JAR."
+            ),
+            console="j2me",
+            core={"code": "js2me", "version": "js2me-szymor"},
+            revision="fixture-1",
+            entry="mit-j2me-dot.jar",
+            files=[("mit-j2me-dot.jar", "rom", "application/java-archive")],
+            license_ref="MIT; LICENSES/j2me-dot-MIT.txt",
+            provenance="fixtures/j2me-dot/ (first-party)",
+            evidence="fixtures/j2me-dot/; PH-06/j2me-dot-gameplay-20261021.md",
         )
         results["ps1"] = self._import_files(
             fixtures,

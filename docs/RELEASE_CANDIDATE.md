@@ -7,9 +7,9 @@ Local HEAD includes Android physical PH-08 (through AUD-001) and commits through
 ## Implemented
 
 - Django/DRF catalog, importer, manifests, Range/S3 transport, Compose stack (PostgreSQL + SeaweedFS + API + Next standalone).
-- Next.js PWA: discovery, library, downloads, player, diagnostics, OPFS/IDB downloader, shell SW (`retro-shell-v4`).
-- Emulator adapters via versioned frame protocol for HTML5, Genesis Plus GX (MD+GG), SMS Plus, FCEUmm, snes9x, gambatte, mgba, stella2014 (Atari 2600), prosystem (Atari 7800), handy (Lynx), mednafen_pce (PCE HuCard), mednafen_wswan (WonderSwan), mednafen_ngp (NGP + NGPC), jsdos (MS-DOS / emulators 8.3.8), PCSX ReARMed, PPSSPP (threaded).
-- Keyboard / simulated gamepad / configurable touch; fullscreen/orientation APIs; save slots + autosave.
+- Next.js PWA: discovery, library, downloads, player, diagnostics, OPFS/IDB downloader, shell SW (`retro-shell-v5`).
+- Emulator adapters via versioned frame protocol for HTML5, Genesis Plus GX (MD+GG), SMS Plus, FCEUmm, snes9x, gambatte, mgba, stella2014 (Atari 2600), prosystem (Atari 7800), handy (Lynx), mednafen_pce (PCE HuCard), mednafen_wswan (WonderSwan), mednafen_ngp (NGP + NGPC), jsdos (MS-DOS / emulators 8.3.8), js2me (J2ME / MIDP subset), PCSX ReARMed, PPSSPP (threaded).
+- Keyboard / simulated gamepad / configurable touch; fullscreen/orientation APIs; save slots + autosave; J2ME keypad + RMS/IndexedDB.
 
 ## Verified (real evidence)
 
@@ -19,6 +19,7 @@ Local HEAD includes Android physical PH-08 (through AUD-001) and commits through
 | Downloads / DL-013 scoped | PASSED | `PH-03` |
 | Offline PWA + OFF-004 wasm eviction | PASSED | `PH-02` |
 | Genesis / SMS / GG / SG-1000 / NES / SNES / GB / GBC / GBA / Atari 2600 / 7800 / Lynx / PCE HuCard / WonderSwan / NGP / NGPC / MS-DOS / PS1 / PSP gameplay + catalog offline | PASSED (scoped) | `PH-05` |
+| J2ME MIT Dot + js2me + offline RMS | PASSED (first-party subset) | `PH-06/j2me-dot-gameplay-20261021.md` |
 | Automated acceptance gates | PASSED | `PH-07` |
 | Android Chrome physical (touch, FS, OR, offline reverse-removed) | PASSED | `PH-08/android-*` |
 | AUD-001 human-heard Genesis on phone | PASSED | `PH-08/aud001-human-listen-20261020.md` |
@@ -45,5 +46,5 @@ Independent expansion work may proceed without waiting for gamepad/iOS:
 
 1. **P0 software Sega gaps closed** (SMS/GG); physical gamepad/iOS still block complete P0.
 2. **P1:** Nintendo set + Atari 2600/7800 + Lynx + PCE HuCard + SG-1000 + WonderSwan + NGP/NGPC + MS-DOS (`jsdos`) verified (`PH-05/*`).
-3. **P1 research:** EmulatorJS `dosbox_pure` still blocked on 4.2.3; J2ME still blocked — RMS+IDB only (`PH-06/j2me-rms-idb-20261021.md`).
+3. **P1 research:** EmulatorJS `dosbox_pure` still blocked on 4.2.3; broader J2ME titles beyond MIT Dot remain unchecked (`PH-06/j2me-dot-gameplay-20261021.md`).
 4. Higher roadmap items (PCE CD, etc.) remain unchecked until evidenced.

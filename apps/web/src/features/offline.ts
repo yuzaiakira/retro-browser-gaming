@@ -3,7 +3,7 @@ import { verifyAsset } from '@/lib/storage';
 import type { Installation, Release } from '@/lib/types';
 
 /** Must match `VERSION` in `public/sw.js`. */
-export const SHELL = 'retro-shell-v4';
+export const SHELL = 'retro-shell-v5';
 
 const SHELL_PATHS = [
   '/',
@@ -18,6 +18,11 @@ const SHELL_PATHS = [
   '/runtime/frame.html',
   '/runtime/frame.js',
   '/runtime/frame.css',
+  '/runtime/dos-frame.html',
+  '/runtime/dos-frame.js',
+  '/runtime/j2me-frame.html',
+  '/runtime/j2me-frame.js',
+  '/runtime/j2me-rms-idb.js',
   '/runtime/seekable-fs.js',
   '/runtime/blob-reader.worker.js',
 ];
@@ -92,7 +97,12 @@ export async function prepareShell(id: string) {
 }
 
 export async function prepareCore(release: Release) {
-  if (release.recommended_core.runtime_type !== 'wasm') return;
+  const needsCorePackage =
+    release.recommended_core.runtime_type === 'wasm' ||
+    release.recommended_core.runtime_type === 'js' ||
+    release.recommended_core.code === 'js2me' ||
+    release.recommended_core.code === 'jsdos';
+  if (!needsCorePackage) return;
   const manifest = release.recommended_core.licensed_asset_manifest;
   if (!manifest.length) throw new Error('CORE_PACKAGE_UNAVAILABLE');
   const cache = await caches.open(SHELL);
@@ -123,9 +133,22 @@ export async function auditInstallation(installation: Installation) {
     const { hashFile } = await import('@/lib/storage');
     if ((await hashFile(await response.blob())) !== resource.sha256) return false;
   }
-  for (const path of ['/runtime/seekable-fs.js', '/runtime/blob-reader.worker.js', '/runtime/frame.html']) {
-    if (installation.release.recommended_core.runtime_type === 'wasm' && !(await cache.match(path))) {
-      return false;
+  const core = installation.release.recommended_core;
+  const framePath =
+    core.code === 'jsdos'
+      ? '/runtime/dos-frame.html'
+      : core.code === 'js2me'
+        ? '/runtime/j2me-frame.html'
+        : '/runtime/frame.html';
+  const runtimePaths =
+    core.code === 'js2me'
+      ? [framePath, '/runtime/j2me-frame.js', '/runtime/j2me-rms-idb.js']
+      : core.code === 'jsdos'
+        ? [framePath, '/runtime/dos-frame.js']
+        : ['/runtime/seekable-fs.js', '/runtime/blob-reader.worker.js', framePath];
+  if (core.runtime_type === 'wasm' || core.runtime_type === 'js' || core.code === 'js2me') {
+    for (const path of runtimePaths) {
+      if (!(await cache.match(path))) return false;
     }
   }
   return true;

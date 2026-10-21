@@ -1,0 +1,8 @@
+MIDlet-Name: MIT J2ME Dot
+MIDlet-Version: 1.0.0
+MIDlet-Vendor: Retro Browser Gaming
+MIDlet-1: MIT J2ME Dot, , retro.j2me.dot.DotMIDlet
+MIDlet-Jar-URL: mit-j2me-dot.jar
+MIDlet-Jar-Size: 2940
+MicroEdition-Configuration: CLDC-1.1
+MicroEdition-Profile: MIDP-2.0

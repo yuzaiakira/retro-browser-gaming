@@ -2,7 +2,7 @@
  * Caches shell/core runtime only. Game ROM bytes stay in OPFS; saves stay in IndexedDB.
  * Version bumps must never delete OPFS/IDB. Old shell CacheStorage entries are pruned on activate.
  */
-const VERSION = 'retro-shell-v4';
+const VERSION = 'retro-shell-v5';
 
 self.addEventListener('install', () => {
   // Stay in waiting until the page sends ACTIVATE_UPDATE so active gameplay is not disrupted.
