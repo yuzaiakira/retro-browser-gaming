@@ -18,7 +18,7 @@ Local HEAD includes Android physical PH-08 (through AUD-001) and commits through
 | Native Compose + API tests | PASSED | `PH-01`, Django test suite |
 | Downloads / DL-013 scoped | PASSED | `PH-03` |
 | Offline PWA + OFF-004 wasm eviction | PASSED | `PH-02` |
-| Genesis / SMS / GG / SG-1000 / NES / SNES / GB / GBC / GBA / Atari 2600 / 7800 / Lynx / PCE HuCard / WonderSwan / NGP / NGPC / MS-DOS / PS1 / PSP gameplay + catalog offline | PASSED (scoped) | `PH-05` |
+| Genesis / SMS / GG / SG-1000 / NES / SNES / GB / GBC / GBA / Atari 2600 / 7800 / Lynx / PCE HuCard / WonderSwan / NGP / NGPC / MS-DOS / PS1 / PSP gameplay + catalog offline | PASSED (scoped) | `PH-05`; PS1/PSP smoke hang fixed as harness-only (`PH-05/ps1-psp-hang-fix-20261021.md`) |
 | J2ME MIT Dot/Paddle/Notes dedicated-origin catalog offline (real SW, no mocks) | PASSED (first-party subset) | `PH-06/catalog-j2me-dedicated-offline-20261021.md`, `docs/j2me-security-architecture.md`, `docs/j2me-compatibility.md` |
 | J2ME SW atomic integrity + cache recovery + RMS prefer-newer rollback | PASSED (automated) | `PH-06/j2me-sw-integrity-20261021.json`, `j2me-cache-recovery-20261021.json`, `j2me-rms-rollback-safety-20261021.json` |
 | J2ME SW unique-generation promotion faults + ACTIVATE_UPDATE auth | PASSED (automated) | `PH-06/j2me-sw-promotion-faults-20261021.json` |
