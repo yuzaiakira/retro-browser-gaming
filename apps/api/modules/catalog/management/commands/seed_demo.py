@@ -560,7 +560,7 @@ class Command(BaseCommand):
             entry="mit-j2me-dot.jar",
             files=[("mit-j2me-dot.jar", "rom", "application/java-archive")],
             license_ref="MIT; LICENSES/j2me-dot-MIT.txt",
-            provenance="fixtures/j2me-dot/ (first-party)",
+            provenance="https://spdx.org/licenses/MIT.html",
             evidence="fixtures/j2me-dot/; PH-06/j2me-dot-gameplay-20261021.md",
         )
         results["j2me-paddle"] = self._import_files(
@@ -577,7 +577,7 @@ class Command(BaseCommand):
             entry="mit-j2me-paddle.jar",
             files=[("mit-j2me-paddle.jar", "rom", "application/java-archive")],
             license_ref="MIT; LICENSES/j2me-dot-MIT.txt",
-            provenance="fixtures/j2me-paddle/ (first-party)",
+            provenance="https://spdx.org/licenses/MIT.html",
             evidence="fixtures/j2me-paddle/; PH-06/j2me-multi-20261021.md",
         )
         results["j2me-notes"] = self._import_files(
@@ -594,7 +594,7 @@ class Command(BaseCommand):
             entry="mit-j2me-notes.jar",
             files=[("mit-j2me-notes.jar", "rom", "application/java-archive")],
             license_ref="MIT; LICENSES/j2me-dot-MIT.txt",
-            provenance="fixtures/j2me-notes/ (first-party)",
+            provenance="https://spdx.org/licenses/MIT.html",
             evidence="fixtures/j2me-notes/; PH-06/j2me-multi-20261021.md",
         )
         results["ps1"] = self._import_files(

@@ -1,0 +1,12 @@
+CATALOG_J2ME_INSTALL_START dot
+CONSOLE Executing inline script violates the following Content Security Policy directive 'script-src 'self' blob: 'unsafe-eval''. Either the 'unsafe-inline' keyword, a hash ('sha256-fbBFc3GB1Li1fPyn7r+U5BAX+JMmteq0K6GxtK5Cb1c='), or a nonce ('nonce-...') is required to enable inline execution. The action has been blocked.
+CONSOLE Refused to execute script from 'http://127.0.0.1:13000/runtime/undefined' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.
+locator.waitFor: Timeout 180000ms exceeded.
+Call log:
+  - waiting for getByText('Running locally · no server rendering', { exact: true }) to be visible
+
+    at waitRunning (/home/akira/Projects/git-contribute/retro-browser-gaming/apps/web/tests/catalog-j2me-offline.cjs:89:82)
+    at async installAndPlay (/home/akira/Projects/git-contribute/retro-browser-gaming/apps/web/tests/catalog-j2me-offline.cjs:195:3)
+    at async run (/home/akira/Projects/git-contribute/retro-browser-gaming/apps/web/tests/catalog-j2me-offline.cjs:287:25) {
+  name: 'TimeoutError'
+}

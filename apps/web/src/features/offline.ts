@@ -21,6 +21,7 @@ const SHELL_PATHS = [
   '/runtime/dos-frame.html',
   '/runtime/dos-frame.js',
   '/runtime/j2me-frame.html',
+  '/runtime/j2me-boot.js',
   '/runtime/j2me-frame.js',
   '/runtime/j2me-rms-idb.js',
   '/runtime/j2me-secure.js',
@@ -146,6 +147,7 @@ export async function auditInstallation(installation: Installation) {
     core.code === 'js2me'
       ? [
           framePath,
+          '/runtime/j2me-boot.js',
           '/runtime/j2me-frame.js',
           '/runtime/j2me-rms-idb.js',
           '/runtime/j2me-secure.js',
