@@ -18,3 +18,4 @@ fixtures/*/*.elf
 fixtures/*/EBOOT.PBP
 fixtures/*/PARAM.SFO
 fixtures/*/assets/tone.wav
+docs/test-evidence/PH-06/.sec-tmp/
