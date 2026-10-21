@@ -21,7 +21,7 @@
 | IN-003, IN-004, IN-005 | PASSED (Chromium + Android physical) | Desktop sim + USB Android Chrome CDP (`PH-08/android-physical-20261020.txt`) |
 | SAV-001 | PASSED | HTML5 + console offline load |
 | SAV-002, SAV-003 | PASSED | Delete keeps saves; invalid import rejected |
-| SEC-001–SEC-003 | PASSED | Prior security evidence; companion extension publish gate + lock digests (`test_catalog`, `PH-05` seed refresh) |
+| SEC-001–SEC-003 | PASSED | Prior security evidence; companion extension publish gate + lock digests (`test_catalog`, `PH-05` seed refresh); product-approval permission + deploy `catalog.E001` (`PH-05/catalog-approval-ops-*20261021*`) |
 | SEC-004 | PASSED | Hostile sandboxed HTML denied launcher IndexedDB |
 | UX-001, UX-002 | PASSED (basic + Android) | Mobile layout + keyboard focus; Android fullscreen/orientation (`PH-08`) |
 | DEP-001, DEP-002 | PASSED | Compose stack + proxy build path |
@@ -37,4 +37,4 @@
 | G06–G10 | PARTIAL — Chromium/Firefox + Android Chrome physical (incl. AUD-001); WebKit catalog (no OPFS install); gamepad/iOS open (`PH-08`) |
 | G11 | PARTIAL — Android PH-08 + AUD-001 closed; physical gamepad + iOS remain |
 
-**RELEASE CANDIDATE / NOT COMPLETE** — see `docs/RELEASE_CANDIDATE.md`. Remaining mandatory physical blockers (deferred): gamepad IN-002, iOS Safari IOS-001. Software gameplay + catalog offline includes consoles through NGP/NGPC, MS-DOS, Genesis Pong, catalog expansion Falling / Big2Small / Nonogram / SMS Sushi Nights (`PH-05/catalog-expansion-20261021.md`), underrepresented GG/GBC/A2600 titles (`PH-05/catalog-underrepresented-expansion-20261021.md`), plus first-party J2ME on dedicated origin (`PH-06`). Catalog governance separates engineering publish from product approval (`docs/catalog-product-approval-report-20261021.md`); no engineering title is product-approved by seed. Sega 32X/CD remain blocked; RC still not COMPLETE.
+**RELEASE CANDIDATE / NOT COMPLETE** — see `docs/RELEASE_CANDIDATE.md`. Remaining mandatory physical blockers (deferred): gamepad IN-002, iOS Safari IOS-001. Software gameplay + catalog offline includes consoles through NGP/NGPC, MS-DOS, Genesis Pong, catalog expansion Falling / Big2Small / Nonogram / SMS Sushi Nights (`PH-05/catalog-expansion-20261021.md`), underrepresented GG/GBC/A2600 titles (`PH-05/catalog-underrepresented-expansion-20261021.md`), plus first-party J2ME on dedicated origin (`PH-06`). Catalog governance separates engineering publish from product approval; product decisions require `catalog.approve_game_product` with append-only history (`docs/catalog-product-approval-report-20261021.md`); no engineering title is product-approved by seed. Sega 32X/CD remain blocked; RC still not COMPLETE.

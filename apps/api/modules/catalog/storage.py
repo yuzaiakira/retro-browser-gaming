@@ -127,7 +127,7 @@ class S3Storage:
         return self.client(public=True).generate_presigned_url(
             "get_object",
             Params={"Bucket": settings.S3_BUCKET, "Key": asset.object_key},
-            ExpiresIn=900,
+            ExpiresIn=int(getattr(settings, "S3_PRESIGNED_URL_EXPIRES", 900)),
         )
 
 

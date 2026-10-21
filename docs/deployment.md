@@ -33,13 +33,25 @@ Three independent layers (never treat one as another):
 
 Server setting `CATALOG_ALLOW_ENGINEERING` (default **false**) controls whether engineering-published but product-pending titles appear in discovery, release, launch-config, download-manifest, and `/dev-assets/` routes. Local Compose `.env` sets `CATALOG_ALLOW_ENGINEERING=true` for demo QA. Production must leave it unset/false. Client query params cannot override this policy.
 
-`seed_demo --with-console-fixtures` still distribution-approves and engineering-publishes fixtures; it **never** sets product approval.
+`seed_demo --with-console-fixtures` still distribution-approves and engineering-publishes fixtures; it **never** sets product approval. Migrations never invent historical approvals.
+
+### Product-approval authorization
+
+Changing `product_approval_status` (approve / reject / clear) requires Django permission **`catalog.approve_game_product`** (or superuser). Staff with only `change_game` may maintain engineering metadata; product fields stay readonly and product Admin actions are omitted. Services enforce the same check so forged Admin POSTs cannot bypass it. Each transition appends an immutable `ProductApprovalDecision` row; ordinary Admin cannot edit or delete history.
+
+### Download revocation limits
+
+Revoking product approval (or disabling engineering visibility) immediately hides list/detail/manifest/launch/gateway paths. Direct S3 presigned GET URLs already issued remain valid until `S3_PRESIGNED_URL_EXPIRES` (default **900** seconds). Prefer `S3_BROWSER_PROXY=true` (gateway re-checks visibility) when faster cut-off matters. Previously installed OPFS/IDB games and saves are **not** deleted by the server.
+
+### Deploy-time engineering guard
+
+When `DJANGO_DEBUG=false` and `CATALOG_ALLOW_ENGINEERING=true`, operators must also set `CATALOG_ALLOW_ENGINEERING_IN_PRODUCTION=true` or `python manage.py check --deploy` fails with **`catalog.E001`**. Do not log secret values when diagnosing this check.
 
 ## Production requirements
 
-Use a maintained native PostgreSQL service, maintained S3 provider, TLS termination, secret manager, explicit CORS origin, health monitoring, encrypted backups plus restore tests, log retention, resource limits, and a release migration job. Keep debug off, set `DJANGO_ALLOWED_HOSTS`, `CSRF_TRUSTED_ORIGINS`, `TRUST_PROXY=true` only behind a trusted proxy, leave `CATALOG_ALLOW_ENGINEERING` false/unset, and create a least-privilege storage identity.
+Use a maintained native PostgreSQL service, maintained S3 provider, TLS termination, secret manager, explicit CORS origin, health monitoring, encrypted backups plus restore tests, log retention, resource limits, and a release migration job. Keep debug off, set `DJANGO_ALLOWED_HOSTS`, `CSRF_TRUSTED_ORIGINS`, `TRUST_PROXY=true` only behind a trusted proxy, leave `CATALOG_ALLOW_ENGINEERING` false/unset, run `manage.py check --deploy`, and create a least-privilege storage identity.
 
-Do not expose Django development assets, the object-store API, or an unauthenticated Admin publicly. Review core redistribution licenses and game evidence, then use Django Admin **Approve for public product catalog** before any console title is considered publicly product-authorized.
+Do not expose Django development assets, the object-store API, or an unauthenticated Admin publicly. Grant `catalog.approve_game_product` only to designated product owners. Review core redistribution licenses and game evidence, then use Django Admin **Approve for public product catalog** before any console title is considered publicly product-authorized.
 
 ## J2ME dedicated-origin recovery
 

@@ -1,0 +1,14 @@
+16 objects imported automatically (use -v 2 for details).
+
+{"requestId": "d7807bc6-6d13-433f-a36a-ec9322709d10", "method": "GET", "status": 200, "durationMs": 238}
+=== engineering demo (ALLOW_ENG=true) ===
+count 32 allows True
+{"requestId": "0e4aa86f-7288-49bd-ac7e-f4046d728280", "method": "GET", "status": 200, "durationMs": 117}
+=== production-like (ALLOW_ENG=false) ===
+count 0 allows False
+engineering_published_pending 32
+{"requestId": "3f2be44c-221a-4964-9532-6734da17a34f", "method": "GET", "status": 404, "durationMs": 6}
+Not Found: /api/v1/games/gpl-a7800-rfk/
+sample_detail gpl-a7800-rfk 404
+all_pending True
+S3_PRESIGNED note: direct URLs remain valid until ExpiresIn TTL after revoke; gateway re-checks
