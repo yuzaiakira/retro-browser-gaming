@@ -119,6 +119,36 @@ class CatalogTests(TestCase):
         with self.assertRaises(ValidationError):
             publish(self.game.pk)
 
+    def test_SEC_003_required_companion_extension_must_match_core(self):
+        """Playable required_files companions must use the pinned core's extensions."""
+        content = b"fake-companion"
+        digest = hashlib.sha256(content).hexdigest()
+        bad = GameAsset.objects.create(
+            release=self.release,
+            kind="rom",
+            object_key=f"sha256/{digest}/bad.xyz",
+            filename="bad.xyz",
+            content_type="application/octet-stream",
+            byte_size=len(content),
+            sha256=digest,
+            version="1",
+            license_status="approved",
+            provenance_url="https://spdx.org/licenses/MIT.html",
+        )
+        LicenseEvidence.objects.create(
+            asset=bad,
+            source_type="first-party",
+            license_text_or_reference="MIT",
+            approved_for_distribution=True,
+            reviewer_or_automation_evidence="unit-test",
+            approved_at=self.asset.license_evidence.approved_at,
+        )
+        profile = self.release.launch_profile
+        profile.required_files = list(profile.required_files) + ["bad.xyz"]
+        profile.save()
+        with self.assertRaises(ValidationError):
+            publish(self.game.pk)
+
     def test_SEC_003_core_without_licensed_package_rejected(self):
         with self.assertRaises(ValidationError):
             EmulatorCore.objects.create(

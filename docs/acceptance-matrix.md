@@ -21,7 +21,7 @@
 | IN-003, IN-004, IN-005 | PASSED (Chromium + Android physical) | Desktop sim + USB Android Chrome CDP (`PH-08/android-physical-20261020.txt`) |
 | SAV-001 | PASSED | HTML5 + console offline load |
 | SAV-002, SAV-003 | PASSED | Delete keeps saves; invalid import rejected |
-| SEC-001–SEC-003 | PASSED | Prior security evidence |
+| SEC-001–SEC-003 | PASSED | Prior security evidence; companion extension publish gate + lock digests (`test_catalog`, `PH-05` seed refresh) |
 | SEC-004 | PASSED | Hostile sandboxed HTML denied launcher IndexedDB |
 | UX-001, UX-002 | PASSED (basic + Android) | Mobile layout + keyboard focus; Android fullscreen/orientation (`PH-08`) |
 | DEP-001, DEP-002 | PASSED | Compose stack + proxy build path |
@@ -37,4 +37,4 @@
 | G06–G10 | PARTIAL — Chromium/Firefox + Android Chrome physical (incl. AUD-001); WebKit catalog (no OPFS install); gamepad/iOS open (`PH-08`) |
 | G11 | PARTIAL — Android PH-08 + AUD-001 closed; physical gamepad + iOS remain |
 
-**RELEASE CANDIDATE / NOT COMPLETE** — see `docs/RELEASE_CANDIDATE.md`. Remaining mandatory physical blockers (deferred): gamepad IN-002, iOS Safari IOS-001. Software gameplay + catalog offline includes consoles through NGP/NGPC, MS-DOS, and first-party J2ME Dot/Paddle/Notes on dedicated origin with atomic SW integrity (`PH-05`, `PH-06`); RC still not COMPLETE.
+**RELEASE CANDIDATE / NOT COMPLETE** — see `docs/RELEASE_CANDIDATE.md`. Remaining mandatory physical blockers (deferred): gamepad IN-002, iOS Safari IOS-001. Software gameplay + catalog offline includes consoles through NGP/NGPC, MS-DOS, MIT Genesis Pong catalog expansion, and first-party J2ME Dot/Paddle/Notes on dedicated origin (`PH-05`, `PH-06`). Sega 32X/CD remain blocked; RC still not COMPLETE.
