@@ -1,0 +1,10 @@
+{
+  "sms-sushiInstall": true,
+  "nes-fallingInstall": true,
+  "gb-big2smallInstall": true,
+  "gba-nonogramInstall": true,
+  "sms-sushiOffline": true,
+  "nes-fallingOffline": true,
+  "gb-big2smallOffline": true,
+  "gba-nonogramOffline": true
+}

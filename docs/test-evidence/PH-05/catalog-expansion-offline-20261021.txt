@@ -1,0 +1,17 @@
+CATALOG_INSTALL_START sms-sushi
+CATALOG_INSTALL_PASS sms-sushi
+CATALOG_INSTALL_START nes-falling
+CATALOG_INSTALL_PASS nes-falling
+CATALOG_INSTALL_START gb-big2small
+CATALOG_INSTALL_PASS gb-big2small
+CATALOG_INSTALL_START gba-nonogram
+CATALOG_INSTALL_PASS gba-nonogram
+CATALOG_OFFLINE_START sms-sushi
+CATALOG_OFFLINE_PASS sms-sushi
+CATALOG_OFFLINE_START nes-falling
+CATALOG_OFFLINE_PASS nes-falling
+CATALOG_OFFLINE_START gb-big2small
+CATALOG_OFFLINE_PASS gb-big2small
+CATALOG_OFFLINE_START gba-nonogram
+CATALOG_OFFLINE_PASS gba-nonogram
+CATALOG_CONSOLE_OFFLINE_PASS {"sms-sushiInstall":true,"nes-fallingInstall":true,"gb-big2smallInstall":true,"gba-nonogramInstall":true,"sms-sushiOffline":true,"nes-fallingOffline":true,"gb-big2smallOffline":true,"gba-nonogramOffline":true}

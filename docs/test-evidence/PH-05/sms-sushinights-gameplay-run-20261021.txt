@@ -1,0 +1,3 @@
+CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
+CONSOLE Failed to load resource: net::ERR_INTERNET_DISCONNECTED
+SMS_GAMEPLAY_PASS {"capabilities":{"saveState":true,"audio":true,"analog":false,"seekableMedia":true,"onDemandMedia":false},"stateBytes":95384,"lit":1607,"beforeHash":1947033079,"movedHash":1785668055,"restoredHash":448706026,"inputChangedFrame":true,"controlScheme":"segaMS via smsplus","fixture":"mit-sms-sushinights.sms"}
