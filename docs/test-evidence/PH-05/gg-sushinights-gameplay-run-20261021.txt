@@ -1,0 +1,3 @@
+CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
+CONSOLE Failed to load resource: net::ERR_INTERNET_DISCONNECTED
+GG_GAMEPLAY_PASS {"capabilities":{"saveState":true,"audio":true,"analog":false,"seekableMedia":true,"onDemandMedia":false},"stateBytes":1036312,"lit":1825,"beforeHash":3432511768,"movedHash":1608478695,"restoredHash":2557944676,"inputChangedFrame":true,"controlScheme":"segaGG","fileName":"mit-gg-sushinights.gg","canvas":"960x640","display":"960x640","aspect":null,"fixture":"mit-gg-sushinights.gg"}

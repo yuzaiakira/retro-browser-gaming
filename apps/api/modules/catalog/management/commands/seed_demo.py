@@ -319,6 +319,50 @@ class Command(BaseCommand):
                 "(https://github.com/joyrider3774/waternet)"
             ),
         )
+        results["gg-sushi"] = self._import_files(
+            fixtures,
+            slug="mit-gg-sushinights",
+            title="MIT GG Sushi Nights",
+            description=(
+                "MIT-licensed Game Gear Sushi Nights (CrossZGB port by untoxa of "
+                "MONIS GAMES / Zal0 original). Engineering catalog fixture only."
+            ),
+            console="sega-gg",
+            core={"code": "genesis_plus_gx", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-gg-sushinights.gg",
+            files=[("mit-gg-sushinights.gg", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/sushinights-GG-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "untoxa/SushiNights release v1.0 gg/SushiNights.gg "
+                "(https://github.com/untoxa/SushiNights); original Zal0/SushiNights MIT"
+            ),
+            genre="Action",
+        )
+        results["gg-snepzhen"] = self._import_files(
+            fixtures,
+            slug="mit-gg-snepzhen",
+            title="MIT GG Snepzhen Solitaire",
+            description=(
+                "MIT-licensed Game Gear Snepzhen Solitaire (Strugglemeat port of "
+                "JoppyFurr Snepzhen Solitaire). Engineering catalog fixture only."
+            ),
+            console="sega-gg",
+            core={"code": "genesis_plus_gx", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-gg-snepzhen.gg",
+            files=[("mit-gg-snepzhen.gg", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/snepzhen-GG-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "SMS Power SnepzhenSolitaire-GG-1.00.zip shenzhen_solitaire.gg; "
+                "source Strugglemeat/shenzhen-solitaire-gamegear; "
+                "upstream JoppyFurr/Snepzhen-Solitaire MIT "
+                "(https://github.com/JoppyFurr/Snepzhen-Solitaire)"
+            ),
+            genre="Card",
+        )
         results["nes"] = self._import_files(
             fixtures,
             slug="mit-nes-table-tennis",
@@ -440,6 +484,27 @@ class Command(BaseCommand):
                 "(https://github.com/joyrider3774/waternet)"
             ),
         )
+        results["gbc-littlegreenblob"] = self._import_files(
+            fixtures,
+            slug="mit-gbc-littlegreenblob",
+            title="MIT GBC Little Green Blob",
+            description=(
+                "MIT-licensed Game Boy Color Little Green Blob platformer by MilanFIN. "
+                "Engineering catalog fixture only. Not a commercial ROM."
+            ),
+            console="gbc",
+            core={"code": "gambatte", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-gbc-littlegreenblob.gbc",
+            files=[("mit-gbc-littlegreenblob.gbc", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/littlegreenblob-GBC-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "MilanFIN/little-green-blob release v1.1 littlegreenblob.gbc "
+                "(https://github.com/MilanFIN/little-green-blob)"
+            ),
+            genre="Platformer",
+        )
         results["gba"] = self._import_files(
             fixtures,
             slug="mit-gba-dino",
@@ -503,6 +568,27 @@ class Command(BaseCommand):
                 "berta-and-butterflies.v1.00.ntsc.en.bin "
                 "(https://github.com/vandalton/BertaAndButterflies)"
             ),
+        )
+        results["a2600-pipes"] = self._import_files(
+            fixtures,
+            slug="mit-a2600-pipes",
+            title="MIT Atari 2600 Pipes",
+            description=(
+                "MIT-licensed Atari 2600 Pipes (Pipe Dreams-inspired puzzle) by albf. "
+                "Uses SuperChip RAM. Engineering catalog fixture only."
+            ),
+            console="atari-2600",
+            core={"code": "stella2014", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-a2600-pipes.a26",
+            files=[("mit-a2600-pipes.a26", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/pipes-A2600-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "albf/pipes-2600 pipe2600.bin "
+                "(https://github.com/albf/pipes-2600)"
+            ),
+            genre="Puzzle",
         )
         results["pce"] = self._import_files(
             fixtures,
