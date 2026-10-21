@@ -2,7 +2,7 @@
 
 ## Verdict
 
-**RELEASE CANDIDATE / NOT COMPLETE** — IN-002/IOS-001 remain BLOCKED_EXTERNAL. Platform expansion started: **Atari 5200** and **Virtual Boy** are VERIFIED_PLAYABLE (gameplay + catalog offline). Product approval remains pending for all engineering titles.
+**RELEASE CANDIDATE / NOT COMPLETE** — IN-002/IOS-001 remain BLOCKED_EXTERNAL. Platform expansion: **Atari 5200** and **Virtual Boy** VERIFIED_PLAYABLE; **N64** EXPERIMENTAL (boot/render only).
 
 ## Deferred physical acceptance (do not rediscover)
 
@@ -14,39 +14,30 @@
 | Item | Status |
 |---|---|
 | Prior VERIFIED_PLAYABLE set | Unchanged |
-| **Atari 5200 (`a5200`)** | VERIFIED_PLAYABLE — CC0 Culomin |
-| **Virtual Boy (`beetle_vb`)** | VERIFIED_PLAYABLE — MIT SPONG |
-| Engineering catalog | **34** published titles (all product-pending) |
-| Core lock | **339 files** |
+| Atari 5200 / Virtual Boy | VERIFIED_PLAYABLE + catalog offline |
+| N64 (`mupen64plus_next`) | EXPERIMENTAL — boots MIT controller-test; input delta open; not seeded |
+| Engineering catalog | **34** titles (all product-pending) |
+| Core lock | **342 files** |
 | Tracker | `docs/platform-expansion-master-plan.md` |
 
 ## Exact commands
 
 ```bash
+# Verified platforms
 CHROMIUM_EXECUTABLE=/usr/bin/chromium PLATFORM=a5200 node apps/web/tests/libretro-family-smoke.cjs
 CHROMIUM_EXECUTABLE=/usr/bin/chromium PLATFORM=vb node apps/web/tests/libretro-family-smoke.cjs
-./scripts/compose.sh exec -T api python manage.py seed_demo --with-console-fixtures
 RETRO_TEST_BASE_URL=http://launcher.localhost:13000 CATALOG_OFFLINE_ONLY=a5200,vb \
   CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/catalog-console-offline.cjs
+
+# N64 experimental boot (not gameplay-pass)
+# see docs/test-evidence/PH-05/n64-boot-20261021.txt
 python3 scripts/verify-core-lock.py
 ```
 
-Evidence: `docs/test-evidence/PH-05/a5200-vb-expansion-20261021.md`.
+## Remaining blockers / next
 
-## Verified this session
-
-- Vendored EJS `a5200` + `beetle_vb` cores; lock 339
-- Frame control schemes `atari5200` / `vb`; blob load path for both
-- Real Chromium gameplay + save-state bytes; catalog install + offline cold-start
-- Seeds leave `product_approval_status=pending`
-
-## Remaining external / product dependencies
-
-1. Physical gamepad / iOS Safari
-2. Production staging HTTPS
-3. Human product approval per title
-4. Next expansion: N64 GameJam MIT ROM + `mupen64plus_next` spike; then C64/`vice_x64sc` and Spectrum/`fuse` with licensed media; Vectrex/Intellivision need cores outside EJS 4.2.3
-
-## Next
-
-Continue with the N64 gameplay spike per `docs/platform-expansion-master-plan.md` without weakening P0 gates.
+1. Physical gamepad / iOS / production HTTPS
+2. Human product approval
+3. N64: prove interactive framebuffer change; GameJam ROM needs WASM memory strategy
+4. C64 (`vice_x64sc`) / Spectrum (`fuse`) with licensed media
+5. Vectrex / Intellivision need cores outside EJS 4.2.3 CDN

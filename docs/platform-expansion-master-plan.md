@@ -17,7 +17,7 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 | ZX Spectrum | `fuse` (CDN present) | GPLv3 | Amstrad-permitted Spectrum ROMs typically embedded; EJS 4.2.3 `getCores()` has **no** `zxspectrum` system key — set `EJS_core=fuse` explicitly | Legal TAP/TZX still needed | RESEARCHED |
 | ZX81 | `81` (CDN present) | GPLv3 | Amstrad permission noted upstream | Legal `.p`/`.tzx` TBD | RESEARCHED |
 | Commodore 64 | `vice_x64sc` (EJS default for `c64`; `vice_x64` also on CDN) | GPLv2 | Optional JiffyDOS only; stock ROMs usually embedded | Legal D64/PRG TBD | RESEARCHED |
-| Nintendo 64 | `mupen64plus_next` | present on CDN | — | MIT `n64brew/N64brew-GameJam2024` `gamejam2024.z64` (~12 MiB) candidate | RESEARCHED — next spike |
+| Nintendo 64 | `mupen64plus_next` | GPLv2-family (EJS package) | — | MIT `Ryzee119/n64_controller_test` boots; GameJam 1.2.1 OOMs on 64 MB RDRAM | **EXPERIMENTAL** (boot/render only; input delta open) |
 | ColecoVision | `gearcoleco` | present on CDN | Proprietary `colecovision.rom` | MIT RetroPIPE | BLOCKED_FIRMWARE (prior) |
 | Sega 32X | PicoDrive | Non-commercial | — | MIT Wave Rider candidate | BLOCKED_LEGAL (prior) |
 | Sega CD | genesis_plus_gx | OK | Proprietary SEGA CD BIOS | — | BLOCKED_FIRMWARE (prior) |
@@ -32,7 +32,8 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 
 | Commit / date | Platforms | Evidence |
 | --- | --- | --- |
-| 81bd0e5 2026-10-21 | Atari 5200 + Virtual Boy | `docs/test-evidence/PH-05/a5200-vb-expansion-20261021.md` |
+| `81bd0e5` 2026-10-21 | Atari 5200 + Virtual Boy | `docs/test-evidence/PH-05/a5200-vb-expansion-20261021.md` |
+| (this commit) 2026-10-21 | N64 experimental boot | `docs/test-evidence/PH-05/n64-boot-20261021.txt` |
 
 ## Working order (hypothesis)
 
