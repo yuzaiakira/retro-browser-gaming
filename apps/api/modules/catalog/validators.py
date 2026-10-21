@@ -41,7 +41,8 @@ def validate_core_manifest(value):
         path = item["path"]
         if (
             not isinstance(path, str)
-            or not re.fullmatch(r"[A-Za-z0-9_./-]+", path)
+            # Allow @ for retina-density filenames (e.g. dialog@2x.png in js2me CSS).
+            or not re.fullmatch(r"[A-Za-z0-9_./@-]+", path)
             or path.startswith("/")
             or ".." in path
             or path in seen

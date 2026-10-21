@@ -1,0 +1,17 @@
+{
+  "dotInstall": true,
+  "dotState": {
+    "score": 4
+  },
+  "paddleInstall": true,
+  "paddleState": {
+    "high": 1
+  },
+  "notesInstall": true,
+  "notesState": {
+    "note": "catalog-offline-note"
+  },
+  "dotOffline": true,
+  "paddleOffline": true,
+  "notesOffline": true
+}
