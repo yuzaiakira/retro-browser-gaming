@@ -1,0 +1,3 @@
+CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
+CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
+SNES_GAMEPLAY_PASS {"capabilities":{"saveState":true,"audio":true,"analog":false,"seekableMedia":true,"onDemandMedia":false},"stateBytes":823432,"lit":300724,"beforeHash":2477797809,"movedHash":2296547589,"restoredHash":81612906,"inputChangedFrame":true,"menuChangedFrame":true,"controlScheme":"snes","core":"snes9x","fixture":"mit-snes-gothicvania.sfc","platform":"snes"}

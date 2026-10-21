@@ -31,6 +31,9 @@ export type MergeDecision =
   | 'equal'
   | 'conflict-keep-target';
 
+const CONFLICT_DB = 'retro-j2me-rms-conflicts';
+const CONFLICT_STORE = 'conflicts';
+
 function idbReq<T>(req: IDBRequest<T>): Promise<T> {
   return new Promise((resolve, reject) => {
     req.onsuccess = () => resolve(req.result);
@@ -105,8 +108,49 @@ export function decideMergeAction(
     if (tgtRev > srcRev) return 'keep-target';
   }
 
-  // Ambiguous different content without trustworthy clocks — keep target.
+  // Equal clocks / revisions with different bytes, or missing meta: keep target,
+  // but callers must also preserve the source via preserveConflictSnapshot.
   return 'conflict-keep-target';
+}
+
+/** Persist a conflicting source snapshot so it is never silently discarded. */
+export async function preserveConflictSnapshot(
+  midletId: string,
+  source: RmsSnapshot,
+  target: RmsSnapshot | null | undefined,
+  reason: string,
+): Promise<string> {
+  if (!isValidSuiteId(midletId)) throw new Error('J2ME_MIGRATE_BAD_ID');
+  const key = `${midletId}::${fingerprintSnapshot(source)}::${Date.now()}`;
+  const db = await openDb(CONFLICT_DB, 1, (database) => {
+    if (!database.objectStoreNames.contains(CONFLICT_STORE)) {
+      database.createObjectStore(CONFLICT_STORE);
+    }
+  });
+  try {
+    const tx = db.transaction(CONFLICT_STORE, 'readwrite');
+    await idbReq(
+      tx.objectStore(CONFLICT_STORE).put(
+        {
+          midletId,
+          reason,
+          at: Date.now(),
+          source: structuredClone(source),
+          target: target ? structuredClone(target) : null,
+          sourceFingerprint: fingerprintSnapshot(source),
+          targetFingerprint: fingerprintSnapshot(target),
+        },
+        key,
+      ),
+    );
+    await new Promise<void>((resolve, reject) => {
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+    return key;
+  } finally {
+    db.close();
+  }
 }
 
 export function stampSnapshot(
@@ -229,43 +273,86 @@ export function planSuiteMerges(
   }));
 }
 
+export type MergeResult = {
+  midletId: string;
+  decision: MergeDecision;
+  conflictKey?: string;
+  error?: string;
+};
+
 /** Write suites into launcher IDB using prefer-newer merge (rollback path). */
 export async function mergeSuitesIntoLauncher(
   suites: SuiteMigration[],
   options?: { originLabel?: string },
-): Promise<Array<{ midletId: string; decision: MergeDecision }>> {
+): Promise<MergeResult[]> {
   if (suites.length > 16) throw new Error('J2ME_MIGRATE_TOO_MANY');
   const db = await openDb(DB_NAME, 1, (database) => {
     if (!database.objectStoreNames.contains(STORE)) database.createObjectStore(STORE);
   });
-  const results: Array<{ midletId: string; decision: MergeDecision }> = [];
+  const results: MergeResult[] = [];
   try {
     for (const suite of suites) {
       if (!isValidSuiteId(suite.midletId)) throw new Error('J2ME_MIGRATE_BAD_ID');
       const byteSize = estimateSnapshotBytes(suite.snapshot);
       if (byteSize <= 0 || byteSize > 256 * 1024) throw new Error('J2ME_MIGRATE_TOO_LARGE');
 
-      const tx = db.transaction(STORE, 'readwrite');
-      const store = tx.objectStore(STORE);
-      const existing = (await idbReq(store.get(suite.midletId))) as RmsSnapshot | undefined;
-      const decision = decideMergeAction(suite.snapshot, existing);
-      if (decision === 'import-source') {
-        const stamped = stampSnapshot(suite.snapshot, existing, options?.originLabel || 'dedicated-rollback');
-        await idbReq(store.put(stamped, suite.midletId));
+      try {
+        const tx = db.transaction(STORE, 'readwrite');
+        const store = tx.objectStore(STORE);
+        const existing = (await idbReq(store.get(suite.midletId))) as RmsSnapshot | undefined;
+        const decision = decideMergeAction(suite.snapshot, existing);
+        let conflictKey: string | undefined;
+        if (decision === 'conflict-keep-target') {
+          conflictKey = await preserveConflictSnapshot(
+            suite.midletId,
+            suite.snapshot,
+            existing,
+            'rollback-conflict',
+          );
+        }
+        if (decision === 'import-source') {
+          const stamped = stampSnapshot(
+            suite.snapshot,
+            existing,
+            options?.originLabel || 'dedicated-rollback',
+          );
+          await idbReq(store.put(stamped, suite.midletId));
+        }
+        await new Promise<void>((resolve, reject) => {
+          tx.oncomplete = () => resolve();
+          tx.onerror = () => reject(tx.error);
+          tx.onabort = () => reject(tx.error || new Error('IDB_TX_ABORTED'));
+        });
+        results.push({ midletId: suite.midletId, decision, conflictKey });
+        await migrationMetaPut(suite.midletId, {
+          status: decision === 'import-source' ? 'rollback-imported' : `rollback-${decision}`,
+          at: Date.now(),
+          byteSize,
+          targetOrigin: 'launcher',
+          decision,
+          fingerprint: fingerprintSnapshot(suite.snapshot),
+        });
+      } catch (error) {
+        const message = String((error as Error)?.name || (error as Error)?.message || error);
+        // Quota / abort: leave existing target intact; preserve source as conflict.
+        let conflictKey: string | undefined;
+        try {
+          conflictKey = await preserveConflictSnapshot(
+            suite.midletId,
+            suite.snapshot,
+            null,
+            `rollback-error:${message}`,
+          );
+        } catch {
+          /* best-effort */
+        }
+        results.push({
+          midletId: suite.midletId,
+          decision: 'conflict-keep-target',
+          conflictKey,
+          error: message,
+        });
       }
-      await new Promise<void>((resolve, reject) => {
-        tx.oncomplete = () => resolve();
-        tx.onerror = () => reject(tx.error);
-      });
-      results.push({ midletId: suite.midletId, decision });
-      await migrationMetaPut(suite.midletId, {
-        status: decision === 'import-source' ? 'rollback-imported' : `rollback-${decision}`,
-        at: Date.now(),
-        byteSize,
-        targetOrigin: 'launcher',
-        decision,
-        fingerprint: fingerprintSnapshot(suite.snapshot),
-      });
     }
     return results;
   } finally {

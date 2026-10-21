@@ -44,4 +44,13 @@ Regenerate integrity digests after editing runtime public assets:
 python3 scripts/generate-j2me-runtime-manifest.py
 ```
 
-HTTPS dual-host staging remains a production prerequisite and is documented as NOT_VERIFIED until exercised with real certificates.
+### Local HTTPS (developer)
+
+```bash
+bash scripts/generate-dev-https-certs.sh
+./scripts/compose.sh up -d
+node scripts/dev-https-edge-proxy.mjs   # https://launcher.localhost:13443 → edge :13000
+CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/j2me-local-https-smoke.cjs
+```
+
+Evidence label: **LOCAL_HTTPS_VERIFIED** only. Production/staging with real certificates remains **NOT_VERIFIED**. Ensure `LAUNCHER_FRAME_ANCESTORS` lists the HTTPS launcher origin used by the TLS terminator.

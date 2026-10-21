@@ -51,6 +51,12 @@ describe('RMS prefer-newer merge', () => {
     expect(decideMergeAction(a, b)).toBe('conflict-keep-target');
   });
 
+  it('conflict-keeps target when timestamps and revisions are equal but bytes differ', () => {
+    const a = snap([1], { updatedAt: 5000, revision: 3 });
+    const b = snap([9], { updatedAt: 5000, revision: 3 });
+    expect(decideMergeAction(a, b)).toBe('conflict-keep-target');
+  });
+
   it('plans rollback merges for deliberately different versions', () => {
     const source: SuiteMigration[] = [
       {

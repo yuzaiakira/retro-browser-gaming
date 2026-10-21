@@ -4,7 +4,7 @@ const launcherHost = process.env.LAUNCHER_HOST || 'launcher.localhost';
 const dedicated = process.env.NEXT_PUBLIC_J2ME_DEDICATED_ORIGIN === 'true';
 
 const launcherCsp = dedicated
-  ? `default-src 'self' blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self' http://${j2meHost}:* http://${j2meHost}; frame-ancestors 'self'; base-uri 'none'`
+  ? `default-src 'self' blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self' http://${j2meHost}:* http://${j2meHost} https://${j2meHost}:* https://${j2meHost}; frame-ancestors 'self'; base-uri 'none'`
   : null;
 
 export default {
@@ -55,7 +55,7 @@ export default {
           {
             key: 'Content-Security-Policy',
             value:
-              "default-src 'self' blob:; script-src 'self' blob: 'unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'self' blob:; frame-ancestors 'self' http://launcher.localhost:* http://localhost:*; base-uri 'none'",
+              "default-src 'self' blob:; script-src 'self' blob: 'unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'self' blob:; frame-ancestors 'self' http://launcher.localhost:* https://launcher.localhost:* http://localhost:* https://localhost:*; base-uri 'none'",
           },
         ],
       },
