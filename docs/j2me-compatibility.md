@@ -9,10 +9,12 @@ Runtime: self-hosted MIT **js2me** (`apps/web/public/cores/js2me/`, commit in `S
 | MIDlet | JAR SHA-256 (prefix) | Canvas | Form/LCDUI | Keypad | Soft keys | RMS/IDB | Offline restore | Sound | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | MIT J2ME Dot | `63afd7fa…` | V | — | V | — | V | V | — | `PH-06/j2me-dot-gameplay-20261021.md` |
-| MIT J2ME Paddle | `51c0c9d9…` | V | — | V | — | V | I | — | Arcade loop + high score; `PH-06/j2me-multi-20261021.md` |
-| MIT J2ME Notes | `cbefc732…` | — | V | — | V | V | I | — | Form/TextField/Save; `PH-06/j2me-multi-20261021.md` |
+| MIT J2ME Paddle | `51c0c9d9…` | V | — | V | — | V | V | — | Arcade + high-score offline; `PH-06/j2me-multi-20261021.md`, `j2me-offline-paddle-notes-20261021.md` |
+| MIT J2ME Notes | `cbefc732…` | — | V | — | V | V | V | — | Form/TextField offline; `PH-06/j2me-multi-20261021.md`, `j2me-offline-paddle-notes-20261021.md` |
 
-Legend: `V` verified in Chromium evidence, `I` implemented (suite identity / IDB) but dedicated offline restart not re-run for that title, `—` not exercised.
+Legend: `V` verified in Chromium evidence for that MIDlet, `—` not exercised.
+
+Security: production allowlist has no bypass; residual same-origin iframe risk documented in `docs/j2me-security-architecture.md`.
 
 ## Implemented MIDP/CLDC subset (practical)
 

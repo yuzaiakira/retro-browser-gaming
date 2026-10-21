@@ -1,0 +1,1 @@
+J2ME_OFFLINE_PADDLE_NOTES_PASS {"paddle":{"midletId":"Retro Browser Gaming/MIT J2ME Paddle/1.0.0","pass1State":{"high":2},"pass2State":{"high":2},"offline":true},"notes":{"midletId":"Retro Browser Gaming/MIT J2ME Notes/1.0.0","pass1State":{"note":"offline-note-42"},"pass2State":{"note":"offline-note-42"},"offline":true},"originServerStopped":true}

@@ -1,7 +1,7 @@
 /**
  * Isolated js2me (MIT) J2ME runtime bridge — same postMessage protocol as dos-frame / frame.js.
  * Core code: js2me. JAR treated as untrusted bytecode; suite RMS isolated in IndexedDB.
- * Default: allowlist-only JAR loads (see j2me-allowlist.json). Set allowUntrusted:true only in tests.
+ * Production: SHA-256 allowlist only (j2me-allowlist.json). Client allowUntrusted is ignored/removed.
  */
 let session,
   started = false,
@@ -210,8 +210,8 @@ async function bootJar(file, options) {
   }
 
   const buffer = await file.arrayBuffer();
-  const allowUntrusted = options?.allowUntrusted === true;
-  const validation = await secure.validateJarBuffer(buffer, { allowUntrusted });
+  // Intentionally ignore any client-supplied allowUntrusted / bypass flags.
+  const validation = await secure.validateJarBuffer(buffer);
 
   document.body.classList.toggle('phone-frame', options?.phoneFrame !== false);
 
@@ -270,10 +270,10 @@ async function bootJar(file, options) {
       midletId,
       screen: { width: js2me.config.width, height: js2me.config.height, profile: screenProfile.label },
       jarSha256: validation.sha256,
-      allowUntrusted,
       security: {
         networkDisabled: true,
-        allowlistEnforced: !allowUntrusted,
+        allowlistEnforced: true,
+        sameOriginIframe: true,
         jarEntries: validation.entryCount,
       },
     },
@@ -309,7 +309,6 @@ addEventListener('message', async (event) => {
         height: d.height,
         screenProfile: d.screenProfile,
         phoneFrame: d.phoneFrame,
-        allowUntrusted: d.allowUntrusted === true,
       });
     } catch (error) {
       reply({ type: 'error', error: String(error?.message || error) });
