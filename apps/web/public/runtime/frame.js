@@ -24,6 +24,8 @@ function preferSeekable(file, companions, core) {
       'a5200',
       'beetle_vb',
       'mupen64plus_next',
+      'vice_x64sc',
+      'fuse',
     ].includes(core)
   ) {
     return false;
@@ -80,6 +82,10 @@ addEventListener('message', async (event) => {
       a5200: 'atari5200',
       beetle_vb: 'vb',
       mupen64plus_next: 'n64',
+      // EJS getCores maps c64 → vice_x64sc; pin scheme so UI/tests stay stable.
+      vice_x64sc: 'c64',
+      // EJS 4.2.3 getCores() has no zxspectrum shortcut — use explicit fuse core.
+      fuse: 'fuse',
       mednafen_pce: 'pce',
       mednafen_wswan: 'ws',
       prosystem: 'atari7800',
@@ -99,6 +105,15 @@ addEventListener('message', async (event) => {
       'virtual-gamepad': 'disabled',
       fastForward: 'disabled',
     };
+    if (d.core === 'vice_x64sc') {
+      // Without warp, D64 autostart stays on LOADING for tens of seconds.
+      window.EJS_defaultOptions.vice_autoloadwarp = 'both';
+      window.EJS_defaultOptions.vice_autostart_warp = 'enabled';
+    }
+    if (d.core === 'fuse') {
+      window.EJS_defaultOptions.fuse_tape_traps = 'enabled';
+      window.EJS_defaultOptions['fuse_load_sound'] = 'disabled';
+    }
     window.EJS_Buttons = {
       settings: { visible: false },
       netplay: { visible: false },

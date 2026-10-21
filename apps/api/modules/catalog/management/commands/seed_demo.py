@@ -31,6 +31,8 @@ SYSTEMS = [
     ("ngp", "Neo Geo Pocket", "handheld"),
     ("ngpc", "Neo Geo Pocket Color", "handheld"),
     ("dos", "MS-DOS", "computer"),
+    ("c64", "Commodore 64", "computer"),
+    ("zx-spectrum", "ZX Spectrum", "computer"),
     ("j2me", "Java ME / J2ME", "handheld"),
     ("ps1", "PlayStation", "console"),
     ("psp", "PlayStation Portable", "handheld"),
@@ -46,6 +48,8 @@ WASM_CORES = [
     ("stella2014", ["a26", "bin"], ["wasm", "secureContext"]),
     ("a5200", ["a52", "bin"], ["wasm", "secureContext"]),
     ("beetle_vb", ["vb", "vboy", "bin"], ["wasm", "secureContext"]),
+    ("vice_x64sc", ["d64", "prg", "tap", "t64", "crt"], ["wasm", "secureContext"]),
+    ("fuse", ["tap", "tzx", "z80", "sna"], ["wasm", "secureContext"]),
     ("prosystem", ["a78", "bin"], ["wasm", "secureContext"]),
     ("handy", ["lnx", "lyx"], ["wasm", "secureContext"]),
     ("mednafen_pce", ["pce"], ["wasm", "secureContext"]),
@@ -77,6 +81,8 @@ CONSOLE_FIXTURE_SLUGS = {
     "ngp",
     "ngpc",
     "dos",
+    "c64",
+    "zx-spectrum",
     "j2me",
     "ps1",
     "psp",
@@ -691,6 +697,63 @@ class Command(BaseCommand):
             compatibility_note=(
                 "Verified Chromium gameplay with beetle_vb / vb control scheme; "
                 "save states supported. Red/stereo display is core-dependent."
+            ),
+        )
+        results["c64"] = self._import_files(
+            fixtures,
+            slug="mit-c64-wildboa",
+            title="MIT C64 Wild Snake Boa",
+            description=(
+                "MIT Commodore 64 Wild Snake Boa homebrew for engineering acceptance "
+                "only. Uses vice_x64sc with embedded stock C64 ROMs (no separate "
+                "proprietary ROM files redistributed). Catalog entry is the SNAKE "
+                "PRG extracted from release Wild.Snake.Boa.d64; the .d64 remains a "
+                "tracked engineering fixture for disk-path smoke. Not a commercial title."
+            ),
+            console="c64",
+            core={"code": "vice_x64sc", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-c64-wildboa.prg",
+            files=[("mit-c64-wildboa.prg", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/wildboa-C64-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "tstamborski/Wild-Boa-Snake release 1.0 Wild.Snake.Boa.d64 "
+                "(PRG SNAKE extracted); https://github.com/tstamborski/Wild-Boa-Snake"
+            ),
+            genre="Action",
+            compatibility_note=(
+                "Verified Chromium gameplay with vice_x64sc / c64; joystick fire + "
+                "D-Pad; save states supported. Autoload warp enabled for disk media; "
+                "older titles may need joyport 1 via core options."
+            ),
+        )
+        results["spectrum"] = self._import_files(
+            fixtures,
+            slug="mit-zx-desolate",
+            title="MIT ZX Spectrum Desolate",
+            description=(
+                "MIT ZX Spectrum Desolate (TI-83 port) for engineering acceptance "
+                "only. Uses EmulatorJS fuse core explicitly (no zxspectrum shortcut "
+                "in EJS 4.2.3 getCores). Spectrum firmware embedded in fuse build; "
+                "no separate Amstrad ROM files redistributed. Not a commercial tape."
+            ),
+            console="zx-spectrum",
+            core={"code": "fuse", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-zx-desolate.tap",
+            files=[("mit-zx-desolate.tap", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/desolate-ZX-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "nzeemin/spectrum-desolate release desolate.tap "
+                "(https://github.com/nzeemin/spectrum-desolate)"
+            ),
+            genre="Adventure",
+            compatibility_note=(
+                "Verified Chromium gameplay with fuse (explicit core mapping); "
+                "QAOP/6789 keyboard; save states supported. Touch users need "
+                "physical/virtual keyboard for adventure input."
             ),
         )
         results["pce"] = self._import_files(

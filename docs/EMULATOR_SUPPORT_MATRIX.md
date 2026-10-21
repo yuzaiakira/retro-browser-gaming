@@ -51,8 +51,10 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | Other | Vectrex | VecX candidate | [ ] | NOT_STARTED | — | — | — | — | — | — | P2 | **Not in EmulatorJS 4.2.3 CDN**; need alternate redistributable core + legal fixture. |
 | Arcade | MAME / FBNeo / CPS / Neo Geo Arcade | MAME / FBNeo candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | ROM-set and BIOS licensing require strict bundle policy. |
 | Computer | MS-DOS | jsdos / emulators 8.3.8 (GPL-2.0) | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Catalog offline (`PH-05/dos-*20261021*`); MIT Floppy Bird ZIP; isolated dos-frame. EmulatorJS `dosbox_pure` still unplayable on 4.2.3 (kept pinned). |
-| Computer | Commodore 64 / Amiga | VICE / PUAE candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Firmware/legal assets and keyboard UX. |
-| Computer | MSX / ZX Spectrum / Atari ST | BlueMSX / Fuse / Hatari candidates | [ ] | PLANNED | — | — | — | — | — | — | P2 | Firmware/legal assets and fixture review. |
+| Computer | Commodore 64 | vice_x64sc / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P2 | Core + catalog offline (`PH-05/c64-spectrum-expansion-20261021.md`, `c64-gameplay.png`); MIT Wild Boa PRG; stock ROMs embedded (no separate proprietary ROM files). |
+| Computer | ZX Spectrum | fuse / EmulatorJS (explicit core; no `zxspectrum` getCores key) | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P2 | Core + catalog offline (`PH-05/c64-spectrum-expansion-20261021.md`, `spectrum-gameplay.png`); MIT Desolate TAP; firmware embedded. |
+| Computer | Amiga | PUAE candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Firmware/legal assets and keyboard UX. |
+| Computer | MSX / Atari ST | BlueMSX / Hatari candidates | [ ] | PLANNED | — | — | — | — | — | — | P2 | Firmware/legal assets and fixture review. |
 | Computer | Apple II / NEC PC-98 | MAME/other candidates | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P3 | Browser cores and legal firmware unverified. |
 
 ## Prioritized emulator roadmap
@@ -64,7 +66,7 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | 2b | NES…GBA + Atari/PCE/SG/WS + 7800/Lynx/NGP/NGPC + DOS | EmulatorJS lock + jsdos (86) | Medium | Verified playable (P1) | PCE CD / Sega CD remain separate multi-file work. |
 | 3 | Playwright WebKit host deps | ICU/webp/ffi packages for Playwright WebKit | Low | Not iOS Safari proof even when green | Install missing shared libraries or document permanent blocker. |
 | 4 | J2ME MIDlet offline | js2me + RMS/IDB + MIT Dot/Paddle/Notes | Medium | First-party offline RMS verified per title | Keep commercial JAR compatibility unchecked until evidenced. |
-| 5 | Sega CD/32X, N64, DS, computers | Multi-file/BIOS-aware adapter and legal fixtures | High | 32X BLOCKED_LEGAL (PicoDrive NC); Sega CD BIOS-blocked; A5200/VB verified (`PH-05/a5200-vb-expansion-20261021.md`); N64/DS/computers remain | Unlock only with approved core/BIOS + legal fixtures. |
+| 5 | Sega CD/32X, N64, DS, computers | Multi-file/BIOS-aware adapter and legal fixtures | High | 32X BLOCKED_LEGAL (PicoDrive NC); Sega CD BIOS-blocked; A5200/VB/C64/Spectrum verified; N64 experimental; DS/Amiga/MSX remain | Unlock only with approved core/BIOS + legal fixtures. |
 | 6 | Arcade, Neo Geo, PCE CD, 3DO | Core plus ROM-set/BIOS policy | High | Rights and bundle validation dominate | Define legal asset policy before code integration. |
 | 7 | Saturn, Dreamcast, 3DS, PS2 | Experimental web cores/WebGL | High | Performance/firmware support unknown | Spike separately; no P0 promotion without a PDR change. |
 | P1 parallel research | Broader J2ME titles | js2me MIDP gaps + legal fixtures | High | Dot playable (`PH-06/j2me-dot-gameplay-20261021.md`) | Add games only with provenance + real browser evidence. |
