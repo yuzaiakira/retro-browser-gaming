@@ -23,6 +23,8 @@ const SHELL_PATHS = [
   '/runtime/j2me-frame.html',
   '/runtime/j2me-frame.js',
   '/runtime/j2me-rms-idb.js',
+  '/runtime/j2me-secure.js',
+  '/runtime/j2me-allowlist.json',
   '/runtime/seekable-fs.js',
   '/runtime/blob-reader.worker.js',
 ];
@@ -142,7 +144,13 @@ export async function auditInstallation(installation: Installation) {
         : '/runtime/frame.html';
   const runtimePaths =
     core.code === 'js2me'
-      ? [framePath, '/runtime/j2me-frame.js', '/runtime/j2me-rms-idb.js']
+      ? [
+          framePath,
+          '/runtime/j2me-frame.js',
+          '/runtime/j2me-rms-idb.js',
+          '/runtime/j2me-secure.js',
+          '/runtime/j2me-allowlist.json',
+        ]
       : core.code === 'jsdos'
         ? [framePath, '/runtime/dos-frame.js']
         : ['/runtime/seekable-fs.js', '/runtime/blob-reader.worker.js', framePath];

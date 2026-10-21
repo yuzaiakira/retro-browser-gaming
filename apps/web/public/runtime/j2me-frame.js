@@ -1,22 +1,33 @@
 /**
  * Isolated js2me (MIT) J2ME runtime bridge — same postMessage protocol as dos-frame / frame.js.
  * Core code: js2me. JAR treated as untrusted bytecode; suite RMS isolated in IndexedDB.
+ * Default: allowlist-only JAR loads (see j2me-allowlist.json). Set allowUntrusted:true only in tests.
  */
 let session,
   started = false,
   midletId = null,
   rms = null,
-  killTimer = 0;
+  killTimer = 0,
+  pressedKeys = new Set(),
+  screenProfile = { width: 240, height: 320, label: '240x320' };
+
+const SCREEN_PROFILES = {
+  '128x160': { width: 128, height: 160 },
+  '176x220': { width: 176, height: 220 },
+  '240x320': { width: 240, height: 320 },
+  '320x240': { width: 320, height: 240 },
+};
 
 const KEY_MAP = {
-  // libretro-ish → MIDP keyCode (Canvas numeric / game keys)
-  4: -1, // up
-  5: -2, // down
-  6: -3, // left
-  7: -4, // right
-  0: -5, // A / fire
-  8: -5, // start → fire
-  3: -5, // X → fire
+  4: -1,
+  5: -2,
+  6: -3,
+  7: -4,
+  0: -5,
+  8: -5,
+  3: -5,
+  9: -6, // L soft
+  1: -7, // R soft / select-ish
 };
 
 const reply = (data) => parent.postMessage({ ...data, session }, location.origin);
@@ -33,34 +44,68 @@ js2me.showError = function (message) {
   reply({ type: 'error', error: String(message) });
 };
 
-js2me.setFullscreen = function () {};
+js2me.setFullscreen = function (enabled) {
+  document.body.classList.toggle('j2me-fullscreen', !!enabled);
+};
+
+function applyScreenProfile(profile) {
+  const p = SCREEN_PROFILES[profile] || SCREEN_PROFILES['240x320'];
+  screenProfile = { ...p, label: profile in SCREEN_PROFILES ? profile : `${p.width}x${p.height}` };
+  js2me.config.width = p.width;
+  js2me.config.height = p.height;
+  js2me.config.fullHeight = p.height;
+  const screen = document.getElementById('screen');
+  if (screen) {
+    screen.style.width = `${p.width}px`;
+    screen.style.height = `${p.height}px`;
+  }
+  document.documentElement.style.setProperty('--j2me-w', `${p.width}px`);
+  document.documentElement.style.setProperty('--j2me-h', `${p.height}px`);
+}
+
+function releaseAllKeys() {
+  for (const code of pressedKeys) {
+    try {
+      js2me.sendKeyReleasedEvent(code);
+    } catch {
+      /* ignore */
+    }
+  }
+  pressedKeys.clear();
+}
+
+function pressKey(code) {
+  if (!started) return;
+  pressedKeys.add(code);
+  js2me.sendKeyPressEvent(code);
+}
+
+function releaseKey(code) {
+  if (!pressedKeys.has(code)) return;
+  pressedKeys.delete(code);
+  js2me.sendKeyReleasedEvent(code);
+}
 
 function wireKeypad() {
   const pad = document.getElementById('keypad');
   if (!pad) return;
-  const press = (code) => {
-    if (!started) return;
-    js2me.sendKeyPressEvent(code);
-  };
-  const release = (code) => {
-    if (!started) return;
-    js2me.sendKeyReleasedEvent(code);
-  };
   pad.querySelectorAll('button[data-key]').forEach((btn) => {
     const code = Number(btn.getAttribute('data-key'));
     btn.addEventListener('pointerdown', (e) => {
       e.preventDefault();
-      press(code);
+      btn.setPointerCapture?.(e.pointerId);
+      pressKey(code);
     });
     btn.addEventListener('pointerup', (e) => {
       e.preventDefault();
-      release(code);
+      releaseKey(code);
     });
-    btn.addEventListener('pointerleave', () => release(code));
+    btn.addEventListener('pointercancel', () => releaseKey(code));
+    btn.addEventListener('lostpointercapture', () => releaseKey(code));
   });
 }
 
-function wireKeyboard() {
+function wireKeyboard(customMap) {
   const mapping = {
     38: -1,
     37: -3,
@@ -68,6 +113,8 @@ function wireKeyboard() {
     40: -2,
     32: -5,
     13: -5,
+    81: -6, // Q = left soft
+    69: -7, // E = right soft
     48: 48,
     49: 49,
     50: 50,
@@ -78,22 +125,25 @@ function wireKeyboard() {
     55: 55,
     56: 56,
     57: 57,
+    106: 42, // *
+    107: 35, // # (approx)
+    ...(customMap || {}),
   };
   document.addEventListener('keydown', (e) => {
     if (!started || mapping[e.which] == null) return;
     e.preventDefault();
-    js2me.sendKeyPressEvent(mapping[e.which]);
+    pressKey(mapping[e.which]);
   });
   document.addEventListener('keyup', (e) => {
-    if (!started || mapping[e.which] == null) return;
+    if (mapping[e.which] == null) return;
     e.preventDefault();
-    js2me.sendKeyReleasedEvent(mapping[e.which]);
+    releaseKey(mapping[e.which]);
   });
-}
-
-async function sha256Hex(buffer) {
-  const hash = await crypto.subtle.digest('SHA-256', buffer);
-  return [...new Uint8Array(hash)].map((b) => b.toString(16).padStart(2, '0')).join('');
+  window.addEventListener('blur', releaseAllKeys);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) releaseAllKeys();
+  });
+  window.addEventListener('orientationchange', releaseAllKeys);
 }
 
 function patchZipPaths() {
@@ -117,6 +167,12 @@ function waitForCanvas(timeoutMs) {
         resolve(canvas);
         return;
       }
+      // Form/List MIDlets may not use Canvas — accept any displayable child
+      const screen = document.getElementById('screen');
+      if (screen && screen.children.length > 0 && Date.now() - start > 400) {
+        resolve(screen.firstElementChild);
+        return;
+      }
       if (Date.now() - start > timeoutMs) {
         reject(new Error('J2ME_CANVAS_TIMEOUT'));
         return;
@@ -128,37 +184,54 @@ function waitForCanvas(timeoutMs) {
 }
 
 async function bootJar(file, options) {
+  const secure = window.J2meSecure;
+  await secure.loadAllowlist('/runtime/j2me-allowlist.json');
+  // After allowlist fetch, lock network and fence storage.
+  secure.installNetworkLockdown();
+  secure.installStorageFence(window.J2meRmsIdb.DB_NAME);
+  secure.wrapExecute();
+
   patchZipPaths();
   rms = window.J2meRmsIdb.create();
   js2me.rmsPersistence = rms;
   js2me.rmsQuotaBytes = 256 * 1024;
   js2me.kill = false;
+  js2me.config.workers = false;
+
+  const profile =
+    options?.screenProfile ||
+    (options?.width && options?.height ? `${options.width}x${options.height}` : '240x320');
+  applyScreenProfile(profile);
+  if (options?.width && options?.height && !SCREEN_PROFILES[profile]) {
+    applyScreenProfile('240x320');
+    js2me.config.width = Number(options.width);
+    js2me.config.height = Number(options.height);
+    js2me.config.fullHeight = Number(options.height);
+  }
 
   const buffer = await file.arrayBuffer();
-  if (buffer.byteLength < 4) throw new Error('JAR_TOO_SMALL');
-  const magic = new Uint8Array(buffer, 0, 4);
-  // ZIP local file header or empty JAR still starts with PK
-  if (magic[0] !== 0x50 || magic[1] !== 0x4b) throw new Error('JAR_NOT_ZIP');
+  const allowUntrusted = options?.allowUntrusted === true;
+  const validation = await secure.validateJarBuffer(buffer, { allowUntrusted });
 
-  const digest = await sha256Hex(buffer);
-  const width = Number(options?.width) || 240;
-  const height = Number(options?.height) || 320;
-  js2me.config.width = width;
-  js2me.config.height = height;
-  js2me.config.fullHeight = height;
+  document.body.classList.toggle('phone-frame', options?.phoneFrame !== false);
 
   await new Promise((resolve, reject) => {
     const blob = new Blob([buffer], { type: 'application/java-archive' });
-    // launchJAR loads the bytecode engine (program_zazu), then the JAR.
     const prevLaunchMidlet = js2me.launchMidlet;
     js2me.launchMidlet = async function (id) {
       try {
+        if (!js2me.manifest?.['midlet-1'] || !js2me.manifest?.['midlet-name']) {
+          throw new Error('JAR_NO_MIDLET');
+        }
         const vendor = js2me.manifest['midlet-vendor'] || 'unknown';
         const name = js2me.manifest['midlet-name'] || 'unknown';
-        midletId = `${vendor}/${name}/${digest.slice(0, 16)}`;
+        const version = js2me.manifest['midlet-version'] || '0';
+        // Suite identity for RMS: vendor/name/version (survives byte-identical rebuilds / hash churn).
+        midletId = `${vendor}/${name}/${version}`;
         js2me.rmsMidletId = midletId;
         const snap = await rms.load(midletId);
         js2me.rmsSuite = snap && snap.stores ? snap : { stores: {} };
+        secure.denyConnector();
         prevLaunchMidlet.call(js2me, id);
         await waitForCanvas(20000);
         started = true;
@@ -195,12 +268,20 @@ async function bootJar(file, options) {
       j2meRuntime: 'js2me',
       rms: true,
       midletId,
-      screen: { width, height },
+      screen: { width: js2me.config.width, height: js2me.config.height, profile: screenProfile.label },
+      jarSha256: validation.sha256,
+      allowUntrusted,
+      security: {
+        networkDisabled: true,
+        allowlistEnforced: !allowUntrusted,
+        jarEntries: validation.entryCount,
+      },
     },
   });
 }
 
 function cleanup() {
+  releaseAllKeys();
   js2me.kill = true;
   started = false;
   const screen = document.getElementById('screen');
@@ -212,6 +293,7 @@ function cleanup() {
   js2me.rmsSuite = { stores: {} };
   js2me.rmsMidletId = null;
   js2me.rmsPersistence = null;
+  midletId = null;
 }
 
 addEventListener('message', async (event) => {
@@ -221,10 +303,13 @@ addEventListener('message', async (event) => {
     session = d.session;
     try {
       wireKeypad();
-      wireKeyboard();
+      wireKeyboard(d.keyMap);
       await bootJar(d.file, {
         width: d.width,
         height: d.height,
+        screenProfile: d.screenProfile,
+        phoneFrame: d.phoneFrame,
+        allowUntrusted: d.allowUntrusted === true,
       });
     } catch (error) {
       reply({ type: 'error', error: String(error?.message || error) });
@@ -236,8 +321,8 @@ addEventListener('message', async (event) => {
     if (!started) return;
     const code = KEY_MAP[d.command];
     if (code == null) return;
-    if (d.value === 1) js2me.sendKeyPressEvent(code);
-    else js2me.sendKeyReleasedEvent(code);
+    if (d.value === 1) pressKey(code);
+    else releaseKey(code);
     return;
   }
   if (d.type !== 'command') return;
@@ -248,8 +333,10 @@ addEventListener('message', async (event) => {
       case 'resume':
         break;
       case 'pause':
+        releaseAllKeys();
         break;
       case 'reset':
+        releaseAllKeys();
         break;
       case 'volume':
         break;
@@ -260,6 +347,12 @@ addEventListener('message', async (event) => {
       case 'rmsSnapshot':
         value = midletId && rms ? await rms.load(midletId) : null;
         break;
+      case 'setScreenProfile': {
+        const label = String(d.value || '240x320');
+        applyScreenProfile(label);
+        value = screenProfile;
+        break;
+      }
       case 'dispose':
         cleanup();
         break;
