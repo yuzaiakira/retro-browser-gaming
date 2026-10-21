@@ -82,6 +82,31 @@ const PLATFORMS = {
     inputProfile: 'n64-stick',
     bootWaitMs: 5000,
   },
+  c64: {
+    label: 'C64',
+    core: 'vice_x64sc',
+    // PRG autostarts far faster than D64 without relying solely on warp options.
+    fixture: 'mit-c64-wildboa.prg',
+    scheme: 'c64',
+    pass: 'C64_GAMEPLAY_PASS',
+    screenshot: 'c64-gameplay.png',
+    // Wild Boa: press fire (RetroPad B=0) then joystick directions.
+    inputProfile: 'fire-move',
+    moveAxes: 'horizontal',
+    bootWaitMs: 5000,
+  },
+  spectrum: {
+    label: 'ZX Spectrum',
+    core: 'fuse',
+    fixture: 'mit-zx-desolate.tap',
+    scheme: 'fuse',
+    pass: 'SPECTRUM_GAMEPLAY_PASS',
+    screenshot: 'spectrum-gameplay.png',
+    // Desolate accepts QAOP / 6789; fuse RetroPad → Cursor/Kempston or keyboard.
+    inputProfile: 'fire-move',
+    moveAxes: 'horizontal',
+    bootWaitMs: 8000,
+  },
   pce: {
     label: 'PCE',
     core: 'mednafen_pce',
@@ -181,6 +206,10 @@ const types = {
   '.lyx': 'application/octet-stream',
   '.ngp': 'application/octet-stream',
   '.ngc': 'application/octet-stream',
+  '.d64': 'application/octet-stream',
+  '.prg': 'application/octet-stream',
+  '.tap': 'application/octet-stream',
+  '.tzx': 'application/octet-stream',
   '.bin': 'application/octet-stream',
   '.zip': 'application/zip',
 };
@@ -324,6 +353,14 @@ async function run() {
         await page.evaluate((c) => window.input(c, 0), cmd);
         await page.waitForTimeout(400);
       }
+    } else if (cfg.inputProfile === 'fire-move') {
+      // RetroPad B (0) = fire / confirm for VICE and many computer cores.
+      for (let i = 0; i < 3; i++) {
+        await page.evaluate(() => window.input(0, 1));
+        await page.waitForTimeout(300);
+        await page.evaluate(() => window.input(0, 0));
+        await page.waitForTimeout(500);
+      }
     } else if (cfg.inputProfile === 'start-move' || cfg.inputProfile === 'start-only-move') {
       const bootCmds = cfg.inputProfile === 'start-only-move' ? [3] : [3, 8];
       for (const cmd of bootCmds) {
@@ -387,7 +424,8 @@ async function run() {
         await page.evaluate((c) => window.input(c, 0), axis[1]);
         if (
           cfg.inputProfile !== 'start-move' &&
-          cfg.inputProfile !== 'start-only-move'
+          cfg.inputProfile !== 'start-only-move' &&
+          cfg.inputProfile !== 'fire-move'
         ) {
           await page.evaluate(() => window.input(8, 1));
           await page.waitForTimeout(60);

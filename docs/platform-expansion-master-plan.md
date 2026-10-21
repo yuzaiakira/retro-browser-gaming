@@ -14,9 +14,9 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 | Virtual Boy | `beetle_vb` | GPLv2 | None | MIT SPONG Demo (`VUEngine/SPONG`) | **VERIFIED_PLAYABLE** |
 | Vectrex | `vecx` | — | — | — | NOT_STARTED — **not in EJS 4.2.3 CDN** |
 | Intellivision | `freeintv` | — | EXEC.ROM etc. | — | NOT_STARTED — **not in EJS 4.2.3 CDN** |
-| ZX Spectrum | `fuse` (CDN present) | GPLv3 | Amstrad-permitted Spectrum ROMs typically embedded; EJS 4.2.3 `getCores()` has **no** `zxspectrum` system key — set `EJS_core=fuse` explicitly | Legal TAP/TZX still needed | RESEARCHED |
+| ZX Spectrum | `fuse` (CDN present; explicit `EJS_core=fuse`) | GPLv3 | Spectrum firmware embedded (Amstrad permission upstream) | MIT Desolate TAP (`nzeemin/spectrum-desolate`) | **VERIFIED_PLAYABLE** |
 | ZX81 | `81` (CDN present) | GPLv3 | Amstrad permission noted upstream | Legal `.p`/`.tzx` TBD | RESEARCHED |
-| Commodore 64 | `vice_x64sc` (EJS default for `c64`; `vice_x64` also on CDN) | GPLv2 | Optional JiffyDOS only; stock ROMs usually embedded | Legal D64/PRG TBD | RESEARCHED |
+| Commodore 64 | `vice_x64sc` (EJS default for `c64`) | GPLv2 | Stock ROMs embedded in EJS package | MIT Wild Boa PRG (`tstamborski/Wild-Boa-Snake`) | **VERIFIED_PLAYABLE** |
 | Nintendo 64 | `mupen64plus_next` | GPLv2-family (EJS package) | — | MIT `Ryzee119/n64_controller_test` boots; GameJam 1.2.1 OOMs on 64 MB RDRAM | **EXPERIMENTAL** (boot/render only; input delta open) |
 | ColecoVision | `gearcoleco` | present on CDN | Proprietary `colecovision.rom` | MIT RetroPIPE | BLOCKED_FIRMWARE (prior) |
 | Sega 32X | PicoDrive | Non-commercial | — | MIT Wave Rider candidate | BLOCKED_LEGAL (prior) |
@@ -34,16 +34,17 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 | --- | --- | --- |
 | `81bd0e5` 2026-10-21 | Atari 5200 + Virtual Boy | `docs/test-evidence/PH-05/a5200-vb-expansion-20261021.md` |
 | 25f8d5d 2026-10-21 | N64 experimental boot | `docs/test-evidence/PH-05/n64-boot-20261021.txt` |
+| (local) 2026-10-21 | Commodore 64 + ZX Spectrum | `docs/test-evidence/PH-05/c64-spectrum-expansion-20261021.md` |
 
 ## Working order (hypothesis)
 
 1. Atari 5200, Virtual Boy ← **done** (`81bd0e5`)
-2. N64 spike with MIT GameJam ROM + `mupen64plus_next` (measure WebGL/perf)
-3. C64 via `vice_x64sc` once a clearly licensed D64/PRG is selected
-4. ZX Spectrum via explicit `fuse` core + licensed TAP (system map gap)
-4. Arcade FBNeo with strict ROM-set policy + legal set
-5. Firmware-unblocked Sega CD / ColecoVision / 32X when authorization exists
-6. Higher-demand Saturn / Dreamcast / 3DS / PS2 only with measured browser feasibility
+2. C64 (`vice_x64sc`) + ZX Spectrum (`fuse`) ← **done** (this session)
+3. N64: prove interactive frame delta or keep EXPERIMENTAL
+4. Vectrex / Intellivision: external WASM core builds if feasible
+5. Arcade FBNeo with strict ROM-set policy + legal set
+6. Firmware-unblocked Sega CD / ColecoVision / 32X when authorization exists
+7. Higher-demand Saturn / Dreamcast / 3DS / PS2 only with measured browser feasibility
 
 ## Rules
 
