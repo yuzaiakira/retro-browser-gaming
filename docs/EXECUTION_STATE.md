@@ -17,7 +17,8 @@
 | Atari 5200 / Virtual Boy | VERIFIED_PLAYABLE + catalog offline |
 | Commodore 64 (`vice_x64sc`) | VERIFIED_PLAYABLE + catalog offline |
 | ZX Spectrum (`fuse` explicit) | VERIFIED_PLAYABLE + catalog offline |
-| N64 (`mupen64plus_next`) | EXPERIMENTAL — boots MIT controller-test; input delta open; not seeded |
+| N64 (`mupen64plus_next`) | EXPERIMENTAL — boots MIT controller-test; **input frame delta still zero** (`n64-input-unproven-20261021.md`); not seeded |
+| Vectrex / Intellivision | BLOCKED_CORE / BLOCKED_FIRMWARE |
 | Engineering catalog | **36** titles (all product-pending) |
 | Core lock | **348 files** |
 | Tracker | `docs/platform-expansion-master-plan.md` |
@@ -44,6 +45,6 @@ Evidence: `docs/test-evidence/PH-05/c64-spectrum-expansion-20261021.md`.
 
 1. Physical gamepad / iOS / production HTTPS
 2. Human product approval
-3. N64: prove interactive framebuffer change; GameJam ROM needs WASM memory strategy
-4. Vectrex / Intellivision: investigate external VecX / FreeIntv WASM builds (absent from EJS 4.2.3 CDN)
-5. Next feasible master-plan platforms (Amiga/MSX/arcade/Jaguar) with legal fixtures
+3. N64: input frame delta still unproven (`PH-05/n64-input-unproven-20261021.md`); keep EXPERIMENTAL
+4. Vectrex: BLOCKED_CORE; Intellivision: BLOCKED_FIRMWARE (`PH-05/vectrex-intellivision-blocker-20261021.md`)
+5. Next feasible: Amiga `puae` (CDN + AROS fallback) / other CDN cores with legal fixtures

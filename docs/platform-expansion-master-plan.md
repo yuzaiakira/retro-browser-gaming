@@ -12,8 +12,8 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 | --- | --- | --- | --- | --- | --- |
 | Atari 5200 | `a5200` | GPLv2 | Built-in AltirraOS (optional proprietary 5200.rom **not** shipped) | CC0 Culomin (`8bitworkshop/culomin5200`) | **VERIFIED_PLAYABLE** |
 | Virtual Boy | `beetle_vb` | GPLv2 | None | MIT SPONG Demo (`VUEngine/SPONG`) | **VERIFIED_PLAYABLE** |
-| Vectrex | `vecx` | — | — | — | NOT_STARTED — **not in EJS 4.2.3 CDN** |
-| Intellivision | `freeintv` | — | EXEC.ROM etc. | — | NOT_STARTED — **not in EJS 4.2.3 CDN** |
+| Vectrex | `vecx` (absent) | GPL-3 upstream libretro-vecx | none typical | MIT Thrust candidate | **BLOCKED_CORE** — not in EJS 4.2.3 CDN (`PH-05/vectrex-intellivision-blocker-20261021.md`) |
+| Intellivision | `freeintv` (absent) | GPLv2+ FreeIntv | proprietary `exec.bin`/`grom.bin` | TBD | **BLOCKED_FIRMWARE** (+ core absent) |
 | ZX Spectrum | `fuse` (CDN present; explicit `EJS_core=fuse`) | GPLv3 | Spectrum firmware embedded (Amstrad permission upstream) | MIT Desolate TAP (`nzeemin/spectrum-desolate`) | **VERIFIED_PLAYABLE** |
 | ZX81 | `81` (CDN present) | GPLv3 | Amstrad permission noted upstream | Legal `.p`/`.tzx` TBD | RESEARCHED |
 | Commodore 64 | `vice_x64sc` (EJS default for `c64`) | GPLv2 | Stock ROMs embedded in EJS package | MIT Wild Boa PRG (`tstamborski/Wild-Boa-Snake`) | **VERIFIED_PLAYABLE** |
@@ -36,16 +36,19 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 | 25f8d5d 2026-10-21 | N64 experimental boot | `docs/test-evidence/PH-05/n64-boot-20261021.txt` |
 | `c0103ab` 2026-10-21 | Commodore 64 (`vice_x64sc`) | `docs/test-evidence/PH-05/c64-spectrum-expansion-20261021.md` |
 | `1e99633` 2026-10-21 | ZX Spectrum (`fuse`) | `docs/test-evidence/PH-05/c64-spectrum-expansion-20261021.md` |
+| (local) 2026-10-21 | N64 input still unproven | `docs/test-evidence/PH-05/n64-input-unproven-20261021.md` |
+| (local) 2026-10-21 | Vectrex/Intellivision blocked | `docs/test-evidence/PH-05/vectrex-intellivision-blocker-20261021.md` |
 
 ## Working order (hypothesis)
 
 1. Atari 5200, Virtual Boy ← **done** (`81bd0e5`)
 2. C64 (`vice_x64sc`) + ZX Spectrum (`fuse`) ← **done** (this session)
-3. N64: prove interactive frame delta or keep EXPERIMENTAL
-4. Vectrex / Intellivision: external WASM core builds if feasible
-5. Arcade FBNeo with strict ROM-set policy + legal set
-6. Firmware-unblocked Sega CD / ColecoVision / 32X when authorization exists
-7. Higher-demand Saturn / Dreamcast / 3DS / PS2 only with measured browser feasibility
+3. N64: prove interactive frame delta or keep EXPERIMENTAL (`PH-05/n64-input-unproven-20261021.md`)
+4. Vectrex / Intellivision: **blocked** (missing CDN core / proprietary BIOS) — external WASM only if separately versioned
+5. Amiga `puae` (CDN present; AROS Kickstart fallback) — MIT AmiGalaga exists but ADF is build-output only (`build/AmiGalaga.adf` not published); need reproducible ADF build or another licensed disk
+6. Arcade FBNeo with strict ROM-set policy + legal set
+7. Firmware-unblocked Sega CD / ColecoVision / 32X when authorization exists
+8. Higher-demand Saturn / Dreamcast / 3DS / PS2 only with measured browser feasibility
 
 ## Rules
 
