@@ -23,18 +23,31 @@ Cutover flag: `NEXT_PUBLIC_J2ME_DEDICATED_ORIGIN=true` (Compose default after PH
 | `parentOrigin` ≠ frame origin | Init validation | Application |
 | CSP j2me host | `unsafe-eval` for js2me; `frame-ancestors` launcher only | Browser |
 | CORP | `cross-origin` on j2me assets (launcher COEP) | Browser |
-| Offline runtime | `j2me-sw.js` precache via `/j2me-install.html` | Browser SW |
-| RMS migration | Narrow `importRmsMigration` payload; source retained | Application |
+| Offline runtime | `j2me-sw.js` atomic staging → promote; SHA-256 + byteSize | Browser SW |
+| Precache allowlist | Path regex only (`/runtime/j2me*`, `/cores/js2me/`, install) | Application |
+| SW activation | `ACTIVATE_UPDATE` from install surface only (no mid-game skipWaiting) | Application |
+| RMS migration | Narrow payload; **prefer-newer** merge; source retained | Application |
+| RMS rollback | Export dedicated suites → launcher merge (never clobber newer) | Application |
 
-**Authentic offline evidence:** `PH-06/catalog-j2me-dedicated-offline-20261021.md` (`mockedAssets:false`, `routeFulfill:false`).
+**Authentic offline evidence:** `PH-06/catalog-j2me-dedicated-offline-20261021.md` (+ reliability re-run). Integrity/recovery: `j2me-sw-integrity-20261021.json`, `j2me-cache-recovery-20261021.json`, `j2me-rms-rollback-safety-20261021.json`.
 
 **Not claimed safe:** Arbitrary uploaded or commercial JARs (allowlist remains).
 
+## Runtime integrity
+
+- Manifest: `apps/web/public/runtime/j2me-runtime-manifest.json` (regenerate via `python3 scripts/generate-j2me-runtime-manifest.py`).
+- Excludes `/j2me-sw.js` (browser-managed). Core `js2me/` assets come from release `licensed_asset_manifest` digests.
+- Launcher loads the manifest **same-origin** (CSP `connect-src 'self'`), then posts J2ME-origin URLs + digests to the install iframe.
+- HTTP 200 alone is never treated as integrity proof.
+
 ## Rollback
 
-1. Set `NEXT_PUBLIC_J2ME_DEDICATED_ORIGIN=false`.
-2. Rebuild web image; FrameAdapter loads same-origin `/runtime/j2me-frame.html`.
-3. Launcher-origin `retro-j2me-rms` was **not** deleted during migration — legacy saves remain.
+1. **Before** disabling cutover: call `rollbackDedicatedRmsToLauncher()` (or equivalent EXPORT_RMS + prefer-newer launcher merge) so dedicated progress is not stranded.
+2. Set `NEXT_PUBLIC_J2ME_DEDICATED_ORIGIN=false`.
+3. Rebuild web image; FrameAdapter loads same-origin `/runtime/j2me-frame.html`.
+4. Legacy launcher `retro-j2me-rms` is never deleted by migration; prefer-newer prevents stale snapshots from overwriting newer dedicated (or newer launcher) saves.
+
+Retaining old launcher snapshots alone does **not** guarantee they contain the newest progress after dedicated play.
 
 ## Local port remap
 
@@ -56,4 +69,6 @@ Open `http://launcher.localhost:13000/` (not raw `127.0.0.1`) so the dedicated h
 
 ## HTTPS production design
 
-Terminate TLS at a reverse proxy with certificates for `app.example` and `j2me.app.example` (or equivalent). Keep host-only cookies on the launcher host; never set `Domain=.example` cookies that the J2ME host can read. Preserve COOP/COEP; serve j2me assets with `Cross-Origin-Resource-Policy: cross-origin`.
+Terminate TLS at a reverse proxy with certificates for `app.example` and `j2me.app.example` (or equivalent). Keep host-only cookies on the launcher host; never set `Domain=.example` cookies that the J2ME host can read. Preserve COOP/COEP; serve j2me assets with `Cross-Origin-Resource-Policy: cross-origin`. Service Workers and secure contexts require HTTPS (or localhost).
+
+**Verification status:** HTTPS staging with real certificates is **NOT_VERIFIED** in this repository session. Localhost HTTP Host-routing does not prove production TLS behavior.

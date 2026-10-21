@@ -314,12 +314,51 @@ function assertParentOrigin(candidate) {
   return candidate;
 }
 
+function snapshotUpdatedAt(snap) {
+  const at = snap?.meta?.updatedAt;
+  return typeof at === 'number' && Number.isFinite(at) && at > 0 ? at : 0;
+}
+
+function snapshotRevision(snap) {
+  const rev = snap?.meta?.revision;
+  return typeof rev === 'number' && Number.isFinite(rev) && rev > 0 ? rev : 0;
+}
+
+function fingerprintSnapshot(snap) {
+  return J2meRmsIdb.fingerprintStores(snap?.stores);
+}
+
+/**
+ * Prefer newer target over stale source. Never silently clobber dedicated progress.
+ * overwrite=true still will not replace a strictly newer target.
+ */
+function decideMergeAction(source, target) {
+  if (!source?.stores) return 'keep-target';
+  if (!target?.stores) return 'import-source';
+  if (fingerprintSnapshot(source) === fingerprintSnapshot(target)) return 'equal';
+  const srcAt = snapshotUpdatedAt(source);
+  const tgtAt = snapshotUpdatedAt(target);
+  if (srcAt > 0 || tgtAt > 0) {
+    if (srcAt > tgtAt) return 'import-source';
+    if (tgtAt > srcAt) return 'keep-target';
+  }
+  const srcRev = snapshotRevision(source);
+  const tgtRev = snapshotRevision(target);
+  if (srcRev > 0 || tgtRev > 0) {
+    if (srcRev > tgtRev) return 'import-source';
+    if (tgtRev > srcRev) return 'keep-target';
+  }
+  // Existing target without clocks: keep unless overwrite and no preferNewer opt-out.
+  return 'conflict-keep-target';
+}
+
 /** Narrow RMS migration import — suite id + stores only, size-bounded. */
 async function importMigratedRms(payload) {
   if (!rms) rms = J2meRmsIdb.create();
   if (!payload || typeof payload !== 'object') throw new Error('J2ME_MIGRATE_BAD_PAYLOAD');
   const suites = Array.isArray(payload.suites) ? payload.suites : [];
   if (suites.length > 16) throw new Error('J2ME_MIGRATE_TOO_MANY');
+  const preferNewer = payload.preferNewer !== false;
   const imported = [];
   for (const entry of suites) {
     const id = String(entry?.midletId || '');
@@ -340,14 +379,45 @@ async function importMigratedRms(payload) {
     }
     if (bytes > 256 * 1024) throw new Error('J2ME_MIGRATE_TOO_LARGE');
     const existing = await rms.load(id);
-    if (existing && !payload.overwrite) {
-      imported.push({ midletId: id, status: 'kept-existing' });
+    const sourceSnap = {
+      stores: structuredClone(stores),
+      meta: entry?.snapshot?.meta || undefined,
+    };
+    if (preferNewer) {
+      const decision = decideMergeAction(sourceSnap, existing);
+      if (decision !== 'import-source') {
+        imported.push({ midletId: id, status: decision === 'equal' ? 'equal' : 'kept-existing', decision });
+        continue;
+      }
+    } else if (existing && !payload.overwrite) {
+      imported.push({ midletId: id, status: 'kept-existing', decision: 'keep-target' });
       continue;
     }
-    await rms.save(id, { stores: structuredClone(stores) });
-    imported.push({ midletId: id, status: 'imported' });
+    await rms.save(id, sourceSnap);
+    imported.push({ midletId: id, status: 'imported', decision: 'import-source' });
   }
   return { imported, frameOrigin: location.origin };
+}
+
+async function exportAllRms() {
+  if (!rms) rms = J2meRmsIdb.create();
+  const suites = await rms.listAll();
+  return {
+    frameOrigin: location.origin,
+    suites: suites.map((s) => ({
+      midletId: s.midletId,
+      snapshot: s.snapshot,
+      byteSize: (() => {
+        let bytes = 0;
+        for (const store of Object.values(s.snapshot.stores || {})) {
+          for (const rec of Object.values(store.records || {})) {
+            bytes += Array.isArray(rec) ? rec.length : rec?.byteLength || 0;
+          }
+        }
+        return bytes;
+      })(),
+    })),
+  };
 }
 
 addEventListener('message', async (event) => {
@@ -418,6 +488,9 @@ addEventListener('message', async (event) => {
         break;
       case 'importRmsMigration':
         value = await importMigratedRms(d.value);
+        break;
+      case 'exportRmsMigration':
+        value = await exportAllRms();
         break;
       case 'probeIsolation':
         value = await probeIsolation();

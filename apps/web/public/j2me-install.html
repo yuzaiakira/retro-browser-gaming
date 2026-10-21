@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <title>J2ME runtime install</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="/runtime/j2me-rms-idb.js"></script>
 </head>
 <body>
   <p id="status">Preparing J2ME runtime…</p>
@@ -12,11 +13,31 @@
       const status = document.getElementById('status');
       const params = new URLSearchParams(location.search);
       const parentOrigin = params.get('parentOrigin') || '';
-      const expectSha = params.get('coreLockHint') || '';
 
       function reply(payload) {
         if (!parentOrigin) return;
         parent.postMessage({ channel: 'j2me-install', ...payload }, parentOrigin);
+      }
+
+      function worker() {
+        return navigator.serviceWorker.controller;
+      }
+
+      function decideMerge(source, target) {
+        if (!source?.stores) return 'keep-target';
+        if (!target?.stores) return 'import-source';
+        const srcFp = J2meRmsIdb.fingerprintStores(source.stores);
+        const tgtFp = J2meRmsIdb.fingerprintStores(target.stores);
+        if (srcFp === tgtFp) return 'equal';
+        const srcAt = source.meta?.updatedAt || 0;
+        const tgtAt = target.meta?.updatedAt || 0;
+        if (srcAt > tgtAt) return 'import-source';
+        if (tgtAt > srcAt) return 'keep-target';
+        const srcRev = source.meta?.revision || 0;
+        const tgtRev = target.meta?.revision || 0;
+        if (srcRev > tgtRev) return 'import-source';
+        if (tgtRev > srcRev) return 'keep-target';
+        return 'conflict-keep-target';
       }
 
       try {
@@ -27,9 +48,14 @@
 
         const registration = await navigator.serviceWorker.register('/j2me-sw.js', { scope: '/' });
         await navigator.serviceWorker.ready;
+
+        // Activate waiting worker only from this install surface (not mid-gameplay).
+        if (registration.waiting) {
+          registration.waiting.postMessage({ type: 'ACTIVATE_UPDATE' });
+        }
         if (!navigator.serviceWorker.controller) {
           await new Promise((resolve, reject) => {
-            const t = setTimeout(() => reject(new Error('J2ME_SW_NO_CONTROLLER')), 15000);
+            const t = setTimeout(() => reject(new Error('J2ME_SW_NO_CONTROLLER')), 20000);
             navigator.serviceWorker.addEventListener(
               'controllerchange',
               () => {
@@ -38,60 +64,133 @@
               },
               { once: true },
             );
-            registration.waiting?.postMessage({ type: 'noop' });
           });
         }
 
-        const urls = [];
         addEventListener('message', (event) => {
           if (event.origin !== parentOrigin) return;
           if (event.data?.channel !== 'j2me-install') return;
-          if (event.data?.type === 'PRECACHE_LIST' && Array.isArray(event.data.urls)) {
-            const worker = navigator.serviceWorker.controller;
-            if (!worker) {
+
+          if (event.data?.type === 'PRECACHE_LIST') {
+            const w = worker();
+            if (!w) {
               reply({ type: 'error', error: 'J2ME_SW_NO_CONTROLLER' });
               return;
             }
+            const entries = Array.isArray(event.data.entries) ? event.data.entries : [];
+            const version = event.data.version || 'v3';
             const onDone = (e) => {
               if (e.data?.type !== 'PRECACHE_DONE') return;
               navigator.serviceWorker.removeEventListener('message', onDone);
-              const failed = (e.data.results || []).filter((r) => !r.ok);
-              if (failed.length) {
-                reply({ type: 'error', error: 'J2ME_PRECACHE_FAILED', failed });
+              if (!e.data.ok) {
+                reply({
+                  type: 'error',
+                  error: e.data.error || 'J2ME_PRECACHE_FAILED',
+                  failed: (e.data.results || []).filter((r) => !r.ok),
+                });
                 status.textContent = 'Precache failed';
                 return;
               }
+              // Activate after successful atomic promote (safe: install iframe only).
+              registration.waiting?.postMessage({ type: 'ACTIVATE_UPDATE' });
               reply({
                 type: 'ready',
                 version: e.data.version,
                 count: e.data.results.length,
                 origin: location.origin,
-                coreLockHint: expectSha,
               });
               status.textContent = 'J2ME runtime ready';
             };
             navigator.serviceWorker.addEventListener('message', onDone);
-            worker.postMessage({ type: 'PRECACHE', urls: event.data.urls });
+            w.postMessage({ type: 'PRECACHE', entries, version });
           }
+
           if (event.data?.type === 'STATUS') {
-            const worker = navigator.serviceWorker.controller;
-            if (!worker) {
+            const w = worker();
+            if (!w) {
               reply({ type: 'error', error: 'J2ME_SW_NO_CONTROLLER' });
               return;
             }
             const onStatus = (e) => {
               if (e.data?.type !== 'CACHE_STATUS_RESULT') return;
               navigator.serviceWorker.removeEventListener('message', onStatus);
-              reply({ type: 'status', ...e.data, origin: location.origin, controlled: !!navigator.serviceWorker.controller });
+              reply({
+                type: 'status',
+                ...e.data,
+                origin: location.origin,
+                controlled: !!navigator.serviceWorker.controller,
+              });
             };
             navigator.serviceWorker.addEventListener('message', onStatus);
-            worker.postMessage({ type: 'CACHE_STATUS' });
+            w.postMessage({ type: 'CACHE_STATUS' });
+          }
+
+          if (event.data?.type === 'VERIFY') {
+            const w = worker();
+            if (!w) {
+              reply({ type: 'error', error: 'J2ME_SW_NO_CONTROLLER' });
+              return;
+            }
+            const onVerify = (e) => {
+              if (e.data?.type !== 'VERIFY_ACTIVE_RESULT') return;
+              navigator.serviceWorker.removeEventListener('message', onVerify);
+              if (!e.data.ok) {
+                reply({ type: 'error', error: e.data.error || 'J2ME_VERIFY_FAILED', missing: e.data.missing });
+                return;
+              }
+              reply({ type: 'verified', version: e.data.version });
+            };
+            navigator.serviceWorker.addEventListener('message', onVerify);
+            w.postMessage({ type: 'VERIFY_ACTIVE', entries: event.data.entries || [] });
+          }
+
+          if (event.data?.type === 'EXPORT_RMS') {
+            (async () => {
+              try {
+                const rms = J2meRmsIdb.create();
+                const suites = await rms.listAll();
+                await rms.close();
+                reply({
+                  type: 'rms-export',
+                  origin: location.origin,
+                  suites: suites.map((s) => ({ midletId: s.midletId, snapshot: s.snapshot })),
+                });
+              } catch (error) {
+                reply({ type: 'error', error: String(error?.message || error) });
+              }
+            })();
+          }
+
+          if (event.data?.type === 'IMPORT_RMS') {
+            (async () => {
+              try {
+                const suites = Array.isArray(event.data.suites) ? event.data.suites : [];
+                if (suites.length > 16) throw new Error('J2ME_MIGRATE_TOO_MANY');
+                const rms = J2meRmsIdb.create();
+                const results = [];
+                for (const entry of suites) {
+                  const id = String(entry?.midletId || '');
+                  if (!/^[A-Za-z0-9 ._+/-]{3,160}$/.test(id) || id.includes('..')) {
+                    throw new Error('J2ME_MIGRATE_BAD_ID');
+                  }
+                  const existing = await rms.load(id);
+                  const decision = decideMerge(entry.snapshot, existing);
+                  if (decision === 'import-source') {
+                    await rms.save(id, entry.snapshot);
+                  }
+                  results.push({ midletId: id, decision });
+                }
+                await rms.close();
+                reply({ type: 'rms-import', results, origin: location.origin });
+              } catch (error) {
+                reply({ type: 'error', error: String(error?.message || error) });
+              }
+            })();
           }
         });
 
         reply({ type: 'boot', origin: location.origin, controlled: !!navigator.serviceWorker.controller });
-        status.textContent = 'Service worker registered — waiting for precache list';
-        void urls;
+        status.textContent = 'Service worker registered — waiting for integrity-checked precache';
       } catch (error) {
         status.textContent = String(error?.message || error);
         reply({ type: 'error', error: String(error?.message || error) });

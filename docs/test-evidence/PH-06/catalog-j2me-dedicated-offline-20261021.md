@@ -33,3 +33,11 @@ Isolation per title: `parentDom: blocked:SecurityError`, empty cookies, j2me SW 
 
 Screenshots: `PH-06/screenshots/catalog-dedicated-offline-j2me-{dot,paddle,notes}.png`.  
 Run log: `PH-06/catalog-j2me-dedicated-offline-run-20261021.txt`.
+
+## Reliability re-run (atomic SW + SHA-256 precache)
+
+After staging/promote integrity wiring and same-origin manifest load (launcher CSP), the gate was re-executed successfully:
+
+- Run log: `PH-06/catalog-j2me-dedicated-offline-reliability-run-20261021.txt`
+- Companion gates: `j2me-sw-integrity-20261021.json`, `j2me-cache-recovery-20261021.json`, `j2me-rms-rollback-safety-20261021.json`
+- Still `mockedAssets:false`, `routeFulfill:false`, origin services stopped for offline cold-start.

@@ -166,6 +166,12 @@ export class FrameAdapter implements EmulatorAdapter {
     return this.call('importRmsMigration', payload);
   }
 
+  /** Export all suite snapshots from the dedicated-origin frame (rollback / audit). */
+  async exportRmsMigration() {
+    if (this.core !== 'js2me') throw new Error('RMS export is J2ME-only');
+    return this.call('exportRmsMigration');
+  }
+
   async start() {
     await this.call('start');
   }

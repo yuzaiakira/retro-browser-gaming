@@ -22,4 +22,6 @@ export interface EmulatorAdapter {
   } | null>;
   /** Dedicated-origin J2ME only — transfer validated launcher RMS snapshots. */
   importRmsMigration?(payload: unknown): Promise<unknown>;
+  /** Dedicated-origin J2ME only — export suite snapshots for rollback merge. */
+  exportRmsMigration?(): Promise<unknown>;
 }
