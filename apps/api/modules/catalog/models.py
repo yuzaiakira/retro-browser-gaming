@@ -96,22 +96,64 @@ class EmulatorCore(ValidatedModel):
         return f"{self.code}@{self.version}"
 
 
+PRODUCT_APPROVAL = [
+    ("pending", "pending"),
+    ("approved", "approved"),
+    ("rejected", "rejected"),
+]
+
+
 class Game(ValidatedModel):
+    """Catalog title with three independent authorization layers.
+
+    - DISTRIBUTION: per-asset LicenseEvidence.approved_for_distribution
+    - ENGINEERING: ``published`` (seed/QA made the graph ready for demo use)
+    - PRODUCT: ``product_approval_status`` (human product-owner authorization)
+
+    ``published`` alone never means public product availability.
+    """
+
     slug = models.SlugField(unique=True)
     title = models.CharField(max_length=180)
     description = models.TextField()
     genre = models.CharField(max_length=80)
     cover_key = models.CharField(max_length=250, blank=True)
     screenshots = models.JSONField(default=list, blank=True)
-    published = models.BooleanField(default=False)
+    published = models.BooleanField(
+        default=False,
+        help_text="Engineering catalog readiness (requires distribution-approved assets).",
+    )
+    product_approval_status = models.CharField(
+        max_length=20,
+        choices=PRODUCT_APPROVAL,
+        default="pending",
+        help_text="Human product-owner decision. Independent of engineering publish.",
+    )
+    product_approved_at = models.DateTimeField(null=True, blank=True)
+    product_approved_by = models.ForeignKey(
+        "auth.User",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="product_approved_games",
+    )
+    product_review_notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def clean(self):
-        if self.published:
-            from .services import assert_publishable
+        from .services import assert_publishable
 
+        if self.published:
             assert_publishable(self)
+        if self.product_approval_status == "approved":
+            if not self.published:
+                raise ValidationError(
+                    "Product approval requires engineering publication first."
+                )
+            assert_publishable(self)
+            if not self.product_approved_at:
+                raise ValidationError("Product approval requires an approval timestamp.")
 
     def __str__(self):
         return self.title

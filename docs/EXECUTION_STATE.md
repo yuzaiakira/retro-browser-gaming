@@ -2,7 +2,7 @@
 
 ## Verdict
 
-**RELEASE CANDIDATE / NOT COMPLETE** — IN-002/IOS-001 remain BLOCKED_EXTERNAL. Underrepresented-platform legal catalog expansion (GG Sushi Nights + Snepzhen, GBC Little Green Blob, A2600 Pipes) verified. Prior PS1/PSP harness fix and earlier catalog titles preserved.
+**RELEASE CANDIDATE / NOT COMPLETE** — IN-002/IOS-001 remain BLOCKED_EXTERNAL. Catalog **governance** milestone complete: engineering publish ≠ product approval; production-facing APIs hide product-pending titles unless `CATALOG_ALLOW_ENGINEERING=true`.
 
 ## Deferred physical acceptance (do not rediscover)
 
@@ -13,43 +13,40 @@
 
 | Item | Status |
 |---|---|
-| PS1 / PSP standalone + catalog offline | **PASS** (harness fix retained) |
-| Prior consoles through NGP/NGPC | VERIFIED_PLAYABLE |
-| Mega Drive Breakout + Pong | PASS |
-| NES Falling, GB Big2Small, GBA Nonogram, SMS Sushi Nights | PASS |
-| **GG Sushi Nights + Snepzhen; GBC Little Green Blob; A2600 Pipes** | **PASS** (engineering catalog) |
+| Emulator cores / prior VERIFIED_PLAYABLE platforms | Unchanged |
+| Engineering fixtures (32 titles incl. underrepresented GG/GBC/A2600) | Seeded + demo-visible |
+| Product approval | **All pending** — none auto-approved |
+| `CATALOG_ALLOW_ENGINEERING` | `true` in local Compose `.env`; **false** default in code |
 | Core lock | **333 files** |
-| J2ME dedicated origin | VERIFIED_PLAYABLE |
-| Sega 32X / Sega CD / ColecoVision | Blocked (legal/BIOS) |
 
 ## Exact commands
 
 ```bash
-./scripts/compose.sh exec -T api python manage.py seed_demo --with-console-fixtures
-CHROMIUM_EXECUTABLE=/usr/bin/chromium GG_FIXTURE=mit-gg-sushinights.gg node apps/web/tests/gg-smoke.cjs
+# Django governance suite
+./scripts/compose.sh exec -T api python manage.py test tests.test_catalog -v1
+
+# Demo catalog still offline-installs engineering titles when policy allows
 RETRO_TEST_BASE_URL=http://launcher.localhost:13000 \
-CATALOG_OFFLINE_ONLY=gg-sushi,gg-snepzhen,gbc-littlegreenblob,a2600-pipes \
-CHROMIUM_EXECUTABLE=/usr/bin/chromium \
+CATALOG_OFFLINE_ONLY=gg-sushi CHROMIUM_EXECUTABLE=/usr/bin/chromium \
   node apps/web/tests/catalog-console-offline.cjs
-python3 scripts/verify-core-lock.py
 ```
 
-Evidence: `docs/test-evidence/PH-05/catalog-underrepresented-expansion-20261021.md`.
+Evidence: `docs/test-evidence/PH-05/catalog-governance-*20261021*`, report `docs/catalog-product-approval-report-20261021.md`.
 
 ## Verified this session
 
-- Four MIT homebrew titles on underrepresented verified platforms (GG×2, GBC, A2600)
-- Interactive gameplay + save/load + catalog offline cold-start for each
-- Regressions: Breakout, Pong, Falling, Big2Small, Nonogram, SMS Sushi, PS1, PSP, DOS, J2ME security, Django catalog 29, core-lock 333, typecheck, lint
-- No core changes; Kaiju Feeder / WonderCell / Town Patrol shortlisted only (license/asset gaps)
+- Separated DISTRIBUTION / ENGINEERING (`published`) / PRODUCT (`product_approval_status`)
+- Production-like policy: list/detail/manifest/asset 404 for pending titles; approve unlocks; seed never product-approves
+- Admin workflow + metadata refresh for priority titles; catalog UX filters/notes
+- Regressions: Django 35 OK, GG Sushi offline, PS1, PSP, DOS, J2ME security, Falling, SMS Sushi, typecheck, lint, core-lock 333
 
 ## Remaining external / product dependencies
 
 1. Physical gamepad / iOS Safari
 2. Production staging HTTPS
-3. Product marketing approval for engineering catalog titles
+3. **Human product approval** per title (see approval report)
 4. 32X legal core / Sega CD BIOS if pursued
 
 ## Next
 
-Optional further catalog diversity on Lynx / WonderSwan / PCE only when LICENSE + redistributable binary are clear; otherwise continue product-approval packaging or deferred P0 hardware gates.
+Product owners review `docs/catalog-product-approval-report-20261021.md` and approve titles intentionally. Do not start another ROM discovery loop until product decisions land.

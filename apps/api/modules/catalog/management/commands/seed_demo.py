@@ -244,8 +244,9 @@ class Command(BaseCommand):
             slug="mit-genesis-pong",
             title="MIT Genesis Pong",
             description=(
-                "MIT-licensed Genesis Pong homebrew fixture expanding the verified "
-                "Mega Drive catalog. Not a commercial ROM."
+                "Two-paddle Pong on Mega Drive. Use Up/Down (or player-2 controls) to move "
+                "the paddle and keep the ball in play. MIT homebrew for engineering catalog "
+                "review — not a commercial ROM."
             ),
             console="sega-md",
             core={"code": "genesis_plus_gx", "version": CORE_VERSION},
@@ -255,6 +256,11 @@ class Command(BaseCommand):
             license_ref="MIT; LICENSES/retro-homebrew-games-MIT.txt",
             provenance="https://spdx.org/licenses/MIT.html",
             evidence="Tracked .fixtures/mit-genesis-pong.bin from monteslu/retro-homebrew-games build-27",
+            genre="Sports",
+            compatibility_note=(
+                "Verified Chromium gameplay with genesis_plus_gx / segaMD mapping; "
+                "save states supported. Distinct from Breakout."
+            ),
         )
         results["sms"] = self._import_files(
             fixtures,
@@ -283,8 +289,9 @@ class Command(BaseCommand):
             slug="mit-sms-sushinights",
             title="MIT SMS Sushi Nights",
             description=(
-                "MIT-licensed Master System Sushi Nights (CrossZGB port by untoxa of "
-                "MONIS GAMES / Zal0 original). Engineering catalog fixture only."
+                "Grappling-hook delivery action on Master System: swing through Neo Sushi "
+                "City, collect sushi, and deliver it before hunger wins. Distinct SMS build "
+                "(not the Game Gear port). MIT CrossZGB port by untoxa of MONIS GAMES / Zal0."
             ),
             console="sega-ms",
             core={"code": "smsplus", "version": CORE_VERSION},
@@ -298,6 +305,10 @@ class Command(BaseCommand):
                 "(https://github.com/untoxa/SushiNights); original Zal0/SushiNights MIT"
             ),
             genre="Action",
+            compatibility_note=(
+                "Verified Chromium gameplay with smsplus / segaMS; save states supported. "
+                "Separate catalog entry from mit-gg-sushinights."
+            ),
         )
         results["gg"] = self._import_files(
             fixtures,
@@ -324,8 +335,9 @@ class Command(BaseCommand):
             slug="mit-gg-sushinights",
             title="MIT GG Sushi Nights",
             description=(
-                "MIT-licensed Game Gear Sushi Nights (CrossZGB port by untoxa of "
-                "MONIS GAMES / Zal0 original). Engineering catalog fixture only."
+                "Game Gear build of Sushi Nights: grappling-hook delivery through a "
+                "handheld-sized Neo Sushi City. Distinct GG ROM from the Master System "
+                "catalog entry. MIT CrossZGB port by untoxa of MONIS GAMES / Zal0."
             ),
             console="sega-gg",
             core={"code": "genesis_plus_gx", "version": CORE_VERSION},
@@ -339,14 +351,19 @@ class Command(BaseCommand):
                 "(https://github.com/untoxa/SushiNights); original Zal0/SushiNights MIT"
             ),
             genre="Action",
+            compatibility_note=(
+                "Verified Chromium gameplay with genesis_plus_gx / segaGG; save states "
+                "supported. Not interchangeable with mit-sms-sushinights."
+            ),
         )
         results["gg-snepzhen"] = self._import_files(
             fixtures,
             slug="mit-gg-snepzhen",
             title="MIT GG Snepzhen Solitaire",
             description=(
-                "MIT-licensed Game Gear Snepzhen Solitaire (Strugglemeat port of "
-                "JoppyFurr Snepzhen Solitaire). Engineering catalog fixture only."
+                "Shenzhen-style mahjong solitaire on Game Gear (cute shortened cards). "
+                "D-pad to move, buttons to select/deal. MIT port of JoppyFurr "
+                "Snepzhen Solitaire by Strugglemeat."
             ),
             console="sega-gg",
             core={"code": "genesis_plus_gx", "version": CORE_VERSION},
@@ -362,6 +379,10 @@ class Command(BaseCommand):
                 "(https://github.com/JoppyFurr/Snepzhen-Solitaire)"
             ),
             genre="Card",
+            compatibility_note=(
+                "Verified Chromium gameplay with genesis_plus_gx / segaGG; save states "
+                "supported."
+            ),
         )
         results["nes"] = self._import_files(
             fixtures,
@@ -389,8 +410,8 @@ class Command(BaseCommand):
             slug="mit-nes-falling",
             title="MIT NES Falling",
             description=(
-                "MIT-licensed NES Falling action homebrew by Jesse Williams (xram64). "
-                "Engineering catalog fixture only. Not a commercial ROM."
+                "Vertical action on NES: guide the falling character, avoid hazards, and "
+                "survive as long as you can. MIT homebrew by Jesse Williams (xram64)."
             ),
             console="nes",
             core={"code": "fceumm", "version": CORE_VERSION},
@@ -404,6 +425,10 @@ class Command(BaseCommand):
                 "falling.nes (https://github.com/xram64/falling-nes)"
             ),
             genre="Action",
+            compatibility_note=(
+                "Verified Chromium gameplay with fceumm / nes controls; save states "
+                "supported."
+            ),
         )
         results["snes"] = self._import_files(
             fixtures,
@@ -448,8 +473,9 @@ class Command(BaseCommand):
             slug="gpl-gb-big2small",
             title="GPL GB Big2Small",
             description=(
-                "GPL-3.0 Game Boy Big2Small puzzle homebrew by Matthew D. Steele. "
-                "Engineering catalog fixture only. Not a commercial ROM."
+                "Game Boy puzzle: shrink and grow to navigate rooms and solve spatial "
+                "challenges. GPL-3.0 homebrew by Matthew D. Steele — redistribution "
+                "includes corresponding source obligations."
             ),
             console="gb",
             core={"code": "gambatte", "version": CORE_VERSION},
@@ -463,6 +489,10 @@ class Command(BaseCommand):
                 "(https://github.com/mdsteele/big2small)"
             ),
             genre="Puzzle",
+            compatibility_note=(
+                "Verified Chromium gameplay with gambatte / gb controls; save states "
+                "supported. DMG .gb title (not Game Boy Color)."
+            ),
         )
         results["gbc"] = self._import_files(
             fixtures,
@@ -489,8 +519,9 @@ class Command(BaseCommand):
             slug="mit-gbc-littlegreenblob",
             title="MIT GBC Little Green Blob",
             description=(
-                "MIT-licensed Game Boy Color Little Green Blob platformer by MilanFIN. "
-                "Engineering catalog fixture only. Not a commercial ROM."
+                "Color platformer: run and jump the little green blob through multi-level "
+                "maps. Use the D-pad and A/B; original design includes score save support. "
+                "MIT homebrew by MilanFIN."
             ),
             console="gbc",
             core={"code": "gambatte", "version": CORE_VERSION},
@@ -504,6 +535,11 @@ class Command(BaseCommand):
                 "(https://github.com/MilanFIN/little-green-blob)"
             ),
             genre="Platformer",
+            compatibility_note=(
+                "Verified Chromium gameplay with gambatte / gb scheme on .gbc; save "
+                "states supported. Large level set — smoke covers interactive play, not "
+                "full completion."
+            ),
         )
         results["gba"] = self._import_files(
             fixtures,
@@ -531,8 +567,9 @@ class Command(BaseCommand):
             slug="mit-gba-nonogram",
             title="MIT GBA Nonogram Advance",
             description=(
-                "MIT-licensed GBA Nonogram Advance puzzle homebrew by Emma Britton "
-                "(v0.9.5 SRAM). Engineering catalog fixture only. Not a commercial ROM."
+                "Picross-style nonogram puzzles on Game Boy Advance. Select cells to "
+                "reveal the picture; SRAM build preserves progress. MIT homebrew by "
+                "Emma Britton (v0.9.5)."
             ),
             console="gba",
             core={"code": "mgba", "version": CORE_VERSION},
@@ -547,6 +584,10 @@ class Command(BaseCommand):
                 "(https://github.com/emmabritton/gba_nonogram_advance)"
             ),
             genre="Puzzle",
+            compatibility_note=(
+                "Verified Chromium gameplay with mgba / gba controls; save states "
+                "supported. Fixture is the SRAM-capable v0.9.5 build."
+            ),
         )
         results["a2600"] = self._import_files(
             fixtures,
@@ -574,8 +615,9 @@ class Command(BaseCommand):
             slug="mit-a2600-pipes",
             title="MIT Atari 2600 Pipes",
             description=(
-                "MIT-licensed Atari 2600 Pipes (Pipe Dreams-inspired puzzle) by albf. "
-                "Uses SuperChip RAM. Engineering catalog fixture only."
+                "Pipe Dreams–inspired puzzle for Atari 2600: place pipes before water "
+                "flows from start to finish. Joystick moves the cursor; fire places a "
+                "pipe. MIT homebrew by albf (SuperChip RAM)."
             ),
             console="atari-2600",
             core={"code": "stella2014", "version": CORE_VERSION},
@@ -589,6 +631,10 @@ class Command(BaseCommand):
                 "(https://github.com/albf/pipes-2600)"
             ),
             genre="Puzzle",
+            compatibility_note=(
+                "Verified Chromium gameplay with stella2014 / atari2600; save states "
+                "supported. Requires SuperChip (emulated); Harmony-class carts on hardware."
+            ),
         )
         results["pce"] = self._import_files(
             fixtures,
@@ -856,6 +902,7 @@ class Command(BaseCommand):
         provenance: str,
         evidence: str,
         genre: str = "Homebrew",
+        compatibility_note: str = "",
     ) -> dict:
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
@@ -897,6 +944,42 @@ class Command(BaseCommand):
             }
             path = root / "manifest.json"
             path.write_text(json.dumps(manifest))
-            if Game.objects.filter(slug=slug).exists():
-                return {"slug": slug, "status": "already-present"}
-            return import_bundle(path, approve=True, publish_game=True)
+            existing = Game.objects.filter(slug=slug).first()
+            if existing:
+                # Refresh non-identity metadata only. Never invent product approval.
+                changed = []
+                if existing.description != description:
+                    existing.description = description
+                    changed.append("description")
+                if existing.genre != genre:
+                    existing.genre = genre
+                    changed.append("genre")
+                if existing.title != title:
+                    existing.title = title
+                    changed.append("title")
+                if changed:
+                    existing.save(update_fields=[*changed, "updated_at"])
+                release = existing.releases.filter(
+                    console__slug=console, revision=revision
+                ).first()
+                if release and compatibility_note and release.compatibility_note != compatibility_note:
+                    release.compatibility_note = compatibility_note
+                    release.save(update_fields=["compatibility_note"])
+                return {
+                    "slug": slug,
+                    "status": "already-present",
+                    "product_approval_status": existing.product_approval_status,
+                }
+            result = import_bundle(path, approve=True, publish_game=True)
+            # Engineering seed publishes for demo visibility only when the
+            # deployment sets CATALOG_ALLOW_ENGINEERING; product approval stays pending.
+            game = Game.objects.get(slug=slug)
+            if compatibility_note:
+                release = game.releases.filter(
+                    console__slug=console, revision=revision
+                ).first()
+                if release:
+                    release.compatibility_note = compatibility_note
+                    release.save(update_fields=["compatibility_note"])
+            result["product_approval_status"] = game.product_approval_status
+            return result

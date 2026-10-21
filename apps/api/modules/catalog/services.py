@@ -1,5 +1,7 @@
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import transaction
+from django.utils import timezone
 
 from .models import Game, GameRelease
 
@@ -66,6 +68,7 @@ def assert_release_publishable(release):
 
 
 def assert_publishable(game):
+    """Engineering publishability: complete graph + DISTRIBUTION_APPROVED assets."""
     releases = list(game.releases.all())
     if not releases:
         raise ValidationError("Game requires a complete release before publishing.")
@@ -76,7 +79,17 @@ def assert_publishable(game):
         assert_release_publishable(release)
 
 
-def is_public(game):
+def catalog_allows_engineering() -> bool:
+    """Server-side policy only; never read from the request."""
+    return bool(getattr(settings, "CATALOG_ALLOW_ENGINEERING", False))
+
+
+def is_product_approved(game) -> bool:
+    return game.product_approval_status == "approved"
+
+
+def is_engineering_ready(game) -> bool:
+    """ENGINEERING_VERIFIED catalog readiness (published + publishable graph)."""
     if not game.published:
         return False
     try:
@@ -86,8 +99,33 @@ def is_public(game):
         return False
 
 
+def is_public(game):
+    """Backward-compatible alias: engineering-ready (not product-authorized)."""
+    return is_engineering_ready(game)
+
+
+def is_catalog_visible(game) -> bool:
+    """Discovery/download visibility under the active deployment policy.
+
+    Product-approved titles are always visible when engineering-ready.
+    Engineering-only titles are visible only when CATALOG_ALLOW_ENGINEERING is set.
+    """
+    if not is_engineering_ready(game):
+        return False
+    if is_product_approved(game):
+        return True
+    return catalog_allows_engineering()
+
+
+def catalog_scope(game) -> str:
+    if is_product_approved(game):
+        return "public"
+    return "engineering-demo"
+
+
 @transaction.atomic
 def publish(game_id):
+    """Mark engineering catalog readiness. Does NOT grant product approval."""
     game = Game.objects.select_for_update().get(pk=game_id)
     assert_publishable(game)
     game.published = True
@@ -95,7 +133,70 @@ def publish(game_id):
     return game
 
 
+@transaction.atomic
+def approve_for_product(game_id, *, user=None, notes: str = ""):
+    """Human product-owner authorization for production-facing catalogs."""
+    game = Game.objects.select_for_update().get(pk=game_id)
+    assert_publishable(game)
+    if not game.published:
+        raise ValidationError("Publish for engineering first.")
+    game.product_approval_status = "approved"
+    game.product_approved_at = timezone.now()
+    game.product_approved_by = user
+    if notes:
+        game.product_review_notes = notes
+    game.save(
+        update_fields=[
+            "product_approval_status",
+            "product_approved_at",
+            "product_approved_by",
+            "product_review_notes",
+            "updated_at",
+        ]
+    )
+    return game
+
+
+@transaction.atomic
+def reject_product_approval(game_id, *, user=None, notes: str = ""):
+    game = Game.objects.select_for_update().get(pk=game_id)
+    game.product_approval_status = "rejected"
+    game.product_approved_at = timezone.now()
+    game.product_approved_by = user
+    if notes:
+        game.product_review_notes = notes
+    game.save(
+        update_fields=[
+            "product_approval_status",
+            "product_approved_at",
+            "product_approved_by",
+            "product_review_notes",
+            "updated_at",
+        ]
+    )
+    return game
+
+
+@transaction.atomic
+def clear_product_approval(game_id):
+    """Return a title to pending product review (engineering publish unchanged)."""
+    game = Game.objects.select_for_update().get(pk=game_id)
+    game.product_approval_status = "pending"
+    game.product_approved_at = None
+    game.product_approved_by = None
+    game.save(
+        update_fields=[
+            "product_approval_status",
+            "product_approved_at",
+            "product_approved_by",
+            "updated_at",
+        ]
+    )
+    return game
+
+
 def catalog_queryset():
+    """Candidate engineering-published games; callers must still apply visibility."""
     return (
         Game.objects.filter(published=True)
         .prefetch_related(
@@ -119,7 +220,7 @@ def public_release(release_id):
             .prefetch_related("assets__license_evidence")
             .get(pk=release_id)
         )
-        if not is_public(release.game):
+        if not is_catalog_visible(release.game):
             raise Http404
         assert_release_publishable(release)
         return release

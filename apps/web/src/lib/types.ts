@@ -5,7 +5,9 @@ export type Asset=z.infer<typeof assetSchema>;
 export type Manifest=z.infer<typeof manifestSchema>;
 export interface Core {id:string;code:string;version:string;status:string;runtime_type:string;min_capabilities:string[];supported_extensions:string[];licensed_asset_manifest:{path:string;sha256:string;byteSize:number;license:string;source:string}[]}
 export interface Release {id:string;console:{id:string;slug:string;name:string;status:string};region:string;revision:string;recommended_core:Core;status:string;compatibility_note:string}
-export interface Game {id:string;slug:string;title:string;description:string;genre:string;releases:Release[]}
+/** catalog_scope is operational (public vs local engineering-demo), not marketing copy. */
+export interface Game {id:string;slug:string;title:string;description:string;genre:string;catalog_scope?:'public'|'engineering-demo';releases:Release[]}
+export interface ConsoleInfo {id:string;slug:string;name:string;status:string}
 export interface Installation {id:string;game:Game;release:Release;manifest:Manifest;state:'downloaded'|'ready-offline'|'missing';verifiedAt:number;shellVersion:string}
 export type DownloadState='queued'|'checking-space'|'downloading'|'paused'|'verifying'|'verified'|'recoverable-error'|'fatal-error'|'cancelled';
 export interface Download {id:string;asset:Asset;state:DownloadState;bytesVerified:number;chunkSize:number;error?:string;updatedAt:number;speed:number}

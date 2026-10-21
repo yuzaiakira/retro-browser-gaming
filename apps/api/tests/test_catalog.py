@@ -21,7 +21,11 @@ from modules.catalog.models import (
     LicenseEvidence,
     PlatformCategory,
 )
-from modules.catalog.services import publish
+from modules.catalog.services import (
+    approve_for_product,
+    clear_product_approval,
+    publish,
+)
 from modules.catalog.storage import LocalStorage
 
 
@@ -30,8 +34,12 @@ class CatalogTests(TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
+        # Tests mirror the local engineering-demo Compose profile.
         self.settings_override = override_settings(
-            DEBUG=True, STORAGE_BACKEND="local", LOCAL_ASSET_ROOT=self.root / "store"
+            DEBUG=True,
+            STORAGE_BACKEND="local",
+            LOCAL_ASSET_ROOT=self.root / "store",
+            CATALOG_ALLOW_ENGINEERING=True,
         )
         self.settings_override.enable()
         self.addCleanup(self.settings_override.disable)
@@ -41,6 +49,7 @@ class CatalogTests(TestCase):
         self.asset = self.release.assets.get()
         self.url = f"/dev-assets/{self.asset.pk}/"
         self.manifest_url = f"/api/v1/releases/{self.release.pk}/download-manifest/"
+        self.assertEqual(self.game.product_approval_status, "pending")
 
     def test_API_001_search_filter_pagination(self):
         result = self.client.get("/api/v1/games/?search=orbit&console=browser")
@@ -377,3 +386,60 @@ class CatalogTests(TestCase):
     def test_research_consoles_are_not_supported(self):
         self.assertEqual(Console.objects.get(slug="psp").status, "research")
         self.assertEqual(Console.objects.get(slug="ps1").status, "research")
+
+    def test_seed_does_not_product_approve(self):
+        self.assertEqual(self.game.product_approval_status, "pending")
+        self.assertIsNone(self.game.product_approved_at)
+        self.assertTrue(self.game.published)
+
+    def test_engineering_visible_only_when_policy_allows(self):
+        """Engineering-published pending titles hide under production-like policy."""
+        self.assertEqual(self.client.get("/api/v1/games/").json()["count"], 1)
+        with override_settings(CATALOG_ALLOW_ENGINEERING=False):
+            self.assertEqual(self.client.get("/api/v1/games/").json()["count"], 0)
+            for path in (
+                "/api/v1/games/orbit-catch/",
+                self.manifest_url,
+                self.url,
+                f"/api/v1/releases/{self.release.pk}/",
+                f"/api/v1/releases/{self.release.pk}/launch-config/",
+            ):
+                self.assertEqual(self.client.get(path).status_code, 404, path)
+
+    def test_product_approval_unlocks_production_catalog(self):
+        with override_settings(CATALOG_ALLOW_ENGINEERING=False):
+            self.assertEqual(self.client.get("/api/v1/games/").json()["count"], 0)
+            admin = get_user_model().objects.create_superuser(
+                "product-owner", password="sample-test-password-789"
+            )
+            approve_for_product(self.game.pk, user=admin, notes="Orbit HTML5 demo OK")
+            self.game.refresh_from_db()
+            self.assertEqual(self.game.product_approval_status, "approved")
+            listing = self.client.get("/api/v1/games/")
+            self.assertEqual(listing.status_code, 200)
+            self.assertEqual(listing.json()["count"], 1)
+            self.assertEqual(listing.json()["results"][0]["catalog_scope"], "public")
+            self.assertEqual(self.client.get(self.manifest_url).status_code, 200)
+            self.assertEqual(self.client.get(self.url).status_code, 200)
+
+    def test_publish_does_not_grant_product_approval(self):
+        clear_product_approval(self.game.pk)
+        self.game.published = False
+        self.game.save(update_fields=["published", "updated_at"])
+        publish(self.game.pk)
+        self.game.refresh_from_db()
+        self.assertTrue(self.game.published)
+        self.assertEqual(self.game.product_approval_status, "pending")
+
+    def test_genre_filter(self):
+        result = self.client.get("/api/v1/games/?genre=Arcade")
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json()["count"], 1)
+        self.assertEqual(self.client.get("/api/v1/games/?genre=Absent").json()["count"], 0)
+
+    def test_direct_release_id_cannot_bypass_product_policy(self):
+        with override_settings(CATALOG_ALLOW_ENGINEERING=False):
+            self.assertEqual(
+                self.client.get(f"/api/v1/releases/{self.release.pk}/").status_code, 404
+            )
+            self.assertEqual(self.client.get(self.manifest_url).status_code, 404)
