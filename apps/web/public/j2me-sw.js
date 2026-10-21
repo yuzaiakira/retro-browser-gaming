@@ -1,12 +1,17 @@
-/* Dedicated-origin J2ME runtime service worker (atomic, integrity-checked).
- * - Precaches into a staging cache; promotes only after every entry verifies.
- * - Never deletes a working active cache before the replacement is ready.
- * - Does not skipWaiting on install; activate only on ACTIVATE_UPDATE.
- * - Rejects precache URLs outside the approved path allowlist.
+/* Dedicated-origin J2ME runtime service worker.
+ *
+ * Cache promotion is NOT a single CacheStorage transaction. Safety comes from:
+ * - Immutable unique generation names (never reuse the active cache name).
+ * - Write ready marker into the new generation before flipping the active pointer.
+ * - Never delete the last known-good generation until the pointer has moved.
+ * - Staging leftovers are discarded on failure without touching the active pointer.
+ *
+ * ACTIVATE_UPDATE is accepted only from /j2me-install.html clients.
  */
 const META = 'j2me-runtime-meta';
 const ACTIVE_KEY = 'active';
 const READY_MARKER = '__j2me_runtime_ready__';
+const KEEP_PREVIOUS_GENERATIONS = 1;
 
 const PATH_ALLOW = [
   /^\/runtime\/j2me/,
@@ -18,6 +23,11 @@ const PATH_ALLOW = [
 
 function pathAllowed(pathname) {
   return PATH_ALLOW.some((re) => re.test(pathname));
+}
+
+function faultInjectionAllowed() {
+  const host = self.location.hostname;
+  return host === 'localhost' || host.endsWith('.localhost');
 }
 
 async function sha256Hex(buffer) {
@@ -51,28 +61,51 @@ async function activeCacheName() {
   return meta?.cacheName || null;
 }
 
+function newGenerationName(version) {
+  const id =
+    typeof crypto !== 'undefined' && crypto.randomUUID
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  return `j2me-runtime-gen-${version}-${id}`;
+}
+
+function isRuntimeGeneration(key) {
+  return key.startsWith('j2me-runtime-gen-') || /^j2me-runtime-(?!meta$|staging-)/.test(key);
+}
+
+function isStaging(key) {
+  return key.includes('-staging-') || key.startsWith('j2me-runtime-staging-');
+}
+
+async function authorizeInstallClient(source) {
+  if (!source || typeof source !== 'object') return { ok: false, error: 'NO_CLIENT' };
+  // ServiceWorker MessageEvent.source may be a Client or MessagePort.
+  if (typeof source.url !== 'string') return { ok: false, error: 'NOT_A_WINDOW_CLIENT' };
+  let url;
+  try {
+    url = new URL(source.url);
+  } catch {
+    return { ok: false, error: 'BAD_CLIENT_URL' };
+  }
+  if (url.origin !== self.location.origin) return { ok: false, error: 'CROSS_ORIGIN_CLIENT' };
+  if (url.pathname !== '/j2me-install.html') {
+    return { ok: false, error: 'CLIENT_NOT_INSTALL_SURFACE', pathname: url.pathname };
+  }
+  return { ok: true, url: url.href };
+}
+
 self.addEventListener('install', () => {
-  // Stay waiting until install page sends ACTIVATE_UPDATE so active gameplay is undisturbed.
+  // Stay waiting until an authorized install surface sends ACTIVATE_UPDATE.
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     (async () => {
       await self.clients.claim();
-      const active = await activeCacheName();
+      // Do not delete runtime generations here — promotion owns retention.
+      // Only scrub abandoned staging caches.
       const keys = await caches.keys();
-      await Promise.all(
-        keys
-          .filter((key) => {
-            if (key === META) return false;
-            if (!key.startsWith('j2me-runtime-')) return false;
-            if (active && key === active) return false;
-            if (key.includes('-staging-')) return true;
-            // Keep the active cache; drop other completed/orphan runtime caches.
-            return active ? key !== active : false;
-          })
-          .map((key) => caches.delete(key)),
-      );
+      await Promise.all(keys.filter((k) => isStaging(k)).map((k) => caches.delete(k)));
     })(),
   );
 });
@@ -80,7 +113,21 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('message', (event) => {
   const data = event.data;
   if (data === 'ACTIVATE_UPDATE' || data?.type === 'ACTIVATE_UPDATE') {
-    event.waitUntil(self.skipWaiting());
+    event.waitUntil(
+      (async () => {
+        const auth = await authorizeInstallClient(event.source);
+        if (!auth.ok) {
+          event.source?.postMessage({
+            type: 'ACTIVATE_DENIED',
+            error: auth.error,
+            pathname: auth.pathname || null,
+          });
+          return;
+        }
+        await self.skipWaiting();
+        event.source?.postMessage({ type: 'ACTIVATE_ACCEPTED' });
+      })(),
+    );
     return;
   }
   if (!data || typeof data !== 'object') return;
@@ -95,12 +142,15 @@ self.addEventListener('message', (event) => {
         const active = await activeCacheName();
         const cache = active ? await caches.open(active) : null;
         const keys = cache ? await cache.keys() : [];
+        const all = await caches.keys();
         event.source?.postMessage({
           type: 'CACHE_STATUS_RESULT',
           version: active,
+          cacheName: active,
           count: keys.filter((r) => !String(r.url).includes(READY_MARKER)).length,
           urls: keys.map((r) => r.url),
           ready: !!(await cache?.match(READY_MARKER)),
+          generations: all.filter((k) => isRuntimeGeneration(k) && !isStaging(k)),
         });
       })(),
     );
@@ -118,6 +168,9 @@ self.addEventListener('message', (event) => {
 async function runPrecache(event, data) {
   const entries = Array.isArray(data.entries) ? data.entries : [];
   const version = String(data.version || 'j2me-runtime').replace(/[^a-zA-Z0-9._-]/g, '');
+  const fault =
+    faultInjectionAllowed() && typeof data.fault === 'string' ? data.fault : null;
+
   if (!entries.length) {
     event.source?.postMessage({
       type: 'PRECACHE_DONE',
@@ -135,8 +188,10 @@ async function runPrecache(event, data) {
     return;
   }
 
+  const previous = await activeCacheName();
   const stagingName = `j2me-runtime-staging-${version}-${Date.now()}`;
-  const finalName = `j2me-runtime-${version}`;
+  // Unique generation — never equal to previous active name.
+  const generationName = newGenerationName(version);
   const staging = await caches.open(stagingName);
   const results = [];
 
@@ -205,60 +260,114 @@ async function runPrecache(event, data) {
         type: 'PRECACHE_DONE',
         ok: false,
         error: 'J2ME_PRECACHE_FAILED',
-        version: finalName,
+        version: generationName,
+        previous,
         results,
       });
       return;
     }
 
-    // Promote staging → final without deleting the previous active first.
-    await caches.delete(finalName);
-    const finalCache = await caches.open(finalName);
+    // Copy staging → new immutable generation (does not touch previous active).
+    const generation = await caches.open(generationName);
     const staged = await staging.keys();
+    let copied = 0;
     for (const req of staged) {
+      if (fault === 'quota-during-copy' && copied >= 1) {
+        const err = new Error('QuotaExceededError');
+        err.name = 'QuotaExceededError';
+        throw err;
+      }
       const res = await staging.match(req);
-      if (res) await finalCache.put(req, res);
+      if (res) await generation.put(req, res);
+      copied += 1;
     }
-    await finalCache.put(
+
+    if (fault === 'crash-before-ready') {
+      throw new Error('FAULT_CRASH_BEFORE_READY');
+    }
+
+    await generation.put(
       READY_MARKER,
       new Response(
         JSON.stringify({
-          version: finalName,
+          version: generationName,
+          manifestVersion: version,
           count: results.length,
           at: Date.now(),
+          previous,
         }),
         { headers: { 'content-type': 'application/json' } },
       ),
     );
+
+    // Verify generation completeness before pointer switch.
+    for (const entry of entries) {
+      const absolute = new URL(String(entry.url), self.location.origin).href;
+      if (!(await generation.match(absolute))) {
+        throw new Error('GENERATION_INCOMPLETE');
+      }
+    }
+
+    if (fault === 'crash-before-meta') {
+      throw new Error('FAULT_CRASH_BEFORE_META');
+    }
+
+    // Pointer switch — only after ready marker + verification.
+    await metaPut(ACTIVE_KEY, {
+      cacheName: generationName,
+      manifestVersion: version,
+      at: Date.now(),
+      count: results.length,
+      previous,
+    });
+
     await caches.delete(stagingName);
 
-    const previous = await activeCacheName();
-    await metaPut(ACTIVE_KEY, { cacheName: finalName, at: Date.now(), count: results.length });
-
-    // Only now drop the previous active (and leftover staging).
-    if (previous && previous !== finalName) {
-      await caches.delete(previous);
-    }
-    const keys = await caches.keys();
-    await Promise.all(
-      keys.filter((k) => k.startsWith('j2me-runtime-staging-')).map((k) => caches.delete(k)),
-    );
+    // Retain previous known-good briefly, then drop older generations.
+    await pruneOldGenerations(generationName, previous);
 
     event.source?.postMessage({
       type: 'PRECACHE_DONE',
       ok: true,
-      version: finalName,
+      version: generationName,
+      previous,
       results,
     });
   } catch (error) {
     await caches.delete(stagingName);
+    // Incomplete generation must not become active; delete the orphan generation
+    // only if the active pointer still points at previous (safe).
+    const stillActive = await activeCacheName();
+    if (stillActive !== generationName) {
+      await caches.delete(generationName);
+    }
     event.source?.postMessage({
       type: 'PRECACHE_DONE',
       ok: false,
-      error: String(error?.message || error),
+      error: String(error?.name === 'QuotaExceededError' ? 'QuotaExceededError' : error?.message || error),
+      previous: stillActive,
+      attempted: generationName,
       results,
     });
   }
+}
+
+async function pruneOldGenerations(activeName, previousName) {
+  const keys = await caches.keys();
+  const keep = new Set([activeName]);
+  if (previousName && KEEP_PREVIOUS_GENERATIONS > 0) keep.add(previousName);
+  await Promise.all(
+    keys
+      .filter((k) => {
+        if (k === META) return false;
+        if (isStaging(k)) return true;
+        if (!isRuntimeGeneration(k) && !k.startsWith('j2me-runtime-')) return false;
+        if (keep.has(k)) return false;
+        // Drop legacy non-gen names and surplus generations.
+        return true;
+      })
+      .map((k) => caches.delete(k)),
+  );
 }
 
 async function verifyActiveCache(entries) {
@@ -289,8 +398,6 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   const url = new URL(req.url);
   if (req.method !== 'GET' || url.origin !== self.location.origin) return;
-  if (!pathAllowed(url.pathname) && !url.pathname.startsWith('/runtime/')) return;
-  // Only serve allowlisted runtime paths from cache.
   if (!pathAllowed(url.pathname)) return;
 
   event.respondWith(

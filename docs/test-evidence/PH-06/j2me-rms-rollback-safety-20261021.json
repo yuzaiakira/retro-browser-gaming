@@ -1,6 +1,6 @@
 {
-  "at": "2026-10-21T08:46:26.705Z",
-  "j2meOrigin": "http://j2me.localhost:45277",
+  "at": "2026-10-21T15:57:25.527Z",
+  "j2meOrigin": "http://j2me.localhost:39539",
   "assertions": {
     "staleLauncherKeptDedicated": true,
     "dedicatedScorePreserved": true,

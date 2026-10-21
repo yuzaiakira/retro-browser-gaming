@@ -23,11 +23,12 @@ Cutover flag: `NEXT_PUBLIC_J2ME_DEDICATED_ORIGIN=true` (Compose default after PH
 | `parentOrigin` ≠ frame origin | Init validation | Application |
 | CSP j2me host | `unsafe-eval` for js2me; `frame-ancestors` launcher only | Browser |
 | CORP | `cross-origin` on j2me assets (launcher COEP) | Browser |
-| Offline runtime | `j2me-sw.js` atomic staging → promote; SHA-256 + byteSize | Browser SW |
+| Offline runtime | Unique generation caches + active pointer; SHA-256 + byteSize | Browser SW |
 | Precache allowlist | Path regex only (`/runtime/j2me*`, `/cores/js2me/`, install) | Application |
-| SW activation | `ACTIVATE_UPDATE` from install surface only (no mid-game skipWaiting) | Application |
-| RMS migration | Narrow payload; **prefer-newer** merge; source retained | Application |
+| SW activation | `ACTIVATE_UPDATE` only if client URL is `/j2me-install.html` | Application |
+| RMS migration | Narrow payload; **prefer-newer** merge; conflicts preserved | Application |
 | RMS rollback | Export dedicated suites → launcher merge (never clobber newer) | Application |
+| Local HTTPS | OpenSSL dev CA + TLS proxy (`scripts/dev-https-edge-proxy.mjs`) | LOCAL_HTTPS_VERIFIED |
 
 **Authentic offline evidence:** `PH-06/catalog-j2me-dedicated-offline-20261021.md` (+ reliability re-run). Integrity/recovery: `j2me-sw-integrity-20261021.json`, `j2me-cache-recovery-20261021.json`, `j2me-rms-rollback-safety-20261021.json`.
 
@@ -39,6 +40,16 @@ Cutover flag: `NEXT_PUBLIC_J2ME_DEDICATED_ORIGIN=true` (Compose default after PH
 - Excludes `/j2me-sw.js` (browser-managed). Core `js2me/` assets come from release `licensed_asset_manifest` digests.
 - Launcher loads the manifest **same-origin** (CSP `connect-src 'self'`), then posts J2ME-origin URLs + digests to the install iframe.
 - HTTP 200 alone is never treated as integrity proof.
+
+## Cache promotion semantics (not a single CacheStorage transaction)
+
+1. Fetch + verify into a **staging** cache.
+2. Copy into a **new unique** `j2me-runtime-gen-<version>-<uuid>` cache (never reuse the active name).
+3. Write the ready marker and re-check entries.
+4. Flip the active **pointer** in `j2me-runtime-meta`.
+5. Only then prune older generations (retains previous known-good briefly).
+
+Faults before step 4 leave the prior active pointer unchanged. Localhost-only `fault` hooks exist for deterministic tests.
 
 ## Rollback
 
@@ -71,4 +82,11 @@ Open `http://launcher.localhost:13000/` (not raw `127.0.0.1`) so the dedicated h
 
 Terminate TLS at a reverse proxy with certificates for `app.example` and `j2me.app.example` (or equivalent). Keep host-only cookies on the launcher host; never set `Domain=.example` cookies that the J2ME host can read. Preserve COOP/COEP; serve j2me assets with `Cross-Origin-Resource-Policy: cross-origin`. Service Workers and secure contexts require HTTPS (or localhost).
 
-**Verification status:** HTTPS staging with real certificates is **NOT_VERIFIED** in this repository session. Localhost HTTP Host-routing does not prove production TLS behavior.
+**Verification status:**
+
+| Label | Status |
+| --- | --- |
+| LOCAL_HTTPS_VERIFIED | PASSED — OpenSSL local CA, NSS import, TLS proxy → Compose edge (`PH-06/j2me-local-https-20261021.json`) |
+| PRODUCTION_STAGING_VERIFIED | NOT — requires ops-managed certs and staging network |
+
+Prerequisites for production staging: dual-host certificates, `LAUNCHER_FRAME_ANCESTORS` including `https://` launcher origins, host-only cookies, unchanged COOP/COEP/CORP.

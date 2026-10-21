@@ -49,9 +49,30 @@
         const registration = await navigator.serviceWorker.register('/j2me-sw.js', { scope: '/' });
         await navigator.serviceWorker.ready;
 
+        async function activateWaiting(worker) {
+          if (!worker) return;
+          await new Promise((resolve, reject) => {
+            const t = setTimeout(() => reject(new Error('J2ME_ACTIVATE_TIMEOUT')), 15000);
+            const onMsg = (e) => {
+              if (e.data?.type === 'ACTIVATE_ACCEPTED') {
+                clearTimeout(t);
+                navigator.serviceWorker.removeEventListener('message', onMsg);
+                resolve();
+              }
+              if (e.data?.type === 'ACTIVATE_DENIED') {
+                clearTimeout(t);
+                navigator.serviceWorker.removeEventListener('message', onMsg);
+                reject(new Error(e.data.error || 'J2ME_ACTIVATE_DENIED'));
+              }
+            };
+            navigator.serviceWorker.addEventListener('message', onMsg);
+            worker.postMessage({ type: 'ACTIVATE_UPDATE' });
+          });
+        }
+
         // Activate waiting worker only from this install surface (not mid-gameplay).
         if (registration.waiting) {
-          registration.waiting.postMessage({ type: 'ACTIVATE_UPDATE' });
+          await activateWaiting(registration.waiting);
         }
         if (!navigator.serviceWorker.controller) {
           await new Promise((resolve, reject) => {
@@ -91,13 +112,14 @@
                 status.textContent = 'Precache failed';
                 return;
               }
-              // Activate after successful atomic promote (safe: install iframe only).
-              registration.waiting?.postMessage({ type: 'ACTIVATE_UPDATE' });
+              // Activate waiting worker only from install surface after successful promote.
+              activateWaiting(registration.waiting).catch(() => {});
               reply({
                 type: 'ready',
                 version: e.data.version,
                 count: e.data.results.length,
                 origin: location.origin,
+                previous: e.data.previous || null,
               });
               status.textContent = 'J2ME runtime ready';
             };

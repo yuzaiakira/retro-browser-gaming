@@ -19,8 +19,12 @@ function launcherOrigins(): string[] {
   return [
     `http://${LAUNCHER_HOST}:*`,
     `http://${LAUNCHER_HOST}`,
+    `https://${LAUNCHER_HOST}:*`,
+    `https://${LAUNCHER_HOST}`,
     'http://localhost:*',
+    'https://localhost:*',
     'http://127.0.0.1:*',
+    'https://127.0.0.1:*',
   ];
 }
 

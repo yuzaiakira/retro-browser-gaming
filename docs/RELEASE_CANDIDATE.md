@@ -21,7 +21,9 @@ Local HEAD includes Android physical PH-08 (through AUD-001) and commits through
 | Genesis / SMS / GG / SG-1000 / NES / SNES / GB / GBC / GBA / Atari 2600 / 7800 / Lynx / PCE HuCard / WonderSwan / NGP / NGPC / MS-DOS / PS1 / PSP gameplay + catalog offline | PASSED (scoped) | `PH-05` |
 | J2ME MIT Dot/Paddle/Notes dedicated-origin catalog offline (real SW, no mocks) | PASSED (first-party subset) | `PH-06/catalog-j2me-dedicated-offline-20261021.md`, `docs/j2me-security-architecture.md`, `docs/j2me-compatibility.md` |
 | J2ME SW atomic integrity + cache recovery + RMS prefer-newer rollback | PASSED (automated) | `PH-06/j2me-sw-integrity-20261021.json`, `j2me-cache-recovery-20261021.json`, `j2me-rms-rollback-safety-20261021.json` |
-| HTTPS production / staging certificates for dual-host cutover | NOT_VERIFIED | No staging cert environment this session |
+| J2ME SW unique-generation promotion faults + ACTIVATE_UPDATE auth | PASSED (automated) | `PH-06/j2me-sw-promotion-faults-20261021.json` |
+| Local trusted HTTPS dual-host (OpenSSL CA + NSS) | LOCAL_HTTPS_VERIFIED | `PH-06/j2me-local-https-20261021.json` — **not** PRODUCTION_STAGING_VERIFIED |
+| HTTPS production / staging certificates for dual-host cutover | NOT_VERIFIED | External staging still required |
 | Automated acceptance gates | PASSED | `PH-07` |
 | Android Chrome physical (touch, FS, OR, offline reverse-removed) | PASSED | `PH-08/android-*` |
 | AUD-001 human-heard Genesis on phone | PASSED | `PH-08/aud001-human-listen-20261020.md` |
