@@ -71,6 +71,17 @@ const PLATFORMS = {
     inputProfile: 'start-only-move',
     moveAxes: 'vertical',
   },
+  n64: {
+    label: 'N64',
+    core: 'mupen64plus_next',
+    fixture: 'mit-n64-controller-test.z64',
+    scheme: 'n64',
+    pass: 'N64_GAMEPLAY_PASS',
+    screenshot: 'n64-gameplay.png',
+    // EmulatorJS n64 scheme: A=0 B=1 Start=3; stick axes 16–19 use ±0x7fff.
+    inputProfile: 'n64-stick',
+    bootWaitMs: 5000,
+  },
   pce: {
     label: 'PCE',
     core: 'mednafen_pce',
@@ -158,6 +169,9 @@ const types = {
   '.a52': 'application/octet-stream',
   '.vb': 'application/octet-stream',
   '.vboy': 'application/octet-stream',
+  '.z64': 'application/octet-stream',
+  '.n64': 'application/octet-stream',
+  '.v64': 'application/octet-stream',
   '.pce': 'application/octet-stream',
   '.sg': 'application/octet-stream',
   '.ws': 'application/octet-stream',
@@ -288,7 +302,7 @@ async function run() {
     if (!result.capabilities?.saveState) {
       throw new Error(`${cfg.label} core did not expose save state capability`);
     }
-    await page.waitForTimeout(2500);
+    await page.waitForTimeout(cfg.bootWaitMs || 2500);
     if (!process.env.SKIP_OFFLINE) await page.context().setOffline(true);
 
     const probe = await page.evaluate(() => window.probe());
@@ -302,7 +316,15 @@ async function run() {
     if (lit < 100) throw new Error(`${cfg.label} canvas almost black after boot (${lit} lit pixels)`);
     const bootHash = sampleHash(bootPng);
 
-    if (cfg.inputProfile === 'start-move' || cfg.inputProfile === 'start-only-move') {
+    if (cfg.inputProfile === 'n64-stick') {
+      // Start + A (n64 A is button 0), then analog stick L/R.
+      for (const cmd of [3, 0]) {
+        await page.evaluate((c) => window.input(c, 1), cmd);
+        await page.waitForTimeout(250);
+        await page.evaluate((c) => window.input(c, 0), cmd);
+        await page.waitForTimeout(400);
+      }
+    } else if (cfg.inputProfile === 'start-move' || cfg.inputProfile === 'start-only-move') {
       const bootCmds = cfg.inputProfile === 'start-only-move' ? [3] : [3, 8];
       for (const cmd of bootCmds) {
         await page.evaluate((c) => window.input(c, 1), cmd);
@@ -334,26 +356,43 @@ async function run() {
     if (beforeLit < 100) throw new Error(`${cfg.label} canvas went black after menu input`);
     const menuDelta = frameDelta(bootPng, beforePng);
 
-    const axis =
-      cfg.moveAxes === 'vertical'
-        ? [4, 5]
-        : cfg.moveAxes === 'horizontal'
-          ? [6, 7]
-          : [6, 7];
-    for (let i = 0; i < 12; i++) {
-      await page.evaluate((c) => window.input(c, 1), axis[0]);
-      await page.waitForTimeout(60);
-      await page.evaluate((c) => window.input(c, 0), axis[0]);
-      await page.evaluate((c) => window.input(c, 1), axis[1]);
-      await page.waitForTimeout(60);
-      await page.evaluate((c) => window.input(c, 0), axis[1]);
-      if (
-        cfg.inputProfile !== 'start-move' &&
-        cfg.inputProfile !== 'start-only-move'
-      ) {
-        await page.evaluate(() => window.input(8, 1));
+    if (cfg.inputProfile === 'n64-stick') {
+      for (let i = 0; i < 12; i++) {
+        await page.evaluate(() => window.input(16, 0x7fff));
+        await page.waitForTimeout(80);
+        await page.evaluate(() => window.input(16, 0));
+        await page.evaluate(() => window.input(17, 0x7fff));
+        await page.waitForTimeout(80);
+        await page.evaluate(() => window.input(17, 0));
+        await page.evaluate(() => window.input(4, 1));
         await page.waitForTimeout(60);
-        await page.evaluate(() => window.input(8, 0));
+        await page.evaluate(() => window.input(4, 0));
+        await page.evaluate(() => window.input(5, 1));
+        await page.waitForTimeout(60);
+        await page.evaluate(() => window.input(5, 0));
+      }
+    } else {
+      const axis =
+        cfg.moveAxes === 'vertical'
+          ? [4, 5]
+          : cfg.moveAxes === 'horizontal'
+            ? [6, 7]
+            : [6, 7];
+      for (let i = 0; i < 12; i++) {
+        await page.evaluate((c) => window.input(c, 1), axis[0]);
+        await page.waitForTimeout(60);
+        await page.evaluate((c) => window.input(c, 0), axis[0]);
+        await page.evaluate((c) => window.input(c, 1), axis[1]);
+        await page.waitForTimeout(60);
+        await page.evaluate((c) => window.input(c, 0), axis[1]);
+        if (
+          cfg.inputProfile !== 'start-move' &&
+          cfg.inputProfile !== 'start-only-move'
+        ) {
+          await page.evaluate(() => window.input(8, 1));
+          await page.waitForTimeout(60);
+          await page.evaluate(() => window.input(8, 0));
+        }
       }
     }
     await page.waitForTimeout(300);

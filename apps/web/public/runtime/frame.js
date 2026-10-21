@@ -16,7 +16,15 @@ function preferSeekable(file, companions, core) {
   // Multi-file discs always use seekable VFS. A few EmulatorJS cores
   // only work reliably via blob URLs (input and/or ZIP mount for DOS).
   if (
-    ['prosystem', 'handy', 'mednafen_ngp', 'dosbox_pure', 'a5200', 'beetle_vb'].includes(core)
+    [
+      'prosystem',
+      'handy',
+      'mednafen_ngp',
+      'dosbox_pure',
+      'a5200',
+      'beetle_vb',
+      'mupen64plus_next',
+    ].includes(core)
   ) {
     return false;
   }
@@ -71,6 +79,7 @@ addEventListener('message', async (event) => {
       stella2014: 'atari2600',
       a5200: 'atari5200',
       beetle_vb: 'vb',
+      mupen64plus_next: 'n64',
       mednafen_pce: 'pce',
       mednafen_wswan: 'ws',
       prosystem: 'atari7800',
@@ -123,7 +132,10 @@ addEventListener('message', async (event) => {
         capabilities: {
           saveState: !!gm.functions.supportsStates(),
           audio: true,
-          analog: d.core === 'ppsspp' || d.core === 'pcsx_rearmed',
+          analog:
+            d.core === 'ppsspp' ||
+            d.core === 'pcsx_rearmed' ||
+            d.core === 'mupen64plus_next',
           seekableMedia: !!seekableBridge,
           onDemandMedia: !!(seekable && seekable.onDemand),
         },
