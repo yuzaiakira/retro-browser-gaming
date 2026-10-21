@@ -6,12 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
   <link rel="stylesheet" href="/runtime/frame.css" />
   <style>
+    :root { --j2me-w: 240px; --j2me-h: 320px; }
     html, body { width: 100%; height: 100%; margin: 0; background: #0a0c10; color: #c8d0d8; overflow: hidden; }
-    #frame { display: flex; flex-direction: column; align-items: center; height: 100%; }
+    #frame { display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: center; }
+    body.phone-frame #frame {
+      background: linear-gradient(160deg, #2a3038, #12151a);
+      border-radius: 28px; padding: 18px 14px 10px; max-width: min(100%, 360px);
+      box-shadow: inset 0 0 0 2px #3a4450, 0 12px 40px rgba(0,0,0,.45);
+    }
+    body.j2me-fullscreen #keypad { display: none; }
+    body.j2me-fullscreen #top { display: none; }
     #top { height: 24px; font: 12px/24px monospace; text-align: center; width: 100%; }
     #screen {
-      width: 240px; height: 320px; background: #000; flex: 0 0 auto;
+      width: var(--j2me-w); height: var(--j2me-h); background: #000; flex: 0 0 auto;
       image-rendering: pixelated; position: relative; overflow: hidden;
+      border: 2px solid #1c242c;
     }
     #screen canvas { display: block; width: 100%; height: 100%; }
     #keypad {
@@ -22,6 +31,7 @@
       height: 40px; border: 1px solid #3a4654; background: #1a222c; color: #e8eef4;
       font: 14px monospace; border-radius: 4px; touch-action: manipulation;
     }
+    #keypad button.softkey { background: #243040; }
     #keypad button:active { background: #2a3644; }
     #alert {
       position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
@@ -60,6 +70,7 @@
   <script src="/cores/js2me/js/utils.js"></script>
   <script src="/cores/js2me/js/threads.js"></script>
   <script src="/runtime/j2me-rms-idb.js"></script>
+  <script src="/runtime/j2me-secure.js"></script>
   <script src="/runtime/j2me-frame.js"></script>
 </head>
 <body>
@@ -67,9 +78,9 @@
     <div id="top"><div id="title">J2ME</div></div>
     <div id="screen"></div>
     <div id="keypad" aria-label="Numeric keypad">
-      <button type="button" id="choice" class="softkey" data-key="-6">LSK</button>
+      <button type="button" id="choice" class="softkey">LSK</button>
       <button type="button" id="ok" data-key="-5">OK</button>
-      <button type="button" id="back" class="softkey" data-key="-7">RSK</button>
+      <button type="button" id="back" class="softkey">RSK</button>
       <button type="button" data-key="49">1</button>
       <button type="button" data-key="50">2</button>
       <button type="button" data-key="51">3</button>

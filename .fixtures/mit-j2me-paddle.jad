@@ -1,0 +1,8 @@
+MIDlet-Name: MIT J2ME Paddle
+MIDlet-Version: 1.0.0
+MIDlet-Vendor: Retro Browser Gaming
+MIDlet-1: MIT J2ME Paddle, , retro.j2me.paddle.PaddleMIDlet
+MIDlet-Jar-URL: mit-j2me-paddle.jar
+MIDlet-Jar-Size: 3536
+MicroEdition-Configuration: CLDC-1.1
+MicroEdition-Profile: MIDP-2.0

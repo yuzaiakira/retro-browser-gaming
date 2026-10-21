@@ -1,0 +1,8 @@
+MIDlet-Name: MIT J2ME Notes
+MIDlet-Version: 1.0.0
+MIDlet-Vendor: Retro Browser Gaming
+MIDlet-1: MIT J2ME Notes, , retro.j2me.notes.NotesMIDlet
+MIDlet-Jar-URL: mit-j2me-notes.jar
+MIDlet-Jar-Size: 2606
+MicroEdition-Configuration: CLDC-1.1
+MicroEdition-Profile: MIDP-2.0

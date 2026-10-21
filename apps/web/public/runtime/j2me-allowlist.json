@@ -1,0 +1,8 @@
+{
+  "description": "SHA-256 allowlist for JARs permitted when allowUntrusted is false (default).",
+  "sha256": [
+    "63afd7fa5a851eec7e64ea25e49d36a5239a8c935cbb80600851c10fed2a50e2",
+    "51c0c9d9f9ae89520a9bcb9c74207f8d0eb7541a907c9996237993780998a5a8",
+    "cbefc73227873438c5558768417e16037717f5008705f1272c2733430ef87370"
+  ]
+}

@@ -563,6 +563,40 @@ class Command(BaseCommand):
             provenance="fixtures/j2me-dot/ (first-party)",
             evidence="fixtures/j2me-dot/; PH-06/j2me-dot-gameplay-20261021.md",
         )
+        results["j2me-paddle"] = self._import_files(
+            fixtures,
+            slug="mit-j2me-paddle",
+            title="MIT J2ME Paddle",
+            description=(
+                "First-party MIT Canvas paddle arcade MIDlet; high score via RMS. "
+                "Engineering fixture — not a commercial JAR."
+            ),
+            console="j2me",
+            core={"code": "js2me", "version": "js2me-szymor"},
+            revision="fixture-1",
+            entry="mit-j2me-paddle.jar",
+            files=[("mit-j2me-paddle.jar", "rom", "application/java-archive")],
+            license_ref="MIT; LICENSES/j2me-dot-MIT.txt",
+            provenance="fixtures/j2me-paddle/ (first-party)",
+            evidence="fixtures/j2me-paddle/; PH-06/j2me-multi-20261021.md",
+        )
+        results["j2me-notes"] = self._import_files(
+            fixtures,
+            slug="mit-j2me-notes",
+            title="MIT J2ME Notes",
+            description=(
+                "First-party MIT Form/TextField Notes MIDlet; note body via RMS. "
+                "Engineering fixture — not a commercial JAR."
+            ),
+            console="j2me",
+            core={"code": "js2me", "version": "js2me-szymor"},
+            revision="fixture-1",
+            entry="mit-j2me-notes.jar",
+            files=[("mit-j2me-notes.jar", "rom", "application/java-archive")],
+            license_ref="MIT; LICENSES/j2me-dot-MIT.txt",
+            provenance="fixtures/j2me-notes/ (first-party)",
+            evidence="fixtures/j2me-notes/; PH-06/j2me-multi-20261021.md",
+        )
         results["ps1"] = self._import_files(
             fixtures,
             slug="mit-ps1-dot",

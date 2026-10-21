@@ -19,7 +19,7 @@ Local HEAD includes Android physical PH-08 (through AUD-001) and commits through
 | Downloads / DL-013 scoped | PASSED | `PH-03` |
 | Offline PWA + OFF-004 wasm eviction | PASSED | `PH-02` |
 | Genesis / SMS / GG / SG-1000 / NES / SNES / GB / GBC / GBA / Atari 2600 / 7800 / Lynx / PCE HuCard / WonderSwan / NGP / NGPC / MS-DOS / PS1 / PSP gameplay + catalog offline | PASSED (scoped) | `PH-05` |
-| J2ME MIT Dot + js2me + offline RMS | PASSED (first-party subset) | `PH-06/j2me-dot-gameplay-20261021.md` |
+| J2ME MIT Dot/Paddle/Notes + js2me + offline RMS + security allowlist | PASSED (first-party subset) | `PH-06/j2me-dot-gameplay-20261021.md`, `j2me-multi-20261021.md`, `j2me-security-20261021.md`, `docs/j2me-compatibility.md` |
 | Automated acceptance gates | PASSED | `PH-07` |
 | Android Chrome physical (touch, FS, OR, offline reverse-removed) | PASSED | `PH-08/android-*` |
 | AUD-001 human-heard Genesis on phone | PASSED | `PH-08/aud001-human-listen-20261020.md` |
@@ -46,5 +46,5 @@ Independent expansion work may proceed without waiting for gamepad/iOS:
 
 1. **P0 software Sega gaps closed** (SMS/GG); physical gamepad/iOS still block complete P0.
 2. **P1:** Nintendo set + Atari 2600/7800 + Lynx + PCE HuCard + SG-1000 + WonderSwan + NGP/NGPC + MS-DOS (`jsdos`) verified (`PH-05/*`).
-3. **P1 research:** EmulatorJS `dosbox_pure` still blocked on 4.2.3; broader J2ME titles beyond MIT Dot remain unchecked (`PH-06/j2me-dot-gameplay-20261021.md`).
+3. **P1 research:** EmulatorJS `dosbox_pure` still blocked on 4.2.3; J2ME commercial titles remain unchecked — only allowlisted first-party MIDlets (`docs/j2me-compatibility.md`).
 4. Higher roadmap items (PCE CD, etc.) remain unchecked until evidenced.

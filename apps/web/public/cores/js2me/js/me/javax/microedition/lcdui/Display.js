@@ -9,7 +9,10 @@ js2me.createClass({
 			midlet.display.element = element;
 			this.choiceButton = document.getElementById('choice');
 			this.backButton = document.getElementById('back');
-			this.choiceButton.addEventListener('mousedown', function () {
+			function onChoice(event) {
+				if (event) {
+					event.preventDefault();
+				}
 				var displayable = midlet.display.current;
 				function getItem(i) {
 					var item = document.createElement('div');
@@ -34,13 +37,20 @@ js2me.createClass({
 						}
 					}
 				}
-			});
-			this.backButton.addEventListener('mousedown', function () {
+			}
+			this.choiceButton.addEventListener('mousedown', onChoice);
+			this.choiceButton.addEventListener('pointerdown', onChoice);
+			function onBack(event) {
+				if (event) {
+					event.preventDefault();
+				}
 				var displayable = midlet.display.current;
 				if (displayable && displayable.backCommands.length == 1 && displayable.commandListener) {
 					displayable.commandListener.$commandAction$Ljavax_microedition_lcdui_Command_Ljavax_microedition_lcdui_Displayable_$V(displayable.backCommands[0], displayable);
 				}
-			});
+			}
+			this.backButton.addEventListener('mousedown', onBack);
+			this.backButton.addEventListener('pointerdown', onBack);
 		}
 		return midlet.display;
 	},
