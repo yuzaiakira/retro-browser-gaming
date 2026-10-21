@@ -1,0 +1,11 @@
+# Copy to compose.override.yaml (gitignored) when host :3000/:8000 are occupied.
+# Browsers must use Host names launcher.localhost / j2me.localhost on the edge port.
+services:
+  api:
+    ports: !override
+      - "127.0.0.1:18000:8000"
+  web:
+    ports: !override []
+  edge:
+    ports: !override
+      - "127.0.0.1:13000:80"

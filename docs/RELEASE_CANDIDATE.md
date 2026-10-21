@@ -19,7 +19,7 @@ Local HEAD includes Android physical PH-08 (through AUD-001) and commits through
 | Downloads / DL-013 scoped | PASSED | `PH-03` |
 | Offline PWA + OFF-004 wasm eviction | PASSED | `PH-02` |
 | Genesis / SMS / GG / SG-1000 / NES / SNES / GB / GBC / GBA / Atari 2600 / 7800 / Lynx / PCE HuCard / WonderSwan / NGP / NGPC / MS-DOS / PS1 / PSP gameplay + catalog offline | PASSED (scoped) | `PH-05` |
-| J2ME MIT Dot/Paddle/Notes catalog offline + security + dedicated-origin PoC (not switched) | PASSED (first-party subset) | `PH-06/catalog-j2me-offline-20261021.md`, `j2me-isolated-origin-poc-20261021.md`, `j2me-security-20261021.md`, `docs/j2me-compatibility.md`, `docs/j2me-security-architecture.md` |
+| J2ME MIT Dot/Paddle/Notes dedicated-origin catalog offline (real SW, no mocks) | PASSED (first-party subset) | `PH-06/catalog-j2me-dedicated-offline-20261021.md`, `docs/j2me-security-architecture.md`, `docs/j2me-compatibility.md` |
 | Automated acceptance gates | PASSED | `PH-07` |
 | Android Chrome physical (touch, FS, OR, offline reverse-removed) | PASSED | `PH-08/android-*` |
 | AUD-001 human-heard Genesis on phone | PASSED | `PH-08/aud001-human-listen-20261020.md` |

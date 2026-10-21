@@ -1,0 +1,47 @@
+{
+  "mockedAssets": false,
+  "routeFulfill": false,
+  "dotInstall": true,
+  "dotState": {
+    "score": 4
+  },
+  "dotJ2meSw": {
+    "controlled": true,
+    "scope": "http://j2me.localhost:13000/"
+  },
+  "dotIsolation": {
+    "origin": "http://j2me.localhost:13000",
+    "parentDom": "blocked:SecurityError",
+    "cookie": ""
+  },
+  "paddleInstall": true,
+  "paddleState": {
+    "high": 2
+  },
+  "paddleJ2meSw": {
+    "controlled": true,
+    "scope": "http://j2me.localhost:13000/"
+  },
+  "paddleIsolation": {
+    "origin": "http://j2me.localhost:13000",
+    "parentDom": "blocked:SecurityError",
+    "cookie": ""
+  },
+  "notesInstall": true,
+  "notesState": {
+    "note": "dedicated-offline-note"
+  },
+  "notesJ2meSw": {
+    "controlled": true,
+    "scope": "http://j2me.localhost:13000/"
+  },
+  "notesIsolation": {
+    "origin": "http://j2me.localhost:13000",
+    "parentDom": "blocked:SecurityError",
+    "cookie": ""
+  },
+  "originServicesStopped": true,
+  "dotOffline": true,
+  "paddleOffline": true,
+  "notesOffline": true
+}

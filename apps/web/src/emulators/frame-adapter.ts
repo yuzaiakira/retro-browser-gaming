@@ -1,16 +1,218 @@
-import type {EmulatorAdapter,RuntimeCapabilities} from './contracts';
+import type { EmulatorAdapter, RuntimeCapabilities } from './contracts';
+import {
+  J2ME_FRAME_PATH,
+  j2meDedicatedEnabled,
+  j2meRuntimeOrigin,
+  launcherOrigin,
+} from './j2me-origin';
+
+type Pending = {
+  resolve: (v: unknown) => void;
+  reject: (e: Error) => void;
+  timer: ReturnType<typeof setTimeout>;
+};
+
 export class FrameAdapter implements EmulatorAdapter {
- capabilities:RuntimeCapabilities={saveState:false,audio:false,analog:false};private frame:HTMLIFrameElement;private session=crypto.randomUUID();private count=0;private pending=new Map<number,{resolve:(v:unknown)=>void;reject:(e:Error)=>void;timer:ReturnType<typeof setTimeout>}>();private urls:string[]=[];private ready:Promise<void>;private readyResolve!:()=>void;private readyReject!:(e:Error)=>void;private timer:ReturnType<typeof setTimeout>;
- constructor(container:HTMLElement,private native:boolean){this.frame=document.createElement('iframe');this.frame.title=native?'HTML5 game':'WebAssembly emulator';this.frame.allow='autoplay; fullscreen; gamepad';this.frame.setAttribute('sandbox',native?'allow-scripts':'allow-scripts allow-same-origin');this.frame.className='game-frame';this.ready=new Promise((resolve,reject)=>{this.readyResolve=resolve;this.readyReject=reject;});this.timer=setTimeout(()=>this.readyReject(new Error('Runtime boot timed out. Check core/game compatibility.')),90000);window.addEventListener('message',this.onMessage);container.append(this.frame);}
- private onMessage=(event:MessageEvent)=>{if(event.source!==this.frame.contentWindow||event.data?.session!==this.session)return;const data=event.data;if(data.type==='ready'){this.capabilities=data.capabilities;clearTimeout(this.timer);this.readyResolve();}if(data.type==='error'){clearTimeout(this.timer);this.readyReject(new Error(data.error));}if(data.type==='reply'){const entry=this.pending.get(data.id);if(entry){clearTimeout(entry.timer);this.pending.delete(data.id);if(data.error)entry.reject(new Error(data.error));else entry.resolve(data.value);}}};
- async load(file:File,options:{core:string;name:string;bios?:File;companions?:File[]}){if(this.native){const html=await file.text();const sessionScript=`<script>window.RETRO_SESSION=${JSON.stringify(this.session)};<\/script>`;const url=URL.createObjectURL(new Blob([html.replace('<script>',sessionScript+'<script>')],{type:'text/html'}));this.urls.push(url);this.frame.src=url;}else{this.frame.src=options.core==='jsdos'?'/runtime/dos-frame.html':options.core==='js2me'?'/runtime/j2me-frame.html':'/runtime/frame.html';await new Promise<void>((resolve,reject)=>{this.frame.onload=()=>resolve();this.frame.onerror=()=>reject(new Error('Frame unavailable'));});// Never forward allowUntrusted or other client bypass flags to the J2ME frame.
-this.frame.contentWindow!.postMessage({type:'init',session:this.session,file,bios:options.bios,companions:options.companions??[],core:options.core,name:options.name},location.origin);}await this.ready;}
- private call(method:string,value?:unknown){const id=++this.count;return new Promise<unknown>((resolve,reject)=>{const timer=setTimeout(()=>{this.pending.delete(id);reject(new Error(`${method} timed out`));},10000);this.pending.set(id,{resolve,reject,timer});this.frame.contentWindow?.postMessage({type:'command',session:this.session,id,method,value},this.native?'*':location.origin);});}
- /** Bounded-memory seekable mount statistics from the isolated frame, when available. */
- async seekableStats(){return this.call('seekableStats') as Promise<{bytesRead:number;peakPayload:number;payloadCapacity:number;mounts:number}|null>;}
- async start(){await this.call('start');}async pause(){await this.call('pause');}async resume(){await this.call('resume');}async reset(){await this.call('reset');}async setVolume(value:number){await this.call('volume',value);}
- input(command:number,value:number){this.frame.contentWindow?.postMessage({type:'input',session:this.session,command,value},this.native?'*':location.origin);}
- async exportState(){if(!this.capabilities.saveState)throw new Error('Save states unsupported');const bytes=await this.call('save');return new Uint8Array(bytes as ArrayBuffer);}
- async importState(bytes:Uint8Array){if(!this.capabilities.saveState)throw new Error('Save states unsupported');await this.call('load',bytes);}
- dispose(){clearTimeout(this.timer);window.removeEventListener('message',this.onMessage);for(const p of this.pending.values()){clearTimeout(p.timer);p.reject(new Error('Runtime disposed'));}this.pending.clear();this.frame.remove();this.urls.forEach(u=>URL.revokeObjectURL(u));}
+  capabilities: RuntimeCapabilities = { saveState: false, audio: false, analog: false };
+  private frame: HTMLIFrameElement;
+  private session = crypto.randomUUID();
+  private count = 0;
+  private pending = new Map<number, Pending>();
+  private urls: string[] = [];
+  private ready: Promise<void>;
+  private readyResolve!: () => void;
+  private readyReject!: (e: Error) => void;
+  private timer: ReturnType<typeof setTimeout>;
+  private targetOrigin: string = '';
+  private disposed = false;
+  private core = '';
+
+  constructor(
+    container: HTMLElement,
+    private native: boolean,
+  ) {
+    this.frame = document.createElement('iframe');
+    this.frame.title = native ? 'HTML5 game' : 'WebAssembly emulator';
+    this.frame.allow = 'autoplay; fullscreen; gamepad';
+    this.frame.setAttribute(
+      'sandbox',
+      native ? 'allow-scripts' : 'allow-scripts allow-same-origin',
+    );
+    this.frame.className = 'game-frame';
+    this.ready = new Promise((resolve, reject) => {
+      this.readyResolve = resolve;
+      this.readyReject = reject;
+    });
+    this.timer = setTimeout(
+      () => this.readyReject(new Error('Runtime boot timed out. Check core/game compatibility.')),
+      90000,
+    );
+    window.addEventListener('message', this.onMessage);
+    container.append(this.frame);
+  }
+
+  private onMessage = (event: MessageEvent) => {
+    if (this.disposed) return;
+    if (event.source !== this.frame.contentWindow) return;
+    if (this.targetOrigin && event.origin !== this.targetOrigin) return;
+    const data = event.data;
+    if (!data || typeof data !== 'object') return;
+    if (data.session !== this.session) return;
+    if (data.type === 'ready') {
+      this.capabilities = data.capabilities;
+      clearTimeout(this.timer);
+      this.readyResolve();
+    }
+    if (data.type === 'error') {
+      clearTimeout(this.timer);
+      this.readyReject(new Error(data.error));
+    }
+    if (data.type === 'reply') {
+      const entry = this.pending.get(data.id);
+      if (entry) {
+        clearTimeout(entry.timer);
+        this.pending.delete(data.id);
+        if (data.error) entry.reject(new Error(data.error));
+        else entry.resolve(data.value);
+      }
+    }
+  };
+
+  async load(
+    file: File,
+    options: { core: string; name: string; bios?: File; companions?: File[] },
+  ) {
+    this.core = options.core;
+    if (this.native) {
+      const html = await file.text();
+      const sessionScript = `<script>window.RETRO_SESSION=${JSON.stringify(this.session)};<\/script>`;
+      const url = URL.createObjectURL(
+        new Blob([html.replace('<script>', sessionScript + '<script>')], { type: 'text/html' }),
+      );
+      this.urls.push(url);
+      this.frame.src = url;
+      this.targetOrigin = '*';
+    } else {
+      const dedicated = options.core === 'js2me' && j2meDedicatedEnabled();
+      const j2meOrigin = dedicated ? j2meRuntimeOrigin() : null;
+      if (dedicated && !j2meOrigin) {
+        throw new Error('J2ME_DEDICATED_ORIGIN_UNCONFIGURED');
+      }
+      if (options.core === 'jsdos') {
+        this.frame.src = '/runtime/dos-frame.html';
+        this.targetOrigin = location.origin;
+      } else if (options.core === 'js2me' && j2meOrigin) {
+        this.frame.src = `${j2meOrigin}${J2ME_FRAME_PATH}`;
+        this.targetOrigin = j2meOrigin;
+      } else if (options.core === 'js2me') {
+        this.frame.src = '/runtime/j2me-frame.html';
+        this.targetOrigin = location.origin;
+      } else {
+        this.frame.src = '/runtime/frame.html';
+        this.targetOrigin = location.origin;
+      }
+      await new Promise<void>((resolve, reject) => {
+        this.frame.onload = () => resolve();
+        this.frame.onerror = () => reject(new Error('Frame unavailable'));
+      });
+      // Never forward allowUntrusted or other client bypass flags.
+      const init: Record<string, unknown> = {
+        type: 'init',
+        session: this.session,
+        file,
+        bios: options.bios,
+        companions: options.companions ?? [],
+        core: options.core,
+        name: options.name,
+      };
+      if (options.core === 'js2me' && j2meOrigin) {
+        init.parentOrigin = launcherOrigin();
+      }
+      this.frame.contentWindow!.postMessage(init, this.targetOrigin === '*' ? '*' : this.targetOrigin);
+    }
+    await this.ready;
+  }
+
+  private post(payload: object) {
+    if (this.disposed) throw new Error('Runtime disposed');
+    const target = this.native ? '*' : this.targetOrigin || location.origin;
+    this.frame.contentWindow?.postMessage(payload, target);
+  }
+
+  private call(method: string, value?: unknown) {
+    const id = ++this.count;
+    return new Promise<unknown>((resolve, reject) => {
+      const timer = setTimeout(() => {
+        this.pending.delete(id);
+        reject(new Error(`${method} timed out`));
+      }, 10000);
+      this.pending.set(id, { resolve, reject, timer });
+      this.post({ type: 'command', session: this.session, id, method, value });
+    });
+  }
+
+  /** Bounded-memory seekable mount statistics from the isolated frame, when available. */
+  async seekableStats() {
+    return this.call('seekableStats') as Promise<{
+      bytesRead: number;
+      peakPayload: number;
+      payloadCapacity: number;
+      mounts: number;
+    } | null>;
+  }
+
+  async importRmsMigration(payload: unknown) {
+    if (this.core !== 'js2me') throw new Error('RMS migration is J2ME-only');
+    return this.call('importRmsMigration', payload);
+  }
+
+  async start() {
+    await this.call('start');
+  }
+  async pause() {
+    await this.call('pause');
+  }
+  async resume() {
+    await this.call('resume');
+  }
+  async reset() {
+    await this.call('reset');
+  }
+  async setVolume(value: number) {
+    await this.call('volume', value);
+  }
+  input(command: number, value: number) {
+    this.post({ type: 'input', session: this.session, command, value });
+  }
+  async exportState() {
+    if (!this.capabilities.saveState) throw new Error('Save states unsupported');
+    const bytes = await this.call('save');
+    return new Uint8Array(bytes as ArrayBuffer);
+  }
+  async importState(bytes: Uint8Array) {
+    if (!this.capabilities.saveState) throw new Error('Save states unsupported');
+    await this.call('load', bytes);
+  }
+  dispose() {
+    this.disposed = true;
+    clearTimeout(this.timer);
+    window.removeEventListener('message', this.onMessage);
+    for (const p of this.pending.values()) {
+      clearTimeout(p.timer);
+      p.reject(new Error('Runtime disposed'));
+    }
+    this.pending.clear();
+    try {
+      if (this.core === 'js2me' && this.targetOrigin && this.targetOrigin !== location.origin) {
+        this.frame.contentWindow?.postMessage(
+          { type: 'command', session: this.session, id: ++this.count, method: 'dispose' },
+          this.targetOrigin,
+        );
+      }
+    } catch {
+      /* ignore */
+    }
+    this.frame.remove();
+    this.urls.forEach((u) => URL.revokeObjectURL(u));
+  }
 }

@@ -51,6 +51,11 @@ services:
       dockerfile: infra/docker/web.Dockerfile
       args:
         API_INTERNAL_URL: http://api:8000
+        # Dedicated-origin cutover is opt-in; enable after PH-06 offline gate.
+        # Cutover enabled after PH-06 dedicated offline gate (2026-10-21).
+        NEXT_PUBLIC_J2ME_DEDICATED_ORIGIN: ${NEXT_PUBLIC_J2ME_DEDICATED_ORIGIN:-true}
+        NEXT_PUBLIC_J2ME_RUNTIME_ORIGIN: ${NEXT_PUBLIC_J2ME_RUNTIME_ORIGIN:-}
+        NEXT_PUBLIC_LAUNCHER_ORIGIN: ${NEXT_PUBLIC_LAUNCHER_ORIGIN:-}
         HTTP_PROXY:
         HTTPS_PROXY:
         NO_PROXY:
@@ -59,13 +64,44 @@ services:
     environment:
       API_INTERNAL_URL: http://api:8000
       NODE_ENV: production
+      J2ME_RUNTIME_HOST: j2me.localhost
+      LAUNCHER_HOST: launcher.localhost
+      LAUNCHER_FRAME_ANCESTORS: ${LAUNCHER_FRAME_ANCESTORS:-http://launcher.localhost:13000 http://launcher.localhost:3000 http://localhost:13000 http://localhost:3000}
+      NEXT_PUBLIC_J2ME_DEDICATED_ORIGIN: ${NEXT_PUBLIC_J2ME_DEDICATED_ORIGIN:-true}
+      NEXT_PUBLIC_J2ME_RUNTIME_ORIGIN: ${NEXT_PUBLIC_J2ME_RUNTIME_ORIGIN:-}
+      NEXT_PUBLIC_LAUNCHER_ORIGIN: ${NEXT_PUBLIC_LAUNCHER_ORIGIN:-}
     depends_on:
       api: {condition: service_healthy}
-    ports: ["127.0.0.1:3000:3000"]
+    # Published only on the docker network; browsers enter via `edge`.
+    expose: ["3000"]
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://localhost:3000/').then(r => { if (!r.ok) process.exit(1) })"]
       interval: 10s
       timeout: 6s
+      retries: 20
+  edge:
+    image: nginx:1.28.0-alpine
+    depends_on:
+      web: {condition: service_healthy}
+    # 3000 = default; 13000 = local remap used by existing evidence scripts.
+    ports:
+      - "127.0.0.1:3000:80"
+      - "127.0.0.1:13000:80"
+    volumes:
+      - ./infra/reverse-proxy/edge.conf:/etc/nginx/conf.d/default.conf:ro
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "-q",
+          "-O",
+          "/dev/null",
+          "--header=Host: launcher.localhost",
+          "http://127.0.0.1/",
+        ]
+      interval: 10s
+      timeout: 5s
       retries: 20
   admin-static:
     image: nginx:1.28.0-alpine

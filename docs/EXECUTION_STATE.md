@@ -2,7 +2,7 @@
 
 ## Verdict
 
-**RELEASE CANDIDATE / NOT COMPLETE** — IN-002/IOS-001 remain BLOCKED_EXTERNAL. MS-DOS VERIFIED_PLAYABLE (`jsdos`). J2ME first-party Dot/Paddle/Notes VERIFIED via production **catalog offline** (Compose; origin services stopped). Dedicated-origin isolation PoC + RMS migration proven but **not** production-switched. Arbitrary commercial JARs remain denied. ColecoVision BIOS-blocked.
+**RELEASE CANDIDATE / NOT COMPLETE** — IN-002/IOS-001 remain BLOCKED_EXTERNAL. MS-DOS VERIFIED_PLAYABLE. J2ME first-party Dot/Paddle/Notes VERIFIED on **dedicated origin** with authentic Service Worker offline cold-start (no Playwright asset mocking). Production cutover flag default `true`. ColecoVision BIOS-blocked.
 
 ## Deferred physical acceptance (do not rediscover)
 
@@ -17,33 +17,31 @@
 | MS-DOS `jsdos` | VERIFIED_PLAYABLE |
 | EmulatorJS `dosbox_pure` | BLOCKED on 4.2.3 |
 | Core lock | **333 files** |
-| J2ME `js2me` | Catalog offline Dot/Paddle/Notes PASSED; CSP boot externalized; isolation PoC green (not switched) |
+| J2ME `js2me` | Dedicated-origin cutover; catalog offline SW gate PASSED (`PH-06/catalog-j2me-dedicated-offline-20261021.md`) |
 | ColecoVision | BLOCKED — proprietary BIOS |
 
 ## Exact commands
 
 ```bash
 python3 scripts/verify-core-lock.py
-RETRO_TEST_BASE_URL=http://127.0.0.1:13000 CHROMIUM_EXECUTABLE=/usr/bin/chromium \
-  node apps/web/tests/catalog-j2me-offline.cjs
-CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/j2me-isolated-origin-poc.cjs
-CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/j2me-rms-migration-poc.cjs
+RETRO_TEST_BASE_URL=http://launcher.localhost:13000 \
+RETRO_J2ME_ORIGIN=http://j2me.localhost:13000 \
+CHROMIUM_EXECUTABLE=/usr/bin/chromium \
+  node apps/web/tests/catalog-j2me-dedicated-offline.cjs
 CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/j2me-security-smoke.cjs
-CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/j2me-js2me-smoke.cjs
 CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/dos-jsdos-smoke.cjs
 ```
 
 ## Verified this session
 
-- Catalog offline: Dot score=4, Paddle high=1, Notes `catalog-offline-note` after stopping web/api/object-store
-- CSP: inline boot blocked in production → `/runtime/j2me-boot.js`
-- Seed: `@` in core paths allowed; J2ME provenance HTTPS
-- Isolation PoC: browser-enforced parent DOM/cookie/IDB separation on `j2me.localhost`
-- RMS migration PoC: all three suites import + Notes offline restore on dedicated origin
-- Production still same-origin frame (intentional until Compose hostname + SW ready)
+- Edge Host routing: `launcher.localhost` / `j2me.localhost`
+- Dedicated SW precache + authentic offline (services stopped; no route.fulfill)
+- Isolation: parent DOM `SecurityError`, empty j2me cookies
+- RMS values restored offline for Dot/Paddle/Notes
+- Cutover: `NEXT_PUBLIC_J2ME_DEDICATED_ORIGIN` default true (rollback via false + rebuild)
 
 ## Next action
 
-1. Wire Compose/`j2me.` hostname + SW scope for dedicated origin; only then switch FrameAdapter.
-2. Expand allowlist only with legal fixtures + PH-06 evidence.
-3. Physical IN-002/IOS-001 when hardware exists — do not declare P0 COMPLETE.
+1. Physical IN-002/IOS-001 when hardware exists — do not declare P0 COMPLETE.
+2. Optional: eviction/recovery dedicated-origin tests; HTTPS staging certificates.
+3. Expand allowlist only with legal fixtures + PH-06 evidence.

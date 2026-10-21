@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>J2ME runtime install</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+  <p id="status">Preparing J2ME runtime…</p>
+  <script>
+    (async function () {
+      const status = document.getElementById('status');
+      const params = new URLSearchParams(location.search);
+      const parentOrigin = params.get('parentOrigin') || '';
+      const expectSha = params.get('coreLockHint') || '';
+
+      function reply(payload) {
+        if (!parentOrigin) return;
+        parent.postMessage({ channel: 'j2me-install', ...payload }, parentOrigin);
+      }
+
+      try {
+        if (!parentOrigin || parentOrigin === location.origin) {
+          throw new Error('J2ME_INSTALL_BAD_PARENT');
+        }
+        if (!('serviceWorker' in navigator)) throw new Error('J2ME_SW_UNAVAILABLE');
+
+        const registration = await navigator.serviceWorker.register('/j2me-sw.js', { scope: '/' });
+        await navigator.serviceWorker.ready;
+        if (!navigator.serviceWorker.controller) {
+          await new Promise((resolve, reject) => {
+            const t = setTimeout(() => reject(new Error('J2ME_SW_NO_CONTROLLER')), 15000);
+            navigator.serviceWorker.addEventListener(
+              'controllerchange',
+              () => {
+                clearTimeout(t);
+                resolve();
+              },
+              { once: true },
+            );
+            registration.waiting?.postMessage({ type: 'noop' });
+          });
+        }
+
+        const urls = [];
+        addEventListener('message', (event) => {
+          if (event.origin !== parentOrigin) return;
+          if (event.data?.channel !== 'j2me-install') return;
+          if (event.data?.type === 'PRECACHE_LIST' && Array.isArray(event.data.urls)) {
+            const worker = navigator.serviceWorker.controller;
+            if (!worker) {
+              reply({ type: 'error', error: 'J2ME_SW_NO_CONTROLLER' });
+              return;
+            }
+            const onDone = (e) => {
+              if (e.data?.type !== 'PRECACHE_DONE') return;
+              navigator.serviceWorker.removeEventListener('message', onDone);
+              const failed = (e.data.results || []).filter((r) => !r.ok);
+              if (failed.length) {
+                reply({ type: 'error', error: 'J2ME_PRECACHE_FAILED', failed });
+                status.textContent = 'Precache failed';
+                return;
+              }
+              reply({
+                type: 'ready',
+                version: e.data.version,
+                count: e.data.results.length,
+                origin: location.origin,
+                coreLockHint: expectSha,
+              });
+              status.textContent = 'J2ME runtime ready';
+            };
+            navigator.serviceWorker.addEventListener('message', onDone);
+            worker.postMessage({ type: 'PRECACHE', urls: event.data.urls });
+          }
+          if (event.data?.type === 'STATUS') {
+            const worker = navigator.serviceWorker.controller;
+            if (!worker) {
+              reply({ type: 'error', error: 'J2ME_SW_NO_CONTROLLER' });
+              return;
+            }
+            const onStatus = (e) => {
+              if (e.data?.type !== 'CACHE_STATUS_RESULT') return;
+              navigator.serviceWorker.removeEventListener('message', onStatus);
+              reply({ type: 'status', ...e.data, origin: location.origin, controlled: !!navigator.serviceWorker.controller });
+            };
+            navigator.serviceWorker.addEventListener('message', onStatus);
+            worker.postMessage({ type: 'CACHE_STATUS' });
+          }
+        });
+
+        reply({ type: 'boot', origin: location.origin, controlled: !!navigator.serviceWorker.controller });
+        status.textContent = 'Service worker registered — waiting for precache list';
+        void urls;
+      } catch (error) {
+        status.textContent = String(error?.message || error);
+        reply({ type: 'error', error: String(error?.message || error) });
+      }
+    })();
+  </script>
+</body>
+</html>

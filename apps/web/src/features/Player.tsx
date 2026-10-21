@@ -65,6 +65,46 @@ export default function Player({ id }: { id: string }) {
         runtime.dispose();
         return;
       }
+      if (
+        item.manifest.core.code === "js2me" &&
+        typeof runtime.importRmsMigration === "function"
+      ) {
+        try {
+          const { j2meDedicatedEnabled, j2meRuntimeOrigin } = await import(
+            "@/emulators/j2me-origin"
+          );
+          if (j2meDedicatedEnabled()) {
+            const {
+              buildMigrationPayload,
+              discoverLauncherRmsSuites,
+              migrationMetaPut,
+            } = await import("@/features/j2me-rms-migrate");
+            const suites = await discoverLauncherRmsSuites();
+            if (suites.length) {
+              // Idempotent: keep existing target data on retry (overwrite false).
+              await runtime.importRmsMigration!(
+                buildMigrationPayload(suites, false),
+              );
+              const target = j2meRuntimeOrigin() || "dedicated";
+              for (const suite of suites) {
+                await migrationMetaPut(suite.midletId, {
+                  status: "migrated",
+                  at: Date.now(),
+                  byteSize: suite.byteSize,
+                  targetOrigin: target,
+                });
+              }
+            }
+          }
+        } catch (error) {
+          // Migration failure must not block play of fresh installs; surface status.
+          if (!disposed)
+            setMessage(
+              "RMS migration deferred: " +
+                String(error instanceof Error ? error.message : error),
+            );
+        }
+      }
       await runtime.start();
       input = new InputRouter(
         (c, v) => runtime!.input(c, v),
