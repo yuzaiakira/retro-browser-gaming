@@ -14,8 +14,8 @@ function revoke() {
 
 function preferSeekable(file, companions, core) {
   // Multi-file discs always use seekable VFS. A few EmulatorJS cores
-  // (prosystem/handy/mednafen_ngp) only accept simulateInput reliably via blob URLs.
-  if (['prosystem', 'handy', 'mednafen_ngp'].includes(core)) return false;
+  // only work reliably via blob URLs (input and/or ZIP mount for DOS).
+  if (['prosystem', 'handy', 'mednafen_ngp', 'dosbox_pure'].includes(core)) return false;
   if ((companions || []).length > 0) return true;
   const total = [file, ...(companions || [])].reduce((sum, item) => sum + (item?.size || 0), 0);
   return total > 0;

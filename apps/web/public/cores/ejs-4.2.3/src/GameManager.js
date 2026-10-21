@@ -341,6 +341,29 @@ class EJS_GameManager {
         }
         return (fileNames.length === 1) ? baseFileName + "-0.cue" : baseFileName + ".m3u";
     }
+    // Backported from EmulatorJS main (4.3.0-pre): DOS needs a batch content path.
+    // Without BOOTUP.BAT, dosbox_pure hits OpenGL/GLES fallback then WASM OOB on start.
+    writeBootupBatchFile() {
+        try {
+            this.mkdir("/emulator");
+            this.mkdir("/emulator/c");
+        } catch (e) {
+            /* directories may already exist */
+        }
+        const data = `
+SET BLASTER=A220 I7 D1 H5 T6
+
+@ECHO OFF
+mount A / -t floppy
+SET PATH=Z:\\;A:\\
+mount c /emulator/c
+c:
+IF EXIST AUTORUN.BAT CALL AUTORUN.BAT
+`;
+        const filename = "BOOTUP.BAT";
+        this.FS.writeFile("/" + filename, data);
+        return filename;
+    }
     loadPpssppAssets() {
         return new Promise(resolve => {
             this.EJS.downloadFile("cores/ppsspp-assets.zip", null, false, { responseType: "arraybuffer", method: "GET" }).then((res) => {

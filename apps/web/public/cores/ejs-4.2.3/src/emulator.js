@@ -857,6 +857,10 @@ class EmulatorJS {
                             this.fileName = this.gameManager.createCueFile(fileNames);
                         }
                     }
+                    // Backported from EmulatorJS main: finish DOS support via batch bootup.
+                    if (this.getCore(true) === "dos" && !this.config.disableBatchBootup) {
+                        this.fileName = this.gameManager.writeBootupBatchFile();
+                    }
                     resolve();
                 });
             }

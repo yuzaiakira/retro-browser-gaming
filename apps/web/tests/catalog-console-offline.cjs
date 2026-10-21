@@ -32,6 +32,7 @@ const GAMES = [
   { slug: 'mit-lynx-dot', title: 'MIT Lynx Dot', platform: 'lynx' },
   { slug: 'gpl-ngp-joypad', title: 'GPL NGP Joypad', platform: 'ngp' },
   { slug: 'gpl-ngpc-test', title: 'GPL NGPC Test', platform: 'ngpc' },
+  { slug: 'mit-dos-floppybird', title: 'MIT DOS Floppy Bird', platform: 'dos' },
   { slug: 'mit-ps1-dot', title: 'MIT PS1 Dot', platform: 'ps1' },
   { slug: 'mit-psp-dot', title: 'MIT PSP Dot', platform: 'psp' },
 ].filter((g) => !only.length || only.includes(g.platform));
