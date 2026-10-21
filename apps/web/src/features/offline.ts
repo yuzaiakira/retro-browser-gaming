@@ -1,6 +1,8 @@
 import { db } from '@/lib/db';
 import { verifyAsset } from '@/lib/storage';
 import type { Installation, Release } from '@/lib/types';
+import { j2meDedicatedEnabled } from '@/emulators/j2me-origin';
+import { prepareDedicatedJ2meRuntime } from '@/features/j2me-runtime-install';
 
 /** Must match `VERSION` in `public/sw.js`. */
 export const SHELL = 'retro-shell-v5';
@@ -108,6 +110,13 @@ export async function prepareCore(release: Release) {
   if (!needsCorePackage) return;
   const manifest = release.recommended_core.licensed_asset_manifest;
   if (!manifest.length) throw new Error('CORE_PACKAGE_UNAVAILABLE');
+
+  // Dedicated J2ME origin: precache VM on j2me host SW (not launcher shell cache).
+  if (release.recommended_core.code === 'js2me' && j2meDedicatedEnabled()) {
+    await prepareDedicatedJ2meRuntime(release);
+    return;
+  }
+
   const cache = await caches.open(SHELL);
   for (const item of manifest) {
     const path = '/cores/' + item.path;
@@ -130,13 +139,18 @@ export async function auditInstallation(installation: Installation) {
   for (const asset of installation.manifest.assets) {
     if (!(await verifyAsset(asset))) return false;
   }
-  for (const resource of installation.release.recommended_core.licensed_asset_manifest) {
+  const core = installation.release.recommended_core;
+  if (core.code === 'js2me' && j2meDedicatedEnabled()) {
+    // Dedicated-origin assets live in j2me SW cache — probed at install time.
+    // Launcher audit still requires shell play route + game OPFS bytes.
+    return true;
+  }
+  for (const resource of core.licensed_asset_manifest) {
     const response = await cache.match('/cores/' + resource.path);
     if (!response) return false;
     const { hashFile } = await import('@/lib/storage');
     if ((await hashFile(await response.blob())) !== resource.sha256) return false;
   }
-  const core = installation.release.recommended_core;
   const framePath =
     core.code === 'jsdos'
       ? '/runtime/dos-frame.html'

@@ -1,6 +1,6 @@
 # Deployment
 
-`compose.yaml` runs four services: PostgreSQL 17, persistent S3-compatible SeaweedFS storage, Django/Gunicorn API, and the Next standalone web server. Browser traffic enters at `http://localhost:3000`; the web server rewrites `/api/v1/*` and `/dev-assets/*` to the private API service. The browser never receives storage credentials.
+`compose.yaml` runs PostgreSQL 17, persistent S3-compatible SeaweedFS storage, Django/Gunicorn API, the Next standalone web server, and an **edge** nginx that Host-routes `launcher.localhost` (app) and `j2me.localhost` (J2ME runtime) on one published port. Prefer `http://launcher.localhost:3000` (or `:13000` with a local override). The web server rewrites `/api/v1/*` and `/dev-assets/*` to the private API service. The browser never receives storage credentials. J2ME cutover: `NEXT_PUBLIC_J2ME_DEDICATED_ORIGIN` (default `true`); see `docs/j2me-security-architecture.md`.
 
 ## Local Compose configuration
 

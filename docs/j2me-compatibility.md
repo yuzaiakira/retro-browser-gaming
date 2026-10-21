@@ -8,13 +8,13 @@ Runtime: self-hosted MIT **js2me** (`apps/web/public/cores/js2me/`, commit in `S
 
 | MIDlet | JAR SHA-256 (prefix) | Canvas | Form/LCDUI | Keypad | Soft keys | RMS/IDB | Offline restore | Sound | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| MIT J2ME Dot | `63afd7fa…` | V | — | V | — | V | V | — | Frame smoke + **catalog offline** (`PH-06/catalog-j2me-offline-20261021.md`) |
-| MIT J2ME Paddle | `51c0c9d9…` | V | — | V | — | V | V | — | Frame + **catalog offline** |
-| MIT J2ME Notes | `cbefc732…` | — | V | — | V | V | V | — | Frame + **catalog offline** |
+| MIT J2ME Dot | `63afd7fa…` | V | — | V | — | V | V | — | Dedicated-origin catalog offline SW (`PH-06/catalog-j2me-dedicated-offline-20261021.md`) |
+| MIT J2ME Paddle | `51c0c9d9…` | V | — | V | — | V | V | — | Dedicated-origin catalog offline SW |
+| MIT J2ME Notes | `cbefc732…` | — | V | — | V | V | V | — | Dedicated-origin catalog offline SW |
 
 Legend: `V` verified in Chromium evidence for that MIDlet, `—` not exercised.
 
-Security: production allowlist has no bypass; residual same-origin iframe risk documented in `docs/j2me-security-architecture.md`. Dedicated-origin isolation PoC + RMS migration tested but **not** production-switched (`PH-06/j2me-isolated-origin-poc-20261021.md`).
+Security: production uses `j2me.localhost` dedicated origin + allowlist; browser-enforced isolation documented in `docs/j2me-security-architecture.md`.
 
 ## Implemented MIDP/CLDC subset (practical)
 
