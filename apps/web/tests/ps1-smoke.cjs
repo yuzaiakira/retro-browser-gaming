@@ -1,12 +1,26 @@
+/**
+ * PS1 real-core smoke: pcsx_rearmed + first-party MIT Dot CUE/BIN.
+ * Bounded phases, query-safe static serving, structured TIMEOUT diagnostics.
+ *
+ * Usage:
+ *   CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/ps1-smoke.cjs
+ *
+ * Env:
+ *   PS1_READY_MS (default 180000) — wait for frame ready
+ *   PS1_OVERALL_MS (default 420000) — hard overall deadline
+ */
 const { chromium } = require('@playwright/test');
 const { createServer } = require('node:http');
-const { readFile } = require('node:fs/promises');
+const { mkdir, readFile } = require('node:fs/promises');
 const { extname, join, normalize } = require('node:path');
 const { PNG } = require('pngjs');
 
 const root = join(__dirname, '..', 'public');
 const fixtures = join(__dirname, '..', '..', '..', '.fixtures');
+const evidenceDir = join(__dirname, '..', '..', '..', 'docs', 'test-evidence', 'PH-05');
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
+const READY_MS = Number(process.env.PS1_READY_MS || 180000);
+const OVERALL_MS = Number(process.env.PS1_OVERALL_MS || 420000);
 const cueName = 'mit-ps1-dot.cue';
 const companions = ['dot_track01.bin', 'dot_track02.bin'];
 const types = {
@@ -19,6 +33,44 @@ const types = {
   '.cue': 'application/octet-stream',
   '.wasm': 'application/wasm',
 };
+
+const diagnostics = {
+  phase: 'boot',
+  notFound: [],
+  requestFailed: [],
+  consoleErrors: [],
+  pageErrors: [],
+};
+
+function pathnameOf(url) {
+  return (url || '/').split('?')[0];
+}
+
+function withTimeout(promise, ms, label) {
+  let timer;
+  return Promise.race([
+    promise.finally(() => clearTimeout(timer)),
+    new Promise((_, reject) => {
+      timer = setTimeout(() => {
+        reject(new Error(`${label} timed out after ${ms}ms`));
+      }, ms);
+    }),
+  ]);
+}
+
+function dumpDiagnostics(error) {
+  const unique404 = [...new Set(diagnostics.notFound)];
+  console.error(
+    `PS1_DIAG ${JSON.stringify({
+      phase: diagnostics.phase,
+      error: String(error?.message || error),
+      notFound: unique404,
+      requestFailed: diagnostics.requestFailed.slice(-20),
+      consoleErrors: diagnostics.consoleErrors.slice(-20),
+      pageErrors: diagnostics.pageErrors.slice(-10),
+    })}`,
+  );
+}
 
 const outer = `<!doctype html><title>PS1 real-core smoke</title><style>body{margin:0;background:#111}iframe{width:960px;height:640px;border:0}</style><iframe id="game" src="/runtime/frame.html"></iframe><script>
 window.result = new Promise((resolve, reject) => {
@@ -67,12 +119,15 @@ async function handler(request, response) {
     'Cross-Origin-Embedder-Policy': 'require-corp',
     'Cross-Origin-Resource-Policy': 'same-origin',
   };
-  if (request.url === '/') return response.writeHead(200, { ...headers, 'content-type': 'text/html' }).end(outer);
+  const pathname = pathnameOf(request.url);
+  if (pathname === '/') {
+    return response.writeHead(200, { ...headers, 'content-type': 'text/html' }).end(outer);
+  }
   try {
     let requested;
-    if (request.url === '/fixture.cue') requested = join(fixtures, cueName);
-    else if (companions.includes(request.url.slice(1))) requested = join(fixtures, request.url.slice(1));
-    else requested = join(root, normalize(request.url).replace(/^[/\\]+/, ''));
+    if (pathname === '/fixture.cue') requested = join(fixtures, cueName);
+    else if (companions.includes(pathname.slice(1))) requested = join(fixtures, pathname.slice(1));
+    else requested = join(root, normalize(pathname).replace(/^[/\\]+/, ''));
     const bytes = await readFile(requested);
     response.writeHead(200, {
       ...headers,
@@ -81,6 +136,7 @@ async function handler(request, response) {
     });
     response.end(bytes);
   } catch {
+    diagnostics.notFound.push(pathname);
     response.writeHead(404, headers).end();
   }
 }
@@ -106,89 +162,156 @@ function greenDotCenter(png) {
   return { x: sumX / count, y: sumY / count, count };
 }
 
-async function run() {
+function attachPageDiagnostics(page) {
+  page.on('console', (message) => {
+    if (message.type() === 'error') {
+      const text = message.text();
+      diagnostics.consoleErrors.push(text.slice(0, 240));
+      console.error(`CONSOLE ${text}`);
+    }
+  });
+  page.on('pageerror', (error) => {
+    diagnostics.pageErrors.push(error.message);
+    console.error(`PAGEERROR ${error.message}`);
+  });
+  page.on('requestfailed', (request) => {
+    diagnostics.requestFailed.push(`${request.url().slice(0, 160)}:${request.failure()?.errorText || 'unknown'}`);
+  });
+}
+
+async function awaitReady(page, label) {
+  diagnostics.phase = label;
+  console.log(`PS1_PHASE ${label}`);
+  return withTimeout(page.evaluate(() => window.result), READY_MS, label);
+}
+
+async function playOnce(page, { offlineAfterReady }) {
+  diagnostics.phase = 'capabilities';
+  const result = await awaitReady(page, 'ready');
+  if (!result.capabilities?.saveState) throw new Error('PS1 core did not expose save state capability');
+  if (!result.capabilities?.seekableMedia) throw new Error('Seekable media mount was not active under COOP/COEP');
+  const isolation = await page.evaluate(() => window.isolation());
+  if (!isolation.crossOriginIsolated) throw new Error('PS1 page was not cross-origin isolated');
+  diagnostics.phase = 'seekableStats';
+  const seekable = await withTimeout(
+    page.evaluate(() => window.command('seekableStats')),
+    20000,
+    'seekableStats',
+  );
+  if (!seekable || seekable.payloadCapacity !== 8 * 1024 * 1024) {
+    throw new Error(`unexpected seekable stats: ${JSON.stringify(seekable)}`);
+  }
+  await page.waitForTimeout(2500);
+  if (offlineAfterReady) {
+    diagnostics.phase = 'offline';
+    await page.context().setOffline(true);
+  }
+  const frame = page.locator('#game');
+  diagnostics.phase = 'render';
+  const before = greenDotCenter(PNG.sync.read(await frame.screenshot()));
+  diagnostics.phase = 'save';
+  const state = await withTimeout(page.evaluate(() => window.command('save')), 20000, 'save');
+  if (!(state?.byteLength > 1024)) throw new Error('PS1 core returned an implausibly small save state');
+  diagnostics.phase = 'input';
+  await page.evaluate(() => window.input(6, 1));
+  await page.waitForTimeout(900);
+  await page.evaluate(() => window.input(6, 0));
+  await page.waitForTimeout(200);
+  const moved = greenDotCenter(PNG.sync.read(await frame.screenshot()));
+  if (!(moved.x < before.x - 10)) {
+    throw new Error(`PS1 left input did not move the green square: ${before.x} -> ${moved.x}`);
+  }
+  diagnostics.phase = 'load';
+  await withTimeout(page.evaluate((saved) => window.command('load', saved), state), 20000, 'load');
+  await page.waitForTimeout(250);
+  const restored = greenDotCenter(PNG.sync.read(await frame.screenshot()));
+  if (Math.abs(restored.x - before.x) > 6) {
+    throw new Error(`PS1 save state did not restore square: ${before.x} -> ${restored.x}`);
+  }
+  return { result, isolation, seekable, state, before, moved, restored };
+}
+
+async function runBody() {
+  await mkdir(join(evidenceDir, 'screenshots'), { recursive: true });
   const server = createServer((request, response) => {
     handler(request, response);
   });
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
   const { port } = server.address();
-  const browser = await chromium.launch({ executablePath, headless: true, args: ['--no-sandbox'] });
+  let browser;
+  let browser2;
   try {
-    const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-    page.on('console', (message) => {
-      if (message.type() === 'error') console.error(`CONSOLE ${message.text()}`);
+    diagnostics.phase = 'launch';
+    browser = await chromium.launch({
+      executablePath,
+      headless: true,
+      args: ['--no-sandbox', '--enable-unsafe-swiftshader'],
     });
-    page.on('pageerror', (error) => console.error(`PAGEERROR ${error.message}`));
+    const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+    attachPageDiagnostics(page);
     await page.goto(`http://127.0.0.1:${port}/`);
-    const result = await page.evaluate(() => window.result);
-    if (!result.capabilities?.saveState) throw new Error('PS1 core did not expose save state capability');
-    if (!result.capabilities?.seekableMedia) throw new Error('Seekable media mount was not active under COOP/COEP');
-    const isolation = await page.evaluate(() => window.isolation());
-    if (!isolation.crossOriginIsolated) throw new Error('PS1 page was not cross-origin isolated');
-    const seekable = await page.evaluate(() => window.command('seekableStats'));
-    if (!seekable || seekable.payloadCapacity !== 8 * 1024 * 1024) {
-      throw new Error(`unexpected seekable stats: ${JSON.stringify(seekable)}`);
-    }
-    await page.waitForTimeout(2500);
-    await page.context().setOffline(true);
-    const frame = page.locator('#game');
-    const before = greenDotCenter(PNG.sync.read(await frame.screenshot()));
-    const state = await page.evaluate(() => window.command('save'));
-    if (!(state?.byteLength > 1024)) throw new Error('PS1 core returned an implausibly small save state');
-    await page.evaluate(() => window.input(6, 1));
-    await page.waitForTimeout(900);
-    await page.evaluate(() => window.input(6, 0));
-    await page.waitForTimeout(200);
-    const moved = greenDotCenter(PNG.sync.read(await frame.screenshot()));
-    if (!(moved.x < before.x - 10)) {
-      throw new Error(`PS1 left input did not move the green square: ${before.x} -> ${moved.x}`);
-    }
-    await page.evaluate((saved) => window.command('load', saved), state);
-    await page.waitForTimeout(250);
-    const restored = greenDotCenter(PNG.sync.read(await frame.screenshot()));
-    if (Math.abs(restored.x - before.x) > 6) {
-      throw new Error(`PS1 save state did not restore square: ${before.x} -> ${restored.x}`);
-    }
-    const shot = join(__dirname, '..', '..', '..', 'docs', 'test-evidence', 'PH-05', 'screenshots', 'ps1-gameplay.png');
+    const first = await playOnce(page, { offlineAfterReady: true });
+    const shot = join(evidenceDir, 'screenshots', 'ps1-gameplay.png');
     await page.screenshot({ path: shot, fullPage: true });
     await browser.close();
+    browser = null;
 
-    // Fresh Chromium process: boot the same multi-file disc, cut the network after
-    // local assets load, then prove interactive movement again.
-    const browser2 = await chromium.launch({ executablePath, headless: true, args: ['--no-sandbox'] });
-    try {
-      const page2 = await browser2.newPage({ viewport: { width: 1280, height: 900 } });
-      await page2.goto(`http://127.0.0.1:${port}/`);
-      await page2.evaluate(() => window.result);
-      await page2.waitForTimeout(2500);
-      await page2.context().setOffline(true);
-      const frame2 = page2.locator('#game');
-      const restarted = greenDotCenter(PNG.sync.read(await frame2.screenshot()));
-      await page2.evaluate(() => window.input(6, 1));
-      await page2.waitForTimeout(900);
-      await page2.evaluate(() => window.input(6, 0));
-      const afterRestartMove = greenDotCenter(PNG.sync.read(await frame2.screenshot()));
-      if (!(afterRestartMove.x < restarted.x - 10)) {
-        throw new Error(`PS1 fresh-browser left input failed: ${restarted.x} -> ${afterRestartMove.x}`);
-      }
-      console.log(
-        `PS1_GAMEPLAY_PASS ${JSON.stringify({
-          capabilities: result.capabilities,
-          isolation,
-          seekable,
-          stateBytes: state.byteLength,
-          before,
-          moved,
-          restored,
-          restarted,
-          afterRestartMove,
-        })}`,
-      );
-    } finally {
-      await browser2.close();
+    diagnostics.phase = 'fresh-launch';
+    browser2 = await chromium.launch({
+      executablePath,
+      headless: true,
+      args: ['--no-sandbox', '--enable-unsafe-swiftshader'],
+    });
+    const page2 = await browser2.newPage({ viewport: { width: 1280, height: 900 } });
+    attachPageDiagnostics(page2);
+    await page2.goto(`http://127.0.0.1:${port}/`);
+    await awaitReady(page2, 'fresh-ready');
+    await page2.waitForTimeout(2500);
+    await page2.context().setOffline(true);
+    const frame2 = page2.locator('#game');
+    diagnostics.phase = 'fresh-render';
+    const restarted = greenDotCenter(PNG.sync.read(await frame2.screenshot()));
+    await page2.evaluate(() => window.input(6, 1));
+    await page2.waitForTimeout(900);
+    await page2.evaluate(() => window.input(6, 0));
+    const afterRestartMove = greenDotCenter(PNG.sync.read(await frame2.screenshot()));
+    if (!(afterRestartMove.x < restarted.x - 10)) {
+      throw new Error(`PS1 fresh-browser left input failed: ${restarted.x} -> ${afterRestartMove.x}`);
     }
+    console.log(
+      `PS1_GAMEPLAY_PASS ${JSON.stringify({
+        capabilities: first.result.capabilities,
+        isolation: first.isolation,
+        seekable: first.seekable,
+        stateBytes: first.state.byteLength,
+        before: first.before,
+        moved: first.moved,
+        restored: first.restored,
+        restarted,
+        afterRestartMove,
+        notFoundSample: [...new Set(diagnostics.notFound)].slice(0, 12),
+      })}`,
+    );
   } finally {
+    if (browser) await browser.close().catch(() => {});
+    if (browser2) await browser2.close().catch(() => {});
     await new Promise((resolve) => server.close(resolve));
+  }
+}
+
+async function run() {
+  console.log(
+    `PS1_SMOKE_START ${JSON.stringify({
+      readyMs: READY_MS,
+      overallMs: OVERALL_MS,
+      chromium: executablePath || 'bundled',
+    })}`,
+  );
+  try {
+    await withTimeout(runBody(), OVERALL_MS, 'PS1 overall');
+  } catch (error) {
+    dumpDiagnostics(error);
+    throw error;
   }
 }
 

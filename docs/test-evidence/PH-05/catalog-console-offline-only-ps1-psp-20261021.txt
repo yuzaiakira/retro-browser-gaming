@@ -1,0 +1,6 @@
+{
+  "ps1Install": true,
+  "pspInstall": true,
+  "ps1Offline": true,
+  "pspOffline": true
+}

@@ -1,0 +1,6 @@
+PS1_SMOKE_START {"readyMs":180000,"overallMs":420000,"chromium":"/usr/bin/chromium"}
+PS1_PHASE ready
+CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
+PS1_PHASE fresh-ready
+CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
+PS1_GAMEPLAY_PASS {"capabilities":{"saveState":true,"audio":true,"analog":true,"seekableMedia":true,"onDemandMedia":true},"isolation":{"crossOriginIsolated":true,"sharedArrayBuffer":true},"seekable":{"bytesRead":335287,"bytesWritten":0,"peakPayload":16376,"payloadCapacity":8388608,"mounts":3,"chunks":0,"reads":39,"mode":"blobfs-ondemand","onDemand":true,"wasmHeapBefore":536870912,"wasmHeapAfterMount":536870912,"modes":["blobfs-ondemand","blobfs-ondemand","blobfs-ondemand"],"reader":{"bytesRead":335287,"peakPayload":16376,"reads":39,"spinMs":8.315000000409782}},"stateBytes":4456472,"before":{"x":479,"y":319.5,"count":16256},"moved":{"x":116.5,"y":319.5,"count":16384},"restored":{"x":479,"y":319.5,"count":16256},"restarted":{"x":479,"y":319.5,"count":16256},"afterRestartMove":{"x":116.5,"y":319.5,"count":16384},"notFoundSample":["/favicon.ico"]}

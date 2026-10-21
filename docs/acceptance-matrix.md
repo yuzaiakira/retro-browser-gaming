@@ -13,7 +13,7 @@
 | OFF-001–OFF-003 | PASSED (HTML5) | Persistent-profile cold-start (`PH-02/offline-pwa-20261020.md`) |
 | OFF-004 | PASSED (wasm core) | Deleted `/cores/.../genesis_plus_gx-wasm.data` offline; OPFS retained; recoverable reinstall (`PH-02/offline-pwa-off004-core-20261020.md`) |
 | OFF-005 | PASSED | Waiting SW does not disrupt Save state |
-| EMU-001–EMU-004 | PASSED (scoped) | Gameplay + BlobFS + catalog offline; Android AUD-001 human-heard Genesis |
+| EMU-001–EMU-004 | PASSED (scoped) | Gameplay + BlobFS + catalog offline; Android AUD-001 human-heard Genesis; PS1/PSP smoke re-PASS 2026-10-21 after harness query-string fix (`PH-05/ps1-psp-hang-fix-20261021.md`) |
 | EMU-005, EMU-006 | PASSED | Lifecycle + unsupported core (`PH-07/acceptance-gates-20261020.md`) |
 | CMP-001, CMP-002 | PASSED (unit) | `compatibility.test.ts` |
 | IN-001 | PASSED (Chromium) | Keyboard → InputRouter command mapping |
