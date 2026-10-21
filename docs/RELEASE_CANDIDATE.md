@@ -49,7 +49,7 @@ These remain **mandatory** and **BLOCKED_EXTERNAL**. They do not authorize decla
 Independent expansion work may proceed without waiting for gamepad/iOS:
 
 1. **P0 software Sega gaps closed** (SMS/GG); physical gamepad/iOS still block complete P0.
-2. **P1:** Nintendo set + Atari 2600/7800 + Lynx + PCE HuCard + SG-1000 + WonderSwan + NGP/NGPC + MS-DOS (`jsdos`) verified (`PH-05/*`); Mega Drive catalog expanded with MIT Genesis Pong (`PH-05/genesis-pong-*`).
+2. **P1:** Nintendo set + Atari 2600/7800 + Lynx + PCE HuCard + SG-1000 + WonderSwan + NGP/NGPC + MS-DOS (`jsdos`) verified (`PH-05/*`); Mega Drive Pong; catalog expansion Falling / Big2Small / Nonogram / Sushi Nights (`PH-05/catalog-expansion-20261021.md`).
 3. **P1 research:** EmulatorJS `dosbox_pure` still blocked on 4.2.3; J2ME commercial titles remain unchecked — only allowlisted first-party MIDlets (`docs/j2me-compatibility.md`).
 4. **P1 blocked (not published):** Sega 32X **BLOCKED_LEGAL** (PicoDrive non-commercial); Sega CD **BIOS-blocked** (`PH-05/sega-32x-feasibility-20261021.md`, `sega-cd-assessment-20261021.md`).
 5. Higher roadmap items (PCE CD, etc.) remain unchecked until evidenced.

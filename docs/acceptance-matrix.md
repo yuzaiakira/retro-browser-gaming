@@ -37,4 +37,4 @@
 | G06–G10 | PARTIAL — Chromium/Firefox + Android Chrome physical (incl. AUD-001); WebKit catalog (no OPFS install); gamepad/iOS open (`PH-08`) |
 | G11 | PARTIAL — Android PH-08 + AUD-001 closed; physical gamepad + iOS remain |
 
-**RELEASE CANDIDATE / NOT COMPLETE** — see `docs/RELEASE_CANDIDATE.md`. Remaining mandatory physical blockers (deferred): gamepad IN-002, iOS Safari IOS-001. Software gameplay + catalog offline includes consoles through NGP/NGPC, MS-DOS, MIT Genesis Pong catalog expansion, and first-party J2ME Dot/Paddle/Notes on dedicated origin (`PH-05`, `PH-06`). Sega 32X/CD remain blocked; RC still not COMPLETE.
+**RELEASE CANDIDATE / NOT COMPLETE** — see `docs/RELEASE_CANDIDATE.md`. Remaining mandatory physical blockers (deferred): gamepad IN-002, iOS Safari IOS-001. Software gameplay + catalog offline includes consoles through NGP/NGPC, MS-DOS, Genesis Pong, and catalog expansion Falling / Big2Small / Nonogram / Sushi Nights (`PH-05/catalog-expansion-20261021.md`), plus first-party J2ME on dedicated origin (`PH-06`). Sega 32X/CD remain blocked; RC still not COMPLETE.

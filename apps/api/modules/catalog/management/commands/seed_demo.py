@@ -276,6 +276,28 @@ class Command(BaseCommand):
                 "(https://www.smspower.org/Homebrew/NinjaGirl-SMS); "
                 "upstream https://github.com/pw32x/ninjagirl"
             ),
+            genre="Action",
+        )
+        results["sms-sushi"] = self._import_files(
+            fixtures,
+            slug="mit-sms-sushinights",
+            title="MIT SMS Sushi Nights",
+            description=(
+                "MIT-licensed Master System Sushi Nights (CrossZGB port by untoxa of "
+                "MONIS GAMES / Zal0 original). Engineering catalog fixture only."
+            ),
+            console="sega-ms",
+            core={"code": "smsplus", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-sms-sushinights.sms",
+            files=[("mit-sms-sushinights.sms", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/sushinights-SMS-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "untoxa/SushiNights release v1.0 sms/SushiNights.sms "
+                "(https://github.com/untoxa/SushiNights); original Zal0/SushiNights MIT"
+            ),
+            genre="Action",
         )
         results["gg"] = self._import_files(
             fixtures,
@@ -316,6 +338,28 @@ class Command(BaseCommand):
                 "mike42/8bit-table-tennis release v1.0 table_tennis_v1.0.nes "
                 "(https://github.com/mike42/8bit-table-tennis)"
             ),
+            genre="Sports",
+        )
+        results["nes-falling"] = self._import_files(
+            fixtures,
+            slug="mit-nes-falling",
+            title="MIT NES Falling",
+            description=(
+                "MIT-licensed NES Falling action homebrew by Jesse Williams (xram64). "
+                "Engineering catalog fixture only. Not a commercial ROM."
+            ),
+            console="nes",
+            core={"code": "fceumm", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-nes-falling.nes",
+            files=[("mit-nes-falling.nes", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/falling-NES-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "xram64/falling-nes commit 52dcb8a951200562e696dfc2aba5d4d14edd0078 "
+                "falling.nes (https://github.com/xram64/falling-nes)"
+            ),
+            genre="Action",
         )
         results["snes"] = self._import_files(
             fixtures,
@@ -353,6 +397,28 @@ class Command(BaseCommand):
             license_ref="MIT; LICENSES/gb-dot-MIT.txt",
             provenance="https://spdx.org/licenses/MIT.html",
             evidence="Built with GBDK 4.3.0; sources in fixtures/gb-dot/",
+            genre="Action",
+        )
+        results["gb-big2small"] = self._import_files(
+            fixtures,
+            slug="gpl-gb-big2small",
+            title="GPL GB Big2Small",
+            description=(
+                "GPL-3.0 Game Boy Big2Small puzzle homebrew by Matthew D. Steele. "
+                "Engineering catalog fixture only. Not a commercial ROM."
+            ),
+            console="gb",
+            core={"code": "gambatte", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="gpl-gb-big2small.gb",
+            files=[("gpl-gb-big2small.gb", "rom", "application/octet-stream")],
+            license_ref="GPL-3.0; LICENSES/big2small-GB-GPL-3.0.txt",
+            provenance="https://www.gnu.org/licenses/gpl-3.0.html",
+            evidence=(
+                "mdsteele/big2small release v1.0.0 big2small.gb "
+                "(https://github.com/mdsteele/big2small)"
+            ),
+            genre="Puzzle",
         )
         results["gbc"] = self._import_files(
             fixtures,
@@ -393,6 +459,29 @@ class Command(BaseCommand):
                 "fritzem/Google-Dino-GBA release 1.0.1 Google-Dino-Advance.gba "
                 "(https://github.com/fritzem/Google-Dino-GBA)"
             ),
+            genre="Action",
+        )
+        results["gba-nonogram"] = self._import_files(
+            fixtures,
+            slug="mit-gba-nonogram",
+            title="MIT GBA Nonogram Advance",
+            description=(
+                "MIT-licensed GBA Nonogram Advance puzzle homebrew by Emma Britton "
+                "(v0.9.5 SRAM). Engineering catalog fixture only. Not a commercial ROM."
+            ),
+            console="gba",
+            core={"code": "mgba", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-gba-nonogram.gba",
+            files=[("mit-gba-nonogram.gba", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/nonogram-GBA-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "emmabritton/gba_nonogram_advance release v0.9.5 "
+                "nonogram_advance_v0.9.5_sram.gba "
+                "(https://github.com/emmabritton/gba_nonogram_advance)"
+            ),
+            genre="Puzzle",
         )
         results["a2600"] = self._import_files(
             fixtures,
@@ -680,6 +769,7 @@ class Command(BaseCommand):
         license_ref: str,
         provenance: str,
         evidence: str,
+        genre: str = "Homebrew",
     ) -> dict:
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
@@ -711,7 +801,7 @@ class Command(BaseCommand):
                     "slug": slug,
                     "title": title,
                     "description": description,
-                    "genre": "Homebrew",
+                    "genre": genre,
                 },
                 "console": console,
                 "core": core,

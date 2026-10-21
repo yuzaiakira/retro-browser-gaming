@@ -1,0 +1,3 @@
+CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
+CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
+GB_GAMEPLAY_PASS {"capabilities":{"saveState":true,"audio":true,"analog":false,"seekableMedia":true,"onDemandMedia":false},"stateBytes":59632,"lit":430973,"beforeHash":3596384931,"movedHash":3858981037,"restoredHash":2637498798,"inputChangedFrame":true,"menuChangedFrame":true,"controlScheme":"gb","core":"gambatte","fixture":"gpl-gb-big2small.gb","platform":"gb"}
