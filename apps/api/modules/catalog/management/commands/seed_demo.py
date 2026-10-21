@@ -22,8 +22,10 @@ SYSTEMS = [
     ("gbc", "Game Boy Color", "handheld"),
     ("gba", "Game Boy Advance", "handheld"),
     ("atari-2600", "Atari 2600", "console"),
+    ("atari-5200", "Atari 5200", "console"),
     ("atari-7800", "Atari 7800", "console"),
     ("lynx", "Atari Lynx", "handheld"),
+    ("virtual-boy", "Virtual Boy", "handheld"),
     ("pce", "PC Engine / TurboGrafx-16", "console"),
     ("wswan", "WonderSwan / Color", "handheld"),
     ("ngp", "Neo Geo Pocket", "handheld"),
@@ -42,6 +44,8 @@ WASM_CORES = [
     ("gambatte", ["gb", "gbc"], ["wasm", "secureContext"]),
     ("mgba", ["gba"], ["wasm", "secureContext"]),
     ("stella2014", ["a26", "bin"], ["wasm", "secureContext"]),
+    ("a5200", ["a52", "bin"], ["wasm", "secureContext"]),
+    ("beetle_vb", ["vb", "vboy", "bin"], ["wasm", "secureContext"]),
     ("prosystem", ["a78", "bin"], ["wasm", "secureContext"]),
     ("handy", ["lnx", "lyx"], ["wasm", "secureContext"]),
     ("mednafen_pce", ["pce"], ["wasm", "secureContext"]),
@@ -63,8 +67,10 @@ CONSOLE_FIXTURE_SLUGS = {
     "gbc",
     "gba",
     "atari-2600",
+    "atari-5200",
     "atari-7800",
     "lynx",
+    "virtual-boy",
     "pce",
     "sega-sg1000",
     "wswan",
@@ -634,6 +640,57 @@ class Command(BaseCommand):
             compatibility_note=(
                 "Verified Chromium gameplay with stella2014 / atari2600; save states "
                 "supported. Requires SuperChip (emulated); Harmony-class carts on hardware."
+            ),
+        )
+        results["a5200"] = self._import_files(
+            fixtures,
+            slug="cc0-a5200-culomin",
+            title="CC0 Atari 5200 Culomin",
+            description=(
+                "CC0 Atari 5200 port of Curse of the Lost Miner for engineering "
+                "acceptance only. Uses a5200 with built-in AltirraOS (proprietary "
+                "5200.rom not redistributed). Not a commercial ROM."
+            ),
+            console="atari-5200",
+            core={"code": "a5200", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="cc0-a5200-culomin.a52",
+            files=[("cc0-a5200-culomin.a52", "rom", "application/octet-stream")],
+            license_ref="CC0-1.0; LICENSES/culomin-A5200-CC0.txt",
+            provenance="https://creativecommons.org/publicdomain/zero/1.0/",
+            evidence=(
+                "8bitworkshop/culomin5200 bin/main.c.rom "
+                "(https://github.com/8bitworkshop/culomin5200)"
+            ),
+            genre="Action",
+            compatibility_note=(
+                "Verified Chromium gameplay with a5200 / atari5200; save states "
+                "supported. Optional official 5200 BIOS not redistributed."
+            ),
+        )
+        results["vb"] = self._import_files(
+            fixtures,
+            slug="mit-vb-spong",
+            title="MIT Virtual Boy SPONG",
+            description=(
+                "MIT Virtual Boy SPONG Demo (VUEngine) for engineering acceptance "
+                "only. Uses beetle_vb (no BIOS). Not a commercial ROM."
+            ),
+            console="virtual-boy",
+            core={"code": "beetle_vb", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-vb-spong.vb",
+            files=[("mit-vb-spong.vb", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/spong-VB-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "VUEngine/SPONG release v1.0 spong-demo-2019-06-20.zip "
+                "(https://github.com/VUEngine/SPONG)"
+            ),
+            genre="Sports",
+            compatibility_note=(
+                "Verified Chromium gameplay with beetle_vb / vb control scheme; "
+                "save states supported. Red/stereo display is core-dependent."
             ),
         )
         results["pce"] = self._import_files(

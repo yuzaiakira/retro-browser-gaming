@@ -49,6 +49,28 @@ const PLATFORMS = {
     pass: 'A2600_GAMEPLAY_PASS',
     screenshot: 'a2600-gameplay.png',
   },
+  a5200: {
+    label: 'A5200',
+    core: 'a5200',
+    fixture: 'cc0-a5200-culomin.a52',
+    scheme: 'atari5200',
+    pass: 'A5200_GAMEPLAY_PASS',
+    screenshot: 'a5200-gameplay.png',
+    // Culomin: no Down spam (falls into darkness). Avoid A spam in the move loop.
+    inputProfile: 'start-move',
+    moveAxes: 'horizontal',
+  },
+  vb: {
+    label: 'VB',
+    core: 'beetle_vb',
+    fixture: 'mit-vb-spong.vb',
+    scheme: 'vb',
+    pass: 'VB_GAMEPLAY_PASS',
+    screenshot: 'vb-gameplay.png',
+    // SPONG paddle is vertical; A blanks beetle_vb framebuffer in this build.
+    inputProfile: 'start-only-move',
+    moveAxes: 'vertical',
+  },
   pce: {
     label: 'PCE',
     core: 'mednafen_pce',
@@ -133,6 +155,9 @@ const types = {
   '.gbc': 'application/octet-stream',
   '.gba': 'application/octet-stream',
   '.a26': 'application/octet-stream',
+  '.a52': 'application/octet-stream',
+  '.vb': 'application/octet-stream',
+  '.vboy': 'application/octet-stream',
   '.pce': 'application/octet-stream',
   '.sg': 'application/octet-stream',
   '.ws': 'application/octet-stream',
@@ -277,21 +302,31 @@ async function run() {
     if (lit < 100) throw new Error(`${cfg.label} canvas almost black after boot (${lit} lit pixels)`);
     const bootHash = sampleHash(bootPng);
 
-    // Hold Down then fire — proven against prosystem robotfindskitten menu.
-    for (let i = 0; i < 10; i++) {
-      await page.evaluate(() => window.input(5, 1));
-      await page.waitForTimeout(100);
-      await page.evaluate(() => window.input(5, 0));
-      await page.waitForTimeout(100);
+    if (cfg.inputProfile === 'start-move' || cfg.inputProfile === 'start-only-move') {
+      const bootCmds = cfg.inputProfile === 'start-only-move' ? [3] : [3, 8];
+      for (const cmd of bootCmds) {
+        await page.evaluate((c) => window.input(c, 1), cmd);
+        await page.waitForTimeout(250);
+        await page.evaluate((c) => window.input(c, 0), cmd);
+        await page.waitForTimeout(400);
+      }
+    } else {
+      // Hold Down then fire — proven against prosystem robotfindskitten menu.
+      for (let i = 0; i < 10; i++) {
+        await page.evaluate(() => window.input(5, 1));
+        await page.waitForTimeout(100);
+        await page.evaluate(() => window.input(5, 0));
+        await page.waitForTimeout(100);
+      }
+      await page.evaluate(() => window.input(0, 1));
+      await page.waitForTimeout(400);
+      await page.evaluate(() => window.input(0, 0));
+      await page.waitForTimeout(500);
+      await page.evaluate(() => window.input(8, 1));
+      await page.waitForTimeout(400);
+      await page.evaluate(() => window.input(8, 0));
+      await page.waitForTimeout(600);
     }
-    await page.evaluate(() => window.input(0, 1));
-    await page.waitForTimeout(400);
-    await page.evaluate(() => window.input(0, 0));
-    await page.waitForTimeout(500);
-    await page.evaluate(() => window.input(8, 1));
-    await page.waitForTimeout(400);
-    await page.evaluate(() => window.input(8, 0));
-    await page.waitForTimeout(600);
 
     const beforePng = PNG.sync.read(await frame.screenshot());
     const beforeHash = sampleHash(beforePng);
@@ -299,16 +334,27 @@ async function run() {
     if (beforeLit < 100) throw new Error(`${cfg.label} canvas went black after menu input`);
     const menuDelta = frameDelta(bootPng, beforePng);
 
+    const axis =
+      cfg.moveAxes === 'vertical'
+        ? [4, 5]
+        : cfg.moveAxes === 'horizontal'
+          ? [6, 7]
+          : [6, 7];
     for (let i = 0; i < 12; i++) {
-      await page.evaluate(() => window.input(7, 1));
+      await page.evaluate((c) => window.input(c, 1), axis[0]);
       await page.waitForTimeout(60);
-      await page.evaluate(() => window.input(7, 0));
-      await page.evaluate(() => window.input(6, 1));
+      await page.evaluate((c) => window.input(c, 0), axis[0]);
+      await page.evaluate((c) => window.input(c, 1), axis[1]);
       await page.waitForTimeout(60);
-      await page.evaluate(() => window.input(6, 0));
-      await page.evaluate(() => window.input(8, 1));
-      await page.waitForTimeout(60);
-      await page.evaluate(() => window.input(8, 0));
+      await page.evaluate((c) => window.input(c, 0), axis[1]);
+      if (
+        cfg.inputProfile !== 'start-move' &&
+        cfg.inputProfile !== 'start-only-move'
+      ) {
+        await page.evaluate(() => window.input(8, 1));
+        await page.waitForTimeout(60);
+        await page.evaluate(() => window.input(8, 0));
+      }
     }
     await page.waitForTimeout(300);
     const movedPng = PNG.sync.read(await frame.screenshot());

@@ -28,13 +28,13 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | Nintendo | Game Boy | gambatte / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Distinct DMG `.gb`; MIT Dot + **GPL-3.0 Big2Small** (`PH-05/gb-big2small-*`, `catalog-expansion-20261021.md`); not inferred from GBC. |
 | Nintendo | Game Boy Color | gambatte / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Distinct `.gbc` Waternet + **Little Green Blob** (`PH-05/catalog-underrepresented-expansion-20261021.md`); separate catalog slug from GB. |
 | Nintendo | Game Boy Advance | mgba / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Core + catalog offline; MIT Dino + **Nonogram Advance** (`PH-05/gba-nonogram-*`, `catalog-expansion-20261021.md`); `gba` control scheme. |
-| Nintendo | Virtual Boy | Beetle VB candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Legal fixture and display UX evaluation. |
+| Nintendo | Virtual Boy | beetle_vb / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P2 | Core + catalog offline (`PH-05/a5200-vb-expansion-20261021.md`, `vb-gameplay.png`); MIT SPONG Demo; no BIOS; red/stereo is core-dependent. |
 | Nintendo | Nintendo 64 | Mupen64Plus candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P2 | WebGL/performance varies by core and ROM. |
 | Nintendo | Nintendo DS | melonDS/DeSmuME candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P2 | Dual-screen/touch and firmware constraints. |
 | Nintendo | Nintendo 3DS | Azahar Web candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P2 | Browser maturity and legal assets unverified. |
 | Nintendo | GameCube / Wii | Dolphin web candidate | [ ] | NOT_FEASIBLE | — | — | — | — | — | — | P3 | No pinned supported browser integration. |
 | Atari | 2600 | stella2014 / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Core + catalog offline; MIT Berta + **Pipes** (SuperChip) (`PH-05/catalog-underrepresented-expansion-20261021.md`). |
-| Atari | 5200 | A5200 candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Separate from 7800; legal fixture/core review required. |
+| Atari | 5200 | a5200 / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P2 | Core + catalog offline (`PH-05/a5200-vb-expansion-20261021.md`, `a5200-gameplay.png`); CC0 Culomin; built-in AltirraOS (proprietary 5200.rom not redistributed). |
 | Atari | 7800 | prosystem / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Core + catalog offline (`PH-05/a7800-*`); GPL-2.0 rfk7800; optional BIOS not redistributed; blob VFS (not seekable). |
 | Atari | Lynx | handy / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Core + catalog offline (`PH-05/lynx-*`); MIT first-party Dot; optional `lynxboot.img` not redistributed. |
 | Atari | Jaguar | Virtual Jaguar candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P3 | Browser maturity and performance unknown. |
@@ -47,7 +47,8 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | Bandai | WonderSwan / Color | mednafen_wswan / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Core + catalog offline (`PH-05/wswan-*`); MIT chips1; lock 68 files. |
 | Other | Panasonic 3DO | Opera candidate | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P3 | BIOS and large-disc constraints. |
 | Other | ColecoVision | gearcoleco (EmulatorJS) | [ ] | BLOCKED | — | — | — | — | — | — | P2 | MIT RetroPIPE ROM exists; **proprietary `colecovision.rom` BIOS required** (`PH-05/coleco-gearcoleco-bios-blocker-20261020.md`). |
-| Other | Intellivision / Vectrex | FreeIntv / VecX candidates | [ ] | PLANNED | — | — | — | — | — | — | P2 | Add separately only after legal fixtures/core locks. |
+| Other | Intellivision | FreeIntv candidate | [ ] | NOT_STARTED | — | — | — | — | — | — | P2 | **Not in EmulatorJS 4.2.3 CDN**; need alternate redistributable core + EXEC firmware + legal fixture. |
+| Other | Vectrex | VecX candidate | [ ] | NOT_STARTED | — | — | — | — | — | — | P2 | **Not in EmulatorJS 4.2.3 CDN**; need alternate redistributable core + legal fixture. |
 | Arcade | MAME / FBNeo / CPS / Neo Geo Arcade | MAME / FBNeo candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | ROM-set and BIOS licensing require strict bundle policy. |
 | Computer | MS-DOS | jsdos / emulators 8.3.8 (GPL-2.0) | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Catalog offline (`PH-05/dos-*20261021*`); MIT Floppy Bird ZIP; isolated dos-frame. EmulatorJS `dosbox_pure` still unplayable on 4.2.3 (kept pinned). |
 | Computer | Commodore 64 / Amiga | VICE / PUAE candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Firmware/legal assets and keyboard UX. |
@@ -63,7 +64,7 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | 2b | NES…GBA + Atari/PCE/SG/WS + 7800/Lynx/NGP/NGPC + DOS | EmulatorJS lock + jsdos (86) | Medium | Verified playable (P1) | PCE CD / Sega CD remain separate multi-file work. |
 | 3 | Playwright WebKit host deps | ICU/webp/ffi packages for Playwright WebKit | Low | Not iOS Safari proof even when green | Install missing shared libraries or document permanent blocker. |
 | 4 | J2ME MIDlet offline | js2me + RMS/IDB + MIT Dot/Paddle/Notes | Medium | First-party offline RMS verified per title | Keep commercial JAR compatibility unchecked until evidenced. |
-| 5 | Sega CD/32X, N64, DS, computers | Multi-file/BIOS-aware adapter and legal fixtures | High | 32X BLOCKED_LEGAL (PicoDrive NC); Sega CD BIOS-blocked; N64/DS/computers remain | Unlock only with approved core/BIOS + legal fixtures. |
+| 5 | Sega CD/32X, N64, DS, computers | Multi-file/BIOS-aware adapter and legal fixtures | High | 32X BLOCKED_LEGAL (PicoDrive NC); Sega CD BIOS-blocked; A5200/VB verified (`PH-05/a5200-vb-expansion-20261021.md`); N64/DS/computers remain | Unlock only with approved core/BIOS + legal fixtures. |
 | 6 | Arcade, Neo Geo, PCE CD, 3DO | Core plus ROM-set/BIOS policy | High | Rights and bundle validation dominate | Define legal asset policy before code integration. |
 | 7 | Saturn, Dreamcast, 3DS, PS2 | Experimental web cores/WebGL | High | Performance/firmware support unknown | Spike separately; no P0 promotion without a PDR change. |
 | P1 parallel research | Broader J2ME titles | js2me MIDP gaps + legal fixtures | High | Dot playable (`PH-06/j2me-dot-gameplay-20261021.md`) | Add games only with provenance + real browser evidence. |
