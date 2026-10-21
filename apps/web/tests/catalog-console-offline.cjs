@@ -34,6 +34,8 @@ const GAMES = [
   { slug: 'mit-gba-nonogram', title: 'MIT GBA Nonogram Advance', platform: 'gba-nonogram' },
   { slug: 'mit-a2600-berta', title: 'MIT Atari 2600 Berta', platform: 'a2600' },
   { slug: 'mit-a2600-pipes', title: 'MIT Atari 2600 Pipes', platform: 'a2600-pipes' },
+  { slug: 'cc0-a5200-culomin', title: 'CC0 Atari 5200 Culomin', platform: 'a5200' },
+  { slug: 'mit-vb-spong', title: 'MIT Virtual Boy SPONG', platform: 'vb' },
   { slug: 'huc-pce-scroll', title: 'HuC PCE Scroll', platform: 'pce' },
   { slug: 'mit-sg1000-retropipe', title: 'MIT SG-1000 RetroPIPE', platform: 'sg1000' },
   { slug: 'mit-wswan-chips1', title: 'MIT WonderSwan chips1', platform: 'wswan' },

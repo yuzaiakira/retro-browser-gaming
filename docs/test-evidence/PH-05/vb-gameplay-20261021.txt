@@ -1,0 +1,3 @@
+CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
+CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
+VB_GAMEPLAY_PASS {"capabilities":{"saveState":true,"audio":true,"analog":false,"seekableMedia":false,"onDemandMedia":false},"stateBytes":395704,"lit":39390,"beforeHash":3073520130,"movedHash":696694927,"restoredHash":696694927,"inputChangedFrame":true,"menuChangedFrame":true,"controlScheme":"vb","core":"beetle_vb","fixture":"mit-vb-spong.vb","platform":"vb"}
