@@ -47,6 +47,11 @@ def manifest_for_core(code: str) -> list[dict]:
         if not any(item["path"].endswith(".wasm") for item in selected):
             raise ValueError(f"No wasm package for core {code} in core-package-lock.json")
         return selected
+    if code == "js2me":
+        selected = [item for item in lock if item["path"].startswith("js2me/")]
+        if not any(item["path"].endswith("/js2me.js") or item["path"].endswith("js/js2me.js") for item in selected):
+            raise ValueError(f"No js2me runtime package for core {code} in core-package-lock.json")
+        return selected
 
     selected: list[dict] = []
     for item in lock:

@@ -45,7 +45,9 @@ class EmulatorCore(ValidatedModel):
     code = models.SlugField()
     version = models.CharField(max_length=80)
     status = models.CharField(max_length=20, choices=STATUS, default="research")
-    runtime_type = models.CharField(max_length=20, choices=[("native", "native"), ("wasm", "wasm")])
+    runtime_type = models.CharField(
+        max_length=20, choices=[("native", "native"), ("wasm", "wasm"), ("js", "js")]
+    )
     min_capabilities = models.JSONField(default=list, blank=True)
     licensed_asset_manifest = models.JSONField(
         default=list, blank=True, validators=[validate_core_manifest]
@@ -72,10 +74,10 @@ class EmulatorCore(ValidatedModel):
             raise ValidationError("Invalid supported extensions.")
         if (
             self.status == "available"
-            and self.runtime_type == "wasm"
+            and self.runtime_type in {"wasm", "js"}
             and not self.licensed_asset_manifest
         ):
-            raise ValidationError("WASM runtime requires a licensed, pinned core manifest.")
+            raise ValidationError("WASM/JS runtime requires a licensed, pinned core manifest.")
         old = type(self).objects.filter(pk=self.pk).first()
         if old and any(
             getattr(old, k) != getattr(self, k)

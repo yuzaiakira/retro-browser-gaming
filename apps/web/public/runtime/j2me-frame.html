@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>J2ME runtime</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+  <link rel="stylesheet" href="/runtime/frame.css" />
+  <style>
+    html, body { width: 100%; height: 100%; margin: 0; background: #0a0c10; color: #c8d0d8; overflow: hidden; }
+    #frame { display: flex; flex-direction: column; align-items: center; height: 100%; }
+    #top { height: 24px; font: 12px/24px monospace; text-align: center; width: 100%; }
+    #screen {
+      width: 240px; height: 320px; background: #000; flex: 0 0 auto;
+      image-rendering: pixelated; position: relative; overflow: hidden;
+    }
+    #screen canvas { display: block; width: 100%; height: 100%; }
+    #keypad {
+      display: grid; grid-template-columns: repeat(3, 56px); gap: 6px; justify-content: center;
+      padding: 10px 0 16px; user-select: none; -webkit-user-select: none;
+    }
+    #keypad button {
+      height: 40px; border: 1px solid #3a4654; background: #1a222c; color: #e8eef4;
+      font: 14px monospace; border-radius: 4px; touch-action: manipulation;
+    }
+    #keypad button:active { background: #2a3644; }
+    #alert {
+      position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+      background: rgba(0,0,0,.72);
+    }
+    #alert .message { background: #1a222c; padding: 16px 20px; border: 1px solid #5a3a3a; max-width: 80%; }
+  </style>
+  <script src="/cores/js2me/js/zip/zip.js"></script>
+  <script src="/cores/js2me/js/zip/inflate.js"></script>
+  <script src="/cores/js2me/js/zip/zip-ext.js"></script>
+  <script src="/cores/js2me/js/js2me.js"></script>
+  <script>
+    js2me.libraryPath = '/cores/js2me/js/me';
+    js2me.config.app = false;
+    js2me.config.engine = 'zazu';
+    js2me.config.selector = false;
+    js2me.config.workers = false;
+    js2me.config.midlet = 1;
+    js2me.config.width = 240;
+    js2me.config.height = 320;
+    js2me.config.fullHeight = 320;
+    js2me.engine = '/cores/js2me/js/program_zazu.js';
+    js2me.rmsQuotaBytes = 256 * 1024;
+  </script>
+  <script src="/cores/js2me/js/bufferStream.js"></script>
+  <script src="/cores/js2me/js/convert.js"></script>
+  <script src="/cores/js2me/js/classes.js"></script>
+  <script src="/cores/js2me/js/execute.js"></script>
+  <script src="/cores/js2me/js/events.js"></script>
+  <script src="/cores/js2me/js/manifest.js"></script>
+  <script src="/cores/js2me/js/methodStub.js"></script>
+  <script src="/cores/js2me/js/launcher.js"></script>
+  <script src="/cores/js2me/js/loader.js"></script>
+  <script src="/cores/js2me/js/numbers.js"></script>
+  <script src="/cores/js2me/js/resources.js"></script>
+  <script src="/cores/js2me/js/utils.js"></script>
+  <script src="/cores/js2me/js/threads.js"></script>
+  <script src="/runtime/j2me-rms-idb.js"></script>
+  <script src="/runtime/j2me-frame.js"></script>
+</head>
+<body>
+  <div id="frame">
+    <div id="top"><div id="title">J2ME</div></div>
+    <div id="screen"></div>
+    <div id="keypad" aria-label="Numeric keypad">
+      <button type="button" id="choice" class="softkey" data-key="-6">LSK</button>
+      <button type="button" id="ok" data-key="-5">OK</button>
+      <button type="button" id="back" class="softkey" data-key="-7">RSK</button>
+      <button type="button" data-key="49">1</button>
+      <button type="button" data-key="50">2</button>
+      <button type="button" data-key="51">3</button>
+      <button type="button" data-key="52">4</button>
+      <button type="button" data-key="53">5</button>
+      <button type="button" data-key="54">6</button>
+      <button type="button" data-key="55">7</button>
+      <button type="button" data-key="56">8</button>
+      <button type="button" data-key="57">9</button>
+      <button type="button" data-key="42">*</button>
+      <button type="button" data-key="48">0</button>
+      <button type="button" data-key="35">#</button>
+    </div>
+  </div>
+  <div id="alert"><div class="message">Error</div></div>
+</body>
+</html>

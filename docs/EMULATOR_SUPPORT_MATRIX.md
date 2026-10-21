@@ -9,7 +9,7 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | Browser | HTML5 / JavaScript | Native isolated iframe | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/V*/V | Chromium + Firefox + Android Chrome; WebKit catalog | P0 | SEC-004 OK; Playwright WebKit has no OPFS so install stays disabled; Android touch/offline/AUD-001 PASSED (`PH-08`); iOS/gamepad open. |
 | Browser | Flash / Ruffle | Ruffle candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Select a pinned browser build and legal SWF fixture. |
 | Browser | WASM game ports | Per-port native runtime | [ ] | PLANNED | — | — | — | — | — | — | P1 | Require license review and iframe adapter. |
-| Classic Mobile Phones / Java ME | J2ME / MIDP 1.0–2.0 | No selected compliant runtime | [ ] | BLOCKED | — | — | — | — | — | — | P1 | Node RMS + Chromium IDB durable (`PH-06/j2me-rms-idb-20261021.md`); still no VM/MIDlet offline gameplay. |
+| Classic Mobile Phones / Java ME | J2ME / MIDP subset | js2me (MIT) + IDB RMS | [x] | VERIFIED_PLAYABLE | V | V | I | V | V/I/V | Chromium | P1 | First-party MIT Dot only (`PH-06/j2me-dot-gameplay-20261021.md`); offline RMS restart PASS. Partial CLDC/MIDP — not full commercial JAR compatibility. Sound unverified. |
 | Sega | SG-1000 | smsplus / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Distinct from SMS (`PH-05/sg1000-*`, `catalog-sg1000-offline-*`); MIT RetroPIPE `.sg`; `segaMS` scheme. |
 | Sega | Master System | SMS Plus / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P0 | Core + catalog offline (`PH-05/sms-gameplay-20261020.md`, `PH-05/catalog-sms-offline-20261020.md`); MIT Ninja Girl; keyboard/touch via catalog player. |
 | Sega | Game Gear | Genesis Plus GX / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P0 | Core + catalog offline (`PH-05/gg-gameplay-20261020.md`, `PH-05/catalog-gg-offline-20261020.md`); MIT Waternet; `segaGG` from `.gg`; same pinned `genesis_plus_gx`. |
@@ -62,10 +62,10 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | 2 | SMS/GG family members | Existing EmulatorJS cores and legal fixtures | Medium | SMS + GG core and catalog offline verified | Optional SG-1000; preserve GG `segaGG` mapping. |
 | 2b | NES…GBA + Atari/PCE/SG/WS + 7800/Lynx/NGP/NGPC + DOS | EmulatorJS lock + jsdos (86) | Medium | Verified playable (P1) | PCE CD / Sega CD remain separate multi-file work. |
 | 3 | Playwright WebKit host deps | ICU/webp/ffi packages for Playwright WebKit | Low | Not iOS Safari proof even when green | Install missing shared libraries or document permanent blocker. |
-| 4 | J2ME MIDlet offline | Self-hosted VM + RMS/IDB + legal JAR | High | IDB PoC only; no gameplay yet | Do not check matrix until Chromium MIDlet evidence. |
+| 4 | J2ME MIDlet offline | js2me + RMS/IDB + MIT Dot | Medium | First-party playable; expand MIDP surface carefully | Keep commercial JAR compatibility unchecked until evidenced. |
 | 5 | Sega CD/32X, N64, DS, computers | Multi-file/BIOS-aware adapter and legal fixtures | High | Large files, firmware, performance, touch layouts | Complete bounded-memory media work first. |
 | 6 | Arcade, Neo Geo, PCE CD, 3DO | Core plus ROM-set/BIOS policy | High | Rights and bundle validation dominate | Define legal asset policy before code integration. |
 | 7 | Saturn, Dreamcast, 3DS, PS2 | Experimental web cores/WebGL | High | Performance/firmware support unknown | Spike separately; no P0 promotion without a PDR change. |
-| P1 parallel research | J2ME feature phones | Self-hosted MIDP VM + JAR/JAD + keypad + RMS | High | RMS+IDB durable; no MIDlet play (`PH-06/j2me-rms-idb-20261021.md`) | Do not integrate until legal Chromium offline MIDlet gameplay exists. |
+| P1 parallel research | Broader J2ME titles | js2me MIDP gaps + legal fixtures | High | Dot playable (`PH-06/j2me-dot-gameplay-20261021.md`) | Add games only with provenance + real browser evidence. |
 
 Review this matrix for every emulator/core, gameplay, offline, save, controller, browser, or acceptance-status change. Evidence links must remain truthful; platform rows are never inherited from another system in the same family.
