@@ -1,0 +1,110 @@
+Found 29 test(s).
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+{"requestId": "3ef4eab4-dae7-47a8-9c94-126a42f00c06", "method": "GET", "status": 200, "durationMs": 9}
+{"requestId": "817e3da6-3e55-490b-85cd-0ad4be30003b", "method": "GET", "status": 200, "durationMs": 1}
+{"requestId": "9f1d3ad1-c9ee-42a5-9492-33af2f748a16", "method": "GET", "status": 200, "durationMs": 1}
+{"requestId": "7c1ae4ec-958f-4781-8d16-a473df41ea0d", "method": "GET", "status": 404, "durationMs": 6}
+Not Found: /api/v1/games/
+.{"requestId": "bb5c21db-ec0f-4855-b1f6-1fae8dec0056", "method": "GET", "status": 200, "durationMs": 7}
+{"requestId": "8885a58f-0a85-4854-bb5d-8833abedf027", "method": "GET", "status": 404, "durationMs": 6}
+Not Found: /api/v1/games/orbit-catch/
+{"requestId": "2b9f6b49-4b0f-48ae-9358-17ca47725578", "method": "GET", "status": 404, "durationMs": 8}
+Not Found: /api/v1/releases/5ec02b31-2d67-4293-8971-a475625b89f4/download-manifest/
+{"requestId": "8c015fd1-d685-44f3-a40a-6593e0337f5a", "method": "GET", "status": 404, "durationMs": 9}
+Not Found: /dev-assets/7bc378ef-7500-476e-a7f9-527ce4485aa8/
+{"requestId": "bfb6d382-9fd8-4d27-870e-014260cdc3a1", "method": "GET", "status": 404, "durationMs": 7}
+Not Found: /api/v1/releases/5ec02b31-2d67-4293-8971-a475625b89f4/launch-config/
+.{"requestId": "f2f651d9-1c73-4cd6-a63a-d9b1782a2da1", "method": "GET", "status": 404, "durationMs": 9}
+Not Found: /api/v1/releases/b425562c-db8f-4750-8296-9e3762f0a369/download-manifest/
+{"requestId": "f0e67fae-b64e-4b60-8455-58ea76d27e65", "method": "GET", "status": 404, "durationMs": 10}
+Not Found: /dev-assets/315f385a-7185-4233-997d-dc5b7581e159/
+.{"requestId": "d0dd05ae-10aa-405e-a98f-edf2444e2609", "method": "GET", "status": 200, "durationMs": 16}
+..{"requestId": "c726cb73-8895-47de-9de3-fc1d4af260b4", "method": "GET", "status": 200, "durationMs": 0}
+{"requestId": "b6c8a62c-4e99-4a3a-b721-6631f98bf23c", "method": "GET", "status": 503, "durationMs": 0}
+Service Unavailable: /health/ready
+{"requestId": "57c0fcf9-db33-4685-bed7-3501c8aa3e38", "method": "GET", "status": 200, "durationMs": 0}
+.{"requestId": "262f95cd-76c7-44b8-a778-3d36abdddb28", "method": "GET", "status": 206, "durationMs": 11}
+{"requestId": "4e9a1110-8c1a-4117-b516-6ee13d14a4d7", "method": "GET", "status": 206, "durationMs": 11}
+{"requestId": "30fb4487-717e-4c39-a90d-448379c15a4b", "method": "GET", "status": 206, "durationMs": 10}
+{"requestId": "bdea994f-24ca-447b-8766-afddc127b60f", "method": "GET", "status": 206, "durationMs": 11}
+{"requestId": "5e461368-621f-4941-be95-5ee7d36c749b", "method": "GET", "status": 206, "durationMs": 10}
+{"requestId": "dc048187-0fc3-4f82-95b5-fdb174787c7a", "method": "GET", "status": 206, "durationMs": 10}
+{"requestId": "7f11636a-2d66-43ae-86bf-efc42c706f5d", "method": "GET", "status": 206, "durationMs": 12}
+{"requestId": "47d375d5-5268-468f-bf83-08fa98b25f15", "method": "GET", "status": 206, "durationMs": 12}
+{"requestId": "efbe5a96-09f4-4cf0-89ee-11c20cdbeab9", "method": "GET", "status": 206, "durationMs": 11}
+{"requestId": "e4680806-27ce-4805-aab2-b441cf7d4596", "method": "GET", "status": 206, "durationMs": 11}
+{"requestId": "e310078a-7d9e-4952-a38e-e9db61a98ef0", "method": "GET", "status": 206, "durationMs": 10}
+{"requestId": "1c81a0a0-4273-4665-9eeb-414d883ce7f0", "method": "GET", "status": 206, "durationMs": 10}
+{"requestId": "03d5d3ad-3574-494f-8905-87c5c3b214b0", "method": "GET", "status": 206, "durationMs": 11}
+{"requestId": "ca5f2ec1-d15f-4629-a27f-2bb9780ee5a1", "method": "GET", "status": 206, "durationMs": 10}
+.{"requestId": "4a6b9ace-6b59-492d-a339-a99bcacaabe8", "method": "GET", "status": 200, "durationMs": 10}
+.{"requestId": "e7ec8689-e586-42d0-8fe2-37b1942b3794", "method": "GET", "status": 206, "durationMs": 10}
+.{"requestId": "b212ab27-1626-4aea-93e8-37c7a1181757", "method": "GET", "status": 416, "durationMs": 11}
+Requested Range Not Satisfiable: /dev-assets/7410e8ce-0c2f-4b0e-bd5d-a8ae6931e117/
+{"requestId": "e0eb844b-9cfb-4671-9586-df3839ce0a0e", "method": "GET", "status": 416, "durationMs": 11}
+Requested Range Not Satisfiable: /dev-assets/7410e8ce-0c2f-4b0e-bd5d-a8ae6931e117/
+{"requestId": "d28e6d72-74bc-4caa-8af8-09887e2827ba", "method": "GET", "status": 416, "durationMs": 10}
+Requested Range Not Satisfiable: /dev-assets/7410e8ce-0c2f-4b0e-bd5d-a8ae6931e117/
+{"requestId": "0dbf841c-dbb7-414a-a354-a79ea357dddc", "method": "GET", "status": 416, "durationMs": 10}
+Requested Range Not Satisfiable: /dev-assets/7410e8ce-0c2f-4b0e-bd5d-a8ae6931e117/
+{"requestId": "50e0666b-337a-470d-9cd6-830b6aa6ef61", "method": "GET", "status": 416, "durationMs": 10}
+Requested Range Not Satisfiable: /dev-assets/7410e8ce-0c2f-4b0e-bd5d-a8ae6931e117/
+{"requestId": "dd54222c-51ca-4120-95a5-0b37e64d44a2", "method": "GET", "status": 412, "durationMs": 11}
+Precondition Failed: /dev-assets/7410e8ce-0c2f-4b0e-bd5d-a8ae6931e117/
+{"requestId": "5ddfacb0-0e05-4e6c-a8e6-f8fad25efeb1", "method": "HEAD", "status": 206, "durationMs": 10}
+.{"requestId": "b25c2e1d-d5b8-4f8f-9790-60624dfcd72f", "method": "GET", "status": 200, "durationMs": 7}
+....{"requestId": "23ebdce9-6618-422a-b954-dba98594ee9b", "method": "GET", "status": 404, "durationMs": 5}
+Not Found: /api/v1/releases/c53cdf90-5b4c-4d10-886d-9bcefeb908f8/download-manifest/
+..{"requestId": "e27cacda-54ab-404b-a74b-ba2e306c0d0e", "method": "GET", "status": 302, "durationMs": 4}
+{"requestId": "7b7f7dae-51e6-42fa-88cc-3606108a8607", "method": "GET", "status": 302, "durationMs": 1}
+{"requestId": "9026e733-2f32-423c-bb52-aeb0a5872d60", "method": "GET", "status": 200, "durationMs": 17}
+{"requestId": "4feea4ea-820c-48a0-80ca-6f58cc8efaf1", "method": "POST", "status": 302, "durationMs": 4}
+{"requestId": "9839a63e-715e-477c-878e-7cb2bbf6eae6", "method": "POST", "status": 302, "durationMs": 3}
+{"requestId": "6fc71582-221e-4713-9cc9-c2595b9c36a7", "method": "POST", "status": 302, "durationMs": 3}
+.Forbidden (CSRF cookie not set.): /admin/login/
+{"requestId": "b36d17fd-292d-41a0-b086-b252c269e379", "method": "POST", "status": 403, "durationMs": 1}
+.{"requestId": "2c3d6173-8f21-41d6-a62f-dcd74709bd5d", "method": "GET", "status": 404, "durationMs": 12}
+Not Found: /dev-assets/637e4abe-6e8d-4fb1-9cd9-515acc20683c/
+{"requestId": "1d8077d7-a7a8-4f20-ba25-038387ce1f91", "method": "GET", "status": 503, "durationMs": 10}
+Service Unavailable: /api/v1/releases/b41be3db-dcc4-4cf6-88d3-ff27da24afbd/download-manifest/
+......{"requestId": "64fffa57-7144-49fe-939b-31810ed2b3e3", "method": "POST", "status": 405, "durationMs": 0}
+Method Not Allowed: /api/v1/games/
+{"requestId": "2084e50d-cdef-4855-8a28-3e6052c66f33", "method": "PUT", "status": 405, "durationMs": 0}
+Method Not Allowed: /api/v1/games/
+{"requestId": "819f65c9-8ba3-4d49-ac2f-e10a3e2320af", "method": "PATCH", "status": 405, "durationMs": 0}
+Method Not Allowed: /api/v1/games/
+{"requestId": "df916d89-b7bf-4d87-8b08-f0fcfee9a103", "method": "DELETE", "status": 405, "durationMs": 0}
+Method Not Allowed: /api/v1/games/
+{"requestId": "4762eb89-84e8-424e-9c74-8e6ca3279146", "method": "POST", "status": 405, "durationMs": 0}
+Method Not Allowed: /api/v1/consoles/
+{"requestId": "c5af7fe6-99e6-4929-8744-479f1c6a15b4", "method": "PUT", "status": 405, "durationMs": 0}
+Method Not Allowed: /api/v1/consoles/
+{"requestId": "389df0f6-0c79-489e-9a70-520f952db49a", "method": "PATCH", "status": 405, "durationMs": 0}
+Method Not Allowed: /api/v1/consoles/
+{"requestId": "9bd17d5c-37a4-49b5-b25b-0be90365ff00", "method": "DELETE", "status": 405, "durationMs": 0}
+Method Not Allowed: /api/v1/consoles/
+{"requestId": "b29d0126-2ba0-48d8-9072-f30852b7f2b8", "method": "POST", "status": 405, "durationMs": 0}
+Method Not Allowed: /api/v1/emulators/
+{"requestId": "c1e4b74d-2060-43fa-a026-8de0cc1ed897", "method": "PUT", "status": 405, "durationMs": 0}
+Method Not Allowed: /api/v1/emulators/
+{"requestId": "246145f2-39e4-4e9a-bd29-98ec37b835f8", "method": "PATCH", "status": 405, "durationMs": 0}
+Method Not Allowed: /api/v1/emulators/
+{"requestId": "d330d2f8-15db-4f70-97a6-e552ae835838", "method": "DELETE", "status": 405, "durationMs": 0}
+Method Not Allowed: /api/v1/emulators/
+{"requestId": "d8cc801b-100f-483d-9151-cc90e87e7660", "method": "POST", "status": 405, "durationMs": 0}
+Method Not Allowed: /api/v1/releases/1857e688-e46b-4cf9-9ad1-d213cea38e05/download-manifest/
+{"requestId": "3db36292-744c-4bf6-9f14-d7869fabebef", "method": "PUT", "status": 405, "durationMs": 0}
+Method Not Allowed: /api/v1/releases/1857e688-e46b-4cf9-9ad1-d213cea38e05/download-manifest/
+{"requestId": "42335b34-81dc-4204-be46-5fa387349dd5", "method": "PATCH", "status": 405, "durationMs": 0}
+Method Not Allowed: /api/v1/releases/1857e688-e46b-4cf9-9ad1-d213cea38e05/download-manifest/
+{"requestId": "924e7677-3c76-4fef-8bf5-ca2fbb33e63f", "method": "DELETE", "status": 405, "durationMs": 0}
+Method Not Allowed: /api/v1/releases/1857e688-e46b-4cf9-9ad1-d213cea38e05/download-manifest/
+.{"requestId": "48a08fbd-ee89-4b3d-aeaf-585113eece1d", "method": "GET", "status": 200, "durationMs": 8}
+.{"requestId": "8a0c58c8-b3c9-42f3-8ee0-9b638c9c7f14", "method": "GET", "status": 206, "durationMs": 10}
+...
+----------------------------------------------------------------------
+Ran 29 tests in 3.671s
+
+OK
+Destroying test database for alias 'default'...

@@ -1,0 +1,2 @@
+CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
+A2600_GAMEPLAY_PASS {"capabilities":{"saveState":true,"audio":true,"analog":false,"seekableMedia":true,"onDemandMedia":false},"stateBytes":640,"lit":77725,"beforeHash":3879851062,"movedHash":3879851062,"restoredHash":3879851062,"inputChangedFrame":true,"menuChangedFrame":true,"controlScheme":"atari2600","core":"stella2014","fixture":"mit-a2600-pipes.a26","platform":"a2600"}
