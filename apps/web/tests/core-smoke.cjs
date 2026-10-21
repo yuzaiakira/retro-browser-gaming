@@ -1,6 +1,6 @@
 const { chromium } = require('@playwright/test');
 const { createServer } = require('node:http');
-const { readFile } = require('node:fs/promises');
+const { mkdir, readFile } = require('node:fs/promises');
 const { extname, join, normalize } = require('node:path');
 const { PNG } = require('pngjs');
 
@@ -8,6 +8,7 @@ const root = join(__dirname, '..', 'public');
 const fixtureName = process.env.GENESIS_FIXTURE || 'mit-genesis-breakout.bin';
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
 const fixture = join(__dirname, '..', '..', '..', '.fixtures', fixtureName);
+const evidenceDir = join(__dirname, '..', '..', '..', 'docs', 'test-evidence', 'PH-05');
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.data': 'application/octet-stream', '.json': 'application/json', '.bin': 'application/octet-stream' };
 const outer = `<!doctype html><title>Genesis real-core smoke</title><style>body{margin:0;background:#111}iframe{width:960px;height:640px;border:0}</style><iframe id="game" src="/runtime/frame.html"></iframe><script>
 window.result = new Promise((resolve, reject) => {
@@ -48,6 +49,8 @@ async function handler(request, response) {
   } catch { response.writeHead(404, headers).end(); }
 }
 
+const isPong = /pong/i.test(fixtureName);
+
 function paddleCenter(png) {
   let best;
   for (let y = Math.floor(png.height * 0.45); y < png.height; y++) {
@@ -67,7 +70,50 @@ function paddleCenter(png) {
   return best;
 }
 
+function nonBlackPixels(png) {
+  let count = 0;
+  for (let i = 0; i < png.data.length; i += 4) {
+    if (png.data[i] + png.data[i + 1] + png.data[i + 2] > 40) count++;
+  }
+  return count;
+}
+
+function sampleHash(png) {
+  let h = 0;
+  for (let y = 8; y < png.height; y += 32) {
+    for (let x = 8; x < png.width; x += 32) {
+      const i = (y * png.width + x) * 4;
+      h = (h * 33 + png.data[i] + png.data[i + 1] * 3 + png.data[i + 2] * 7) >>> 0;
+    }
+  }
+  return h;
+}
+
+/** Left (green) vertical paddle centroid for MIT Genesis Pong. */
+function pongPaddleCenter(png) {
+  let best;
+  const y0 = Math.floor(png.height * 0.05);
+  const y1 = Math.floor(png.height * 0.9);
+  const xMax = Math.floor(png.width * 0.4);
+  for (let x = 0; x < xMax; x++) {
+    let runStart = -1;
+    for (let y = y0; y <= y1; y++) {
+      const index = (y * png.width + x) * 4;
+      const green = png.data[index] < 48 && png.data[index + 1] > 160 && png.data[index + 2] < 48;
+      if (green && runStart < 0) runStart = y;
+      if ((!green || y === y1) && runStart >= 0) {
+        const height = y - runStart + (green ? 1 : 0);
+        if (height >= 12 && (!best || height > best.height)) best = { center: runStart + height / 2, height, x };
+        runStart = -1;
+      }
+    }
+  }
+  if (!best) throw new Error('Genesis Pong paddle was not rendered');
+  return best;
+}
+
 async function run() {
+  await mkdir(join(evidenceDir, 'screenshots'), { recursive: true });
   const server = createServer((request, response) => { handler(request, response); });
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
   const { port } = server.address();
@@ -88,22 +134,65 @@ async function run() {
     await page.evaluate(() => window.input(3, 1));
     await page.waitForTimeout(500);
     await page.evaluate(() => window.input(3, 0));
-    await page.waitForTimeout(700);
+    await page.waitForTimeout(isPong ? 400 : 700);
+    if (isPong) {
+      await page.evaluate(() => window.input(0, 1));
+      await page.waitForTimeout(200);
+      await page.evaluate(() => window.input(0, 0));
+      await page.waitForTimeout(900);
+    }
     const frame = page.locator('#game');
-    const before = paddleCenter(PNG.sync.read(await frame.screenshot()));
-    const state = await page.evaluate(() => window.command('save'));
-    if (!(state?.byteLength > 1024)) throw new Error('Genesis core returned an implausibly small save state');
-    await page.evaluate(() => window.input(6, 1));
-    await page.waitForTimeout(450);
-    await page.evaluate(() => window.input(6, 0));
-    const moved = paddleCenter(PNG.sync.read(await frame.screenshot()));
-    if (!(moved.center < before.center - 12)) throw new Error(`Genesis left input did not move the paddle: ${before.center} -> ${moved.center}`);
-    await page.evaluate((saved) => window.command('load', saved), state);
-    await page.waitForTimeout(150);
-    const restored = paddleCenter(PNG.sync.read(await frame.screenshot()));
-    if (Math.abs(restored.center - before.center) > 3) throw new Error(`Genesis save state did not restore paddle position: ${before.center} -> ${restored.center}`);
-    await page.screenshot({ path: '../../docs/test-evidence/PH-05/screenshots/genesis-gameplay.png', fullPage: true });
-    console.log(`GENESIS_GAMEPLAY_PASS ${JSON.stringify({ capabilities: result.capabilities, stateBytes: state.byteLength, before: before.center, moved: moved.center, restored: restored.center })}`);
+    if (isPong) {
+      const beforePng = PNG.sync.read(await frame.screenshot());
+      const lit = nonBlackPixels(beforePng);
+      if (lit < 80) throw new Error(`Genesis Pong canvas almost black after boot (${lit} lit pixels)`);
+      const before = pongPaddleCenter(beforePng);
+      const beforeHash = sampleHash(beforePng);
+      const state = await page.evaluate(() => window.command('save'));
+      if (!(state?.byteLength > 1024)) throw new Error('Genesis core returned an implausibly small save state');
+      await page.evaluate(() => window.input(4, 1));
+      await page.waitForTimeout(450);
+      await page.evaluate(() => window.input(4, 0));
+      await page.waitForTimeout(200);
+      const movedPng = PNG.sync.read(await frame.screenshot());
+      const moved = pongPaddleCenter(movedPng);
+      const movedHash = sampleHash(movedPng);
+      if (!(moved.center < before.center - 8) && movedHash === beforeHash) {
+        throw new Error(`Genesis Pong up input did not move paddle/frame: ${before.center} -> ${moved.center}`);
+      }
+      await page.evaluate((saved) => window.command('load', saved), state);
+      await page.waitForTimeout(150);
+      const restored = pongPaddleCenter(PNG.sync.read(await frame.screenshot()));
+      if (Math.abs(restored.center - before.center) > 6) {
+        throw new Error(`Genesis Pong save state did not restore paddle: ${before.center} -> ${restored.center}`);
+      }
+      await page.screenshot({ path: join(evidenceDir, 'screenshots', 'genesis-pong-gameplay.png'), fullPage: true });
+      console.log(`GENESIS_GAMEPLAY_PASS ${JSON.stringify({
+        fixture: fixtureName,
+        capabilities: result.capabilities,
+        stateBytes: state.byteLength,
+        lit,
+        before: before.center,
+        moved: moved.center,
+        restored: restored.center,
+        inputChangedFrame: movedHash !== beforeHash,
+      })}`);
+    } else {
+      const before = paddleCenter(PNG.sync.read(await frame.screenshot()));
+      const state = await page.evaluate(() => window.command('save'));
+      if (!(state?.byteLength > 1024)) throw new Error('Genesis core returned an implausibly small save state');
+      await page.evaluate(() => window.input(6, 1));
+      await page.waitForTimeout(450);
+      await page.evaluate(() => window.input(6, 0));
+      const moved = paddleCenter(PNG.sync.read(await frame.screenshot()));
+      if (!(moved.center < before.center - 12)) throw new Error(`Genesis left input did not move the paddle: ${before.center} -> ${moved.center}`);
+      await page.evaluate((saved) => window.command('load', saved), state);
+      await page.waitForTimeout(150);
+      const restored = paddleCenter(PNG.sync.read(await frame.screenshot()));
+      if (Math.abs(restored.center - before.center) > 3) throw new Error(`Genesis save state did not restore paddle position: ${before.center} -> ${restored.center}`);
+      await page.screenshot({ path: join(evidenceDir, 'screenshots', 'genesis-gameplay.png'), fullPage: true });
+      console.log(`GENESIS_GAMEPLAY_PASS ${JSON.stringify({ capabilities: result.capabilities, stateBytes: state.byteLength, before: before.center, moved: moved.center, restored: restored.center })}`);
+    }
   } finally { await browser.close(); await new Promise((resolve) => server.close(resolve)); }
 }
 

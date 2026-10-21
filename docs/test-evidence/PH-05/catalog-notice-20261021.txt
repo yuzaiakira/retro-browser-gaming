@@ -1,0 +1,14 @@
+NOTICE Checking compatibility and manifest…×
+NOTICE Checking compatibility and manifest…×
+NOTICE Verifying bundle and preparing offline resources…×
+NOTICE Verifying bundle and preparing offline resources…×
+NOTICE CORE_INTEGRITY_FAILED×
+FINAL_NOTICE null
+STATE [
+  {
+    state: 'downloaded',
+    id: '32aeeecd-10ef-4cc4-bc9c-5a809623d26c',
+    title: 'MIT Genesis Pong'
+  }
+]
+CACHES [ 'retro-shell-v5' ]

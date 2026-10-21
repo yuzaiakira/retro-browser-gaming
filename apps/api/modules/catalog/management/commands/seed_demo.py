@@ -143,12 +143,18 @@ class Command(BaseCommand):
             if with_consoles:
                 core = EmulatorCore.objects.get(code=code, version=core_version)
                 if core.status != "available":
-                    # Status is mutable; identity fields are not.
+                    # Status is mutable via Model.save(); package digests are not.
                     core.status = "available"
-                    core.licensed_asset_manifest = manifest_for_core(code)
-                    core.save(update_fields=["status", "licensed_asset_manifest"])
-                # Extension allow-list is identity-immutable via Model.save(); widen via
-                # QuerySet.update when the pinned EmulatorJS core gains formats (e.g. .gg).
+                    core.save(update_fields=["status"])
+                # Lock-derived package digests and extension allow-lists are identity-
+                # immutable via Model.save(); refresh via QuerySet.update so catalog
+                # installs keep matching the pinned core-package-lock on disk.
+                desired_manifest = manifest_for_core(code)
+                if core.licensed_asset_manifest != desired_manifest:
+                    EmulatorCore.objects.filter(pk=core.pk).update(
+                        licensed_asset_manifest=desired_manifest
+                    )
+                    core.licensed_asset_manifest = desired_manifest
                 desired_ext = list(ext)
                 current_ext = list(core.supported_extensions or [])
                 if current_ext != desired_ext and set(current_ext).issubset(set(desired_ext)):
@@ -232,6 +238,23 @@ class Command(BaseCommand):
             license_ref="MIT; LICENSES/retro-homebrew-games-MIT.txt",
             provenance="https://spdx.org/licenses/MIT.html",
             evidence="Tracked .fixtures/mit-genesis-breakout.bin from monteslu/retro-homebrew-games build-27",
+        )
+        results["genesis-pong"] = self._import_files(
+            fixtures,
+            slug="mit-genesis-pong",
+            title="MIT Genesis Pong",
+            description=(
+                "MIT-licensed Genesis Pong homebrew fixture expanding the verified "
+                "Mega Drive catalog. Not a commercial ROM."
+            ),
+            console="sega-md",
+            core={"code": "genesis_plus_gx", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-genesis-pong.bin",
+            files=[("mit-genesis-pong.bin", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/retro-homebrew-games-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence="Tracked .fixtures/mit-genesis-pong.bin from monteslu/retro-homebrew-games build-27",
         )
         results["sms"] = self._import_files(
             fixtures,

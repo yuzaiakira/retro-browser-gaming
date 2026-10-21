@@ -17,6 +17,7 @@ const only = (process.env.CATALOG_OFFLINE_ONLY || '')
 
 const GAMES = [
   { slug: 'mit-genesis-breakout', title: 'MIT Genesis Breakout', platform: 'genesis' },
+  { slug: 'mit-genesis-pong', title: 'MIT Genesis Pong', platform: 'genesis-pong' },
   { slug: 'mit-sms-ninjagirl', title: 'MIT SMS Ninja Girl', platform: 'sms' },
   { slug: 'mit-gg-waternet', title: 'MIT GG Waternet', platform: 'gg' },
   { slug: 'mit-nes-table-tennis', title: 'MIT NES Table Tennis', platform: 'nes' },
@@ -119,10 +120,14 @@ async function run() {
   const userDataDir = mkdtempSync(join(tmpdir(), 'retro-console-offline-'));
   const results = {};
   try {
+    const chromiumArgs = [
+      '--no-sandbox',
+      '--host-resolver-rules=MAP launcher.localhost 127.0.0.1,MAP j2me.localhost 127.0.0.1',
+    ];
     let context = await chromium.launchPersistentContext(userDataDir, {
       executablePath,
       headless: true,
-      args: ['--no-sandbox'],
+      args: chromiumArgs,
       viewport: { width: 1280, height: 900 },
     });
     let page = context.pages()[0] || (await context.newPage());
@@ -142,7 +147,7 @@ async function run() {
     context = await chromium.launchPersistentContext(userDataDir, {
       executablePath,
       headless: true,
-      args: ['--no-sandbox'],
+      args: chromiumArgs,
       viewport: { width: 1280, height: 900 },
     });
     page = context.pages()[0] || (await context.newPage());
@@ -162,7 +167,10 @@ async function run() {
 
     await context.close();
     mkdirSync(join(evidenceDir, 'screenshots'), { recursive: true });
-    writeFileSync(join(evidenceDir, 'catalog-console-offline-20261020.txt'), JSON.stringify(results, null, 2));
+    const evidenceName = only.length
+      ? `catalog-console-offline-only-${only.join('-')}-20261021.txt`
+      : 'catalog-console-offline-20261020.txt';
+    writeFileSync(join(evidenceDir, evidenceName), JSON.stringify(results, null, 2));
     console.log(`CATALOG_CONSOLE_OFFLINE_PASS ${JSON.stringify(results)}`);
   } finally {
     rmSync(userDataDir, { recursive: true, force: true });

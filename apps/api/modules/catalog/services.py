@@ -31,11 +31,25 @@ def assert_release_publishable(release):
     entry = next(a for a in assets if a.filename == profile.entry_file)
     if entry.kind not in {"rom", "disk", "html_bundle"}:
         raise ValidationError("Entry file must be playable content.")
-    if (
-        entry.filename.rsplit(".", 1)[-1].lower()
-        not in release.recommended_core.supported_extensions
-    ):
+    extensions = {
+        str(x).lower() for x in release.recommended_core.supported_extensions
+    }
+    entry_ext = entry.filename.rsplit(".", 1)[-1].lower()
+    if entry_ext not in extensions:
         raise ValidationError("Unsupported entry file extension.")
+    # Companions listed in required_files that are playable kinds must also match
+    # the pinned core's supported extensions (CUE companions may be .bin tracks).
+    required = set(profile.required_files)
+    for asset in assets:
+        if asset.filename not in required:
+            continue
+        if asset.kind not in {"rom", "disk"}:
+            continue
+        parts = asset.filename.rsplit(".", 1)
+        if len(parts) < 2 or parts[-1].lower() not in extensions:
+            raise ValidationError(
+                f"Required playable asset {asset.filename} has an unsupported extension."
+            )
     for asset in assets:
         asset.full_clean()
         try:
@@ -45,6 +59,10 @@ def assert_release_publishable(release):
         evidence.full_clean()
         if asset.license_status != "approved" or not evidence.approved_for_distribution:
             raise ValidationError("Every asset requires approved distribution rights.")
+        if not asset.sha256 or not asset.byte_size:
+            raise ValidationError("Every asset requires SHA-256 and positive byte size.")
+        if not asset.provenance_url:
+            raise ValidationError("Every asset requires provenance.")
 
 
 def assert_publishable(game):

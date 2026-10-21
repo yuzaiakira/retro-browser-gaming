@@ -36,6 +36,17 @@ def load_core_lock() -> list[dict]:
     return json.loads(LOCK_PATH.read_text())
 
 
+def _catalog_manifest_entry(item: dict) -> dict:
+    """Strip lock-only annotations so entries satisfy validate_core_manifest."""
+    return {
+        "path": item["path"],
+        "sha256": item["sha256"],
+        "byteSize": item["byteSize"],
+        "license": item["license"],
+        "source": item["source"],
+    }
+
+
 def manifest_for_core(code: str) -> list[dict]:
     """Shared EmulatorJS runtime plus the named core's wasm/report assets.
 
@@ -46,12 +57,12 @@ def manifest_for_core(code: str) -> list[dict]:
         selected = [item for item in lock if item["path"].startswith("jsdos-")]
         if not any(item["path"].endswith(".wasm") for item in selected):
             raise ValueError(f"No wasm package for core {code} in core-package-lock.json")
-        return selected
+        return [_catalog_manifest_entry(item) for item in selected]
     if code == "js2me":
         selected = [item for item in lock if item["path"].startswith("js2me/")]
         if not any(item["path"].endswith("/js2me.js") or item["path"].endswith("js/js2me.js") for item in selected):
             raise ValueError(f"No js2me runtime package for core {code} in core-package-lock.json")
-        return selected
+        return [_catalog_manifest_entry(item) for item in selected]
 
     selected: list[dict] = []
     for item in lock:
@@ -63,4 +74,4 @@ def manifest_for_core(code: str) -> list[dict]:
             selected.append(item)
     if not any(code in item["path"] and item["path"].endswith(".data") for item in selected):
         raise ValueError(f"No wasm data package for core {code} in core-package-lock.json")
-    return selected
+    return [_catalog_manifest_entry(item) for item in selected]
