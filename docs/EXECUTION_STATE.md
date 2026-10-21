@@ -45,8 +45,8 @@ Evidence: `docs/test-evidence/PH-05/a5200-vb-expansion-20261021.md`.
 1. Physical gamepad / iOS Safari
 2. Production staging HTTPS
 3. Human product approval per title
-4. Next expansion candidates: ZX Spectrum / C64 (firmware rights), N64/DS spikes, Vectrex/Intellivision (need non-4.2.3 cores)
+4. Next expansion: N64 GameJam MIT ROM + `mupen64plus_next` spike; then C64/`vice_x64sc` and Spectrum/`fuse` with licensed media; Vectrex/Intellivision need cores outside EJS 4.2.3
 
 ## Next
 
-Continue platform expansion per `docs/platform-expansion-master-plan.md` (computers / N64 / DS) without weakening P0 gates.
+Continue with the N64 gameplay spike per `docs/platform-expansion-master-plan.md` without weakening P0 gates.
