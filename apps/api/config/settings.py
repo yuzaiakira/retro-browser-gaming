@@ -22,7 +22,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "drf_spectacular",
-    "modules.catalog",
+    "modules.catalog.apps.CatalogConfig",
 ]
 MIDDLEWARE = [
     "config.middleware.RequestContextMiddleware",
@@ -80,11 +80,11 @@ if STORAGE_BACKEND == "local" and not DEBUG:
 CATALOG_ALLOW_ENGINEERING = (
     os.getenv("CATALOG_ALLOW_ENGINEERING", "false").lower() == "true"
 )
-if CATALOG_ALLOW_ENGINEERING and not DEBUG:
-    # Engineering fixtures may be shown only in explicitly configured non-production
-    # deployments that also keep DEBUG off only when operators accept the risk —
-    # still require the explicit env var (never implied by DEBUG alone).
-    pass
+# Required acknowledgment when exposing engineering fixtures with DEBUG=false.
+# Detected by `manage.py check --deploy` (catalog.E001). Secure default: false.
+CATALOG_ALLOW_ENGINEERING_IN_PRODUCTION = (
+    os.getenv("CATALOG_ALLOW_ENGINEERING_IN_PRODUCTION", "false").lower() == "true"
+)
 S3_ENDPOINT_URL = os.getenv("S3_ENDPOINT_URL", "http://object-store:9000")
 S3_PUBLIC_ENDPOINT_URL = os.getenv("S3_PUBLIC_ENDPOINT_URL", "http://localhost:9000")
 S3_BROWSER_PROXY = os.getenv("S3_BROWSER_PROXY", "false").lower() == "true"
@@ -92,6 +92,11 @@ S3_BUCKET = os.getenv("S3_BUCKET", "retro-demo")
 S3_ACCESS_KEY_ID = os.getenv("S3_ACCESS_KEY_ID", "")
 S3_SECRET_ACCESS_KEY = os.getenv("S3_SECRET_ACCESS_KEY", "")
 S3_REGION = os.getenv("S3_REGION", "us-east-1")
+# Direct S3 GET URLs remain usable until this TTL even after product revocation.
+# Gateway/proxy delivery (`S3_BROWSER_PROXY=true`) re-checks visibility on each request.
+S3_PRESIGNED_URL_EXPIRES = int(os.getenv("S3_PRESIGNED_URL_EXPIRES", "900"))
+if S3_PRESIGNED_URL_EXPIRES < 60 or S3_PRESIGNED_URL_EXPIRES > 3600:
+    raise ImproperlyConfigured("S3_PRESIGNED_URL_EXPIRES must be between 60 and 3600 seconds")
 CSRF_TRUSTED_ORIGINS = [x for x in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",") if x]
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG

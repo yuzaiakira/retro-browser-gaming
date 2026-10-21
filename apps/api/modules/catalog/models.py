@@ -141,6 +141,14 @@ class Game(ValidatedModel):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        permissions = [
+            (
+                "approve_game_product",
+                "Can approve, reject, or clear public product catalog decisions",
+            ),
+        ]
+
     def clean(self):
         from .services import assert_publishable
 
@@ -157,6 +165,48 @@ class Game(ValidatedModel):
 
     def __str__(self):
         return self.title
+
+
+class ProductApprovalDecision(ValidatedModel):
+    """Append-only audit log for product approval transitions.
+
+    Operational status remains on Game; this table never replaces it.
+    Rows are immutable after insert — no invented backfill for existing titles.
+    """
+
+    game = models.ForeignKey(
+        Game, on_delete=models.CASCADE, related_name="product_approval_decisions"
+    )
+    previous_status = models.CharField(max_length=20, choices=PRODUCT_APPROVAL)
+    new_status = models.CharField(max_length=20, choices=PRODUCT_APPROVAL)
+    actor = models.ForeignKey(
+        "auth.User",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="product_approval_decisions",
+    )
+    decided_at = models.DateTimeField(default=timezone.now)
+    notes = models.TextField(blank=True)
+
+    class Meta:
+        ordering = ["-decided_at", "-id"]
+
+    def clean(self):
+        if self.previous_status == self.new_status:
+            raise ValidationError("Decision must change product approval status.")
+
+    def save(self, *args, **kwargs):
+        # UUID primary keys are assigned before insert; use _state.adding.
+        if not self._state.adding:
+            raise ValidationError("Product approval decisions are append-only.")
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Product approval decisions cannot be deleted.")
+
+    def __str__(self):
+        return f"{self.game_id}: {self.previous_status} → {self.new_status}"
 
 
 class GameRelease(ValidatedModel):

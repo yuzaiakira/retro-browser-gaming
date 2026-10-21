@@ -3,7 +3,8 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import transaction
 from django.utils import timezone
 
-from .models import Game, GameRelease
+from .models import Game, GameRelease, ProductApprovalDecision
+from .permissions import require_product_approve_permission
 
 
 def assert_release_publishable(release):
@@ -39,8 +40,6 @@ def assert_release_publishable(release):
     entry_ext = entry.filename.rsplit(".", 1)[-1].lower()
     if entry_ext not in extensions:
         raise ValidationError("Unsupported entry file extension.")
-    # Companions listed in required_files that are playable kinds must also match
-    # the pinned core's supported extensions (CUE companions may be .bin tracks).
     required = set(profile.required_files)
     for asset in assets:
         if asset.filename not in required:
@@ -123,6 +122,17 @@ def catalog_scope(game) -> str:
     return "engineering-demo"
 
 
+def _record_decision(game, *, previous: str, new: str, user, notes: str) -> None:
+    ProductApprovalDecision.objects.create(
+        game=game,
+        previous_status=previous,
+        new_status=new,
+        actor=user if getattr(user, "is_authenticated", False) else None,
+        decided_at=timezone.now(),
+        notes=notes or "",
+    )
+
+
 @transaction.atomic
 def publish(game_id):
     """Mark engineering catalog readiness. Does NOT grant product approval."""
@@ -136,10 +146,14 @@ def publish(game_id):
 @transaction.atomic
 def approve_for_product(game_id, *, user=None, notes: str = ""):
     """Human product-owner authorization for production-facing catalogs."""
+    require_product_approve_permission(user)
     game = Game.objects.select_for_update().get(pk=game_id)
     assert_publishable(game)
     if not game.published:
         raise ValidationError("Publish for engineering first.")
+    previous = game.product_approval_status
+    if previous == "approved":
+        return game
     game.product_approval_status = "approved"
     game.product_approved_at = timezone.now()
     game.product_approved_by = user
@@ -154,12 +168,17 @@ def approve_for_product(game_id, *, user=None, notes: str = ""):
             "updated_at",
         ]
     )
+    _record_decision(game, previous=previous, new="approved", user=user, notes=notes)
     return game
 
 
 @transaction.atomic
 def reject_product_approval(game_id, *, user=None, notes: str = ""):
+    require_product_approve_permission(user)
     game = Game.objects.select_for_update().get(pk=game_id)
+    previous = game.product_approval_status
+    if previous == "rejected":
+        return game
     game.product_approval_status = "rejected"
     game.product_approved_at = timezone.now()
     game.product_approved_by = user
@@ -174,13 +193,18 @@ def reject_product_approval(game_id, *, user=None, notes: str = ""):
             "updated_at",
         ]
     )
+    _record_decision(game, previous=previous, new="rejected", user=user, notes=notes)
     return game
 
 
 @transaction.atomic
-def clear_product_approval(game_id):
+def clear_product_approval(game_id, *, user=None, notes: str = ""):
     """Return a title to pending product review (engineering publish unchanged)."""
+    require_product_approve_permission(user)
     game = Game.objects.select_for_update().get(pk=game_id)
+    previous = game.product_approval_status
+    if previous == "pending":
+        return game
     game.product_approval_status = "pending"
     game.product_approved_at = None
     game.product_approved_by = None
@@ -192,6 +216,7 @@ def clear_product_approval(game_id):
             "updated_at",
         ]
     )
+    _record_decision(game, previous=previous, new="pending", user=user, notes=notes)
     return game
 
 

@@ -5,7 +5,9 @@ import tempfile
 from pathlib import Path
 
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
+from django.contrib.auth.models import Permission
+from django.core.checks import run_checks
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.management import call_command
 from django.db import connection
 from django.test import TestCase, override_settings
@@ -20,11 +22,13 @@ from modules.catalog.models import (
     LaunchProfile,
     LicenseEvidence,
     PlatformCategory,
+    ProductApprovalDecision,
 )
 from modules.catalog.services import (
     approve_for_product,
     clear_product_approval,
     publish,
+    reject_product_approval,
 )
 from modules.catalog.storage import LocalStorage
 
@@ -423,13 +427,14 @@ class CatalogTests(TestCase):
             self.assertEqual(self.client.get(self.url).status_code, 200)
 
     def test_publish_does_not_grant_product_approval(self):
-        clear_product_approval(self.game.pk)
+        self.assertEqual(self.game.product_approval_status, "pending")
         self.game.published = False
         self.game.save(update_fields=["published", "updated_at"])
         publish(self.game.pk)
         self.game.refresh_from_db()
         self.assertTrue(self.game.published)
         self.assertEqual(self.game.product_approval_status, "pending")
+        self.assertEqual(ProductApprovalDecision.objects.filter(game=self.game).count(), 0)
 
     def test_genre_filter(self):
         result = self.client.get("/api/v1/games/?genre=Arcade")
@@ -443,3 +448,160 @@ class CatalogTests(TestCase):
                 self.client.get(f"/api/v1/releases/{self.release.pk}/").status_code, 404
             )
             self.assertEqual(self.client.get(self.manifest_url).status_code, 404)
+
+    def test_anonymous_cannot_change_product_approval(self):
+        with self.assertRaises(PermissionDenied):
+            approve_for_product(self.game.pk, user=None)
+        with self.assertRaises(PermissionDenied):
+            reject_product_approval(self.game.pk, user=None)
+        with self.assertRaises(PermissionDenied):
+            clear_product_approval(self.game.pk, user=None)
+        self.assertEqual(ProductApprovalDecision.objects.count(), 0)
+
+    def test_staff_without_approve_perm_cannot_product_decide(self):
+        staff = get_user_model().objects.create_user(
+            "eng-staff", password="sample-test-password-123", is_staff=True
+        )
+        # Engineering metadata permission alone is insufficient.
+        staff.user_permissions.add(Permission.objects.get(codename="change_game"))
+        staff = get_user_model().objects.get(pk=staff.pk)
+        self.assertTrue(staff.has_perm("catalog.change_game"))
+        self.assertFalse(staff.has_perm("catalog.approve_game_product"))
+        with self.assertRaises(PermissionDenied):
+            approve_for_product(self.game.pk, user=staff)
+        with self.assertRaises(PermissionDenied):
+            reject_product_approval(self.game.pk, user=staff)
+        self.game.refresh_from_db()
+        self.assertEqual(self.game.product_approval_status, "pending")
+
+    def test_approve_perm_holder_can_decide_and_history_is_append_only(self):
+        owner = get_user_model().objects.create_user(
+            "product-reviewer", password="sample-test-password-456", is_staff=True
+        )
+        owner.user_permissions.add(
+            Permission.objects.get(codename="approve_game_product")
+        )
+        owner = get_user_model().objects.get(pk=owner.pk)
+        approve_for_product(self.game.pk, user=owner, notes="Approved for review packet")
+        reject_product_approval(self.game.pk, user=owner, notes="Hold for screenshots")
+        clear_product_approval(self.game.pk, user=owner, notes="Reset to pending")
+        decisions = list(
+            ProductApprovalDecision.objects.filter(game=self.game).order_by("decided_at", "id")
+        )
+        self.assertEqual(len(decisions), 3)
+        self.assertEqual(
+            [(d.previous_status, d.new_status, d.actor_id) for d in decisions],
+            [
+                ("pending", "approved", owner.pk),
+                ("approved", "rejected", owner.pk),
+                ("rejected", "pending", owner.pk),
+            ],
+        )
+        self.assertEqual(decisions[0].notes, "Approved for review packet")
+        first = decisions[0]
+        first.notes = "tamper"
+        with self.assertRaises(ValidationError):
+            first.save()
+        with self.assertRaises(ValidationError):
+            first.delete()
+
+    def test_admin_actions_hidden_without_approve_perm(self):
+        from django.contrib import admin as djadmin
+
+        staff = get_user_model().objects.create_user(
+            "eng-admin", password="sample-test-password-123", is_staff=True
+        )
+        staff.user_permissions.add(Permission.objects.get(codename="change_game"))
+        staff = get_user_model().objects.get(pk=staff.pk)
+        self.client.force_login(staff)
+        request = self.client.get("/admin/catalog/game/").wsgi_request
+        request.user = staff
+        model_admin = djadmin.site._registry[Game]
+        actions = model_admin.get_actions(request)
+        self.assertNotIn("approve_product_selected", actions)
+        self.assertNotIn("reject_product_selected", actions)
+        self.assertNotIn("clear_product_selected", actions)
+        self.assertIn("publish_selected", actions)
+
+    def test_admin_forged_post_cannot_approve_without_perm(self):
+        staff = get_user_model().objects.create_user(
+            "forger", password="sample-test-password-123", is_staff=True
+        )
+        for codename in ("change_game", "view_game"):
+            staff.user_permissions.add(Permission.objects.get(codename=codename))
+        staff = get_user_model().objects.get(pk=staff.pk)
+        self.client.force_login(staff)
+        response = self.client.post(
+            f"/admin/catalog/game/{self.game.pk}/change/",
+            {
+                "slug": self.game.slug,
+                "title": self.game.title,
+                "description": self.game.description,
+                "genre": self.game.genre,
+                "cover_key": "",
+                "screenshots": "[]",
+                "published": "on",
+                "product_approval_status": "approved",
+                "product_review_notes": "forged",
+                "_save": "Save",
+            },
+        )
+        # Readonly field strips forged status, or PermissionDenied → 403.
+        self.game.refresh_from_db()
+        self.assertEqual(self.game.product_approval_status, "pending")
+        self.assertEqual(ProductApprovalDecision.objects.filter(game=self.game).count(), 0)
+        self.assertIn(response.status_code, {200, 302, 403})
+
+    def test_revocation_hides_gateway_assets_immediately(self):
+        owner = get_user_model().objects.create_superuser(
+            "revoker", password="sample-test-password-789"
+        )
+        with override_settings(CATALOG_ALLOW_ENGINEERING=False):
+            approve_for_product(self.game.pk, user=owner)
+            self.assertEqual(self.client.get(self.manifest_url).status_code, 200)
+            self.assertEqual(self.client.get(self.url).status_code, 200)
+            clear_product_approval(self.game.pk, user=owner, notes="revoke")
+            self.assertEqual(self.client.get(self.manifest_url).status_code, 404)
+            self.assertEqual(self.client.get(self.url).status_code, 404)
+            self.assertEqual(self.client.get("/api/v1/games/").json()["count"], 0)
+
+    def test_deploy_check_flags_engineering_without_ack(self):
+        with override_settings(
+            DEBUG=False,
+            CATALOG_ALLOW_ENGINEERING=True,
+            CATALOG_ALLOW_ENGINEERING_IN_PRODUCTION=False,
+        ):
+            errors = [
+                e
+                for e in run_checks(include_deployment_checks=True)
+                if e.id == "catalog.E001"
+            ]
+            self.assertEqual(len(errors), 1)
+        with override_settings(
+            DEBUG=False,
+            CATALOG_ALLOW_ENGINEERING=True,
+            CATALOG_ALLOW_ENGINEERING_IN_PRODUCTION=True,
+        ):
+            errors = [
+                e
+                for e in run_checks(include_deployment_checks=True)
+                if e.id == "catalog.E001"
+            ]
+            self.assertEqual(len(errors), 0)
+        with override_settings(
+            DEBUG=True,
+            CATALOG_ALLOW_ENGINEERING=True,
+            CATALOG_ALLOW_ENGINEERING_IN_PRODUCTION=False,
+        ):
+            errors = [
+                e
+                for e in run_checks(include_deployment_checks=True)
+                if e.id == "catalog.E001"
+            ]
+            self.assertEqual(len(errors), 0)
+
+    def test_migration_leaves_titles_pending(self):
+        self.assertEqual(
+            Game.objects.exclude(product_approval_status="pending").count(), 0
+        )
+        self.assertEqual(ProductApprovalDecision.objects.count(), 0)
