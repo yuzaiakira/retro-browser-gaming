@@ -9,7 +9,7 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | Browser | HTML5 / JavaScript | Native isolated iframe | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/V*/V | Chromium + Firefox + Android Chrome; WebKit catalog | P0 | SEC-004 OK; Playwright WebKit has no OPFS so install stays disabled; Android touch/offline/AUD-001 PASSED (`PH-08`); iOS/gamepad open. |
 | Browser | Flash / Ruffle | Ruffle candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Select a pinned browser build and legal SWF fixture. |
 | Browser | WASM game ports | Per-port native runtime | [ ] | PLANNED | — | — | — | — | — | — | P1 | Require license review and iframe adapter. |
-| Classic Mobile Phones / Java ME | J2ME / MIDP 1.0–2.0 | No selected compliant runtime | [ ] | BLOCKED | — | — | — | — | — | — | P1 | RMS **API PoC** green in isolation (`PH-06/j2me-rms-poc-20261020.md`); still no VM integration, legal MIDlet offline gameplay, or browser IDB/OPFS proof. |
+| Classic Mobile Phones / Java ME | J2ME / MIDP 1.0–2.0 | No selected compliant runtime | [ ] | BLOCKED | — | — | — | — | — | — | P1 | Node RMS + Chromium IDB durable (`PH-06/j2me-rms-idb-20261021.md`); still no VM/MIDlet offline gameplay. |
 | Sega | SG-1000 | smsplus / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Distinct from SMS (`PH-05/sg1000-*`, `catalog-sg1000-offline-*`); MIT RetroPIPE `.sg`; `segaMS` scheme. |
 | Sega | Master System | SMS Plus / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P0 | Core + catalog offline (`PH-05/sms-gameplay-20261020.md`, `PH-05/catalog-sms-offline-20261020.md`); MIT Ninja Girl; keyboard/touch via catalog player. |
 | Sega | Game Gear | Genesis Plus GX / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P0 | Core + catalog offline (`PH-05/gg-gameplay-20261020.md`, `PH-05/catalog-gg-offline-20261020.md`); MIT Waternet; `segaGG` from `.gg`; same pinned `genesis_plus_gx`. |
@@ -49,7 +49,7 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | Other | ColecoVision | gearcoleco (EmulatorJS) | [ ] | BLOCKED | — | — | — | — | — | — | P2 | MIT RetroPIPE ROM exists; **proprietary `colecovision.rom` BIOS required** (`PH-05/coleco-gearcoleco-bios-blocker-20261020.md`). |
 | Other | Intellivision / Vectrex | FreeIntv / VecX candidates | [ ] | PLANNED | — | — | — | — | — | — | P2 | Add separately only after legal fixtures/core locks. |
 | Arcade | MAME / FBNeo / CPS / Neo Geo Arcade | MAME / FBNeo candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | ROM-set and BIOS licensing require strict bundle policy. |
-| Computer | MS-DOS | dosbox_pure (EmulatorJS, threaded) | [ ] | PLANNED | I | — | — | — | — | Chromium diag | P1 | Cores pinned (lock 80); Floppy Bird MIT ZIP fails start (OpenGL/GLES + OOB) — `PH-05/dos-dosbox-pure-spike-20261020.md`. Not catalog-integrated. |
+| Computer | MS-DOS | jsdos / emulators 8.3.8 (GPL-2.0) | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Catalog offline (`PH-05/dos-*20261021*`); MIT Floppy Bird ZIP; isolated dos-frame. EmulatorJS `dosbox_pure` still unplayable on 4.2.3 (kept pinned). |
 | Computer | Commodore 64 / Amiga | VICE / PUAE candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Firmware/legal assets and keyboard UX. |
 | Computer | MSX / ZX Spectrum / Atari ST | BlueMSX / Fuse / Hatari candidates | [ ] | PLANNED | — | — | — | — | — | — | P2 | Firmware/legal assets and fixture review. |
 | Computer | Apple II / NEC PC-98 | MAME/other candidates | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P3 | Browser cores and legal firmware unverified. |
@@ -60,12 +60,12 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 |---|---|---|---|---|---|
 | 1 | Physical device/control matrix | Gamepad, mobile touch, iOS Safari, audible output | Medium | No substitute for physical-device evidence | Record real-device results; WebKit host libs blocked automation on this workstation. |
 | 2 | SMS/GG family members | Existing EmulatorJS cores and legal fixtures | Medium | SMS + GG core and catalog offline verified | Optional SG-1000; preserve GG `segaGG` mapping. |
-| 2b | NES…GBA + Atari/PCE/SG/WS + 7800/Lynx/NGP/NGPC | EmulatorJS 4.2.3 lock (77) | Medium | Verified playable (P1) | PCE CD / Sega CD remain separate multi-file work. |
+| 2b | NES…GBA + Atari/PCE/SG/WS + 7800/Lynx/NGP/NGPC + DOS | EmulatorJS lock + jsdos (86) | Medium | Verified playable (P1) | PCE CD / Sega CD remain separate multi-file work. |
 | 3 | Playwright WebKit host deps | ICU/webp/ffi packages for Playwright WebKit | Low | Not iOS Safari proof even when green | Install missing shared libraries or document permanent blocker. |
-| 4 | MS-DOS (`dosbox_pure`) | Threaded core + ZIP/VFS + legal DOS game | High | Requires SAB/COI like PSP; host FS isolation | Spike before catalog; do not mark playable without interactive evidence. |
+| 4 | J2ME MIDlet offline | Self-hosted VM + RMS/IDB + legal JAR | High | IDB PoC only; no gameplay yet | Do not check matrix until Chromium MIDlet evidence. |
 | 5 | Sega CD/32X, N64, DS, computers | Multi-file/BIOS-aware adapter and legal fixtures | High | Large files, firmware, performance, touch layouts | Complete bounded-memory media work first. |
 | 6 | Arcade, Neo Geo, PCE CD, 3DO | Core plus ROM-set/BIOS policy | High | Rights and bundle validation dominate | Define legal asset policy before code integration. |
 | 7 | Saturn, Dreamcast, 3DS, PS2 | Experimental web cores/WebGL | High | Performance/firmware support unknown | Spike separately; no P0 promotion without a PDR change. |
-| P1 parallel research | J2ME feature phones | Self-hosted MIDP VM + JAR/JAD + keypad + RMS | High | Isolated RMS PoC only (`PH-06/j2me-rms-poc-20261020.md`) | Do not integrate until browser-persisted RMS + legal Chromium offline gameplay exist. |
+| P1 parallel research | J2ME feature phones | Self-hosted MIDP VM + JAR/JAD + keypad + RMS | High | RMS+IDB durable; no MIDlet play (`PH-06/j2me-rms-idb-20261021.md`) | Do not integrate until legal Chromium offline MIDlet gameplay exists. |
 
 Review this matrix for every emulator/core, gameplay, offline, save, controller, browser, or acceptance-status change. Evidence links must remain truthful; platform rows are never inherited from another system in the same family.

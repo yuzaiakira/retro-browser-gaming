@@ -105,14 +105,7 @@ const PLATFORMS = {
     pass: 'NGPC_GAMEPLAY_PASS',
     screenshot: 'ngpc-gameplay.png',
   },
-  dos: {
-    label: 'DOS',
-    core: 'dosbox_pure',
-    fixture: 'mit-dos-floppybird.zip',
-    scheme: 'dos',
-    pass: 'DOS_GAMEPLAY_PASS',
-    screenshot: 'dos-gameplay.png',
-  },
+  // MS-DOS uses dedicated apps/web/tests/dos-jsdos-smoke.cjs (jsdos runtime).
 };
 
 const platformKey = process.env.PLATFORM || 'snes';

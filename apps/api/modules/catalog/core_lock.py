@@ -37,8 +37,17 @@ def load_core_lock() -> list[dict]:
 
 
 def manifest_for_core(code: str) -> list[dict]:
-    """Shared EmulatorJS runtime plus the named core's wasm/report assets."""
+    """Shared EmulatorJS runtime plus the named core's wasm/report assets.
+
+    jsdos uses a separate self-hosted emulators package (not EmulatorJS .data cores).
+    """
     lock = load_core_lock()
+    if code == "jsdos":
+        selected = [item for item in lock if item["path"].startswith("jsdos-")]
+        if not any(item["path"].endswith(".wasm") for item in selected):
+            raise ValueError(f"No wasm package for core {code} in core-package-lock.json")
+        return selected
+
     selected: list[dict] = []
     for item in lock:
         path = item["path"]

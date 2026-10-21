@@ -28,6 +28,7 @@ SYSTEMS = [
     ("wswan", "WonderSwan / Color", "handheld"),
     ("ngp", "Neo Geo Pocket", "handheld"),
     ("ngpc", "Neo Geo Pocket Color", "handheld"),
+    ("dos", "MS-DOS", "computer"),
     ("ps1", "PlayStation", "console"),
     ("psp", "PlayStation Portable", "handheld"),
 ]
@@ -47,6 +48,7 @@ WASM_CORES = [
     ("mednafen_ngp", ["ngp", "ngc", "ngpc"], ["wasm", "secureContext"]),
     ("pcsx_rearmed", ["cue", "chd", "bin"], ["wasm", "secureContext"]),
     ("ppsspp", ["iso", "cso", "pbp"], ["wasm", "threads", "webgl2", "secureContext"]),
+    ("jsdos", ["zip"], ["wasm", "secureContext"]),
 ]
 
 CONSOLE_FIXTURE_SLUGS = {
@@ -66,6 +68,7 @@ CONSOLE_FIXTURE_SLUGS = {
     "wswan",
     "ngp",
     "ngpc",
+    "dos",
     "ps1",
     "psp",
 }
@@ -116,9 +119,10 @@ class Command(BaseCommand):
             },
         )
         for code, ext, cap in WASM_CORES:
+            core_version = "jsdos-8.3.8" if code == "jsdos" else CORE_VERSION
             EmulatorCore.objects.get_or_create(
                 code=code,
-                version=CORE_VERSION,
+                version=core_version,
                 defaults={
                     "runtime_type": "wasm",
                     "status": "available" if with_consoles else "research",
@@ -128,7 +132,7 @@ class Command(BaseCommand):
                 },
             )
             if with_consoles:
-                core = EmulatorCore.objects.get(code=code, version=CORE_VERSION)
+                core = EmulatorCore.objects.get(code=code, version=core_version)
                 if core.status != "available":
                     # Status is mutable; identity fields are not.
                     core.status = "available"
@@ -515,6 +519,23 @@ class Command(BaseCommand):
                 "NeoGeoFreak2004/NGPC-Code test/test.ngp "
                 "(https://github.com/NeoGeoFreak2004/NGPC-Code)"
             ),
+        )
+        results["dos"] = self._import_files(
+            fixtures,
+            slug="mit-dos-floppybird",
+            title="MIT DOS Floppy Bird",
+            description=(
+                "MIT Floppy Bird DOS COM packaged as ZIP for js-dos (emulators) runtime. "
+                "EmulatorJS dosbox_pure remains unplayable on 4.2.3 (OpenGL/GLES + OOB)."
+            ),
+            console="dos",
+            core={"code": "jsdos", "version": "jsdos-8.3.8"},
+            revision="fixture-1",
+            entry="mit-dos-floppybird.zip",
+            files=[("mit-dos-floppybird.zip", "rom", "application/zip")],
+            license_ref="MIT; LICENSES/floppybird-MIT.txt",
+            provenance="https://github.com/icebreaker/floppybird",
+            evidence="build/flpybird.com + AUTORUN.BAT; sources mirrored under fixtures/dos-floppybird/",
         )
         results["ps1"] = self._import_files(
             fixtures,
