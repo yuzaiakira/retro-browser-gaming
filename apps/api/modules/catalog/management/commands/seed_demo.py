@@ -33,6 +33,7 @@ SYSTEMS = [
     ("dos", "MS-DOS", "computer"),
     ("c64", "Commodore 64", "computer"),
     ("zx-spectrum", "ZX Spectrum", "computer"),
+    ("amiga", "Commodore Amiga", "computer"),
     ("j2me", "Java ME / J2ME", "handheld"),
     ("ps1", "PlayStation", "console"),
     ("psp", "PlayStation Portable", "handheld"),
@@ -50,6 +51,7 @@ WASM_CORES = [
     ("beetle_vb", ["vb", "vboy", "bin"], ["wasm", "secureContext"]),
     ("vice_x64sc", ["d64", "prg", "tap", "t64", "crt"], ["wasm", "secureContext"]),
     ("fuse", ["tap", "tzx", "z80", "sna"], ["wasm", "secureContext"]),
+    ("puae", ["adf", "hdf", "ipf"], ["wasm", "secureContext"]),
     ("prosystem", ["a78", "bin"], ["wasm", "secureContext"]),
     ("handy", ["lnx", "lyx"], ["wasm", "secureContext"]),
     ("mednafen_pce", ["pce"], ["wasm", "secureContext"]),
@@ -83,6 +85,7 @@ CONSOLE_FIXTURE_SLUGS = {
     "dos",
     "c64",
     "zx-spectrum",
+    "amiga",
     "j2me",
     "ps1",
     "psp",
@@ -754,6 +757,29 @@ class Command(BaseCommand):
                 "Verified Chromium gameplay with fuse (explicit core mapping); "
                 "QAOP/6789 keyboard; save states supported. Touch users need "
                 "physical/virtual keyboard for adventure input."
+            ),
+        )
+        results["amiga"] = self._import_files(
+            fixtures,
+            slug="mit-amiga-dot",
+            title="MIT Amiga Dot",
+            description=(
+                "First-party MIT Amiga joystick fixture for engineering acceptance "
+                "only. Uses EmulatorJS puae with embedded AROS Kickstart fallback "
+                "(proprietary kick*.rom not redistributed). Not a commercial disk."
+            ),
+            console="amiga",
+            core={"code": "puae", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-amiga-dot.adf",
+            files=[("mit-amiga-dot.adf", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/amiga-dot-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence="Built from fixtures/amiga-dot/ (amigadev/crosstools + amitools)",
+            genre="Action",
+            compatibility_note=(
+                "Verified Chromium gameplay with puae / amiga; joystick fire + D-Pad; "
+                "save states supported. AROS fallback Kickstart only."
             ),
         )
         results["pce"] = self._import_files(

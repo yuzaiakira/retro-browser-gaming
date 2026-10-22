@@ -107,6 +107,18 @@ const PLATFORMS = {
     moveAxes: 'horizontal',
     bootWaitMs: 8000,
   },
+  amiga: {
+    label: 'Amiga',
+    core: 'puae',
+    fixture: 'mit-amiga-dot.adf',
+    scheme: 'amiga',
+    pass: 'AMIGA_GAMEPLAY_PASS',
+    screenshot: 'amiga-gameplay.png',
+    // Amiga Dot: joystick port 2 fire + D-Pad; AROS Kickstart fallback needs ~30s.
+    inputProfile: 'fire-move',
+    moveAxes: 'horizontal',
+    bootWaitMs: 35000,
+  },
   pce: {
     label: 'PCE',
     core: 'mednafen_pce',
@@ -210,6 +222,7 @@ const types = {
   '.prg': 'application/octet-stream',
   '.tap': 'application/octet-stream',
   '.tzx': 'application/octet-stream',
+  '.adf': 'application/octet-stream',
   '.bin': 'application/octet-stream',
   '.zip': 'application/zip',
 };
