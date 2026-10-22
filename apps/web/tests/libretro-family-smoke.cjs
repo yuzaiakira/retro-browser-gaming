@@ -147,6 +147,20 @@ const PLATFORMS = {
     moveHoldMs: 80,
     moveIterations: 16,
   },
+  nds: {
+    label: 'Nintendo DS',
+    core: 'desmume',
+    fixture: 'mit-nds-dinods.nds',
+    scheme: 'nds',
+    pass: 'NDS_GAMEPLAY_PASS',
+    screenshot: 'nds-gameplay.png',
+    // DinoDS: A (8) or stylus tap jumps; dual-screen + pointer required.
+    inputProfile: 'nds-dino',
+    moveAxes: 'horizontal',
+    bootWaitMs: 6000,
+    moveHoldMs: 80,
+    moveIterations: 12,
+  },
   pce: {
     label: 'PCE',
     core: 'mednafen_pce',
@@ -255,6 +269,7 @@ const types = {
   '.dsk': 'application/octet-stream',
   '.cdt': 'application/octet-stream',
   '.sna': 'application/octet-stream',
+  '.nds': 'application/octet-stream',
   '.bin': 'application/octet-stream',
   '.zip': 'application/zip',
 };
@@ -405,6 +420,39 @@ async function run() {
         await page.waitForTimeout(300);
         await page.evaluate(() => window.input(0, 0));
         await page.waitForTimeout(500);
+      }
+    } else if (cfg.inputProfile === 'nds-dino') {
+      // DinoDS: RetroPad A (8) jumps; stylus via pointer on lower (touch) screen.
+      for (let i = 0; i < 4; i++) {
+        await page.evaluate(() => window.input(8, 1));
+        await page.waitForTimeout(200);
+        await page.evaluate(() => window.input(8, 0));
+        await page.waitForTimeout(350);
+      }
+      await page.evaluate(() => {
+        const win = document.querySelector('iframe').contentWindow;
+        const canvas = win.document.querySelector('canvas');
+        if (!canvas) throw new Error('NDS canvas missing for stylus tap');
+        const rect = canvas.getBoundingClientRect();
+        const x = rect.left + rect.width * 0.5;
+        const y = rect.top + rect.height * 0.75;
+        for (const type of ['pointerdown', 'mousedown', 'pointerup', 'mouseup', 'click']) {
+          canvas.dispatchEvent(
+            new PointerEvent(type === 'click' ? 'click' : type, {
+              bubbles: true,
+              cancelable: true,
+              clientX: x,
+              clientY: y,
+              pointerType: 'touch',
+              buttons: type.endsWith('down') ? 1 : 0,
+            }),
+          );
+        }
+      });
+      const box = await frame.boundingBox();
+      if (box) {
+        await page.mouse.click(box.x + box.width * 0.5, box.y + box.height * 0.75);
+        await page.waitForTimeout(300);
       }
     } else if (cfg.inputProfile === 'move-only') {
       // No boot keys — used when the frame/core auto-starts the program.

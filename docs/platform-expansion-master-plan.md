@@ -26,8 +26,8 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 | Sega 32X | PicoDrive | Non-commercial | — | MIT Wave Rider candidate | BLOCKED_LEGAL (prior) |
 | Sega CD | genesis_plus_gx | OK | Proprietary SEGA CD BIOS | — | BLOCKED_FIRMWARE (prior) |
 | N64 | `mupen64plus_next` | present on CDN | — | Legal ROM TBD | RESEARCHED |
-| NDS | `melonds` / `desmume` | present on CDN | Firmware TBD | Legal ROM TBD | **NEXT** (Milestone C) |
-| FBNeo / MAME | `fbneo` / `mame2003_plus` | present on CDN | BIOS/ROM-set policy | — | RESEARCHED (Milestone D) |
+| NDS | `desmume` (selected; `melonds` rejected) | GPL-2.0 | HLE BIOS (no proprietary firmware) | MIT DinoDS (`BotRandomness/DinoDS`) | **VERIFIED_PLAYABLE** |
+| FBNeo / MAME | `fbneo` / `mame2003_plus` | present on CDN | BIOS/ROM-set policy | — | **NEXT** (Milestone D) |
 | Jaguar | `virtualjaguar` | present on CDN | — | Legal ROM TBD | RESEARCHED (Milestone E) |
 | 3DO | `opera` | present on CDN | BIOS required | — | RESEARCHED |
 | PS Vita / GC / Wii | — | — | — | — | NOT_FEASIBLE / re-evaluate later |
@@ -44,6 +44,7 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 |  2026-10-22 | Amiga VERIFIED; MSX/Atari ST BLOCKED_CORE | `PH-05/amiga-expansion-20261022.md`, `PH-05/msx-atarist-blocker-20261022.md` |
 |  2026-10-22 | ZX81 core+fixture EXPERIMENTAL (LOAD "" blocker) | `PH-05/zx81-blocker-20261022.md` |
 |  2026-10-22 | Amstrad CPC (`cap32`) VERIFIED_PLAYABLE | `PH-05/cpc-expansion-20261022.md` |
+|  2026-10-22 | Nintendo DS (`desmume`) VERIFIED_PLAYABLE | `PH-05/nds-expansion-20261022.md` |
 
 ## Working order (hypothesis)
 
@@ -51,7 +52,7 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 2. C64 + ZX Spectrum ← **done**
 3. Amiga (`puae` + first-party MIT ADF) ← **done**
 4. MSX / Atari ST ← **blocked** (no EJS 4.2.3 CDN cores)
-5. Cap32 ← **done**; next MelonDS / FBNeo / Jaguar — CDN-feasible; ZX81 awaits patched `eo_loadp` or proven `LOAD ""`
+5. Cap32 + NDS ← **done**; next FBNeo / Jaguar — CDN-feasible; ZX81 awaits patched `eo_loadp` or proven `LOAD ""`
 6. N64 remains EXPERIMENTAL until new evidence
 7. Firmware-unblocked Sega CD / ColecoVision / 32X / Vectrex / Intellivision when authorization or external WASM exists
 8. Higher-demand Saturn / Dreamcast / 3DS / PS2 only with measured browser feasibility

@@ -36,6 +36,7 @@ SYSTEMS = [
     ("amiga", "Commodore Amiga", "computer"),
     ("zx81", "Sinclair ZX81", "computer"),
     ("amstrad-cpc", "Amstrad CPC", "computer"),
+    ("nds", "Nintendo DS", "handheld"),
     ("j2me", "Java ME / J2ME", "handheld"),
     ("ps1", "PlayStation", "console"),
     ("psp", "PlayStation Portable", "handheld"),
@@ -56,6 +57,7 @@ WASM_CORES = [
     ("puae", ["adf", "hdf", "ipf"], ["wasm", "secureContext"]),
     ("81", ["p", "tzx"], ["wasm", "secureContext"]),
     ("cap32", ["dsk", "cdt", "sna", "m3u"], ["wasm", "secureContext"]),
+    ("desmume", ["nds"], ["wasm", "webgl2", "secureContext"]),
     ("prosystem", ["a78", "bin"], ["wasm", "secureContext"]),
     ("handy", ["lnx", "lyx"], ["wasm", "secureContext"]),
     ("mednafen_pce", ["pce"], ["wasm", "secureContext"]),
@@ -92,6 +94,7 @@ CONSOLE_FIXTURE_SLUGS = {
     "amiga",
     "zx81",
     "amstrad-cpc",
+    "nds",
     "j2me",
     "ps1",
     "psp",
@@ -837,6 +840,33 @@ class Command(BaseCommand):
             compatibility_note=(
                 "Verified Chromium gameplay with explicit cap32 core; DSK autostart; "
                 "joystick left/right + fire; save states supported."
+            ),
+        )
+        results["nds"] = self._import_files(
+            fixtures,
+            slug="mit-nds-dinods",
+            title="MIT NDS DinoDS",
+            description=(
+                "MIT-licensed Nintendo DS endless-runner homebrew for engineering "
+                "acceptance only. Uses EmulatorJS desmume with HLE BIOS (proprietary "
+                "bios7/bios9/firmware.bin not redistributed). melonds rejected for "
+                "mandatory proprietary firmware. Not a commercial ROM."
+            ),
+            console="nds",
+            core={"code": "desmume", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-nds-dinods.nds",
+            files=[("mit-nds-dinods.nds", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/dinods-NDS-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "BotRandomness/DinoDS release v1.0.0 DinoDS.nds "
+                "(https://github.com/BotRandomness/DinoDS)"
+            ),
+            genre="Action",
+            compatibility_note=(
+                "Verified Chromium gameplay with desmume / nds scheme; A + stylus "
+                "touch jump; dual-screen layout; save states supported. HLE BIOS only."
             ),
         )
         results["pce"] = self._import_files(

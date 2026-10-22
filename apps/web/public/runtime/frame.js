@@ -29,6 +29,7 @@ function preferSeekable(file, companions, core) {
       'puae',
       '81',
       'cap32',
+      'desmume',
     ].includes(core)
   ) {
     return false;
@@ -95,6 +96,8 @@ addEventListener('message', async (event) => {
       '81': '81',
       // EJS 4.2.3 getCores() has no cpc/amstrad shortcut — use explicit cap32 core.
       cap32: 'cap32',
+      // Prefer desmume (HLE BIOS) over melonds (requires proprietary DS firmware).
+      desmume: 'nds',
       mednafen_pce: 'pce',
       mednafen_wswan: 'ws',
       prosystem: 'atari7800',
@@ -147,6 +150,12 @@ addEventListener('message', async (event) => {
       // Cap32 autostarts DSK/CDT/M3U; CPC firmware is embedded in the core package.
       window.EJS_defaultOptions.cap32_model = '6128';
       window.EJS_defaultOptions['cap32-model'] = '6128';
+    }
+    if (d.core === 'desmume') {
+      // Keep HLE BIOS/firmware (do not require proprietary bios7/bios9/firmware.bin).
+      window.EJS_defaultOptions.desmume_use_external_bios = 'disabled';
+      window.EJS_defaultOptions['desmume_pointer_type'] = 'touch';
+      window.EJS_defaultOptions.desmume_pointer_type = 'touch';
     }
     window.EJS_Buttons = {
       settings: { visible: false },
