@@ -30,6 +30,7 @@ function preferSeekable(file, companions, core) {
       '81',
       '81_eo',
       'cap32',
+      'bluemsx',
       'desmume',
       'virtualjaguar',
       'virtualjaguar_js',
@@ -100,6 +101,8 @@ addEventListener('message', async (event) => {
       '81_eo': '81',
       // EJS 4.2.3 getCores() has no cpc/amstrad shortcut — use explicit cap32 core.
       cap32: 'cap32',
+      // EJS 4.2.3 getCores() has no msx shortcut — use explicit bluemsx core.
+      bluemsx: 'segaMS',
       // Prefer desmume (HLE BIOS) over melonds (requires proprietary DS firmware).
       desmume: 'nds',
       // getCores maps jaguar → virtualjaguar; pin scheme for probes/UI.
@@ -160,6 +163,17 @@ addEventListener('message', async (event) => {
       window.EJS_defaultOptions.cap32_model = '6128';
       window.EJS_defaultOptions['cap32-model'] = '6128';
     }
+    if (d.core === 'bluemsx') {
+      // Auto: .rom → MSX2+ then C-BIOS fallback when proprietary Shared Roms absent.
+      // Explicit "MSX" skips that fallback and machineCreate fails without Machines/MSX.
+      // Machines/Databases mounted via EJS_externalFiles (EJS does not extract them from .data).
+      // core.json lists m3u — without this EmulatorJS wraps .rom in a fake .cue and load fails.
+      window.EJS_disableCue = true;
+      window.EJS_defaultOptions.bluemsx_msxtype = 'Auto';
+      window.EJS_defaultOptions['bluemsx-msxtype'] = 'Auto';
+      window.EJS_defaultOptions.bluemsx_cartmapper = 'Auto';
+      window.EJS_defaultOptions['bluemsx-cartmapper'] = 'Auto';
+    }
     if (d.core === 'desmume') {
       // Keep HLE BIOS/firmware (do not require proprietary bios7/bios9/firmware.bin).
       window.EJS_defaultOptions.desmume_use_external_bios = 'disabled';
@@ -194,15 +208,30 @@ addEventListener('message', async (event) => {
           emu.changeSettingOption?.('keyboardInput', 'enabled');
           emu.gameManager?.functions?.setKeyboardEnabled?.(1);
         }
+        if (d.core === 'bluemsx') {
+          emu.changeSettingOption?.('keyboardInput', 'enabled');
+          emu.gameManager?.functions?.setKeyboardEnabled?.(1);
+        }
       } catch {
         /* best-effort; launch still proceeds */
       }
       const gm = emu.gameManager;
       const seekable = seekableBridge?.stats?.() || null;
+      // Some independently built cores advertise supports_states but crash on
+      // save_state_info (WASM signature mismatch). Probe before advertising.
+      let saveState = !!gm.functions.supportsStates();
+      if (saveState) {
+        try {
+          const probe = gm.getState();
+          saveState = !!(probe && probe.byteLength > 0);
+        } catch {
+          saveState = false;
+        }
+      }
       reply({
         type: 'ready',
         capabilities: {
-          saveState: !!gm.functions.supportsStates(),
+          saveState,
           audio: true,
           analog:
             d.core === 'ppsspp' ||
@@ -217,11 +246,17 @@ addEventListener('message', async (event) => {
     };
 
     const boot = () => {
+      // EmulatorJS discards Machines/Databases from core .data; GameManager pins
+      // system_directory for bluemsx and this pack supplies C-BIOS + Databases.
+      if (d.core === 'bluemsx') {
+        externalFiles['/home/web_user/retroarch/userdata/system/'] =
+          '/cores/ejs-4.2.3/system/bluemsx-system.data';
+      }
       if (preferSeekable(d.file, companions, d.core) && seekableReady()) {
         const files = { ['/' + d.file.name]: d.file };
         for (const file of companions) files['/' + file.name] = file;
         window.EJS_gameUrl = d.file.name;
-        window.EJS_externalFiles = {};
+        window.EJS_externalFiles = { ...externalFiles };
         seekableBridge = window.RetroSeekableFS.installSeekableLoader(files, { core: d.core });
       } else {
         const total = [d.file, ...companions].reduce((sum, item) => sum + item.size, 0);

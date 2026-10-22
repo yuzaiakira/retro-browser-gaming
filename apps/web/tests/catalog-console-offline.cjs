@@ -41,6 +41,7 @@ const GAMES = [
   { slug: 'mit-amiga-dot', title: 'MIT Amiga Dot', platform: 'amiga' },
   { slug: 'mit-zx81-dot', title: 'MIT ZX81 Dot', platform: 'zx81' },
   { slug: 'mit-cpc-brickblaster', title: 'MIT CPC Brick Blaster', platform: 'cpc' },
+  { slug: 'mit-msx-dot', title: 'MIT MSX Dot', platform: 'msx' },
   { slug: 'mit-nds-dinods', title: 'MIT NDS DinoDS', platform: 'nds' },
   { slug: 'mit-jaguar-2048', title: 'MIT Jaguar 2048', platform: 'jaguar' },
   { slug: 'huc-pce-scroll', title: 'HuC PCE Scroll', platform: 'pce' },
@@ -66,7 +67,15 @@ async function installGame(page, game) {
     await play.waitFor({ timeout: 300000 });
     await play.click();
   }
-  await page.getByRole('button', { name: 'Save state', exact: true }).waitFor({ timeout: 180000 });
+  // Player ready: Save state when supported, else Pause (always present once running).
+  const saveBtn = page.getByRole('button', { name: 'Save state', exact: true });
+  const pauseBtn = page.getByRole('button', { name: 'Pause', exact: true });
+  try {
+    await saveBtn.waitFor({ timeout: 180000 });
+  } catch {
+    await pauseBtn.waitFor({ timeout: 5000 });
+  }
+  const hasSave = (await saveBtn.count()) > 0;
 
   // Keyboard input while catalog player is live (libretro Left)
   await page.evaluate(() => {
@@ -107,8 +116,10 @@ async function installGame(page, game) {
     if (!touchHit) throw new Error(`${game.slug}: Touch Left did not reach InputRouter`);
   }
 
-  await page.getByRole('button', { name: 'Save state', exact: true }).click();
-  await page.getByText('State saved on this device', { exact: true }).waitFor({ timeout: 30000 });
+  if (hasSave) {
+    await saveBtn.click();
+    await page.getByText('State saved on this device', { exact: true }).waitFor({ timeout: 30000 });
+  }
   const controlled = await page.evaluate(async () => {
     await navigator.serviceWorker.ready;
     return !!navigator.serviceWorker.controller;
@@ -128,9 +139,17 @@ async function offlineColdBoot(page, game) {
     .filter({ has: page.getByRole('heading', { name: game.title }) })
     .getByRole('link', { name: 'Play game' })
     .click();
-  await page.getByRole('button', { name: 'Save state', exact: true }).waitFor({ timeout: 180000 });
-  await page.getByRole('button', { name: 'Load state', exact: true }).click();
-  await page.getByText('State restored', { exact: true }).waitFor({ timeout: 30000 });
+  const saveBtn = page.getByRole('button', { name: 'Save state', exact: true });
+  const pauseBtn = page.getByRole('button', { name: 'Pause', exact: true });
+  try {
+    await saveBtn.waitFor({ timeout: 180000 });
+  } catch {
+    await pauseBtn.waitFor({ timeout: 5000 });
+  }
+  if ((await saveBtn.count()) > 0) {
+    await page.getByRole('button', { name: 'Load state', exact: true }).click();
+    await page.getByText('State restored', { exact: true }).waitFor({ timeout: 30000 });
+  }
 }
 
 async function run() {

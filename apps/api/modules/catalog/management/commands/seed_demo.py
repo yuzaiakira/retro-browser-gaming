@@ -36,6 +36,7 @@ SYSTEMS = [
     ("amiga", "Commodore Amiga", "computer"),
     ("zx81", "Sinclair ZX81", "computer"),
     ("amstrad-cpc", "Amstrad CPC", "computer"),
+    ("msx", "MSX", "computer"),
     ("nds", "Nintendo DS", "handheld"),
     ("atari-jaguar", "Atari Jaguar", "console"),
     ("j2me", "Java ME / J2ME", "handheld"),
@@ -59,6 +60,7 @@ WASM_CORES = [
     ("81", ["p", "tzx"], ["wasm", "secureContext"]),
     ("81_eo", ["p", "tzx"], ["wasm", "secureContext"]),
     ("cap32", ["dsk", "cdt", "sna", "m3u"], ["wasm", "secureContext"]),
+    ("bluemsx", ["rom", "ri", "mx1", "mx2", "dsk", "cas", "m3u"], ["wasm", "secureContext"]),
     ("desmume", ["nds"], ["wasm", "webgl2", "secureContext"]),
     ("virtualjaguar", ["j64", "jag", "rom", "abs", "bin"], ["wasm", "secureContext"]),
     ("prosystem", ["a78", "bin"], ["wasm", "secureContext"]),
@@ -97,6 +99,7 @@ CONSOLE_FIXTURE_SLUGS = {
     "amiga",
     "zx81",
     "amstrad-cpc",
+    "msx",
     "nds",
     "atari-jaguar",
     "j2me",
@@ -845,6 +848,33 @@ class Command(BaseCommand):
             compatibility_note=(
                 "Verified Chromium gameplay with explicit cap32 core; DSK autostart; "
                 "joystick left/right + fire; save states supported."
+            ),
+        )
+        results["msx"] = self._import_files(
+            fixtures,
+            slug="mit-msx-dot",
+            title="MIT MSX Dot",
+            description=(
+                "First-party MIT MSX cursor/joystick fixture for engineering acceptance "
+                "only. Uses EmulatorJS bluemsx explicitly (no msx shortcut in EJS 4.2.3 "
+                "getCores) with C-BIOS 0.23 Machines mounted into the RetroArch SYSTEM "
+                "directory. Proprietary MSX system ROMs are not redistributed. Not a "
+                "commercial cartridge."
+            ),
+            console="msx",
+            core={"code": "bluemsx", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-msx-dot.rom",
+            files=[("mit-msx-dot.rom", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/msx-dot-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence="Built from fixtures/msx-dot/ (z88dk +msx -subtype=rom)",
+            genre="Action",
+            compatibility_note=(
+                "Verified Chromium gameplay with explicit bluemsx + C-BIOS SYSTEM "
+                "mount; cursor / joystick D-Pad move; fire toggles glyph. Savestate "
+                "ABI mismatch on this build (saveState capability false). "
+                "PRODUCT_PENDING."
             ),
         )
         results["nds"] = self._import_files(
