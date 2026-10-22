@@ -126,11 +126,11 @@ const PLATFORMS = {
     scheme: '81',
     pass: 'ZX81_GAMEPLAY_PASS',
     screenshot: 'zx81-gameplay.png',
-    // Joypad devices initialized in 81_eo — LOAD "" via face buttons, then move.
-    inputProfile: 'zx81-load-move',
+    // 81_eo eo_loadp injects .p then leaves BASIC K cursor — RUN (R+Enter) then move.
+    inputProfile: 'zx81-run-move',
     moveAxes: 'horizontal',
-    bootWaitMs: 5000,
-    moveHoldMs: 120,
+    bootWaitMs: 6000,
+    moveHoldMs: 150,
     moveIterations: 24,
   },
   cpc: {
@@ -472,41 +472,18 @@ async function run() {
       }
     } else if (cfg.inputProfile === 'move-only') {
       // No boot keys — used when the frame/core auto-starts the program.
-    } else if (cfg.inputProfile === 'zx81-load-move') {
-      // Prefer direct keyboard LOAD "" (frame enables keyboardInput + setKeyboardEnabled).
-      // Fall back to remapped face buttons if keyboard path is unavailable.
-      try {
-        await page.locator('#game').click({ position: { x: 480, y: 320 } });
-        await page.waitForTimeout(300);
-        await page.keyboard.press('KeyJ');
-        await page.waitForTimeout(400);
-        await page.keyboard.down('Shift');
-        await page.waitForTimeout(100);
-        await page.keyboard.press('KeyP');
-        await page.waitForTimeout(300);
-        await page.keyboard.press('KeyP');
-        await page.waitForTimeout(100);
-        await page.keyboard.up('Shift');
-        await page.waitForTimeout(300);
-        await page.keyboard.press('Enter');
-        await page.waitForTimeout(6000);
-      } catch {
-        const tap = async (btn, hold = 450, gap = 400) => {
-          await page.evaluate((c) => window.input(c, 1), btn);
-          await page.waitForTimeout(hold);
-          await page.evaluate((c) => window.input(c, 0), btn);
-          await page.waitForTimeout(gap);
-        };
-        await tap(0);
-        await page.evaluate(() => window.input(1, 1));
-        await page.waitForTimeout(150);
-        await tap(8);
-        await tap(8);
-        await page.evaluate(() => window.input(1, 0));
-        await page.waitForTimeout(150);
-        await tap(9);
-        await page.waitForTimeout(6000);
-      }
+    } else if (cfg.inputProfile === 'zx81-run-move' || cfg.inputProfile === 'zx81-load-move') {
+      // 81_eo maps B→R (RUN) and X→NEWLINE via keybovl; page.keyboard does not reach the core.
+      const tap = async (btn, hold = 500, gap = 450) => {
+        await page.evaluate((c) => window.input(c, 1), btn);
+        await page.waitForTimeout(hold);
+        await page.evaluate((c) => window.input(c, 0), btn);
+        await page.waitForTimeout(gap);
+      };
+      // RetroPad: B=0, Y=1, Select=2, Start=3, D-pad 4-7, A=8, X=9
+      await tap(0); // R / RUN
+      await tap(9); // NEWLINE
+      await page.waitForTimeout(3000);
     } else if (cfg.inputProfile === 'start-move' || cfg.inputProfile === 'start-only-move') {
       const bootCmds = cfg.inputProfile === 'start-only-move' ? [3] : [3, 8];
       for (const cmd of bootCmds) {
@@ -575,7 +552,8 @@ async function run() {
           cfg.inputProfile !== 'start-only-move' &&
           cfg.inputProfile !== 'fire-move' &&
           cfg.inputProfile !== 'move-only' &&
-          cfg.inputProfile !== 'zx81-load-move'
+          cfg.inputProfile !== 'zx81-load-move' &&
+          cfg.inputProfile !== 'zx81-run-move'
         ) {
           await page.evaluate(() => window.input(8, 1));
           await page.waitForTimeout(60);

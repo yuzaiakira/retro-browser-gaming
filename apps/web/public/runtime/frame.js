@@ -149,7 +149,8 @@ addEventListener('message', async (event) => {
       window.EJS_defaultOptions['81_joypad_down'] = 'default';
       window.EJS_defaultOptions['81_joypad_left'] = 'default';
       window.EJS_defaultOptions['81_joypad_right'] = 'default';
-      window.EJS_defaultOptions['81_joypad_b'] = 'j';
+      // B → R (RUN keyword at K cursor after eo_loadp); X → NEWLINE; A → P (Dot).
+      window.EJS_defaultOptions['81_joypad_b'] = 'r';
       window.EJS_defaultOptions['81_joypad_a'] = 'p';
       window.EJS_defaultOptions['81_joypad_y'] = 'shift';
       window.EJS_defaultOptions['81_joypad_x'] = 'new line';
