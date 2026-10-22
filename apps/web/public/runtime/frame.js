@@ -217,10 +217,18 @@ addEventListener('message', async (event) => {
       }
       const gm = emu.gameManager;
       const seekable = seekableBridge?.stats?.() || null;
-      // Some independently built cores advertise supports_states but crash on
-      // save_state_info (WASM signature mismatch). Probe before advertising.
+      // Independently rebuilt cores may advertise supports_states but crash or
+      // return empty on save_state_info (WASM arity). Probe only those cores —
+      // stock CDN cores like puae can fail getState at onGameStart (AROS still
+      // booting) and still support saves after boot.
+      const SAVE_STATE_EARLY_PROBE = new Set([
+        'bluemsx',
+        '81_eo',
+        'virtualjaguar_js',
+        'virtualjaguar',
+      ]);
       let saveState = !!gm.functions.supportsStates();
-      if (saveState) {
+      if (saveState && SAVE_STATE_EARLY_PROBE.has(d.core)) {
         try {
           const probe = gm.getState();
           saveState = !!(probe && probe.byteLength > 0);
