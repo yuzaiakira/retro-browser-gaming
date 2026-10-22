@@ -2,7 +2,7 @@
 
 ## Verdict
 
-**RELEASE CANDIDATE / NOT COMPLETE** — IN-002/IOS-001 remain BLOCKED_EXTERNAL. Platform expansion: **Atari 5200**, **Virtual Boy**, **Commodore 64**, **ZX Spectrum**, **Amiga**, **Amstrad CPC**, and **Nintendo DS** VERIFIED_PLAYABLE; **ZX81** / **Jaguar** / **N64** EXPERIMENTAL; **FBNeo** BLOCKED_FIXTURE (do **not** vendor Gridlee); MSX/Atari ST BLOCKED_CORE pending external WASM (bluemsx rebuild in flight).
+**RELEASE CANDIDATE / NOT COMPLETE** — IN-002/IOS-001 remain BLOCKED_EXTERNAL. Platform expansion: **Atari 5200**, **Virtual Boy**, **Commodore 64**, **ZX Spectrum**, **Amiga**, **Amstrad CPC**, and **Nintendo DS** VERIFIED_PLAYABLE; **ZX81** / **Jaguar** / **N64** EXPERIMENTAL; **FBNeo** BLOCKED_FIXTURE (do **not** vendor Gridlee); MSX/Atari ST BLOCKED_CORE (bluemsx rebuild in flight).
 
 ## Deferred physical acceptance (do not rediscover)
 
@@ -16,12 +16,12 @@
 | VERIFIED_PLAYABLE | Prior set + Amiga + CPC + **Nintendo DS** |
 | Nintendo DS (`desmume`) | VERIFIED_PLAYABLE — HLE; MIT DinoDS; A+stylus; offline (`PH-05/nds-expansion-20261022.md`) |
 | Amstrad CPC (`cap32`) | VERIFIED_PLAYABLE (`PH-05/cpc-expansion-20261022.md`) |
-| Atari Jaguar (`virtualjaguar`) | EXPERIMENTAL — JAGR/Jaguar Server format → black FB on pinned EJS package (`PH-05/jaguar-blocker-20261022.md`); newer WASM rebuild in progress |
+| Atari Jaguar (`virtualjaguar` / `virtualjaguar_js`) | EXPERIMENTAL — black/no input delta; independently versioned `virtualjaguar_js` rebuilt (`PH-05/jaguar-vj-js-build-20261022.md`) |
 | Arcade FBNeo | **BLOCKED_FIXTURE** — no redistributable vendored ZIP; Gridlee is mamedev.org-only (do not bundle) (`PH-05/fbneo-blocker-20261022.md`) |
-| ZX81 (`81_eo`) | EXPERIMENTAL — independently versioned `81_eo` with `eo_loadp` + JOYPAD init landed; Chromium still idle `K` (`PH-05/zx81-blocker-20261022.md`) |
-| MSX / Atari ST | BLOCKED_CORE in EJS 4.2.3 CDN; `EmulatorJS/build` can produce `bluemsx` (build running) |
+| ZX81 (`81_eo`) | EXPERIMENTAL — `eo_loadp` injects 2262 bytes and sets PC=`$4092` (CRT found); framebuffer still idle; joypad/keyboard produce no delta (`PH-05/zx81-blocker-20261022.md`) |
+| MSX / Atari ST | BLOCKED_CORE in EJS 4.2.3 CDN; bluemsx external rebuild packaging in flight |
 | N64 | EXPERIMENTAL |
-| Core lock | **369 files** (includes `81_eo` packages + report) |
+| Core lock | **369 files** (`81_eo` + `virtualjaguar_js`) |
 | Tracker | `docs/platform-expansion-master-plan.md` |
 
 ## Exact commands
@@ -41,8 +41,8 @@ CHROMIUM_EXECUTABLE=/usr/bin/chromium PLATFORM=jaguar SKIP_OFFLINE=1 \
 
 1. Physical gamepad / iOS / production HTTPS
 2. Human product approval
-3. ZX81: prove Dot after `eo_loadp` or alternate snap/content path
-4. Jaguar: finish newer `virtualjaguar` WASM or JST_ROM conversion; verify input
-5. FBNeo: find non-Gridlee redistributable fixture (or written permission)
-6. MSX: integrate independently versioned `bluemsx` + legal BIOS/system files + fixture when build completes
+3. ZX81: CRT runs at `$4092` but Dot display/input still dead — native harness or `.z81` snap of running Dot
+4. Jaguar: retain EXPERIMENTAL; try alternate licensed fixture or video path if new evidence appears
+5. FBNeo: non-Gridlee redistributable fixture only
+6. MSX: finish `bluemsx` package + legal Machines/Databases + fixture
 7. N64 remains EXPERIMENTAL until new actionable evidence

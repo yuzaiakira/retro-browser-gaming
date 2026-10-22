@@ -47,6 +47,7 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 |  2026-10-22 | Nintendo DS (`desmume`) VERIFIED_PLAYABLE | `PH-05/nds-expansion-20261022.md` |
 |  2026-10-22 | FBNeo BLOCKED_FIXTURE; Jaguar EXPERIMENTAL (black FB) | `PH-05/fbneo-blocker-20261022.md`, `PH-05/jaguar-blocker-20261022.md` |
 |  2026-10-22 | ZX81 `81_eo` independent WASM (gameplay still blocked); Gridlee must not be vendored | `PH-05/zx81-eo-loadp-build-20261022.md`, updated blockers |
+|  2026-10-22 | Jaguar `virtualjaguar_js` rebuild (still EXPERIMENTAL); ZX81 CRT inject proven in logs | `PH-05/jaguar-vj-js-build-20261022.md`, updated ZX81 blocker |
 
 ## Working order (hypothesis)
 
