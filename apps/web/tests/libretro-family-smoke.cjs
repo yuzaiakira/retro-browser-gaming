@@ -121,15 +121,15 @@ const PLATFORMS = {
   },
   zx81: {
     label: 'ZX81',
-    core: '81',
+    core: '81_eo',
     fixture: 'mit-zx81-dot.p',
     scheme: '81',
     pass: 'ZX81_GAMEPLAY_PASS',
     screenshot: 'zx81-gameplay.png',
-    // Tape flash-load requires LOAD ""; typed via remapped face buttons then D-Pad.
+    // Joypad devices initialized in 81_eo — LOAD "" via face buttons, then move.
     inputProfile: 'zx81-load-move',
     moveAxes: 'horizontal',
-    bootWaitMs: 4000,
+    bootWaitMs: 5000,
     moveHoldMs: 120,
     moveIterations: 24,
   },
@@ -473,22 +473,42 @@ async function run() {
     } else if (cfg.inputProfile === 'move-only') {
       // No boot keys — used when the frame/core auto-starts the program.
     } else if (cfg.inputProfile === 'zx81-load-move') {
-      // B=j (LOAD), Y=shift, A=p (quote), X=newline — then wait for flash load.
-      const tap = async (btn, hold = 450, gap = 400) => {
-        await page.evaluate((c) => window.input(c, 1), btn);
-        await page.waitForTimeout(hold);
-        await page.evaluate((c) => window.input(c, 0), btn);
-        await page.waitForTimeout(gap);
-      };
-      await tap(0);
-      await page.evaluate(() => window.input(1, 1));
-      await page.waitForTimeout(150);
-      await tap(8);
-      await tap(8);
-      await page.evaluate(() => window.input(1, 0));
-      await page.waitForTimeout(150);
-      await tap(9);
-      await page.waitForTimeout(6000);
+      // Prefer direct keyboard LOAD "" (frame enables keyboardInput + setKeyboardEnabled).
+      // Fall back to remapped face buttons if keyboard path is unavailable.
+      const frame = page.frameLocator('#game');
+      try {
+        await page.locator('#game').click({ position: { x: 480, y: 320 } });
+        await page.waitForTimeout(300);
+        await page.keyboard.press('KeyJ');
+        await page.waitForTimeout(400);
+        await page.keyboard.down('Shift');
+        await page.waitForTimeout(100);
+        await page.keyboard.press('KeyP');
+        await page.waitForTimeout(300);
+        await page.keyboard.press('KeyP');
+        await page.waitForTimeout(100);
+        await page.keyboard.up('Shift');
+        await page.waitForTimeout(300);
+        await page.keyboard.press('Enter');
+        await page.waitForTimeout(6000);
+      } catch {
+        const tap = async (btn, hold = 450, gap = 400) => {
+          await page.evaluate((c) => window.input(c, 1), btn);
+          await page.waitForTimeout(hold);
+          await page.evaluate((c) => window.input(c, 0), btn);
+          await page.waitForTimeout(gap);
+        };
+        await tap(0);
+        await page.evaluate(() => window.input(1, 1));
+        await page.waitForTimeout(150);
+        await tap(8);
+        await tap(8);
+        await page.evaluate(() => window.input(1, 0));
+        await page.waitForTimeout(150);
+        await tap(9);
+        await page.waitForTimeout(6000);
+      }
+      void frame;
     } else if (cfg.inputProfile === 'start-move' || cfg.inputProfile === 'start-only-move') {
       const bootCmds = cfg.inputProfile === 'start-only-move' ? [3] : [3, 8];
       for (const cmd of bootCmds) {

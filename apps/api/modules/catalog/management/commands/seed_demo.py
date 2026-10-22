@@ -57,6 +57,7 @@ WASM_CORES = [
     ("fuse", ["tap", "tzx", "z80", "sna"], ["wasm", "secureContext"]),
     ("puae", ["adf", "hdf", "ipf"], ["wasm", "secureContext"]),
     ("81", ["p", "tzx"], ["wasm", "secureContext"]),
+    ("81_eo", ["p", "tzx"], ["wasm", "secureContext"]),
     ("cap32", ["dsk", "cdt", "sna", "m3u"], ["wasm", "secureContext"]),
     ("desmume", ["nds"], ["wasm", "webgl2", "secureContext"]),
     ("virtualjaguar", ["j64", "jag", "rom", "abs", "bin"], ["wasm", "secureContext"]),
@@ -800,12 +801,12 @@ class Command(BaseCommand):
             title="MIT ZX81 Dot",
             description=(
                 "First-party MIT ZX81 cursor/keyboard fixture for engineering acceptance "
-                "only. Uses EmulatorJS 81 core explicitly (no zx81 shortcut in EJS 4.2.3 "
-                "getCores). ZX81 firmware embedded in 81-libretro build; no separate "
-                "Sinclair ROM files redistributed. Not a commercial tape."
+                "only. Uses independently versioned EmulatorJS-compatible 81_eo core "
+                "(eo_loadp for .p; stock 81 package retained). ZX81 firmware embedded; "
+                "no separate Sinclair ROM files redistributed. Not a commercial tape."
             ),
             console="zx81",
-            core={"code": "81", "version": CORE_VERSION},
+            core={"code": "81_eo", "version": CORE_VERSION},
             revision="fixture-1",
             entry="mit-zx81-dot.p",
             files=[("mit-zx81-dot.p", "rom", "application/octet-stream")],
@@ -814,8 +815,9 @@ class Command(BaseCommand):
             evidence="Built from fixtures/zx81-dot/ (z88dk +zx81)",
             genre="Action",
             compatibility_note=(
-                "Verified Chromium gameplay with explicit 81 core; RetroPad D-Pad maps "
-                "to ZX81 cursor keys 5/6/7/8; O/P/Q/A also move. Save states supported."
+                "Verified Chromium gameplay with 81_eo (eo_loadp .p inject); RetroPad "
+                "D-Pad maps to ZX81 cursor keys 5/6/7/8. Save states supported. "
+                "PRODUCT_PENDING."
             ),
         )
         results["cpc"] = self._import_files(
