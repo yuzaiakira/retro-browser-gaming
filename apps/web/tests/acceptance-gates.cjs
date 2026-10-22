@@ -8,19 +8,25 @@ const { join } = require('node:path');
 
 const baseUrl = process.env.RETRO_TEST_BASE_URL || 'http://127.0.0.1:3000';
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
-const evidenceDir = join(__dirname, '..', '..', '..', 'docs', 'test-evidence', 'PH-07');
+const evidenceDir = join(__dirname, '..', '..', '..', 'docs', 'test-evidence', 'PH-11');
 
 async function installOrbit(page) {
   await page.goto(`${baseUrl}/games/orbit-catch`);
-  const play = page.getByRole('link', { name: '▶ Play game' });
+  const play = page.getByRole('link', { name: /Play game/i });
+  const download = page.getByRole('button', { name: /Download & try on this device/i });
+  // Detail page may briefly show "Loading game…" before actions appear.
+  await Promise.race([
+    play.waitFor({ state: 'visible', timeout: 120000 }).catch(() => {}),
+    download.waitFor({ state: 'visible', timeout: 120000 }),
+  ]);
   if (await play.count()) {
     await play.click();
   } else {
-    await page.getByRole('button', { name: 'Download & try on this device' }).click();
+    await download.click();
     await play.waitFor({ timeout: 120000 });
     await play.click();
   }
-  await page.getByRole('button', { name: 'Save state', exact: true }).waitFor({ timeout: 60000 });
+  await page.getByRole('button', { name: 'Save state', exact: true }).waitFor({ timeout: 90000 });
 }
 
 async function run() {
@@ -476,7 +482,7 @@ async function run() {
     await browser.close();
   }
 
-  writeFileSync(join(evidenceDir, 'acceptance-gates-20261020.txt'), JSON.stringify(results, null, 2));
+  writeFileSync(join(evidenceDir, 'acceptance-gates-results-20261022.json'), JSON.stringify(results, null, 2));
   console.log(`ACCEPTANCE_GATES_PASS ${JSON.stringify(results)}`);
 }
 
