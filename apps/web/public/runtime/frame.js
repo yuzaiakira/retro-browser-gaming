@@ -28,6 +28,7 @@ function preferSeekable(file, companions, core) {
       'fuse',
       'puae',
       '81',
+      'cap32',
     ].includes(core)
   ) {
     return false;
@@ -92,6 +93,8 @@ addEventListener('message', async (event) => {
       puae: 'amiga',
       // EJS 4.2.3 getCores() has no zx81 shortcut — use explicit 81 core.
       '81': '81',
+      // EJS 4.2.3 getCores() has no cpc/amstrad shortcut — use explicit cap32 core.
+      cap32: 'cap32',
       mednafen_pce: 'pce',
       mednafen_wswan: 'ws',
       prosystem: 'atari7800',
@@ -139,6 +142,11 @@ addEventListener('message', async (event) => {
       window.EJS_defaultOptions['81_joypad_a'] = 'p';
       window.EJS_defaultOptions['81_joypad_y'] = 'shift';
       window.EJS_defaultOptions['81_joypad_x'] = 'new line';
+    }
+    if (d.core === 'cap32') {
+      // Cap32 autostarts DSK/CDT/M3U; CPC firmware is embedded in the core package.
+      window.EJS_defaultOptions.cap32_model = '6128';
+      window.EJS_defaultOptions['cap32-model'] = '6128';
     }
     window.EJS_Buttons = {
       settings: { visible: false },

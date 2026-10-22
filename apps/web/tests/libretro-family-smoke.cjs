@@ -133,6 +133,20 @@ const PLATFORMS = {
     moveHoldMs: 120,
     moveIterations: 24,
   },
+  cpc: {
+    label: 'Amstrad CPC',
+    core: 'cap32',
+    fixture: 'mit-cpc-brickblaster.dsk',
+    scheme: 'cap32',
+    pass: 'CPC_GAMEPLAY_PASS',
+    screenshot: 'cpc-gameplay.png',
+    // Brick Blaster: Cap32 autostarts DSK; RetroPad fire + left/right paddle.
+    inputProfile: 'fire-move',
+    moveAxes: 'horizontal',
+    bootWaitMs: 8000,
+    moveHoldMs: 80,
+    moveIterations: 16,
+  },
   pce: {
     label: 'PCE',
     core: 'mednafen_pce',
@@ -238,6 +252,9 @@ const types = {
   '.tzx': 'application/octet-stream',
   '.adf': 'application/octet-stream',
   '.p': 'application/octet-stream',
+  '.dsk': 'application/octet-stream',
+  '.cdt': 'application/octet-stream',
+  '.sna': 'application/octet-stream',
   '.bin': 'application/octet-stream',
   '.zip': 'application/zip',
 };

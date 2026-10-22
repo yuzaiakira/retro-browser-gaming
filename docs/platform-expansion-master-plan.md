@@ -16,6 +16,7 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 | Intellivision | `freeintv` (absent) | GPLv2+ FreeIntv | proprietary `exec.bin`/`grom.bin` | TBD | **BLOCKED_FIRMWARE** (+ core absent) |
 | ZX Spectrum | `fuse` (CDN present; explicit `EJS_core=fuse`) | GPLv3 | Spectrum firmware embedded (Amstrad permission upstream) | MIT Desolate TAP (`nzeemin/spectrum-desolate`) | **VERIFIED_PLAYABLE** |
 | ZX81 | `81` (CDN present; explicit `EJS_core=81`) | GPLv3 | Firmware embedded | MIT ZX81 Dot `.p` (first-party z88dk) | **EXPERIMENTAL** — core+fixture wired; `LOAD ""` gameplay blocked (`PH-05/zx81-blocker-20261022.md`) |
+| Amstrad CPC | `cap32` (CDN present; explicit `EJS_core=cap32`) | GPLv2+ | CPC firmware embedded | MIT Brick Blaster DSK (`issalig/brick_blaster` v1.0_RC4) | **VERIFIED_PLAYABLE** |
 | Amiga | `puae` | GPLv2 | AROS Kickstart fallback (no proprietary kick ROM) | MIT Amiga Dot ADF (first-party) | **VERIFIED_PLAYABLE** |
 | MSX | `bluemsx` (absent) | — | BIOS typically required | — | **BLOCKED_CORE** (`PH-05/msx-atarist-blocker-20261022.md`) |
 | Atari ST | `hatari` (absent) | — | EmuTOS candidate if core existed | — | **BLOCKED_CORE** (`PH-05/msx-atarist-blocker-20261022.md`) |
@@ -25,9 +26,9 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 | Sega 32X | PicoDrive | Non-commercial | — | MIT Wave Rider candidate | BLOCKED_LEGAL (prior) |
 | Sega CD | genesis_plus_gx | OK | Proprietary SEGA CD BIOS | — | BLOCKED_FIRMWARE (prior) |
 | N64 | `mupen64plus_next` | present on CDN | — | Legal ROM TBD | RESEARCHED |
-| NDS | `melonds` / `desmume` | present on CDN | Firmware TBD | Legal ROM TBD | RESEARCHED |
-| FBNeo / MAME | `fbneo` / `mame2003_plus` | present on CDN | BIOS/ROM-set policy | — | RESEARCHED |
-| Jaguar | `virtualjaguar` | present on CDN | — | Legal ROM TBD | RESEARCHED |
+| NDS | `melonds` / `desmume` | present on CDN | Firmware TBD | Legal ROM TBD | **NEXT** (Milestone C) |
+| FBNeo / MAME | `fbneo` / `mame2003_plus` | present on CDN | BIOS/ROM-set policy | — | RESEARCHED (Milestone D) |
+| Jaguar | `virtualjaguar` | present on CDN | — | Legal ROM TBD | RESEARCHED (Milestone E) |
 | 3DO | `opera` | present on CDN | BIOS required | — | RESEARCHED |
 | PS Vita / GC / Wii | — | — | — | — | NOT_FEASIBLE / re-evaluate later |
 
@@ -42,6 +43,7 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 | `c9e0f09` 2026-10-21 | N64 input still unproven; Vectrex/Intellivision blocked | `PH-05/n64-input-unproven-20261021.md`, `PH-05/vectrex-intellivision-blocker-20261021.md` |
 |  2026-10-22 | Amiga VERIFIED; MSX/Atari ST BLOCKED_CORE | `PH-05/amiga-expansion-20261022.md`, `PH-05/msx-atarist-blocker-20261022.md` |
 |  2026-10-22 | ZX81 core+fixture EXPERIMENTAL (LOAD "" blocker) | `PH-05/zx81-blocker-20261022.md` |
+|  2026-10-22 | Amstrad CPC (`cap32`) VERIFIED_PLAYABLE | `PH-05/cpc-expansion-20261022.md` |
 
 ## Working order (hypothesis)
 
@@ -49,7 +51,7 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 2. C64 + ZX Spectrum ← **done**
 3. Amiga (`puae` + first-party MIT ADF) ← **done**
 4. MSX / Atari ST ← **blocked** (no EJS 4.2.3 CDN cores)
-5. Cap32 / FBNeo / MelonDS / Jaguar — next CDN-feasible; ZX81 awaits patched `eo_loadp` or proven `LOAD ""`
+5. Cap32 ← **done**; next MelonDS / FBNeo / Jaguar — CDN-feasible; ZX81 awaits patched `eo_loadp` or proven `LOAD ""`
 6. N64 remains EXPERIMENTAL until new evidence
 7. Firmware-unblocked Sega CD / ColecoVision / 32X / Vectrex / Intellivision when authorization or external WASM exists
 8. Higher-demand Saturn / Dreamcast / 3DS / PS2 only with measured browser feasibility
