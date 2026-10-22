@@ -161,6 +161,20 @@ const PLATFORMS = {
     moveHoldMs: 80,
     moveIterations: 12,
   },
+  jaguar: {
+    label: 'Atari Jaguar',
+    core: 'virtualjaguar',
+    fixture: 'mit-jaguar-2048.jag',
+    scheme: 'jaguar',
+    pass: 'JAGUAR_GAMEPLAY_PASS',
+    screenshot: 'jaguar-gameplay.png',
+    // jag2048: D-Pad slides tiles (2048 puzzle).
+    inputProfile: 'move-only',
+    moveAxes: 'horizontal',
+    bootWaitMs: 20000,
+    moveHoldMs: 200,
+    moveIterations: 24,
+  },
   pce: {
     label: 'PCE',
     core: 'mednafen_pce',
@@ -270,6 +284,8 @@ const types = {
   '.cdt': 'application/octet-stream',
   '.sna': 'application/octet-stream',
   '.nds': 'application/octet-stream',
+  '.jag': 'application/octet-stream',
+  '.j64': 'application/octet-stream',
   '.bin': 'application/octet-stream',
   '.zip': 'application/zip',
 };
