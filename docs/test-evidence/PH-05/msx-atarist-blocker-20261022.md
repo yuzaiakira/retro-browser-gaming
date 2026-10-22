@@ -36,4 +36,4 @@ Built via `EmulatorJS/build` + `emscripten/emsdk:3.1.74` `-c=bluemsx`:
 3. Skipping bluemsx's private `rxml.c` under `STATIC_LINKING=1` is insufficient while a stale archive member remains; a hard clean also tripped missing `libretro-font.i` outside the EmulatorJS wrapper path.
 4. No `bluemsx-*.data` packages were produced. **Hatari** is absent from `EmulatorJS/build` `cores.json`.
 
-**Status remains BLOCKED_CORE** — concrete link dependency: resolve rxml double-inclusion in the EmulatorJS/blueMSX emscripten recipe, then package Machines/Databases and lock legal system ROMs + a licensed interactive fixture before any VERIFIED_PLAYABLE claim.
+**MSX update (same day):** rxml API skew fixed; `bluemsx-*.data` + C-BIOS Machines locked — see `PH-05/msx-bluemsx-rxml-build-20261022.md`. Gameplay/fixture still open (EXPERIMENTAL, not VERIFIED). **Atari ST** remains **BLOCKED_CORE** (hatari absent).
