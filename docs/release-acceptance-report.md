@@ -85,7 +85,7 @@ Gate table G01–G05 PASS (scoped); G06–G11 PARTIAL (gamepad/iOS/staging open)
 
 ## Product approval
 
-Live DB 2026-10-22 (`PH-11/product-approval-counts-20261022.txt`):
+Live DB re-checked 2026-10-22 after PH-11 (`PH-11/external-gates-availability-20261022.txt`):
 
 | Metric | Count |
 | --- | --- |
@@ -94,7 +94,18 @@ Live DB 2026-10-22 (`PH-11/product-approval-counts-20261022.txt`):
 | `approved` | 0 |
 | `rejected` | 0 |
 
-Includes EXPERIMENTAL catalog rows (e.g. Jaguar, ZX81) that must **not** be product-approved without separate playability decisions. Packets: update `docs/catalog-product-approval-report-20261021.md`.
+**No product approvals were applied by automation.**  
+Owner shortlist (proposed public v1 / hold / reject-experimental): `docs/product-release-shortlist-20261022.md`.  
+Packets: `docs/catalog-product-approval-report-20261021.md`.
+
+## External gates follow-up (same day, post PH-11)
+
+| Gate | Result | Evidence |
+| --- | --- | --- |
+| IN-002-P / IN-002-D | **BLOCKED_EXTERNAL** | No `/dev/input/js*`; no gamepad HID (`external-gates-availability-20261022.txt`) |
+| IOS-001 | **BLOCKED_EXTERNAL** | `idevice_id -l` empty; no adb device |
+| Staging HTTPS | **BLOCKED_EXTERNAL** | No authorized staging access; local HTTPS not substituted |
+| Product approval | **NOT_VERIFIED** | Shortlist ready; human Admin decision required |
 
 ---
 

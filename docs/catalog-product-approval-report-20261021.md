@@ -2,7 +2,9 @@
 
 **Audience:** product owners / release managers
 **Technical approval ≠ product marketing authorization.**
-**Status of this packet:** all **42** engineering titles remain `product_approval_status=pending` (live DB 2026-10-22: `docs/test-evidence/PH-11/product-approval-counts-20261022.txt`). **0** product-approved. **Do not** approve EXPERIMENTAL rows (Jaguar, ZX81) without new playability evidence.
+**Status of this packet:** all **42** engineering titles remain `product_approval_status=pending` (re-checked 2026-10-22: `docs/test-evidence/PH-11/external-gates-availability-20261022.txt`). **0** product-approved. **Do not** approve EXPERIMENTAL rows (Jaguar, ZX81) without new playability evidence.
+
+**Owner shortlist (proposed public v1 / hold / reject):** `docs/product-release-shortlist-20261022.md` — recommendations only; no automated approvals.
 
 ## Policy layers
 

@@ -56,7 +56,8 @@ Staging smoke (after access granted): use staging URLs; never production. Comman
 3. Admin → Approve / Reject / Clear — confirm `ProductApprovalDecision` history row.
 4. Expect: API/gateway hide immediately on revoke; direct S3 URLs may live until TTL (default 900 s); offline OPFS copies are **not** remotely wiped.
 
-Inventory snapshot 2026-10-22: **42 pending, 0 approved** — `docs/test-evidence/PH-11/product-approval-counts-20261022.txt`.  
+Inventory snapshot 2026-10-22 (re-checked): **42 pending, 0 approved** — `docs/test-evidence/PH-11/external-gates-availability-20261022.txt`.  
+Proposed public shortlist: `docs/product-release-shortlist-20261022.md`.  
 Packets: `docs/catalog-product-approval-report-20261021.md` (update counts when approving).
 
 **Do not** product-approve EXPERIMENTAL platforms (Jaguar, ZX81, N64) without new playability evidence.
