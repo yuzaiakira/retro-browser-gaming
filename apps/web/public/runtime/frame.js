@@ -32,6 +32,7 @@ function preferSeekable(file, companions, core) {
       'cap32',
       'desmume',
       'virtualjaguar',
+      'virtualjaguar_js',
     ].includes(core)
   ) {
     return false;
@@ -103,6 +104,7 @@ addEventListener('message', async (event) => {
       desmume: 'nds',
       // getCores maps jaguar → virtualjaguar; pin scheme for probes/UI.
       virtualjaguar: 'jaguar',
+      virtualjaguar_js: 'jaguar',
       mednafen_pce: 'pce',
       mednafen_wswan: 'ws',
       prosystem: 'atari7800',

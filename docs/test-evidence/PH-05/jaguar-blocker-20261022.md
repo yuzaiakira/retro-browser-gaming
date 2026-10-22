@@ -43,3 +43,8 @@ Screenshot: `screenshots/jaguar-input-fail.png`.
 1. Independently versioned newer `virtualjaguar` WASM (EmulatorJS/build) that includes JST_JAGSERVER / JAGR handling — rebuild in progress this session.
 2. Or produce a JST_ROM / Alpine image of jag2048 that the pinned core accepts without absolute-RAM relocation bugs.
 3. FBNeo remains separately blocked (`fbneo-blocker-20261022.md`).
+
+
+## Follow-up (same day)
+
+Independently versioned `virtualjaguar_js` rebuilt and smoke-tested — still not VERIFIED_PLAYABLE. Evidence: `PH-05/jaguar-vj-js-build-20261022.md`.

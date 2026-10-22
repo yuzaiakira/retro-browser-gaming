@@ -21,14 +21,14 @@
 | ZX81 (`81_eo`) | EXPERIMENTAL — independently versioned `81_eo` with `eo_loadp` + JOYPAD init landed; Chromium still idle `K` (`PH-05/zx81-blocker-20261022.md`) |
 | MSX / Atari ST | BLOCKED_CORE in EJS 4.2.3 CDN; `EmulatorJS/build` can produce `bluemsx` (build running) |
 | N64 | EXPERIMENTAL |
-| Core lock | **366 files** (includes `81_eo` packages + report) |
+| Core lock | **369 files** (includes `81_eo` packages + report) |
 | Tracker | `docs/platform-expansion-master-plan.md` |
 
 ## Exact commands
 
 ```bash
 python3 scripts/verify-core-lock.py
-# CORE_LOCK_OK 366 files
+# CORE_LOCK_OK 369 files
 CHROMIUM_EXECUTABLE=/usr/bin/chromium PLATFORM=zx81 SKIP_OFFLINE=1 \
   node apps/web/tests/libretro-family-smoke.cjs
 # ZX81 framebuffer unchanged … (still blocked)

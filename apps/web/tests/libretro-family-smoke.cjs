@@ -163,7 +163,7 @@ const PLATFORMS = {
   },
   jaguar: {
     label: 'Atari Jaguar',
-    core: 'virtualjaguar',
+    core: 'virtualjaguar_js',
     fixture: 'mit-jaguar-2048.jag',
     scheme: 'jaguar',
     pass: 'JAGUAR_GAMEPLAY_PASS',
@@ -475,7 +475,6 @@ async function run() {
     } else if (cfg.inputProfile === 'zx81-load-move') {
       // Prefer direct keyboard LOAD "" (frame enables keyboardInput + setKeyboardEnabled).
       // Fall back to remapped face buttons if keyboard path is unavailable.
-      const frame = page.frameLocator('#game');
       try {
         await page.locator('#game').click({ position: { x: 480, y: 320 } });
         await page.waitForTimeout(300);
@@ -508,7 +507,6 @@ async function run() {
         await tap(9);
         await page.waitForTimeout(6000);
       }
-      void frame;
     } else if (cfg.inputProfile === 'start-move' || cfg.inputProfile === 'start-only-move') {
       const bootCmds = cfg.inputProfile === 'start-only-move' ? [3] : [3, 8];
       for (const cmd of bootCmds) {
