@@ -119,6 +119,20 @@ const PLATFORMS = {
     moveAxes: 'horizontal',
     bootWaitMs: 35000,
   },
+  zx81: {
+    label: 'ZX81',
+    core: '81',
+    fixture: 'mit-zx81-dot.p',
+    scheme: '81',
+    pass: 'ZX81_GAMEPLAY_PASS',
+    screenshot: 'zx81-gameplay.png',
+    // Tape flash-load requires LOAD ""; typed via remapped face buttons then D-Pad.
+    inputProfile: 'zx81-load-move',
+    moveAxes: 'horizontal',
+    bootWaitMs: 4000,
+    moveHoldMs: 120,
+    moveIterations: 24,
+  },
   pce: {
     label: 'PCE',
     core: 'mednafen_pce',
@@ -223,6 +237,7 @@ const types = {
   '.tap': 'application/octet-stream',
   '.tzx': 'application/octet-stream',
   '.adf': 'application/octet-stream',
+  '.p': 'application/octet-stream',
   '.bin': 'application/octet-stream',
   '.zip': 'application/zip',
 };
@@ -374,6 +389,25 @@ async function run() {
         await page.evaluate(() => window.input(0, 0));
         await page.waitForTimeout(500);
       }
+    } else if (cfg.inputProfile === 'move-only') {
+      // No boot keys — used when the frame/core auto-starts the program.
+    } else if (cfg.inputProfile === 'zx81-load-move') {
+      // B=j (LOAD), Y=shift, A=p (quote), X=newline — then wait for flash load.
+      const tap = async (btn, hold = 450, gap = 400) => {
+        await page.evaluate((c) => window.input(c, 1), btn);
+        await page.waitForTimeout(hold);
+        await page.evaluate((c) => window.input(c, 0), btn);
+        await page.waitForTimeout(gap);
+      };
+      await tap(0);
+      await page.evaluate(() => window.input(1, 1));
+      await page.waitForTimeout(150);
+      await tap(8);
+      await tap(8);
+      await page.evaluate(() => window.input(1, 0));
+      await page.waitForTimeout(150);
+      await tap(9);
+      await page.waitForTimeout(6000);
     } else if (cfg.inputProfile === 'start-move' || cfg.inputProfile === 'start-only-move') {
       const bootCmds = cfg.inputProfile === 'start-only-move' ? [3] : [3, 8];
       for (const cmd of bootCmds) {
@@ -428,17 +462,21 @@ async function run() {
           : cfg.moveAxes === 'horizontal'
             ? [6, 7]
             : [6, 7];
-      for (let i = 0; i < 12; i++) {
+      const moveHold = cfg.moveHoldMs || 60;
+      const moveIters = cfg.moveIterations || 12;
+      for (let i = 0; i < moveIters; i++) {
         await page.evaluate((c) => window.input(c, 1), axis[0]);
-        await page.waitForTimeout(60);
+        await page.waitForTimeout(moveHold);
         await page.evaluate((c) => window.input(c, 0), axis[0]);
         await page.evaluate((c) => window.input(c, 1), axis[1]);
-        await page.waitForTimeout(60);
+        await page.waitForTimeout(moveHold);
         await page.evaluate((c) => window.input(c, 0), axis[1]);
         if (
           cfg.inputProfile !== 'start-move' &&
           cfg.inputProfile !== 'start-only-move' &&
-          cfg.inputProfile !== 'fire-move'
+          cfg.inputProfile !== 'fire-move' &&
+          cfg.inputProfile !== 'move-only' &&
+          cfg.inputProfile !== 'zx81-load-move'
         ) {
           await page.evaluate(() => window.input(8, 1));
           await page.waitForTimeout(60);

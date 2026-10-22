@@ -27,6 +27,7 @@ function preferSeekable(file, companions, core) {
       'vice_x64sc',
       'fuse',
       'puae',
+      '81',
     ].includes(core)
   ) {
     return false;
@@ -89,6 +90,8 @@ addEventListener('message', async (event) => {
       fuse: 'fuse',
       // getCores maps amiga → puae; pin scheme name for probes/UI.
       puae: 'amiga',
+      // EJS 4.2.3 getCores() has no zx81 shortcut — use explicit 81 core.
+      '81': '81',
       mednafen_pce: 'pce',
       mednafen_wswan: 'ws',
       prosystem: 'atari7800',
@@ -121,6 +124,21 @@ addEventListener('message', async (event) => {
       // Prefer embedded AROS Kickstart; do not require proprietary kick*.rom.
       window.EJS_defaultOptions.puae_model = 'A500';
       window.EJS_defaultOptions['puae-model'] = 'A500';
+    }
+    if (d.core === '81') {
+      // .p/.tzx mount as virtual tape; Flash Load needs LOAD "".
+      // 81-libretro treats joypad "auto" as joymap 0 (dead) — pin explicit keys.
+      // Use "default" (not digit strings) for D-Pad — matches upstream cursor map.
+      window.EJS_defaultOptions['81_fast_load'] = 'enabled';
+      window.EJS_defaultOptions['81_chroma_81'] = 'disabled';
+      window.EJS_defaultOptions['81_joypad_up'] = 'default';
+      window.EJS_defaultOptions['81_joypad_down'] = 'default';
+      window.EJS_defaultOptions['81_joypad_left'] = 'default';
+      window.EJS_defaultOptions['81_joypad_right'] = 'default';
+      window.EJS_defaultOptions['81_joypad_b'] = 'j';
+      window.EJS_defaultOptions['81_joypad_a'] = 'p';
+      window.EJS_defaultOptions['81_joypad_y'] = 'shift';
+      window.EJS_defaultOptions['81_joypad_x'] = 'new line';
     }
     window.EJS_Buttons = {
       settings: { visible: false },
@@ -163,6 +181,9 @@ addEventListener('message', async (event) => {
           onDemandMedia: !!(seekable && seekable.onDemand),
         },
       });
+      // 81-libretro mounts .p/.tzx as virtual tape (eo_loadp is disabled upstream).
+      // Players type LOAD "" via the core keyboard overlay (Select) or remapped face
+      // buttons (B=j, Y=shift, A=p, X=newline). Smoke drives that sequence explicitly.
     };
 
     const boot = () => {
