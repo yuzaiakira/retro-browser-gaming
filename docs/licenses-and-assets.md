@@ -57,7 +57,7 @@ Atari 5200 Culomin / Virtual Boy SPONG / N64 controller-test provenance unchange
 
 Amiga Dot is first-party MIT (`fixtures/amiga-dot/`); `AmiGalaga` was rejected because its ADF embeds commercial Galaga ROM-derived data. PUAE uses AROS Kickstart fallback (no proprietary `kick*.rom`).
 
-ZX81 Dot is first-party MIT (`fixtures/zx81-dot/`, z88dk). `charlierobson/biggoil` was rejected (no LICENSE). Stock EmulatorJS `81` retained; independently versioned `81_eo` (GPLv3 EightyOne patch: `eo_loadp` + JOYPAD init) is locked separately. Gameplay remains experimental (`PH-05/zx81-blocker-20261022.md`).
+ZX81 Dot is first-party MIT (`fixtures/zx81-dot/`, z88dk). `charlierobson/biggoil` was rejected (no LICENSE). Stock EmulatorJS `81` retained; independently versioned `81_eo` (GPLv3 EightyOne patch: `eo_loadp` + JOYPAD init) is locked separately. Gameplay remains experimental (`PH-05/zx81-native-diagnosis-20261022.md`). Independently built `bluemsx` WASM packages lock C-BIOS 0.23 (`LICENSES/cbios-0.23.txt`, BSD-style) under Machines/; MSX gameplay fixture still open (`PH-05/msx-bluemsx-rxml-build-20261022.md`).
 
 Amstrad CPC Brick Blaster is MIT from `issalig/brick_blaster` (`v1.0_RC4` English DSK). EmulatorJS `cap32` embeds Caprice32 CPC firmware (no separate Amstrad ROM files). Evidence: `PH-05/cpc-expansion-20261022.md`.
 
