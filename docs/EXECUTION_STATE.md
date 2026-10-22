@@ -48,8 +48,6 @@ WORK=/tmp/bluemsx-clean-build bash scripts/build-bluemsx-clean.sh
 
 1. Physical gamepad / iOS / production HTTPS
 2. Human product approval
-3. ZX81: BASIC `RAND USR` with live display, or supported reproducible `.z81` — do not mark VERIFIED without input-driven Dot motion
-4. Jaguar: retain EXPERIMENTAL
-5. FBNeo: non-Gridlee redistributable fixture only
-6. N64 remains EXPERIMENTAL until new actionable evidence
-7. Next independently feasible platform from master plan only when MSX clean-build evidence is filed
+3. ZX81 / Jaguar / N64 — retain EXPERIMENTAL (no new implementation path this session)
+4. FBNeo BLOCKED_FIXTURE; Atari ST / Vectrex / Intellivision / Coleco / hatari / opera / neocd — cores absent from lock or BIOS/legal blocked
+5. Next VERIFIED_PLAYABLE expansion needs a CDN-locked core **and** redistributable fixture that is not already covered; do not reopen EXPERIMENTAL/BLOCKED rows without a new path
