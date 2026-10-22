@@ -37,6 +37,7 @@ SYSTEMS = [
     ("zx81", "Sinclair ZX81", "computer"),
     ("amstrad-cpc", "Amstrad CPC", "computer"),
     ("nds", "Nintendo DS", "handheld"),
+    ("atari-jaguar", "Atari Jaguar", "console"),
     ("j2me", "Java ME / J2ME", "handheld"),
     ("ps1", "PlayStation", "console"),
     ("psp", "PlayStation Portable", "handheld"),
@@ -58,6 +59,7 @@ WASM_CORES = [
     ("81", ["p", "tzx"], ["wasm", "secureContext"]),
     ("cap32", ["dsk", "cdt", "sna", "m3u"], ["wasm", "secureContext"]),
     ("desmume", ["nds"], ["wasm", "webgl2", "secureContext"]),
+    ("virtualjaguar", ["j64", "jag", "rom", "abs", "bin"], ["wasm", "secureContext"]),
     ("prosystem", ["a78", "bin"], ["wasm", "secureContext"]),
     ("handy", ["lnx", "lyx"], ["wasm", "secureContext"]),
     ("mednafen_pce", ["pce"], ["wasm", "secureContext"]),
@@ -95,6 +97,7 @@ CONSOLE_FIXTURE_SLUGS = {
     "zx81",
     "amstrad-cpc",
     "nds",
+    "atari-jaguar",
     "j2me",
     "ps1",
     "psp",
@@ -867,6 +870,33 @@ class Command(BaseCommand):
             compatibility_note=(
                 "Verified Chromium gameplay with desmume / nds scheme; A + stylus "
                 "touch jump; dual-screen layout; save states supported. HLE BIOS only."
+            ),
+        )
+        results["jaguar"] = self._import_files(
+            fixtures,
+            slug="mit-jaguar-2048",
+            title="MIT Jaguar 2048",
+            description=(
+                "MIT-licensed Atari Jaguar 2048 homebrew for engineering acceptance "
+                "only. Uses EmulatorJS virtualjaguar with embedded HLE boot ROM "
+                "(no separate Jaguar BIOS files redistributed). Not a commercial cart."
+            ),
+            console="atari-jaguar",
+            core={"code": "virtualjaguar", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-jaguar-2048.jag",
+            files=[("mit-jaguar-2048.jag", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/jag2048-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "toarnold/jag2048 jag2048.jag "
+                "(https://github.com/toarnold/jag2048)"
+            ),
+            genre="Puzzle",
+            compatibility_note=(
+                "EXPERIMENTAL: virtualjaguar / jaguar wired with embedded HLE BIOS; "
+                "Chromium currently shows a black framebuffer for jag2048 "
+                "(PH-05/jaguar-blocker-20261022.md). Not verified playable."
             ),
         )
         results["pce"] = self._import_files(

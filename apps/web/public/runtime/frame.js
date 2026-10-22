@@ -30,6 +30,7 @@ function preferSeekable(file, companions, core) {
       '81',
       'cap32',
       'desmume',
+      'virtualjaguar',
     ].includes(core)
   ) {
     return false;
@@ -98,6 +99,8 @@ addEventListener('message', async (event) => {
       cap32: 'cap32',
       // Prefer desmume (HLE BIOS) over melonds (requires proprietary DS firmware).
       desmume: 'nds',
+      // getCores maps jaguar → virtualjaguar; pin scheme for probes/UI.
+      virtualjaguar: 'jaguar',
       mednafen_pce: 'pce',
       mednafen_wswan: 'ws',
       prosystem: 'atari7800',
