@@ -1,5 +1,7 @@
 # MSX BlueMSX Emscripten build — rxml link fix (2026-10-22)
 
+**Status:** Package build succeeded (commit `491b366`). Interactive gameplay / offline acceptance is documented in `PH-05/msx-expansion-20261022.md` (VERIFIED_PLAYABLE). Older `RXML_LINK_FAILED` attempts are superseded by this merge rebuild.
+
 ## Root cause
 
 Duplicate / missing `rxml_*` came from **API skew**, not a simple double-include:
