@@ -1,0 +1,4 @@
+{
+  "msxInstall": true,
+  "msxOffline": true
+}
