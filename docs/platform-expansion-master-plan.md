@@ -18,7 +18,7 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 | ZX81 | `81_eo` (patched rebuild; stock `81` retained) | GPLv3 | Firmware embedded | MIT ZX81 Dot `.p` (first-party z88dk) | **EXPERIMENTAL** — native CDFLAG/altint diagnosis; Dot still not interactive (`PH-05/zx81-native-diagnosis-20261022.md`) |
 | Amstrad CPC | `cap32` (CDN present; explicit `EJS_core=cap32`) | GPLv2+ | CPC firmware embedded | MIT Brick Blaster DSK (`issalig/brick_blaster` v1.0_RC4) | **VERIFIED_PLAYABLE** |
 | Amiga | `puae` | GPLv2 | AROS Kickstart fallback (no proprietary kick ROM) | MIT Amiga Dot ADF (first-party) | **VERIFIED_PLAYABLE** |
-| MSX | `bluemsx` (independently built WASM; not stock EJS CDN) | GPLv2+ blueMSX-libretro | C-BIOS 0.23 (BSD-style) SYSTEM pack | MIT MSX Dot `.rom` (first-party z88dk) | **VERIFIED_PLAYABLE** — Auto→C-BIOS; catalog offline; savestate ABI open (`PH-05/msx-expansion-20261022.md`) |
+| MSX | `bluemsx` (independently built WASM; not stock EJS CDN) | GPLv2+ blueMSX-libretro | C-BIOS 0.23 (BSD-style) SYSTEM pack | MIT MSX Dot `.rom` (first-party z88dk) | **VERIFIED_PLAYABLE** — Auto→C-BIOS; catalog offline; save/restore fixed (`PH-05/msx-savestate-abi-20261022.md`) |
 | Atari ST | `hatari` (absent) | — | EmuTOS candidate if core existed | — | **BLOCKED_CORE** (`PH-05/msx-atarist-blocker-20261022.md`) |
 | Commodore 64 | `vice_x64sc` (EJS default for `c64`) | GPLv2 | Stock ROMs embedded in EJS package | MIT Wild Boa PRG (`tstamborski/Wild-Boa-Snake`) | **VERIFIED_PLAYABLE** |
 | Nintendo 64 | `mupen64plus_next` | GPLv2-family (EJS package) | — | MIT `Ryzee119/n64_controller_test` boots; GameJam 1.2.1 OOMs on 64 MB RDRAM | **EXPERIMENTAL** (boot/render only; input delta open) |
@@ -50,6 +50,7 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 |  2026-10-22 | Jaguar `virtualjaguar_js` rebuild (still EXPERIMENTAL); ZX81 CRT inject proven in logs | `PH-05/jaguar-vj-js-build-20261022.md`, updated ZX81 blocker |
 |  2026-10-22 | ZX81 native CDFLAG/altint diagnosis (still EXPERIMENTAL); MSX bluemsx WASM + C-BIOS locked (EXPERIMENTAL, no gameplay) | `PH-05/zx81-native-diagnosis-20261022.md`, `PH-05/msx-bluemsx-rxml-build-20261022.md` |
 |  2026-10-22 | MSX (`bluemsx`) VERIFIED_PLAYABLE — Dot + C-BIOS SYSTEM + offline | `PH-05/msx-expansion-20261022.md` |
+|  2026-10-22 | MSX save-state ABI fixed (Board.saveState zero-arity); clean build script | `PH-05/msx-savestate-abi-20261022.md`, `PH-05/msx-clean-build-20261022.txt` |
 
 ## Working order (hypothesis)
 

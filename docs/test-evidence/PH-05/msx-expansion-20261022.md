@@ -44,13 +44,13 @@ RETRO_TEST_BASE_URL=http://launcher.localhost:13000 CATALOG_OFFLINE_ONLY=msx \
 
 ## Save states
 
-`supports_states` is true, but `save_state_info` raises WASM `function signature mismatch` on this independently built package. The frame adapter probes `getState()` and reports `saveState: false`. Offline catalog skips save/load when the Save state control is absent. SRAM/`.srm` path remains available via RetroArch overrides; not used for acceptance.
+**Fixed** — see `PH-05/msx-savestate-abi-20261022.md`. Root cause was `boardInfo.saveState(stateFile)` calling a zero-arg BoardInfo callback (WASM `call_indirect` arity trap), not an EmulatorJS `cwrap` export mismatch. After `0003-board-saveState-zero-arity-wasm.patch`: `saveState:true`, `stateBytes≈4194328`, round-trip restore verified.
 
 ## Known limitations
 
-- Savestate ABI mismatch (rebuild follow-up; see reproducible build script).
 - Prefer Auto + C-BIOS; proprietary MSX system ROMs are not redistributed.
 - Favicon 404 in smoke harness is harmless.
+- Emscripten `-O3` package SHA-256 may vary across clean rebuild hosts; compare functionally + promote only after lock update.
 
 ## Superseded
 

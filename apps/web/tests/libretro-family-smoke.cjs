@@ -419,8 +419,7 @@ async function run() {
     });
     await page.goto(`http://127.0.0.1:${port}/`);
     const result = await page.evaluate(() => window.result);
-    // bluemsx independently-built WASM currently mismatches save_state_info ABI.
-    if (!result.capabilities?.saveState && platformKey !== 'msx') {
+    if (!result.capabilities?.saveState) {
       throw new Error(`${cfg.label} core did not expose save state capability`);
     }
     await page.waitForTimeout(cfg.bootWaitMs || 2500);
