@@ -28,6 +28,7 @@ function preferSeekable(file, companions, core) {
       'fuse',
       'puae',
       '81',
+      '81_eo',
       'cap32',
       'desmume',
       'virtualjaguar',
@@ -93,8 +94,9 @@ addEventListener('message', async (event) => {
       fuse: 'fuse',
       // getCores maps amiga → puae; pin scheme name for probes/UI.
       puae: 'amiga',
-      // EJS 4.2.3 getCores() has no zx81 shortcut — use explicit 81 core.
+      // EJS 4.2.3 getCores() has no zx81 shortcut — use explicit 81 / 81_eo cores.
       '81': '81',
+      '81_eo': '81',
       // EJS 4.2.3 getCores() has no cpc/amstrad shortcut — use explicit cap32 core.
       cap32: 'cap32',
       // Prefer desmume (HLE BIOS) over melonds (requires proprietary DS firmware).
@@ -134,8 +136,9 @@ addEventListener('message', async (event) => {
       window.EJS_defaultOptions.puae_model = 'A500';
       window.EJS_defaultOptions['puae-model'] = 'A500';
     }
-    if (d.core === '81') {
-      // .p/.tzx mount as virtual tape; Flash Load needs LOAD "".
+    if (d.core === '81' || d.core === '81_eo') {
+      // 81_eo: independently versioned WASM calls eo_loadp for .p (tape path for .tzx).
+      // Stock 81 still needs LOAD ""; keep face-button LOAD map for that path.
       // 81-libretro treats joypad "auto" as joymap 0 (dead) — pin explicit keys.
       // Use "default" (not digit strings) for D-Pad — matches upstream cursor map.
       window.EJS_defaultOptions['81_fast_load'] = 'enabled';
@@ -183,6 +186,11 @@ addEventListener('message', async (event) => {
           emu.isFastForward = false;
           emu.gameManager?.toggleFastForward?.(0);
         }
+        // ZX81 keybovl needs RETRO_DEVICE_KEYBOARD / JOYPAD; enable RA keyboard feed.
+        if (d.core === '81' || d.core === '81_eo') {
+          emu.changeSettingOption?.('keyboardInput', 'enabled');
+          emu.gameManager?.functions?.setKeyboardEnabled?.(1);
+        }
       } catch {
         /* best-effort; launch still proceeds */
       }
@@ -201,9 +209,8 @@ addEventListener('message', async (event) => {
           onDemandMedia: !!(seekable && seekable.onDemand),
         },
       });
-      // 81-libretro mounts .p/.tzx as virtual tape (eo_loadp is disabled upstream).
-      // Players type LOAD "" via the core keyboard overlay (Select) or remapped face
-      // buttons (B=j, Y=shift, A=p, X=newline). Smoke drives that sequence explicitly.
+      // Stock 81: .p/.tzx as tape; LOAD "" via overlay or remapped face buttons.
+      // 81_eo: .p uses eo_loadp (direct inject); .tzx/.t81 keep FlashLoad tape path.
     };
 
     const boot = () => {
