@@ -1,0 +1,9 @@
+TITLE Rewind — your pocket arcade
+URL http://launcher.localhost:13000/games/orbit-catch
+BODY_SNIP ◀◀ | rewind | POCKET ARCADE | ⌂ | Discover | ▦ | All games | ▣ | My library | 0 | ↓ | Downloads | ⚙ | Settings |  YOUR DEVICE. YOUR ARCADE. |  | Download once. | Keep the good times offline. |  | Device diagnostics ↗ | THE ARCADE / GAMES | Online⚙ | ← Back to games |  | Loading game… |  | ◀◀ REWIND |  | Built for the games you come back to. |  | Compatibility & diagnostics ↗
+BUTTONS []
+LINKS ["◀◀rewindPOCKET ARCADE","⌂Discover","▦All games","▣My library0","↓Downloads","⚙Settings","Device diagnostics ↗","⚙","← Back to games","Compatibility & diagnostics ↗"]
+HAS_DL 0 HAS_PLAY 0
+AFTER_PLAY_URL http://launcher.localhost:13000/games/orbit-catch
+AFTER_BODY ◀◀ | rewind | POCKET ARCADE | ⌂ | Discover | ▦ | All games | ▣ | My library | 0 | ↓ | Downloads | ⚙ | Settings |  YOUR DEVICE. YOUR ARCADE. |  | Download once. | Keep the good times offline. |  | Device diagnostics ↗ | THE ARCADE / GAMES | Online⚙ | ← Back to games | HTML5 / Arcade | Orbit Catch |  | Original HTML5 arcade game. Catch mint stars; avoid amber comets. Keyboard and touch controls are available through the launcher. It is an offline-capable first-party demo. |  | Compatibility · limited |  | Browser capabilities are present. Actual game compatibility depends on this device and core version. |  | Core: native-html · 1.1.0 |  | Device-specific compatibility notes are not recorded for this release yet. |  | Install state: Not installed on this device |  | Download: 4.4 KiB · 1 verified file · No BIOS asset required |  | ↓ Download & try on this device |  | No account needed. Game files and saves stay on this device. Downloads verify every file before install. |  | Open download manager → | ◀◀ REWIND |  | Built for the games you come back to. |  | Compatibility & diagnostics ↗
+AFTER_BUTTONS ["↓ Download & try on this device"]

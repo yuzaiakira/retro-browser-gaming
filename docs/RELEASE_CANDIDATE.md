@@ -1,57 +1,48 @@
-# Release candidate checkpoint — 2026-10-20
+# Release candidate checkpoint — 2026-10-22
 
 **Verdict: RELEASE CANDIDATE / NOT COMPLETE**
 
-Local HEAD includes Android physical PH-08 (through AUD-001) and commits through the segaMD audio/control fix. This checkpoint freezes the distinction between what is shipped, what is verified, and what still blocks a complete P0 tag.
+Audit base SHA `8d24d9fdc1f9d3957e3a887d2ae5adb87280945f` plus local fix commits from the 2026-10-22 release-readiness pass. This checkpoint freezes shipped vs verified vs still-blocking P0.
 
 ## Implemented
 
-- Django/DRF catalog, importer, manifests, Range/S3 transport, Compose stack (PostgreSQL + SeaweedFS + API + Next standalone).
-- Next.js PWA: discovery, library, downloads, player, diagnostics, OPFS/IDB downloader, shell SW (`retro-shell-v5`).
-- Emulator adapters via versioned frame protocol for HTML5, Genesis Plus GX (MD+GG), SMS Plus, FCEUmm, snes9x, gambatte, mgba, stella2014 (Atari 2600), prosystem (Atari 7800), handy (Lynx), mednafen_pce (PCE HuCard), mednafen_wswan (WonderSwan), mednafen_ngp (NGP + NGPC), jsdos (MS-DOS / emulators 8.3.8), js2me (J2ME / MIDP subset), PCSX ReARMed, PPSSPP (threaded).
-- Keyboard / simulated gamepad / configurable touch; fullscreen/orientation APIs; save slots + autosave; J2ME keypad + RMS/IndexedDB.
+- Django/DRF catalog, importer, manifests, Range/S3 transport, Compose stack (PostgreSQL + SeaweedFS + API + Next standalone + Host-routed edge).
+- Next.js PWA: discovery, library, downloads, player, diagnostics, OPFS/IDB downloader, shell SW.
+- Emulator adapters via versioned frame protocol (HTML5, Genesis family, Nintendo handhelds/consoles, Atari family subset, PCE/WS/NGP, computers MSX/C64/Spectrum/Amiga/CPC, NDS, jsdos, js2me, PS1, PSP threaded).
+- Keyboard / simulated gamepad / touch; saves; J2ME dedicated-origin + RMS.
+- Catalog governance: DISTRIBUTION / ENGINEERING / PRODUCT layers + `catalog.E001`.
 
 ## Verified (real evidence)
 
 | Area | Status | Pointer |
 |---|---|---|
-| Native Compose + API tests | PASSED | `PH-01`, Django test suite |
+| Native Compose + API tests | PASSED | `PH-01`, `PH-11/django-tests-20261022.txt` (43 OK) |
 | Downloads / DL-013 scoped | PASSED | `PH-03` |
-| Offline PWA + OFF-004 wasm eviction | PASSED | `PH-02` |
-| Genesis / SMS / GG / SG-1000 / NES / SNES / GB / GBC / GBA / Atari 2600 / 7800 / Lynx / PCE HuCard / WonderSwan / NGP / NGPC / MS-DOS / PS1 / PSP gameplay + catalog offline | PASSED (scoped) | `PH-05`; PS1/PSP smoke hang fixed as harness-only (`PH-05/ps1-psp-hang-fix-20261021.md`) |
-| J2ME MIT Dot/Paddle/Notes dedicated-origin catalog offline (real SW, no mocks) | PASSED (first-party subset) | `PH-06/catalog-j2me-dedicated-offline-20261021.md`, `docs/j2me-security-architecture.md`, `docs/j2me-compatibility.md` |
-| J2ME SW atomic integrity + cache recovery + RMS prefer-newer rollback | PASSED (automated) | `PH-06/j2me-sw-integrity-20261021.json`, `j2me-cache-recovery-20261021.json`, `j2me-rms-rollback-safety-20261021.json` |
-| J2ME SW unique-generation promotion faults + ACTIVATE_UPDATE auth | PASSED (automated) | `PH-06/j2me-sw-promotion-faults-20261021.json` |
-| Local trusted HTTPS dual-host (OpenSSL CA + NSS) | LOCAL_HTTPS_VERIFIED | `PH-06/j2me-local-https-20261021.json` — **not** PRODUCTION_STAGING_VERIFIED |
-| HTTPS production / staging certificates for dual-host cutover | NOT_VERIFIED | External staging still required |
-| Automated acceptance gates | PASSED | `PH-07` |
-| Android Chrome physical (touch, FS, OR, offline reverse-removed) | PASSED | `PH-08/android-*` |
-| AUD-001 human-heard Genesis on phone | PASSED | `PH-08/aud001-human-listen-20261020.md` |
-| Playwright WebKit catalog (no OPFS install) | PASSED as capability gate | `PH-02/webkit-orbit-capability-*` |
+| Offline PWA + OFF-004 | PASSED | `PH-02` |
+| Console gameplay + catalog offline | PASSED (scoped) | `PH-05`; regression `PH-11/emulator-regression-20261022.txt` |
+| Orbit HTML5 after CSP blob + origin sentinel fix | PASSED | `PH-11/acceptance-gates-20261022.txt`, `orbit-fixed.png` |
+| Amiga saveState after probe-scope fix | PASSED | `PH-11/amiga-fix-20261022.txt` |
+| J2ME dedicated-origin offline + SW integrity | PASSED (scoped) | `PH-06` |
+| Local trusted HTTPS dual-host | LOCAL_HTTPS_VERIFIED | `PH-06/j2me-local-https-20261021.json` — **not** staging |
+| HTTPS production / staging | **BLOCKED_EXTERNAL** | `docs/production-staging-verification.md` |
+| Automated acceptance gates | PASSED | `PH-11/acceptance-gates-20261022.txt` |
+| Android Chrome physical + AUD-001 | PASSED | `PH-08` |
+| Playwright WebKit capability (no OPFS) | PASSED as capability gate | `PH-02/webkit-orbit-capability-*` |
+| Core lock | PASSED | 373 files |
 
-## External hardware blockers (deferred)
+## External blockers (mandatory)
 
-See `docs/test-evidence/PH-08/deferred-physical-acceptance.md`:
-
-- IN-002-P / IN-002-D — physical gamepad
-- IOS-001 — real iOS Safari
-
-These remain **mandatory** and **BLOCKED_EXTERNAL**. They do not authorize declaring complete P0 release.
+| ID | Status | Runbook |
+|---|---|---|
+| IN-002-P / IN-002-D | BLOCKED_EXTERNAL | `docs/physical-device-acceptance.md` |
+| IOS-001 | BLOCKED_EXTERNAL | same |
+| Staging HTTPS | BLOCKED_EXTERNAL | `docs/production-staging-verification.md` |
+| Product approval | NOT_VERIFIED (42 pending / 0 approved) | `docs/catalog-product-approval-report-20261021.md` |
 
 ## Remaining release acceptance
 
-1. Clear deferred physical rows when hardware exists, **or** obtain an explicit PDR change (not done here).
-2. Keep COOP/COEP, core lock, and legal fixture provenance intact for any new platform.
-3. Tag a release only from a clean committed revision with evidence links that match reality.
+1. Clear physical / iOS / staging rows with dated evidence, **or** explicit PDR change (not done).
+2. Human product-approve only intended public titles.
+3. Tag only from a clean committed revision with matching evidence.
 
-## Future development (post-RC, non-blocking P0)
-
-Independent expansion work may proceed without waiting for gamepad/iOS:
-
-1. **P0 software Sega gaps closed** (SMS/GG); physical gamepad/iOS still block complete P0.
-2. **P1:** Nintendo set + Atari 2600/7800 + Lynx + PCE HuCard + SG-1000 + WonderSwan + NGP/NGPC + MS-DOS (`jsdos`) verified (`PH-05/*`); Mega Drive Pong; catalog expansion Falling / Big2Small / Nonogram / SMS Sushi Nights (`PH-05/catalog-expansion-20261021.md`); underrepresented GG/GBC/A2600 expansion (`PH-05/catalog-underrepresented-expansion-20261021.md`).
-3. **Catalog governance:** engineering `published` separated from `product_approval_status`; production APIs require product approval unless `CATALOG_ALLOW_ENGINEERING`. Product decisions require `catalog.approve_game_product`, append-only `ProductApprovalDecision` history, and `catalog.E001` deploy guard. Direct S3 URLs remain valid up to `S3_PRESIGNED_URL_EXPIRES` (default 900s) after revoke (`docs/catalog-product-approval-report-20261021.md`, `docs/deployment.md`). Engineering titles (34 after A5200/VB) remain product-pending until a human decides.
-4. **Platform expansion (optional, non-P0):** Atari 5200 + Virtual Boy + Commodore 64 + ZX Spectrum + Amiga + CPC + NDS + MSX VERIFIED_PLAYABLE (`docs/platform-expansion-master-plan.md`). N64 / Jaguar / ZX81 EXPERIMENTAL; Atari ST BLOCKED_CORE; FBNeo BLOCKED_FIXTURE.
-5. **P1 research:** EmulatorJS `dosbox_pure` still blocked on 4.2.3; J2ME commercial titles remain unchecked — only allowlisted first-party MIDlets (`docs/j2me-compatibility.md`).
-6. **P1 blocked (not published):** Sega 32X **BLOCKED_LEGAL** (PicoDrive non-commercial); Sega CD **BIOS-blocked** (`PH-05/sega-32x-feasibility-20261021.md`, `sega-cd-assessment-20261021.md`).
-7. Higher roadmap items (PCE CD, etc.) remain unchecked until evidenced.
+Full audit: `docs/release-acceptance-report.md`. Ops checklist: `docs/release-manager-handover.md`.

@@ -1,6 +1,6 @@
 # Implementation handover — RELEASE CANDIDATE / NOT COMPLETE
 
-Date: 2026-10-20. Local HEAD includes automated P0 closure, Android USB PH-08 (incl. AUD-001), deferred gamepad/iOS documentation, and Master System core gameplay evidence. **Do not declare COMPLETE** until deferred physical rows pass (or PDR changes). See `docs/RELEASE_CANDIDATE.md`.
+Date: 2026-10-20 (implementation baseline). **Release-readiness refresh 2026-10-22:** see `docs/release-acceptance-report.md` and `docs/release-manager-handover.md`. Orbit CSP/`blob:` + FrameAdapter origin sentinel and Amiga saveState probe scope were fixed in that pass. **Do not declare COMPLETE** until deferred physical/staging/product rows pass (or PDR changes). See `docs/RELEASE_CANDIDATE.md`.
 
 ## Verdict
 
