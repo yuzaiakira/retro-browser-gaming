@@ -41,6 +41,7 @@ The following tracked fixtures are used by core smoke tests (`core-smoke.cjs`, `
 | `.fixtures/mit-amiga-dot.adf` | `348b009bd77f9f1bf483dd98f11492bdd80c1bfbba470f63544ec02b842e87ba` | First-party `fixtures/amiga-dot/` (crosstools + amitools) | MIT, `LICENSES/amiga-dot-MIT.txt` |
 | `.fixtures/mit-zx81-dot.p` | `fb81bc0bba7f6cbe0ccb6b9267f4cf464f2969edce2d2f3f8e0b2c056e45c7c5` | First-party `fixtures/zx81-dot/` (z88dk `+zx81`) | MIT, `LICENSES/zx81-dot-MIT.txt` |
 | `.fixtures/mit-cpc-brickblaster.dsk` | `0213b3b5ef409c0ba66916771c9b3379dcab5236c10bce2313ffa9d00f1600e1` | `issalig/brick_blaster` release `v1.0_RC4` `dist/brickb_en.dsk` | MIT, `LICENSES/brickblaster-CPC-MIT.txt` |
+| `.fixtures/mit-msx-dot.rom` | `57e77ece49b72b5e0ad319e8c62955c24e887bd426622073f57fbefba108e995` | First-party `fixtures/msx-dot/` (z88dk `+msx -subtype=rom`) | MIT, `LICENSES/msx-dot-MIT.txt` |
 | `.fixtures/mit-nds-dinods.nds` | `f31cc7de00f33394639280caf1069f9e63b4937ae04bc968a0413045455efdcc` | `BotRandomness/DinoDS` release `v1.0.0` `DinoDS.nds` | MIT, `LICENSES/dinods-NDS-MIT.txt` |
 | `.fixtures/mit-jaguar-2048.jag` | `311e7a3480041c9ac01a2e129d8aaf5e76d9d5c8879c35fcc1f067582bef0bfe` | `toarnold/jag2048` `jag2048.jag` | MIT, `LICENSES/jag2048-MIT.txt` |
 | `.fixtures/huc-pce-scroll.pce` | `5397d79a9fdeba1c1911d331ed564700f9d3981f62f9984ae289ddb9a8dcf35d` | Built from `BlockoS/huc` `examples/scroll` | GPL-2.0, `LICENSES/HuC-GPL-2.0.txt` |
@@ -57,7 +58,9 @@ Atari 5200 Culomin / Virtual Boy SPONG / N64 controller-test provenance unchange
 
 Amiga Dot is first-party MIT (`fixtures/amiga-dot/`); `AmiGalaga` was rejected because its ADF embeds commercial Galaga ROM-derived data. PUAE uses AROS Kickstart fallback (no proprietary `kick*.rom`).
 
-ZX81 Dot is first-party MIT (`fixtures/zx81-dot/`, z88dk). `charlierobson/biggoil` was rejected (no LICENSE). Stock EmulatorJS `81` retained; independently versioned `81_eo` (GPLv3 EightyOne patch: `eo_loadp` + JOYPAD init) is locked separately. Gameplay remains experimental (`PH-05/zx81-native-diagnosis-20261022.md`). Independently built `bluemsx` WASM packages lock C-BIOS 0.23 (`LICENSES/cbios-0.23.txt`, BSD-style) under Machines/; MSX gameplay fixture still open (`PH-05/msx-bluemsx-rxml-build-20261022.md`).
+ZX81 Dot is first-party MIT (`fixtures/zx81-dot/`, z88dk). `charlierobson/biggoil` was rejected (no LICENSE). Stock EmulatorJS `81` retained; independently versioned `81_eo` (GPLv3 EightyOne patch: `eo_loadp` + JOYPAD init) is locked separately. Gameplay remains experimental (`PH-05/zx81-native-diagnosis-20261022.md`).
+
+MSX Dot is first-party MIT (`fixtures/msx-dot/`, z88dk `+msx -subtype=rom`). Independently built `bluemsx` WASM packages lock C-BIOS 0.23 (`LICENSES/cbios-0.23.txt`, BSD-style). EmulatorJS does not auto-extract Machines/Databases from core `.data`, so a slim `ejs-4.2.3/system/bluemsx-system.data` (C-BIOS Machines + Databases) is mounted into `/home/web_user/retroarch/userdata/system/` via `EJS_externalFiles`.
 
 Amstrad CPC Brick Blaster is MIT from `issalig/brick_blaster` (`v1.0_RC4` English DSK). EmulatorJS `cap32` embeds Caprice32 CPC firmware (no separate Amstrad ROM files). Evidence: `PH-05/cpc-expansion-20261022.md`.
 
@@ -69,7 +72,7 @@ EmulatorJS core packages for `fceumm`, `snes9x`, `gambatte`, `mgba`, `stella2014
 
 ## Emulator runtime
 
-EmulatorJS source is pinned to commit `e150dc0491ae747028919fb82d6598954976ede6` (runtime 4.2.3). The vendored launcher source license is GPL-3.0 in `LICENSES/EmulatorJS-GPL-3.0.txt`. `docs/core-package-lock.json` records SHA-256/size/source for vendored runtime files (366 entries after `81_eo`); `scripts/verify-core-lock.py` verifies them. Arcade/FBNeo: do **not** vendor MAME Dev “free ROMs” (including Gridlee) — site-only redistribution (`PH-05/fbneo-blocker-20261022.md`).
+EmulatorJS source is pinned to commit `e150dc0491ae747028919fb82d6598954976ede6` (runtime 4.2.3). The vendored launcher source license is GPL-3.0 in `LICENSES/EmulatorJS-GPL-3.0.txt`. `docs/core-package-lock.json` records SHA-256/size/source for vendored runtime files (373 entries including `bluemsx` + SYSTEM pack); `scripts/verify-core-lock.py` verifies them. Arcade/FBNeo: do **not** vendor MAME Dev “free ROMs” (including Gridlee) — site-only redistribution (`PH-05/fbneo-blocker-20261022.md`).
 
 Core-level redistribution terms need a separate audit before publishing a core-backed release. The presence of a core file and a successful local test do **not** approve it for public distribution. Genesis/PS1/PSP core-smoke fixtures are engineering evidence only, not catalog releases.
 

@@ -151,6 +151,13 @@ class EJS_GameManager {
             (this.EJS.rewindEnabled ? "rewind_granularity = 6\n" : "") +
             "savefile_directory = \"/data/saves\"\n";
 
+        // blueMSX needs Machines/Databases under SYSTEM. EmulatorJS leaves
+        // system_directory empty, which makes RetroArch use the content dir.
+        // Pin an explicit SYSTEM path; frame.js mounts bluemsx-system.data here.
+        if (this.EJS.getCore() === "bluemsx") {
+            cfg += "system_directory = \"/home/web_user/retroarch/userdata/system\"\n";
+        }
+
         if (this.EJS.retroarchOpts && Array.isArray(this.EJS.retroarchOpts)) {
             this.EJS.retroarchOpts.forEach(option => {
                 let selected = this.EJS.preGetSetting(option.name);
