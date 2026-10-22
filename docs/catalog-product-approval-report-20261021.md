@@ -1,8 +1,8 @@
-# Product approval report — engineering catalog (2026-10-21)
+# Product approval report — engineering catalog (2026-10-21; counts refreshed 2026-10-22)
 
 **Audience:** product owners / release managers
 **Technical approval ≠ product marketing authorization.**
-**Status of this packet:** all **32** engineering titles remain `product_approval_status=pending`. No title in this report is product-approved.
+**Status of this packet:** all **42** engineering titles remain `product_approval_status=pending` (live DB 2026-10-22: `docs/test-evidence/PH-11/product-approval-counts-20261022.txt`). **0** product-approved. **Do not** approve EXPERIMENTAL rows (Jaguar, ZX81) without new playability evidence.
 
 ## Policy layers
 
@@ -49,13 +49,22 @@ Evidence: `docs/test-evidence/PH-05/catalog-approval-ops-*20261021*`, prior `cat
 
 ## Inventory summary
 
-All **32** seeded engineering titles below are:
+All **42** seeded engineering titles are:
 
 - **Distribution rights approved** in the importer sense (MIT/GPL/first-party evidence in `docs/licenses-and-assets.md` + `LICENSES/`).
 - **Engineering-published** for local/QA when `CATALOG_ALLOW_ENGINEERING=true`.
 - **Awaiting product approval** (`pending`). **None** are product-approved.
 
 Separate blockers (32X, Sega CD, ColecoVision, commercial J2ME) are **not** in the catalog.
+
+### Live counts (2026-10-22)
+
+| Metric | Value |
+| --- | --- |
+| Total / published | 42 |
+| pending | 42 |
+| approved | 0 |
+| rejected | 0 |
 
 ### Classification key
 
@@ -102,6 +111,16 @@ All rows: **Product approval = pending**. Screenshots under `docs/test-evidence/
 | `mit-j2me-notes` | j2me | Gameplay | First-party MIT | `PH-06` multi | PH-06 | Dedicated origin | PH-06 |
 | `mit-ps1-dot` | ps1 | Diagnostic | First-party MIT Dot | PS1 smoke | `catalog-offline-ps1.png` | Minimal disc fixture | `ps1-gameplay.png` |
 | `mit-psp-dot` | psp | Diagnostic | First-party MIT Dot | PSP smoke | `catalog-offline-psp.png` | Minimal PBP fixture | `psp-gameplay.png` |
+| `cc0-a5200-culomin` | atari-5200 | Gameplay | CC0 Culomin | `a5200-vb-expansion-*` | catalog offline A5200 | — | PH-05 |
+| `mit-vb-spong` | virtual-boy | Gameplay | MIT SPONG | same | catalog offline VB | — | PH-05 |
+| `mit-c64-wildboa` | c64 | Gameplay | MIT Wild Snake Boa | `c64-spectrum-expansion-*` | catalog offline C64 | — | PH-05 |
+| `mit-zx-desolate` | zx-spectrum | Gameplay | MIT Desolate | same | catalog offline Spectrum | — | PH-05 |
+| `mit-amiga-dot` | amiga | Diagnostic | First-party MIT Dot | `amiga-expansion-*`; saveState re-PASS 2026-10-22 | catalog offline Amiga | AROS Kickstart fallback ~30s | PH-05 / PH-11 |
+| `mit-cpc-brickblaster` | amstrad-cpc | Gameplay | MIT Brick Blaster | `cpc-expansion-*` | catalog offline CPC | — | PH-05 |
+| `mit-msx-dot` | msx | Diagnostic | First-party MIT Dot | MSX BlueMSX VERIFIED; saveState fixed | catalog offline MSX | C-BIOS Auto | PH-05 |
+| `mit-nds-dinods` | nds | Gameplay | MIT DinoDS | `nds-expansion-*` | catalog offline NDS | HLE BIOS | PH-05 |
+| `mit-jaguar-2048` | atari-jaguar | **EXPERIMENTAL** | MIT 2048 | black/no input delta | — | **Do not product-approve** without new evidence | PH-05 jaguar |
+| `mit-zx81-dot` | zx81 | **EXPERIMENTAL** | First-party MIT Dot | not interactive | — | **Do not product-approve** without new evidence | PH-05 zx81 |
 
 ### Missing evidence (product polish — not distribution blockers)
 

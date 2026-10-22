@@ -2,28 +2,38 @@
 
 ## Verdict
 
-**RELEASE CANDIDATE / NOT COMPLETE** — IN-002/IOS-001 remain BLOCKED_EXTERNAL. Platform expansion: **Atari 5200**, **Virtual Boy**, **Commodore 64**, **ZX Spectrum**, **Amiga**, **Amstrad CPC**, **Nintendo DS**, and **MSX** VERIFIED_PLAYABLE; **ZX81** / **Jaguar** / **N64** EXPERIMENTAL; **FBNeo** BLOCKED_FIXTURE (do **not** vendor Gridlee); Atari ST BLOCKED_CORE (hatari absent).
+**RELEASE CANDIDATE / NOT COMPLETE** — IN-002-P/D, IOS-001, and production staging HTTPS remain **BLOCKED_EXTERNAL**. Product approval: **42 pending / 0 approved** (live DB 2026-10-22). Software defects fixed this session: Orbit CSP/`blob:` + FrameAdapter `*` origin sentinel; Amiga saveState early-probe scope.
 
-## Deferred physical acceptance (do not rediscover)
+## Deferred physical / external (do not rediscover)
 
-- IN-002-P / IN-002-D — no gamepad
-- IOS-001 — no iOS device
+- IN-002-P / IN-002-D — no gamepad (`docs/physical-device-acceptance.md`)
+- IOS-001 — no iOS device (same)
+- Staging HTTPS — no authorized staging (`docs/production-staging-verification.md`)
 
 ## Platform / catalog status
 
 | Item | Status |
 |---|---|
-| VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + **MSX** (save/restore now verified) |
-| MSX (`bluemsx`) | VERIFIED_PLAYABLE — MIT Dot; C-BIOS; Auto→C-BIOS; offline; **saveState fixed** (`PH-05/msx-savestate-abi-20261022.md`) |
-| Nintendo DS (`desmume`) | VERIFIED_PLAYABLE — HLE; MIT DinoDS; A+stylus; offline (`PH-05/nds-expansion-20261022.md`) |
-| Amstrad CPC (`cap32`) | VERIFIED_PLAYABLE (`PH-05/cpc-expansion-20261022.md`) |
-| Atari Jaguar (`virtualjaguar` / `virtualjaguar_js`) | EXPERIMENTAL — black/no input delta (`PH-05/jaguar-vj-js-build-20261022.md`) |
-| Arcade FBNeo | **BLOCKED_FIXTURE** — no redistributable vendored ZIP (`PH-05/fbneo-blocker-20261022.md`) |
-| ZX81 (`81_eo`) | EXPERIMENTAL — Dot not interactive (`PH-05/zx81-native-diagnosis-20261022.md`) |
-| Atari ST | BLOCKED_CORE — hatari absent from EmulatorJS/build inventory |
-| N64 | EXPERIMENTAL |
-| Core lock | **373 files** (bluemsx packages rebuilt for saveState arity fix) |
+| VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX (save/restore verified) |
+| EXPERIMENTAL | ZX81 / Jaguar / N64 |
+| FBNeo | BLOCKED_FIXTURE |
+| Atari ST | BLOCKED_CORE — hatari absent |
+| Core lock | **373 files** |
 | Tracker | `docs/platform-expansion-master-plan.md` |
+
+## Release acceptance (2026-10-22)
+
+| Check | Result | Evidence |
+|---|---|---|
+| Django 43 tests | OK | `PH-11/django-tests-20261022.txt` |
+| Storage Range probe | PASS | `PH-11/verify-storage-20261022.txt` |
+| `catalog.E001` | PASS (errors when misconfigured) | `PH-11/catalog-e001-20261022.txt` |
+| Acceptance gates | PASS | `PH-11/acceptance-gates-20261022.txt` |
+| Emulator regression | PASS | `PH-11/emulator-regression-20261022.txt` |
+| Orbit HTML5 after CSP+origin fix | PASS | `PH-11/screenshots/orbit-fixed.png` |
+| Amiga after probe scope fix | PASS | `PH-11/amiga-fix-20261022.txt` |
+
+Handover: `docs/release-manager-handover.md`, report: `docs/release-acceptance-report.md`.
 
 ## Exact commands
 
@@ -31,23 +41,31 @@
 python3 scripts/verify-core-lock.py
 # CORE_LOCK_OK 373 files
 
+./scripts/compose.sh exec -T api python manage.py test tests -v 1
+./scripts/compose.sh exec -T api env DJANGO_DEBUG=false CATALOG_ALLOW_ENGINEERING=false \
+  python manage.py check --deploy
+
+RETRO_TEST_BASE_URL=http://launcher.localhost:13000 CHROMIUM_EXECUTABLE=/usr/bin/chromium \
+  node apps/web/tests/acceptance-gates.cjs
+
 CHROMIUM_EXECUTABLE=/usr/bin/chromium PLATFORM=msx SKIP_OFFLINE=1 \
   node apps/web/tests/libretro-family-smoke.cjs
-# MSX_GAMEPLAY_PASS … saveState:true stateBytes:4194328
+# MSX_GAMEPLAY_PASS … saveState:true
 
-RETRO_TEST_BASE_URL=http://launcher.localhost:13000 CATALOG_OFFLINE_ONLY=msx \
-  CHROMIUM_EXECUTABLE=/usr/bin/chromium \
-  node apps/web/tests/catalog-console-offline.cjs
-# CATALOG_CONSOLE_OFFLINE_PASS
+CHROMIUM_EXECUTABLE=/usr/bin/chromium PLATFORM=amiga SKIP_OFFLINE=1 \
+  node apps/web/tests/libretro-family-smoke.cjs
+# AMIGA_GAMEPLAY_PASS … saveState:true stateBytes:1104272
+```
 
-WORK=/tmp/bluemsx-clean-build bash scripts/build-bluemsx-clean.sh
-# empty WORK; pinned build+bluemsx revs; fail-fast patches; artifacts under $WORK/output only
+After web CSP / FrameAdapter / `public/runtime` changes:
+
+```bash
+./scripts/compose.sh up -d --build web
 ```
 
 ## Remaining blockers / next
 
-1. Physical gamepad / iOS / production HTTPS
-2. Human product approval
-3. ZX81 / Jaguar / N64 — retain EXPERIMENTAL (no new implementation path this session)
-4. FBNeo BLOCKED_FIXTURE; Atari ST / Vectrex / Intellivision / Coleco / hatari / opera / neocd — cores absent from lock or BIOS/legal blocked
-5. Next VERIFIED_PLAYABLE expansion needs a CDN-locked core **and** redistributable fixture that is not already covered; do not reopen EXPERIMENTAL/BLOCKED rows without a new path
+1. Physical gamepad / iOS / production staging HTTPS (runbooks ready; execute when hardware/access exists)
+2. Human product approval for intended public titles only
+3. Retain EXPERIMENTAL/BLOCKED platform rows — no expansion required for P0
+4. Do **not** tag COMPLETE until mandatory gates clear or PDR explicitly changes

@@ -1,0 +1,19 @@
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> retro-web@0.2.0 test
+> vitest run
+
+
+ RUN  v3.2.4 /home/akira/Projects/git-contribute/retro-browser-gaming/apps/web
+
+ ✓ src/features/input.test.ts (1 test) 1ms
+ ✓ src/emulators/media.test.ts (2 tests) 3ms
+ ✓ src/features/compatibility.test.ts (6 tests) 2ms
+ ✓ src/features/j2me-rms-migrate.test.ts (9 tests) 3ms
+ ✓ src/emulators/frame-adapter.test.ts (3 tests) 2ms
+
+ Test Files  5 passed (5)
+      Tests  21 passed (21)
+   Start at  21:23:03
+   Duration  228ms (transform 122ms, setup 0ms, collect 160ms, tests 12ms, environment 0ms, prepare 223ms)
+

@@ -1,0 +1,7 @@
+locator.waitFor: Timeout 90000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'Save state', exact: true }) to be visible
+
+    at [stdin]:11:71 {
+  name: 'TimeoutError'
+}

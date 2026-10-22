@@ -1,0 +1,7 @@
+SystemCheckError: System check identified some issues:
+
+ERRORS:
+?: (catalog.E001) CATALOG_ALLOW_ENGINEERING=true while DJANGO_DEBUG=false without CATALOG_ALLOW_ENGINEERING_IN_PRODUCTION=true.
+	HINT: Unset CATALOG_ALLOW_ENGINEERING for production, or set CATALOG_ALLOW_ENGINEERING_IN_PRODUCTION=true only for an explicit non-debug engineering demo host. Never rely on client flags.
+
+System check identified 1 issue (0 silenced).
