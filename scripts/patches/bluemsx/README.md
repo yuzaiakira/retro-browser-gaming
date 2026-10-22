@@ -2,28 +2,35 @@
 
 Applied by `scripts/build-bluemsx-clean.sh` / `scripts/rebuild-bluemsx-emscripten.sh`.
 
-## Required changes (pin bluemsx `e3086eb`, emsdk `3.1.74`)
+## Pins
 
-1. **Frontend rxml API merge** (`compile/RetroArch/libretro-common/formats/xml/rxml.c` + `rxml.h`)
-   - Provide both `rxml_load_document_owned_opts` (bluemsx) and path-based `rxml_load_document`.
-   - Evidence: `docs/test-evidence/PH-05/msx-bluemsx-rxml-build-20261022.md` (supersedes RXML_LINK_FAILED logs).
+| Component | Revision |
+|---|---|
+| emsdk image | `emscripten/emsdk:3.1.74` |
+| EmulatorJS/build | `677b1334ab1721a1e31b918f211b68f4e54f67a8` |
+| blueMSX-libretro | `e3086eb5d36d77fa11704cf53dc176686e70127d` |
+| EmulatorJS runtime target | `e150dc0491ae747028919fb82d6598954976ede6` (4.2.3) |
 
-2. **Gate bluemsx private rxml** (`compile/bluemsx/Makefile.common`)
-   - Compile bluemsx `libretro-common/.../rxml.c` only when `STATIC_LINKING` is not `1`.
-   - Prevents duplicate `rxml_*` symbols under Emscripten static link.
+## Required changes
 
-3. **Restore `libretro-font.i`**
-   - Path: `compile/bluemsx/Src/Libretro/libretro-font.i` from bluemsx git at the pinned revision.
+1. **Frontend rxml API merge** (`frontend-rxml/rxml.c` + `rxml.h`)
+   - Both `rxml_load_document_owned_opts` and path-based `rxml_load_document`.
+   - Evidence: `docs/test-evidence/PH-05/msx-bluemsx-rxml-build-20261022.md`.
 
-4. **Packaging**
-   - Include Machines (at least C-BIOS) + Databases in the `.data` 7z.
-   - After install, extract slim SYSTEM pack:
-     `Machines/MSX - C-BIOS`, `MSX2 - C-BIOS`, `MSX2+ - C-BIOS`, and `Databases/`
-     → `apps/web/public/cores/ejs-4.2.3/system/bluemsx-system.data`
+2. **Gate bluemsx private rxml** (`0002-bluemsx-gate-private-rxml-static-linking.patch`)
+   - Skip core `rxml.c` when `STATIC_LINKING=1`.
 
-5. **`build.json`**
-   - `minimumEJSVersion` must be ≤ pinned runtime (4.2.3 → use 4.2.2).
+3. **Board.saveState WASM arity** (`0003-board-saveState-zero-arity-wasm.patch`)
+   - Call `boardInfo.saveState()` with zero args (implementations are zero-arg).
+   - Passing `stateFile` caused `call_indirect` **function signature mismatch** inside serialize.
+   - Evidence: `docs/test-evidence/PH-05/msx-savestate-abi-20261022.md`.
 
-## Known post-build issue
+4. **Restore `libretro-font.i`**
 
-`save_state_info` WASM export signature mismatch under EmulatorJS `cwrap` — frame adapter reports `saveState: false` until a rebuild aligns RetroArch export ABI.
+5. **Packaging** — Machines (C-BIOS) + Databases in `.data`; slim SYSTEM pack for EmulatorJS mount.
+
+6. **`build.json`** — `minimumEJSVersion` ≤ 4.2.3.
+
+## Fail-fast policy
+
+`build-bluemsx-clean.sh` applies patches with `git apply --check` / reverse-check. Unexpected conflicts abort the build (`|| true` is not used for required patches).

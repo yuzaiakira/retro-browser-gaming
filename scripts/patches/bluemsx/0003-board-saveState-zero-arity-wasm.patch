@@ -1,0 +1,29 @@
+diff --git a/Src/Board/Board.c b/Src/Board/Board.c
+index 3857b67..da1d8db 100644
+--- a/Src/Board/Board.c
++++ b/Src/Board/Board.c
+@@ -1040,7 +1040,8 @@ void boardSaveState(const char* stateFile, int screenshot)
+     machineSaveState(boardMachine);
+ 
+     // Call board dependent save state
+-    boardInfo.saveState(stateFile);
++    /* WASM: BoardInfo::saveState is zero-arg; passing stateFile traps call_indirect. */
++    boardInfo.saveState();
+ 
+     if (screenshot) {
+         bitmap = archScreenCapture(SC_SMALL, &size, 1);
+diff --git a/Src/Board/Board.h b/Src/Board/Board.h
+index f67bc75..e87c2f0 100644
+--- a/Src/Board/Board.h
++++ b/Src/Board/Board.h
+@@ -66,8 +66,8 @@ typedef struct {
+ 
+     void   (*destroy)();
+     void   (*softReset)();
+-    void   (*loadState)();
+-    void   (*saveState)();
++    void   (*loadState)(void);
++    void   (*saveState)(void);
+     int    (*getRefreshRate)();
+     UInt8* (*getRamPage)(int);
+     void   (*setDataBus)(void*, UInt8, UInt8, int);
