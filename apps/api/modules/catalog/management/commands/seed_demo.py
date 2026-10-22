@@ -35,6 +35,7 @@ SYSTEMS = [
     ("zx-spectrum", "ZX Spectrum", "computer"),
     ("amiga", "Commodore Amiga", "computer"),
     ("zx81", "Sinclair ZX81", "computer"),
+    ("amstrad-cpc", "Amstrad CPC", "computer"),
     ("j2me", "Java ME / J2ME", "handheld"),
     ("ps1", "PlayStation", "console"),
     ("psp", "PlayStation Portable", "handheld"),
@@ -54,6 +55,7 @@ WASM_CORES = [
     ("fuse", ["tap", "tzx", "z80", "sna"], ["wasm", "secureContext"]),
     ("puae", ["adf", "hdf", "ipf"], ["wasm", "secureContext"]),
     ("81", ["p", "tzx"], ["wasm", "secureContext"]),
+    ("cap32", ["dsk", "cdt", "sna", "m3u"], ["wasm", "secureContext"]),
     ("prosystem", ["a78", "bin"], ["wasm", "secureContext"]),
     ("handy", ["lnx", "lyx"], ["wasm", "secureContext"]),
     ("mednafen_pce", ["pce"], ["wasm", "secureContext"]),
@@ -89,6 +91,7 @@ CONSOLE_FIXTURE_SLUGS = {
     "zx-spectrum",
     "amiga",
     "zx81",
+    "amstrad-cpc",
     "j2me",
     "ps1",
     "psp",
@@ -807,6 +810,33 @@ class Command(BaseCommand):
             compatibility_note=(
                 "Verified Chromium gameplay with explicit 81 core; RetroPad D-Pad maps "
                 "to ZX81 cursor keys 5/6/7/8; O/P/Q/A also move. Save states supported."
+            ),
+        )
+        results["cpc"] = self._import_files(
+            fixtures,
+            slug="mit-cpc-brickblaster",
+            title="MIT CPC Brick Blaster",
+            description=(
+                "MIT-licensed Amstrad CPC Arkanoid-style homebrew for engineering "
+                "acceptance only. Uses EmulatorJS cap32 explicitly (no cpc shortcut "
+                "in EJS 4.2.3 getCores). CPC firmware embedded in Cap32; no separate "
+                "Amstrad ROM files redistributed. Not a commercial disk."
+            ),
+            console="amstrad-cpc",
+            core={"code": "cap32", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-cpc-brickblaster.dsk",
+            files=[("mit-cpc-brickblaster.dsk", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/brickblaster-CPC-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "issalig/brick_blaster release v1.0_RC4 dist/brickb_en.dsk "
+                "(https://github.com/issalig/brick_blaster)"
+            ),
+            genre="Arcade",
+            compatibility_note=(
+                "Verified Chromium gameplay with explicit cap32 core; DSK autostart; "
+                "joystick left/right + fire; save states supported."
             ),
         )
         results["pce"] = self._import_files(

@@ -1,0 +1,2 @@
+CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
+CPC_GAMEPLAY_PASS {"capabilities":{"saveState":true,"audio":true,"analog":false,"seekableMedia":false,"onDemandMedia":false},"stateBytes":131352,"lit":578560,"beforeHash":475113520,"movedHash":1291959770,"restoredHash":1291959770,"inputChangedFrame":true,"menuChangedFrame":true,"controlScheme":"cap32","core":"cap32","fixture":"mit-cpc-brickblaster.dsk","platform":"cpc"}
