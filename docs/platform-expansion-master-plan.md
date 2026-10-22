@@ -40,7 +40,7 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 | `c0103ab` 2026-10-21 | Commodore 64 (`vice_x64sc`) | `docs/test-evidence/PH-05/c64-spectrum-expansion-20261021.md` |
 | `1e99633` 2026-10-21 | ZX Spectrum (`fuse`) | `docs/test-evidence/PH-05/c64-spectrum-expansion-20261021.md` |
 | `c9e0f09` 2026-10-21 | N64 input still unproven; Vectrex/Intellivision blocked | `PH-05/n64-input-unproven-20261021.md`, `PH-05/vectrex-intellivision-blocker-20261021.md` |
-| (local) 2026-10-22 | Amiga VERIFIED; MSX/Atari ST BLOCKED_CORE | `PH-05/amiga-expansion-20261022.md`, `PH-05/msx-atarist-blocker-20261022.md` |
+|  2026-10-22 | Amiga VERIFIED; MSX/Atari ST BLOCKED_CORE | `PH-05/amiga-expansion-20261022.md`, `PH-05/msx-atarist-blocker-20261022.md` |
 
 ## Working order (hypothesis)
 
