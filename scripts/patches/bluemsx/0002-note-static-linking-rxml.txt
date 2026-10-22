@@ -1,0 +1,2 @@
+See Makefile.common in successful /tmp/ejs-build tree:
+Private bluemsx rxml.c must be wrapped in ifneq ($(STATIC_LINKING), 1).

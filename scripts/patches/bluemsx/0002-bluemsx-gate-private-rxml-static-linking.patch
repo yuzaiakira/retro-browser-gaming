@@ -1,0 +1,21 @@
+diff --git a/Makefile.common b/Makefile.common
+index ed6d457..032fe65 100644
+--- a/Makefile.common
++++ b/Makefile.common
+@@ -306,11 +306,12 @@ SOURCES_CXX  := $(CORE_DIR)/Src/SoundChips/Moonsound.cpp \
+ 
+ #SOURCES_CXX  += $(CORE_DIR)/Src/IoDevice/msxgr.cpp
+ 
+-# rxml performs no file I/O and is not part of the libretro-common
+-# subset that statically linked frontends provide, so the core always
+-# carries its own copy. On static targets the archive member is only
+-# pulled in when the frontend leaves rxml symbols unresolved.
++# Under STATIC_LINKING (Emscripten/EmulatorJS), RetroArch frontend
++# provides a single upgraded rxml (owned_opts + path loader).
++# Compiling a second copy duplicates symbols at wasm-ld.
++ifneq ($(STATIC_LINKING), 1)
+ SOURCES_C += $(LIBRETRO_COMM_DIR)/formats/xml/rxml.c
++endif
+ 
+ ifneq ($(STATIC_LINKING), 1)
+ SOURCES_C += $(LIBRETRO_COMM_DIR)/file/retro_dirent.c \
