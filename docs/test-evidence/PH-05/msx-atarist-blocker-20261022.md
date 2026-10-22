@@ -26,3 +26,14 @@
 | Atari ST | **BLOCKED_CORE** | No Hatari WASM package in pinned EmulatorJS 4.2.3 inventory |
 
 Next independently feasible CDN cores include ZX81 (`81`), `cap32` (Amstrad CPC), `fbneo`, `melonds`, `virtualjaguar` — each still needs legal fixtures and firmware review.
+
+## External WASM attempt (same day, follow-up)
+
+Built via `EmulatorJS/build` + `emscripten/emsdk:3.1.74` `-c=bluemsx`:
+
+1. Core compiles to objects; Machines/Databases tree present under `compile/bluemsx/system/bluemsx/`.
+2. Final `wasm-ld` for `bluemsx_libretro.js` fails with **duplicate `rxml_*` symbols** — `obj-emscripten/.../rxml.o` vs `libretro_emscripten.a(rxml.o)`.
+3. Skipping bluemsx's private `rxml.c` under `STATIC_LINKING=1` is insufficient while a stale archive member remains; a hard clean also tripped missing `libretro-font.i` outside the EmulatorJS wrapper path.
+4. No `bluemsx-*.data` packages were produced. **Hatari** is absent from `EmulatorJS/build` `cores.json`.
+
+**Status remains BLOCKED_CORE** — concrete link dependency: resolve rxml double-inclusion in the EmulatorJS/blueMSX emscripten recipe, then package Machines/Databases and lock legal system ROMs + a licensed interactive fixture before any VERIFIED_PLAYABLE claim.
