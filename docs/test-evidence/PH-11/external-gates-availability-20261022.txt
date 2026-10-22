@@ -1,0 +1,24 @@
+External gate availability probe — 2026-10-22 (post PH-11)
+HEAD: e0c7f18dbe43013a978cbc8cf0f9ea1abcc39051
+
+IN-002-P / IN-002-D:
+  /dev/input/js* = absent
+  lsusb gamepad/joystick match = none
+  /dev/input/by-id = keyboard/mouse/audio/LED only (REDRAGON/CX/Compx receivers)
+  RESULT: BLOCKED_EXTERNAL (unchanged)
+
+IOS-001:
+  idevice_id present; idevice_id -l = empty
+  adb devices = no device
+  RESULT: BLOCKED_EXTERNAL (unchanged)
+
+Staging HTTPS:
+  No STAGING_* in .env
+  No authorized staging host credentials in session
+  RESULT: BLOCKED_EXTERNAL (unchanged)
+  Note: LOCAL_HTTPS_VERIFIED (PH-06) is not PRODUCTION_STAGING_VERIFIED
+
+Product approval (live Compose DB):
+  total=42 published=42 pending=42 approved=0 rejected=0
+  Shortlist prepared: docs/product-release-shortlist-20261022.md
+  RESULT: NOT_VERIFIED — awaiting human Admin decisions (no approvals applied)

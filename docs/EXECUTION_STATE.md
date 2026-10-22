@@ -2,7 +2,7 @@
 
 ## Verdict
 
-**RELEASE CANDIDATE / NOT COMPLETE** — IN-002-P/D, IOS-001, and production staging HTTPS remain **BLOCKED_EXTERNAL**. Product approval: **42 pending / 0 approved** (live DB 2026-10-22). Software defects fixed this session: Orbit CSP/`blob:` + FrameAdapter `*` origin sentinel; Amiga saveState early-probe scope.
+**RELEASE CANDIDATE / NOT COMPLETE** — IN-002-P/D, IOS-001, and production staging HTTPS remain **BLOCKED_EXTERNAL** (re-probed; still no hardware/staging — `PH-11/external-gates-availability-20261022.txt`). Product approval: **42 pending / 0 approved**; shortlist prepared at `docs/product-release-shortlist-20261022.md` (no approvals applied).
 
 ## Deferred physical / external (do not rediscover)
 
@@ -65,7 +65,8 @@ After web CSP / FrameAdapter / `public/runtime` changes:
 
 ## Remaining blockers / next
 
-1. Physical gamepad / iOS / production staging HTTPS (runbooks ready; execute when hardware/access exists)
-2. Human product approval for intended public titles only
-3. Retain EXPERIMENTAL/BLOCKED platform rows — no expansion required for P0
+1. QA: physical gamepad + iOS per `docs/physical-device-acceptance.md`
+2. Ops: staging HTTPS per `docs/production-staging-verification.md`
+3. Product owner: approve/reject from `docs/product-release-shortlist-20261022.md` via Admin (`catalog.approve_game_product`)
 4. Do **not** tag COMPLETE until mandatory gates clear or PDR explicitly changes
+5. Do **not** reopen emulator expansion for P0
