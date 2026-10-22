@@ -53,8 +53,9 @@ This is the engineering inventory for browser-emulatable platforms. It follows `
 | Computer | MS-DOS | jsdos / emulators 8.3.8 (GPL-2.0) | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P1 | Catalog offline (`PH-05/dos-*20261021*`); MIT Floppy Bird ZIP; isolated dos-frame. EmulatorJS `dosbox_pure` still unplayable on 4.2.3 (kept pinned). |
 | Computer | Commodore 64 | vice_x64sc / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P2 | Core + catalog offline (`PH-05/c64-spectrum-expansion-20261021.md`, `c64-gameplay.png`); MIT Wild Boa PRG; stock ROMs embedded (no separate proprietary ROM files). |
 | Computer | ZX Spectrum | fuse / EmulatorJS (explicit core; no `zxspectrum` getCores key) | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P2 | Core + catalog offline (`PH-05/c64-spectrum-expansion-20261021.md`, `spectrum-gameplay.png`); MIT Desolate TAP; firmware embedded. |
-| Computer | Amiga | PUAE candidate | [ ] | PLANNED | — | — | — | — | — | — | P2 | Firmware/legal assets and keyboard UX. |
-| Computer | MSX / Atari ST | BlueMSX / Hatari candidates | [ ] | PLANNED | — | — | — | — | — | — | P2 | Firmware/legal assets and fixture review. |
+| Computer | Commodore Amiga | puae / EmulatorJS | [x] | VERIFIED_PLAYABLE | V | V | V | V | V/I/V | Chromium | P2 | Core + catalog offline (`PH-05/amiga-expansion-20261022.md`); MIT Amiga Dot ADF; AROS Kickstart fallback (no proprietary kick ROM). |
+| Computer | MSX | BlueMSX candidate | [ ] | BLOCKED | — | — | — | — | — | — | P2 | **Not in EJS 4.2.3 CDN** (`PH-05/msx-atarist-blocker-20261022.md`). |
+| Computer | Atari ST | Hatari candidate | [ ] | BLOCKED | — | — | — | — | — | — | P2 | **Not in EJS 4.2.3 CDN**; EmuTOS alone insufficient without a browser core (`PH-05/msx-atarist-blocker-20261022.md`). |
 | Computer | Apple II / NEC PC-98 | MAME/other candidates | [ ] | EXPERIMENTAL | — | — | — | — | — | — | P3 | Browser cores and legal firmware unverified. |
 
 ## Prioritized emulator roadmap

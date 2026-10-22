@@ -26,6 +26,7 @@ function preferSeekable(file, companions, core) {
       'mupen64plus_next',
       'vice_x64sc',
       'fuse',
+      'puae',
     ].includes(core)
   ) {
     return false;
@@ -86,6 +87,8 @@ addEventListener('message', async (event) => {
       vice_x64sc: 'c64',
       // EJS 4.2.3 getCores() has no zxspectrum shortcut — use explicit fuse core.
       fuse: 'fuse',
+      // getCores maps amiga → puae; pin scheme name for probes/UI.
+      puae: 'amiga',
       mednafen_pce: 'pce',
       mednafen_wswan: 'ws',
       prosystem: 'atari7800',
@@ -113,6 +116,11 @@ addEventListener('message', async (event) => {
     if (d.core === 'fuse') {
       window.EJS_defaultOptions.fuse_tape_traps = 'enabled';
       window.EJS_defaultOptions['fuse_load_sound'] = 'disabled';
+    }
+    if (d.core === 'puae') {
+      // Prefer embedded AROS Kickstart; do not require proprietary kick*.rom.
+      window.EJS_defaultOptions.puae_model = 'A500';
+      window.EJS_defaultOptions['puae-model'] = 'A500';
     }
     window.EJS_Buttons = {
       settings: { visible: false },
