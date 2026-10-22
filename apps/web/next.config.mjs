@@ -3,8 +3,10 @@ const j2meHost = process.env.J2ME_RUNTIME_HOST || 'j2me.localhost';
 const launcherHost = process.env.LAUNCHER_HOST || 'launcher.localhost';
 const dedicated = process.env.NEXT_PUBLIC_J2ME_DEDICATED_ORIGIN === 'true';
 
+// blob: is required for native-html installs (Orbit etc. use blob: object URLs in
+// an iframe). frame-src does not inherit default-src, so omitting blob: blocks play.
 const launcherCsp = dedicated
-  ? `default-src 'self' blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self' http://${j2meHost}:* http://${j2meHost} https://${j2meHost}:* https://${j2meHost}; frame-ancestors 'self'; base-uri 'none'`
+  ? `default-src 'self' blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self' blob: http://${j2meHost}:* http://${j2meHost} https://${j2meHost}:* https://${j2meHost}; frame-ancestors 'self'; base-uri 'none'`
   : null;
 
 export default {

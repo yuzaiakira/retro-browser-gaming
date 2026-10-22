@@ -12,6 +12,12 @@ type Pending = {
   timer: ReturnType<typeof setTimeout>;
 };
 
+/** '*' (or empty) allows any frame origin; otherwise require an exact match. */
+export function isAllowedMessageOrigin(targetOrigin: string, eventOrigin: string): boolean {
+  if (!targetOrigin || targetOrigin === '*') return true;
+  return eventOrigin === targetOrigin;
+}
+
 export class FrameAdapter implements EmulatorAdapter {
   capabilities: RuntimeCapabilities = { saveState: false, audio: false, analog: false };
   private frame: HTMLIFrameElement;
@@ -54,7 +60,9 @@ export class FrameAdapter implements EmulatorAdapter {
   private onMessage = (event: MessageEvent) => {
     if (this.disposed) return;
     if (event.source !== this.frame.contentWindow) return;
-    if (this.targetOrigin && event.origin !== this.targetOrigin) return;
+    // Native HTML uses sandboxed blob: frames (opaque origin "null") and sets
+    // targetOrigin to '*' as an allow-any sentinel for postMessage.
+    if (!isAllowedMessageOrigin(this.targetOrigin, event.origin)) return;
     const data = event.data;
     if (!data || typeof data !== 'object') return;
     if (data.session !== this.session) return;
