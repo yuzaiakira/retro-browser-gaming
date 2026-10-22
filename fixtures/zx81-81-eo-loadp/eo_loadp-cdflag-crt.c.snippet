@@ -1,0 +1,58 @@
+void eo_loadp( const void* data, size_t size )
+{
+  memcpy( (void*)( memory + 0x4009 ), data, size );
+
+  z80.sp.w = 0x7ffc;
+
+  memory[ 0x4000 ] = 0xff;
+  memory[ 0x4001 ] = 0x80;
+  memory[ 0x4002 ] = 0xfc;
+  memory[ 0x4003 ] = 0x7f;
+  memory[ 0x4004 ] = 0x00;
+  memory[ 0x4005 ] = 0x80;
+  memory[ 0x4006 ] = 0x00;
+  memory[ 0x4007 ] = 0xfe;
+  memory[ 0x4008 ] = 0xff;
+
+  memory[ z80.sp.w + 0 ] = 0x76;
+  memory[ z80.sp.w + 1 ] = 0x06;
+  memory[ z80.sp.w + 2 ] = 0x00;
+  memory[ z80.sp.w + 3 ] = 0x3e;
+
+  z80.pc.w = 0x0207;
+  z80.ix.w = 0x0281;
+  z80.iy.w = 0x4000;
+  z80.i = 0x1e;
+  z80.r = 0xca;
+
+  /* z88dk Dot: REM + line 2 RAND USR VAL "16514"; CRT at $4092 (LD IY,$4000).
+   * Native diagnosis: .p CDFLAG=$40 makes ROM SLOW ($0F2B → $0207) take the
+   * early RET NC path without OUT $FE/$FD, so altint_on never sees FRAMES
+   * advance and spins at $40F1. Clear CDFLAG, force FAST/NMI off, set IX=
+   * $4000 for -mz80_ixiy, then enter CRT as USR would. Stable getk() loop
+   * still not verified — PC can fall back to BASIC $0047 after altint sync. */
+  if ( memory[ 0x4092 ] == 0xfd && memory[ 0x4093 ] == 0x21 )
+  {
+    extern int NMI_generator;
+    NMI_generator = 0;
+    memory[ 0x403B ] = 0x00; /* CDFLAG */
+    z80.ix.w = 0x4000;
+    z80.iy.w = 0x4000;
+    z80.iff1 = 0;
+    z80.iff2 = 0;
+    z80.sp.w = 0x7ffc;
+    memory[ z80.sp.w + 0 ] = 0x76;
+    memory[ z80.sp.w + 1 ] = 0x06;
+    z80.pc.w = 0x4092;
+  }
+  (void)size;
+}
+
+
+typedef struct
+{
+  // Z80
+  uint8_t a, f, b, c, d, e, h, l;
+  uint8_t a2, f2, b2, c2, d2, e2, h2, l2;
+  uint8_t ixh, ixl, iyh, iyl, sph, spl, pch, pcl;
+  uint8_t i, r, im, iff1, iff2, halted;
