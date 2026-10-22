@@ -15,7 +15,7 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 | Vectrex | `vecx` (absent) | GPL-3 upstream libretro-vecx | none typical | MIT Thrust candidate | **BLOCKED_CORE** — not in EJS 4.2.3 CDN (`PH-05/vectrex-intellivision-blocker-20261021.md`) |
 | Intellivision | `freeintv` (absent) | GPLv2+ FreeIntv | proprietary `exec.bin`/`grom.bin` | TBD | **BLOCKED_FIRMWARE** (+ core absent) |
 | ZX Spectrum | `fuse` (CDN present; explicit `EJS_core=fuse`) | GPLv3 | Spectrum firmware embedded (Amstrad permission upstream) | MIT Desolate TAP (`nzeemin/spectrum-desolate`) | **VERIFIED_PLAYABLE** |
-| ZX81 | `81` (CDN present) | GPLv3 | Amstrad permission noted upstream | Legal `.p`/`.tzx` TBD | RESEARCHED — next CDN candidate |
+| ZX81 | `81` (CDN present; explicit `EJS_core=81`) | GPLv3 | Firmware embedded | MIT ZX81 Dot `.p` (first-party z88dk) | **EXPERIMENTAL** — core+fixture wired; `LOAD ""` gameplay blocked (`PH-05/zx81-blocker-20261022.md`) |
 | Amiga | `puae` | GPLv2 | AROS Kickstart fallback (no proprietary kick ROM) | MIT Amiga Dot ADF (first-party) | **VERIFIED_PLAYABLE** |
 | MSX | `bluemsx` (absent) | — | BIOS typically required | — | **BLOCKED_CORE** (`PH-05/msx-atarist-blocker-20261022.md`) |
 | Atari ST | `hatari` (absent) | — | EmuTOS candidate if core existed | — | **BLOCKED_CORE** (`PH-05/msx-atarist-blocker-20261022.md`) |
@@ -41,6 +41,7 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 | `1e99633` 2026-10-21 | ZX Spectrum (`fuse`) | `docs/test-evidence/PH-05/c64-spectrum-expansion-20261021.md` |
 | `c9e0f09` 2026-10-21 | N64 input still unproven; Vectrex/Intellivision blocked | `PH-05/n64-input-unproven-20261021.md`, `PH-05/vectrex-intellivision-blocker-20261021.md` |
 |  2026-10-22 | Amiga VERIFIED; MSX/Atari ST BLOCKED_CORE | `PH-05/amiga-expansion-20261022.md`, `PH-05/msx-atarist-blocker-20261022.md` |
+|  2026-10-22 | ZX81 core+fixture EXPERIMENTAL (LOAD "" blocker) | `PH-05/zx81-blocker-20261022.md` |
 
 ## Working order (hypothesis)
 
@@ -48,7 +49,7 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 2. C64 + ZX Spectrum ← **done**
 3. Amiga (`puae` + first-party MIT ADF) ← **done**
 4. MSX / Atari ST ← **blocked** (no EJS 4.2.3 CDN cores)
-5. ZX81 (`81`) / Cap32 / FBNeo / MelonDS / Jaguar — next CDN-feasible with legal fixtures
+5. Cap32 / FBNeo / MelonDS / Jaguar — next CDN-feasible; ZX81 awaits patched `eo_loadp` or proven `LOAD ""`
 6. N64 remains EXPERIMENTAL until new evidence
 7. Firmware-unblocked Sega CD / ColecoVision / 32X / Vectrex / Intellivision when authorization or external WASM exists
 8. Higher-demand Saturn / Dreamcast / 3DS / PS2 only with measured browser feasibility

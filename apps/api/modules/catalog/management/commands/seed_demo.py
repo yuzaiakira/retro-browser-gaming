@@ -34,6 +34,7 @@ SYSTEMS = [
     ("c64", "Commodore 64", "computer"),
     ("zx-spectrum", "ZX Spectrum", "computer"),
     ("amiga", "Commodore Amiga", "computer"),
+    ("zx81", "Sinclair ZX81", "computer"),
     ("j2me", "Java ME / J2ME", "handheld"),
     ("ps1", "PlayStation", "console"),
     ("psp", "PlayStation Portable", "handheld"),
@@ -52,6 +53,7 @@ WASM_CORES = [
     ("vice_x64sc", ["d64", "prg", "tap", "t64", "crt"], ["wasm", "secureContext"]),
     ("fuse", ["tap", "tzx", "z80", "sna"], ["wasm", "secureContext"]),
     ("puae", ["adf", "hdf", "ipf"], ["wasm", "secureContext"]),
+    ("81", ["p", "tzx"], ["wasm", "secureContext"]),
     ("prosystem", ["a78", "bin"], ["wasm", "secureContext"]),
     ("handy", ["lnx", "lyx"], ["wasm", "secureContext"]),
     ("mednafen_pce", ["pce"], ["wasm", "secureContext"]),
@@ -86,6 +88,7 @@ CONSOLE_FIXTURE_SLUGS = {
     "c64",
     "zx-spectrum",
     "amiga",
+    "zx81",
     "j2me",
     "ps1",
     "psp",
@@ -780,6 +783,30 @@ class Command(BaseCommand):
             compatibility_note=(
                 "Verified Chromium gameplay with puae / amiga; joystick fire + D-Pad; "
                 "save states supported. AROS fallback Kickstart only."
+            ),
+        )
+        results["zx81"] = self._import_files(
+            fixtures,
+            slug="mit-zx81-dot",
+            title="MIT ZX81 Dot",
+            description=(
+                "First-party MIT ZX81 cursor/keyboard fixture for engineering acceptance "
+                "only. Uses EmulatorJS 81 core explicitly (no zx81 shortcut in EJS 4.2.3 "
+                "getCores). ZX81 firmware embedded in 81-libretro build; no separate "
+                "Sinclair ROM files redistributed. Not a commercial tape."
+            ),
+            console="zx81",
+            core={"code": "81", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-zx81-dot.p",
+            files=[("mit-zx81-dot.p", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/zx81-dot-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence="Built from fixtures/zx81-dot/ (z88dk +zx81)",
+            genre="Action",
+            compatibility_note=(
+                "Verified Chromium gameplay with explicit 81 core; RetroPad D-Pad maps "
+                "to ZX81 cursor keys 5/6/7/8; O/P/Q/A also move. Save states supported."
             ),
         )
         results["pce"] = self._import_files(
