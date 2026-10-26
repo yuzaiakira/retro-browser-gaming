@@ -12,16 +12,19 @@
 .player-hud-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
 .hud-btn{padding:8px 12px!important;font-size:13px!important;gap:8px!important;min-height:40px}
 .player-status{margin:0;padding:6px 14px;font-size:13px;color:var(--muted);min-height:1.6em;background:#0f1312}
-.player-viewport{position:relative;flex:1;display:flex;align-items:center;justify-content:center;background:#000;min-height:min(70vh,640px);overflow:hidden}
+.player-viewport{position:relative;flex:1;display:flex;align-items:center;justify-content:center;background:#000;min-height:min(70vh,640px);overflow:hidden;padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0)}
 .player-stage{background:#000;aspect-ratio:4/3;width:min(100%,calc(70vh * 4 / 3));max-height:100%;max-width:100%;border:0;border-radius:0;overflow:hidden;margin:0 auto}
 .player-stage iframe{border:0;width:100%;height:100%;display:block}
-.player-paused-badge{position:absolute;inset:auto auto 16px 16px;background:#c5f478e6;color:#182012;font-weight:800;padding:6px 12px;border-radius:6px;pointer-events:none;z-index:4}
-.touch-overlay.touch-area{position:absolute;inset:0;height:auto;margin:0;border:0;border-radius:0;background:transparent;z-index:2;pointer-events:none}
+.player-paused-badge{position:absolute;inset:auto auto max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:#c5f478e6;color:#182012;font-weight:800;padding:6px 12px;border-radius:6px;pointer-events:none;z-index:4}
+.player-toast{position:absolute;top:max(12px,env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:6;padding:8px 14px;border-radius:8px;background:#1c2621e6;border:1px solid #607445;color:var(--lime);font-size:13px;font-weight:700;pointer-events:none;max-width:min(90%,420px);text-align:center}
+.player-shell[data-menu] .touch-overlay,.touch-overlay.blocked{pointer-events:none!important}
+.touch-overlay.touch-area{position:absolute;inset:0;height:auto;margin:0;border:0;border-radius:0;background:transparent;z-index:2;pointer-events:none;padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0)}
 .touch-overlay .touch-button,.touch-overlay .analog{pointer-events:auto}
 .touch-overlay.editing{background-image:linear-gradient(#46534533 1px,transparent 1px),linear-gradient(90deg,#46534533 1px,transparent 1px);background-size:24px 24px;pointer-events:none}.touch-overlay.editing .touch-button{pointer-events:auto}.layout-editor{position:relative;z-index:8;margin:10px 14px 16px;background:var(--panel)}
 .touch-button{min-width:44px;min-height:44px}
-.orientation-hint{position:absolute;top:8px;left:50%;transform:translateX(-50%);z-index:5;margin:0;padding:6px 10px;font-size:12px;background:#191e1ecc;border:1px solid var(--border);border-radius:999px;pointer-events:none}
-.game-menu-backdrop,.confirm-backdrop{position:fixed;inset:0;background:#000000b8;display:flex;align-items:center;justify-content:center;padding:16px;z-index:40}
+.orientation-hint{position:absolute;top:max(8px,env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:5;margin:0;padding:6px 10px;font-size:12px;background:#191e1ecc;border:1px solid var(--border);border-radius:999px;pointer-events:none}
+.game-menu-backdrop,.confirm-backdrop{position:fixed;inset:0;background:#000000b8;display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));z-index:40}
+.confirm-backdrop{z-index:50}
 .game-menu,.confirm-dialog{width:min(440px,100%);max-height:min(90dvh,720px);overflow:auto;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px 18px;box-shadow:0 18px 48px #0008}
 .game-menu-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
 .game-menu-head h2,.confirm-dialog h2{margin:0;font-size:1.2rem}

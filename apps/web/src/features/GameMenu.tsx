@@ -17,6 +17,14 @@ export type GameMenuAction =
   | "touch-edit"
   | "exit";
 
+function focusableIn(root: HTMLElement) {
+  return [
+    ...root.querySelectorAll<HTMLElement>(
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    ),
+  ];
+}
+
 export default function GameMenu({
   open,
   paused,
@@ -52,19 +60,18 @@ export default function GameMenu({
     if (!open) return;
     returnFocus.current = document.activeElement as HTMLElement | null;
     const panel = panelRef.current;
-    const focusables = panel?.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-    );
-    focusables?.[0]?.focus();
+    const focusables = panel ? focusableIn(panel) : [];
+    // Prefer Close / Resume over destructive Exit as initial focus.
+    const preferred =
+      focusables.find((el) => el.textContent?.trim() === "Close") ||
+      focusables[0];
+    preferred?.focus();
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        e.stopPropagation();
-        onClose();
-        return;
-      }
-      if (e.key !== "Tab" || !focusables?.length) return;
-      const list = [...focusables];
+      // Escape is owned by Player (and ConfirmDialog when nested).
+      if (e.key !== "Tab" || !panel) return;
+      const list = focusableIn(panel);
+      if (!list.length) return;
       const first = list[0];
       const last = list[list.length - 1];
       if (e.shiftKey && document.activeElement === first) {
@@ -80,7 +87,7 @@ export default function GameMenu({
       window.removeEventListener("keydown", onKey, true);
       returnFocus.current?.focus?.();
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open) return null;
 
@@ -101,10 +108,17 @@ export default function GameMenu({
           </button>
         </header>
         <div className="game-menu-grid">
-          <button type="button" onClick={() => onAction(paused ? "resume" : "pause")}>
+          <button
+            type="button"
+            onClick={() => onAction(paused ? "resume" : "pause")}
+          >
             {paused ? "Resume" : "Pause"}
           </button>
-          <button type="button" className="secondary" onClick={() => onAction("restart")}>
+          <button
+            type="button"
+            className="secondary"
+            onClick={() => onAction("restart")}
+          >
             Restart
           </button>
           {caps.saveState && (
@@ -112,21 +126,41 @@ export default function GameMenu({
               <button type="button" onClick={() => onAction("quick-save")}>
                 Quick save
               </button>
-              <button type="button" className="secondary" onClick={() => onAction("quick-load")}>
+              <button
+                type="button"
+                className="secondary"
+                onClick={() => onAction("quick-load")}
+              >
                 Quick load
               </button>
             </>
           )}
-          <button type="button" className="secondary" onClick={() => onAction("fullscreen")}>
+          <button
+            type="button"
+            className="secondary"
+            onClick={() => onAction("fullscreen")}
+          >
             Fullscreen
           </button>
-          <button type="button" className="secondary" onClick={() => onAction("touch-toggle")}>
+          <button
+            type="button"
+            className="secondary"
+            onClick={() => onAction("touch-toggle")}
+          >
             {touchVisible ? "Hide touch controls" : "Show touch controls"}
           </button>
-          <button type="button" className="secondary" onClick={() => onAction("touch-edit")}>
+          <button
+            type="button"
+            className="secondary"
+            onClick={() => onAction("touch-edit")}
+          >
             {editingTouch ? "Finish control edit" : "Edit touch controls"}
           </button>
-          <button type="button" className="danger" onClick={() => onAction("exit")}>
+          <button
+            type="button"
+            className="danger"
+            onClick={() => onAction("exit")}
+          >
             Exit to library
           </button>
         </div>
@@ -158,7 +192,11 @@ export default function GameMenu({
               >
                 {[0, 1, 2, 3, 9].map((n) => (
                   <option key={n} value={n}>
-                    {n === 9 ? "Autosave" : n === 0 ? "Quick / Slot 1" : `Slot ${n + 1}`}
+                    {n === 9
+                      ? "Autosave"
+                      : n === 0
+                        ? "Quick / Slot 1"
+                        : `Slot ${n + 1}`}
                   </option>
                 ))}
               </select>
@@ -167,10 +205,18 @@ export default function GameMenu({
               <button type="button" onClick={() => onAction("save-slot")}>
                 Save to slot
               </button>
-              <button type="button" className="secondary" onClick={() => onAction("load-slot")}>
+              <button
+                type="button"
+                className="secondary"
+                onClick={() => onAction("load-slot")}
+              >
                 Load slot
               </button>
-              <button type="button" className="secondary" onClick={() => onAction("export")}>
+              <button
+                type="button"
+                className="secondary"
+                onClick={() => onAction("export")}
+              >
                 Export backup
               </button>
               <label className="button secondary file-label">
