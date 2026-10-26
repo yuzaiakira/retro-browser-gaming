@@ -17,11 +17,15 @@ RUN npm run build
 
 FROM node:24.11.1-bookworm-slim
 ENV NODE_ENV=production PORT=3000 HOSTNAME=0.0.0.0
+ENV RBG_PRIVATE_ASSET_DIR=/private-runtime
 WORKDIR /app
 RUN useradd --create-home --uid 10001 retro
 COPY --from=build --chown=retro:retro /app/.next/standalone ./
 COPY --from=build --chown=retro:retro /app/.next/static ./.next/static
 COPY --from=build --chown=retro:retro /app/public ./public
+# Emulator .data/.wasm are provisioned at runtime from RBG_PRIVATE_ASSET_DIR (not baked into the image).
+COPY --chown=retro:retro scripts/web-entrypoint.sh /app/web-entrypoint.sh
+RUN chmod 755 /app/web-entrypoint.sh
 USER retro
 EXPOSE 3000
-CMD ["node", "server.js"]
+CMD ["/app/web-entrypoint.sh"]

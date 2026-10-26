@@ -7,3 +7,7 @@
 node_modules
 /apps/web/node_modules
 **/.next
+# Never bake private emulator binaries or the private asset root into images.
+.private-runtime
+**/apps/web/public/cores/**/*.data
+**/apps/web/public/cores/**/*.wasm

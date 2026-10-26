@@ -1,0 +1,39 @@
+# Local private assets
+
+## First-time / existing developer (this machine)
+
+After the migration commit, binaries already exist in:
+
+1. `.private-runtime/cores/` (canonical, gitignored)
+2. `apps/web/public/cores/**/*.data|*.wasm` (working copies, gitignored)
+
+Verify:
+
+```bash
+python3 scripts/provision-private-cores.py --check
+python3 scripts/verify-core-lock.py --mode LOCAL_FULL
+./scripts/compose.sh up -d --build web
+```
+
+Optional: set in `.env` (not committed):
+
+```bash
+RBG_PRIVATE_ASSET_DIR=/absolute/path/to/.private-runtime
+```
+
+## Restore working copies from private root
+
+```bash
+python3 scripts/provision-private-cores.py          # copy
+# or
+python3 scripts/provision-private-cores.py --link   # symlink
+```
+
+## Source-only clone (no private binaries)
+
+```bash
+python3 scripts/verify-core-lock.py --mode SOURCE_ONLY
+python3 scripts/check-no-private-cores-tracked.py
+```
+
+Gameplay for EmulatorJS/jsdos cores will fail until binaries are provisioned from an authorized store. Do **not** download proprietary BIOS.

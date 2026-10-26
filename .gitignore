@@ -19,3 +19,11 @@ fixtures/*/EBOOT.PBP
 fixtures/*/PARAM.SFO
 fixtures/*/assets/tone.wav
 docs/test-evidence/PH-06/.sec-tmp/
+
+# Private runtime asset root (emulator .data/.wasm and company-provisioned payloads).
+# Canonical local default; override with RBG_PRIVATE_ASSET_DIR.
+.private-runtime/
+
+# Working-tree copies of private core binaries (provisioned; not for public Git).
+apps/web/public/cores/**/*.data
+apps/web/public/cores/**/*.wasm
