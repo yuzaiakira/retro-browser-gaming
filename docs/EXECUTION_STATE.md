@@ -3,6 +3,7 @@
 ## Verdict
 
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
+**Player UX (PH-UX):** immersive PlayerShell, capability-gated Game Menu, safe confirms, Quick Save/Load (slot 0), overlay touch (`layout:v2`), Continue Playing / Ready Offline CTAs — verified 2026-10-26.  
 **Open-source prep:** source-offer gate verifies **every** `SHA256SUMS` entry; `--require-public-delivery` for prod GPL serving; LOCAL_FULL needs `RBG_ALLOW_LOCAL_FULL=1`; MIT LICENSE proposed (not enacted). Sanitized candidate `77110c5` ← private `501ed79` (re-filter after newer tip before push). **STOP** before GitHub publish.
 
 ## Deferred physical / external (do not rediscover)
@@ -20,6 +21,17 @@
 | FBNeo | BLOCKED_FIXTURE |
 | Atari ST | BLOCKED_CORE — hatari absent |
 | Core lock | **373 files** |
+
+## Player UX pass (2026-10-26)
+
+| Check | Result |
+|---|---|
+| Acceptance gates (IN/SAV/EMU/CAT/SEC) | `ACCEPTANCE_GATES_PASS` → `docs/test-evidence/PH-UX/acceptance-gates-20261026.txt` |
+| Player UX Playwright | `PLAYER_UX_PASS` → `docs/test-evidence/PH-UX/player-ux-20261026.txt` |
+| Screenshots | `docs/test-evidence/PH-UX/screenshots/` (desktop shell, game menu, mobile portrait/landscape) |
+| Genesis smoke | `GENESIS_GAMEPLAY_PASS` |
+| MSX smoke | `MSX_GAMEPLAY_PASS` |
+| Vitest / typecheck | 23 passed / `tsc --noEmit` OK |
 
 ## Release-candidate pass (2026-10-26 evening)
 
@@ -42,3 +54,4 @@
 5. Product: Alpha game set approvals
 6. Resolve CS for `81_eo` / `virtualjaguar_js`
 7. QA: physical gamepad + iOS; Ops: staging HTTPS
+8. Optional UX polish: deeper orientation guidance, InputRouter redundant-dispatch skip, further library density pass

@@ -23,7 +23,7 @@
     "simultaneous": true
   },
   "in004": {
-    "layoutKey": "layout:browser:landscape",
+    "layoutKey": "layout:v2:browser:landscape",
     "retained": true,
     "sized": true
   },
@@ -38,8 +38,8 @@
   "sav003": {
     "ok": true,
     "rejected": true,
-    "priorSha": "93e25093db5caa0ba2c641990d6b44c6a54e5723a8e00f506c6d27e21b20d497",
-    "stillSha": "93e25093db5caa0ba2c641990d6b44c6a54e5723a8e00f506c6d27e21b20d497"
+    "priorSha": "d50a2d6a9bf1f6288225f0d0562ae88b01e52a5da84adf7f98309aaf3e505c77",
+    "stillSha": "d50a2d6a9bf1f6288225f0d0562ae88b01e52a5da84adf7f98309aaf3e505c77"
   },
   "emu005": true,
   "emu006": true

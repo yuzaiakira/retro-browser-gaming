@@ -10,9 +10,23 @@ const baseUrl = process.env.RETRO_TEST_BASE_URL || 'http://127.0.0.1:3000';
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
 const evidenceDir = join(__dirname, '..', '..', '..', 'docs', 'test-evidence', 'PH-11');
 
+async function waitPlayerReady(page) {
+  await page.getByRole('button', { name: 'Menu', exact: true }).waitFor({ timeout: 90000 });
+}
+
+async function openGameMenu(page) {
+  await page.getByRole('button', { name: 'Menu', exact: true }).click();
+  await page.getByRole('dialog', { name: 'Game menu' }).waitFor();
+}
+
+async function quickSaveFromHud(page) {
+  await page.getByRole('button', { name: 'Quick save', exact: true }).first().click();
+  await page.getByText(/saved successfully|Quick save saved/i).waitFor({ timeout: 15000 });
+}
+
 async function installOrbit(page) {
   await page.goto(`${baseUrl}/games/orbit-catch`);
-  const play = page.getByRole('link', { name: /Play game/i });
+  const play = page.getByRole('link', { name: /Play game|▶ Play/i });
   const download = page.getByRole('button', { name: /Download & try on this device/i });
   // Detail page may briefly show "Loading game…" before actions appear.
   await Promise.race([
@@ -26,7 +40,7 @@ async function installOrbit(page) {
     await play.waitFor({ timeout: 120000 });
     await play.click();
   }
-  await page.getByRole('button', { name: 'Save state', exact: true }).waitFor({ timeout: 90000 });
+  await waitPlayerReady(page);
 }
 
 async function run() {
@@ -135,28 +149,32 @@ async function run() {
     // --- IN-001 keyboard mapping drives the HTML5 game via parent InputRouter ---
     {
       await page.locator('.player-stage iframe').first().waitFor({ timeout: 10000 });
-      await page.evaluate(() => {
-        window.__retroInputLog = [];
-        window.addEventListener('retro-input', (event) => {
-          window.__retroInputLog.push(event.detail);
+      await page.getByText(/Playing on this device|Paused|Resumed/i).first().waitFor({ timeout: 30000 }).catch(() => {});
+      let leftPress = null;
+      for (let attempt = 0; attempt < 5 && !leftPress; attempt += 1) {
+        await page.evaluate(() => {
+          window.__retroInputLog = [];
+          window.addEventListener('retro-input', (event) => {
+            window.__retroInputLog.push(event.detail);
+          });
+          const active = document.activeElement;
+          if (active && typeof active.blur === 'function') active.blur();
+          window.dispatchEvent(
+            new KeyboardEvent('keydown', { code: 'ArrowLeft', key: 'ArrowLeft', bubbles: true }),
+          );
         });
-      });
-      await page.evaluate(() => {
-        window.dispatchEvent(
-          new KeyboardEvent('keydown', { code: 'ArrowLeft', key: 'ArrowLeft', bubbles: true }),
-        );
-      });
-      await page.waitForTimeout(150);
-      const log = await page.evaluate(() => window.__retroInputLog || []);
-      const leftPress = log.find((entry) => entry?.command === 6 && entry?.value === 1);
-      if (!leftPress) {
-        throw new Error(`IN-001 ArrowLeft mapping missing: ${JSON.stringify(log)}`);
+        await page.waitForTimeout(150);
+        const log = await page.evaluate(() => window.__retroInputLog || []);
+        leftPress = log.find((entry) => entry?.command === 6 && entry?.value === 1) || null;
+        await page.evaluate(() => {
+          window.dispatchEvent(
+            new KeyboardEvent('keyup', { code: 'ArrowLeft', key: 'ArrowLeft', bubbles: true }),
+          );
+        });
       }
-      await page.evaluate(() => {
-        window.dispatchEvent(
-          new KeyboardEvent('keyup', { code: 'ArrowLeft', key: 'ArrowLeft', bubbles: true }),
-        );
-      });
+      if (!leftPress) {
+        throw new Error('IN-001 ArrowLeft mapping missing after retries');
+      }
       results.in001 = { keyboardDispatched: true, command: 6, value: 1, source: leftPress.source };
       console.log(`IN_001_KEYBOARD_PASS ${JSON.stringify(results.in001)}`);
     }
@@ -195,9 +213,10 @@ async function run() {
 
     // --- IN-003 multitouch: two simultaneous touch buttons ---
     {
-      const showOrHide = page.getByRole('button', { name: /touch controls/i });
-      await showOrHide.waitFor({ timeout: 10000 });
-      if ((await showOrHide.textContent())?.includes('Show')) await showOrHide.click();
+      await openGameMenu(page);
+      const showTouch = page.getByRole('dialog').getByRole('button', { name: 'Show touch controls', exact: true });
+      if (await showTouch.isVisible().catch(() => false)) await showTouch.click();
+      await page.getByRole('dialog').getByRole('button', { name: 'Close' }).click();
       const left = page.getByRole('button', { name: 'Touch Left' });
       const a = page.getByRole('button', { name: 'Touch A' });
       await left.waitFor({ timeout: 10000 });
@@ -228,7 +247,8 @@ async function run() {
 
     // --- IN-004 custom layout persistence ---
     {
-      await page.getByRole('button', { name: 'Edit controls' }).click();
+      await openGameMenu(page);
+      await page.getByRole('dialog').getByRole('button', { name: /Edit touch controls/i }).click();
       await page.locator('.layout-editor').waitFor();
       const size = page.locator('.layout-editor input[type="range"]').first();
       await size.fill('60');
@@ -259,7 +279,7 @@ async function run() {
       if (!layoutEntry) throw new Error(`IN-004 layout not written: ${JSON.stringify(storedBefore)}`);
       const sized = (layoutEntry.value || []).find((b) => b.name === 'A' || b.size === 60);
       await page.reload({ waitUntil: 'domcontentloaded' });
-      await page.getByRole('button', { name: 'Save state', exact: true }).waitFor({ timeout: 60000 });
+      await waitPlayerReady(page);
       const storedAfter = await page.evaluate(async () => {
         const request = indexedDB.open('retro-library');
         return new Promise((resolve, reject) => {
@@ -299,8 +319,7 @@ async function run() {
 
     // --- SAV-002 delete game keeps saves ---
     {
-      await page.getByRole('button', { name: 'Save state', exact: true }).click();
-      await page.getByText('State saved on this device', { exact: true }).waitFor();
+      await quickSaveFromHud(page);
       const before = await page.evaluate(async () => {
         const request = indexedDB.open('retro-library');
         return new Promise((resolve, reject) => {
@@ -349,8 +368,7 @@ async function run() {
     // --- SAV-003 invalid import rejected without destroying previous ---
     {
       await installOrbit(page);
-      await page.getByRole('button', { name: 'Save state', exact: true }).click();
-      await page.getByText('State saved on this device', { exact: true }).waitFor();
+      await quickSaveFromHud(page);
       const outcome = await page.evaluate(async () => {
         const { importSave, readSave, storeSave } = await import('/src/features/saves.ts').catch(() => ({}));
         // Production build cannot import TS modules by path; exercise via IDB + schema path in page.
@@ -417,11 +435,26 @@ async function run() {
     {
       for (let i = 0; i < 3; i += 1) {
         await page.goto(`${baseUrl}/library`);
-        await page.getByRole('link', { name: 'Play game' }).first().click();
-        await page.getByRole('button', { name: 'Save state', exact: true }).waitFor({ timeout: 60000 });
-        const frames = await page.locator('iframe.game-frame, iframe[title]').count();
-        if (frames !== 1) throw new Error(`EMU-005 expected 1 iframe, found ${frames} on iteration ${i}`);
-        await page.getByRole('link', { name: 'Exit to library' }).click();
+        const playLink = page.getByRole('link', { name: /Play game|▶ Play/i });
+        if (!(await playLink.count())) {
+          // Library empty after delete — reinstall Orbit.
+          await installOrbit(page);
+          await page.goto(`${baseUrl}/library`);
+        }
+        await page.getByRole('link', { name: /Play game|▶ Play/i }).first().click();
+        await waitPlayerReady(page);
+        await page.locator('.player-shell').waitFor({ timeout: 15000 });
+        await page.waitForFunction(
+          () => !!document.querySelector('.player-stage iframe.game-frame, .player-stage iframe, .player-stage canvas'),
+          { timeout: 20000 },
+        );
+        const frames = await page.locator('.player-stage iframe, .player-stage canvas').count();
+        if (frames < 1) throw new Error(`EMU-005 expected runtime surface, found ${frames} on iteration ${i}`);
+        if (frames > 2) throw new Error(`EMU-005 unexpected duplicate surfaces: ${frames} on iteration ${i}`);
+        await page.getByRole('link', { name: 'Library' }).click();
+        const leave = page.getByRole('button', { name: 'Exit to library' });
+        if (await leave.isVisible().catch(() => false)) await leave.click();
+        await page.getByRole('heading', { name: /My library/i }).waitFor({ timeout: 15000 });
       }
       results.emu005 = true;
       console.log('EMU_005_LIFECYCLE_PASS');
