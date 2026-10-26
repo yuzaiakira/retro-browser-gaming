@@ -1,0 +1,18 @@
+{
+  "orbit": {
+    "readyOffline": true,
+    "playedOnline": true,
+    "quickSave": true,
+    "offlineLibrary": true,
+    "continuePlayingSection": true,
+    "offlinePlay": true,
+    "offlineLoad": true
+  },
+  "genesis": {
+    "readyOffline": true,
+    "quickSave": true,
+    "offlinePlay": true,
+    "offlineLoad": true,
+    "inputOk": true
+  }
+}

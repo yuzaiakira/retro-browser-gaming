@@ -1,13 +1,30 @@
 {
   "journeys": {
     "homeLoaded": true,
-    "catalogUrlSync": true,
+    "emptySearch": true,
+    "slowErrorCatalog": true,
     "detailsProgressive": true,
     "downloadToPlay": true,
+    "playPrimary": true,
     "library": true,
-    "continuePlayingCta": true,
     "downloadsPage": true,
-    "settingsAdvanced": true
+    "settingsAdvanced": true,
+    "searchFocus": true
+  },
+  "history": {
+    "genrePushed": true,
+    "searchReplaced": true,
+    "searchDidNotPushPerKey": true,
+    "clearFilters": true,
+    "backClearedGenre": true,
+    "forwardRestoredGenre": true,
+    "sharedUrlRestored": true,
+    "invalidPageOk": true
+  },
+  "continuePlaying": {
+    "absentBeforeLaunch": true,
+    "readyToPlayShown": true,
+    "presentAfterLaunch": true
   },
   "responsive": {
     "hub-laptop.png": {
