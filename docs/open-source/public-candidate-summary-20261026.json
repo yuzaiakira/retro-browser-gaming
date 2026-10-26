@@ -1,0 +1,28 @@
+{
+  "schema": "rbg-public-candidate-summary-v1",
+  "created_utc": "2026-10-26T15:51:00Z",
+  "strategy": "OPTION_B_ISOLATED_SANITIZED_CLONE",
+  "publication_status": "STOP_BEFORE_GITHUB",
+  "original_private_head": "60c8327f6916ec94c47bf739f449a7fe05538e50",
+  "candidate_rewritten_head": "b306ebe7e24a494a884dcb31134c085343422302",
+  "candidate_path": "/home/akira/Projects/git-contribute/retro-browser-gaming-public-candidate-20261026/tree",
+  "paths_removed_count": 59,
+  "paths_removed_manifest": "docs/open-source/history-removal-manifest.txt",
+  "commits_parsed": 86,
+  "refs_in_candidate": ["refs/heads/main"],
+  "tags_in_candidate": [],
+  "history_core_binary_paths_remaining": 0,
+  "tip_tracked_path_count": 1256,
+  "tip_tree_matches_private": true,
+  "secret_heuristic_hits": 0,
+  "tests": {
+    "SOURCE_ONLY_core_lock": "PASS",
+    "private_core_tracked_check": "PASS",
+    "private_asset_backup_unit_tests": "PASS",
+    "vitest": "PASS_21",
+    "typescript": "PASS",
+    "next_build": "PASS"
+  },
+  "owner_repo_unchanged": true,
+  "remote_actions": "none"
+}

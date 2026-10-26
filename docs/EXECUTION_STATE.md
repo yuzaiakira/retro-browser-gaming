@@ -3,7 +3,7 @@
 ## Verdict
 
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
-**Open-source prep:** **PARTIAL** — P1 backup **reverified PASS**; Option B candidate tip `914f826` ← private `01d6449`; legal package `READY_FOR_LEGAL_REVIEW`; **STOP** before any public push / visibility change.
+**Open-source prep:** **PUBLIC_REPOSITORY_READY_FOR_OWNER_APPROVAL** — P1 backup reverified; Option B candidate `b306ebe` ← private `60c8327`; license proposals ready (not enacted); corresponding-source offer assembled offline; **STOP** before GitHub publish / root LICENSE commit without owner OK.
 
 ## Deferred physical / external (do not rediscover)
 
