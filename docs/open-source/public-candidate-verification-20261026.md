@@ -8,55 +8,45 @@
 | Artifact | Path |
 | --- | --- |
 | Candidate root | `/home/akira/Projects/git-contribute/retro-browser-gaming-public-candidate-20261026/` |
-| Working tree | `…/tree/` |
+| Working tree (current) | `…/tree/` |
+| Prior filter snapshot | `…/tree-from-df9cb63.bak/` (superseded; keep offline) |
 | Source bundle used as input | `…/source-all-refs.bundle` |
 | Paths removed | `…/paths-to-remove.txt` (59) |
 | Commit map | `…/commit-map.txt` |
 
-## SHA mapping (initial filter from owner tip `df9cb63`)
+## SHA mapping (refreshed from owner tip `01d6449`)
 
 | Role | SHA |
 | --- | --- |
-| Original owner HEAD | `df9cb6397a217722a1f6cbded04206afc1f2b4e9` |
-| Candidate rewritten HEAD | `9b8c3c1c2ec68655cfbde9169010a5781ad0fbae` |
-| Commits parsed | 82 |
-| Commit-map entries rewritten | 83 (all SHAs changed) |
+| Original owner HEAD | `01d644998cd975f9dd2cef1eae446fe6af2c2336` |
+| Candidate rewritten HEAD | `914f826f72f3e81e69f4117811324db20f5daa36` |
+| Tip map | `01d6449…` → `914f826…` |
+| Commits in candidate | 83 |
 | Branches in candidate | `main` only |
 | Tags | none |
 
-> If additional commits land on the private repo before publication, **re-run** filter-repo from the new tip and replace these SHAs. Do not publish the stale candidate.
+Earlier dry filter from `df9cb63` → `9b8c3c1` is superseded; **publish only from a candidate rebuilt at the approved tip.**
 
-## History / tip audits
-
-| Check | Result |
-| --- | --- |
-| `apps/web/public/cores/**/*.data\|.wasm` reachable in candidate history | **none** (`HISTORY_PATHS_CLEAN`) |
-| Tip tracked core binaries | **none** |
-| Tip path set vs owner tip | **identical** (1242 paths) |
-| Proprietary BIOS pathnames in history | **none found** |
-| Secret heuristic (key/token patterns) on tip text | **0 hits** |
-| EmulatorJS `loader.js` present | yes |
-
-## Candidate software verification
+## History / tip audits (current candidate)
 
 | Check | Result |
 | --- | --- |
-| `verify-core-lock.py --mode SOURCE_ONLY` | PASS (314 / skip 59) |
-| `check-no-private-cores-tracked.py` | PASS |
-| `test_private_asset_backup.py` | PASS |
-| Vitest | 21 PASS |
-| `tsc --noEmit` | PASS |
-| Next.js production build | PASS |
-| Django tests (owner Compose; tip source identical) | 43 PASS |
+| Core `.data`/`.wasm` paths in candidate history | **none** (`HISTORY_PATHS_CLEAN`) |
+| Tip path set vs owner tip | **identical** (1248 paths) |
+| Alpha UX present in candidate tip | yes (`Public Alpha limits`) |
+| SOURCE_ONLY lock | PASS |
+| Private-core track check | PASS |
 
 ## Owner repository preservation
 
 | Check | Result |
 | --- | --- |
-| Owner HEAD after filter | still `df9cb63…` (unchanged by filter) |
-| `origin` on owner | untouched |
+| Owner HEAD after filter | `01d6449…` (unchanged by filter) |
+| `origin` on owner | untouched / not force-pushed |
 | Private assets / backups | untouched |
 
 ## Publication (not executed)
 
-See `legal-review-package.md` §8 and `github-publication-plan.md` Option B.
+See `legal-review-package.md` §8 and `option-b-publication-steps.md`.
+
+**Owner approval gate:** authorize creating a **new** public GitHub repo and pushing candidate `914f826…` (or a newer refreshed tip) — never flip visibility on `yuzaiakira/retro-browser-gaming`.
