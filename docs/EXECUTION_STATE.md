@@ -3,7 +3,7 @@
 ## Verdict
 
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
-**Open-source prep:** **PUBLIC_REPOSITORY_READY_FOR_OWNER_APPROVAL** — P1 backup reverified; Option B candidate `b306ebe` ← private `60c8327`; license proposals ready (not enacted); corresponding-source offer assembled offline; **STOP** before GitHub publish / root LICENSE commit without owner OK.
+**Open-source prep:** **PUBLIC_REPOSITORY_READY_FOR_OWNER_APPROVAL** (updated) — browser allowlist enforced (`PUBLIC_BROWSER` 55/59; `81_eo`/`virtualjaguar_js` blocked); CS offer gate + disposition docs; root LICENSE still owner-blocked; refresh Option B candidate after these commits; **STOP** before GitHub publish.
 
 ## Deferred physical / external (do not rediscover)
 

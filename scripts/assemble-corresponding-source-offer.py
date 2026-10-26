@@ -72,8 +72,11 @@ def main() -> int:
         ("ph05-jaguar", ROOT / "docs" / "test-evidence" / "PH-05" / "jaguar-vj-js-build-20261022.md"),
         ("docs-corresponding", ROOT / "docs" / "open-source" / "corresponding-source.md"),
         ("docs-matrix", ROOT / "docs" / "open-source" / "corresponding-source-matrix.json"),
+        ("docs-allowlist", ROOT / "docs" / "open-source" / "browser-distributable-allowlist.json"),
+        ("docs-not-cleared", ROOT / "docs" / "open-source" / "not-cleared-cores.md"),
         ("private-manifest", MANIFEST),
         ("core-lock", ROOT / "docs" / "core-package-lock.json"),
+        ("zx81-snippet", ROOT / "fixtures" / "zx81-81-eo-loadp" / "eo_loadp-cdflag-crt.c.snippet"),
     ]
     # When copying ejs tree, skip .data/.wasm even if present as working copies
     for name, src in sections:
@@ -112,8 +115,8 @@ def main() -> int:
         "files_copied": copied,
         "private_binary_count_referenced": len(inventory.get("files", [])),
         "gaps": [
-            "81_eo: patch files not checked into scripts/patches/ — NEEDS_LEGAL_REVIEW before product redistribution",
-            "virtualjaguar_js: rebuild notes only; no patch directory — EXPERIMENTAL / NEEDS_LEGAL_REVIEW",
+            "81_eo: NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION — incomplete corresponding source",
+            "virtualjaguar_js: NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION — incomplete corresponding source",
             "Stock EmulatorJS CDN cores: upstream pin + lock hashes; unmodified relative to EmulatorJS 4.2.3 packaging where not marked independently rebuilt",
         ],
         "how_users_obtain": [

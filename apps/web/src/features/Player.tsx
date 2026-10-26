@@ -131,7 +131,7 @@ export default function Player({ id }: { id: string }) {
         /beacuse it's likly that the minified files are missing/i.test(raw);
       setMessage(
         missingRuntime
-          ? "Emulator runtime files are missing or unreachable. On a source-only checkout, import authorized private cores (see docs/open-source/private-asset-backup.md), run provision-private-cores.py, then retry. Original error: " +
+          ? "Emulator runtime files are missing, blocked for public distribution, or unreachable. Source-only clones need an authorized private-asset import; public deployments only sync allowlisted cores (81_eo / virtualjaguar_js are not cleared). See docs/open-source/private-asset-backup.md and browser-distributable-allowlist.json. Original error: " +
             raw
           : raw,
       );

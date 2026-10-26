@@ -1,0 +1,485 @@
+{
+  "schema": "rbg-browser-distributable-allowlist-v1",
+  "description": "Deny-by-default for PUBLIC_BROWSER deployments. LOCAL_FULL may provision all private-store files for authorized local/dev use without changing this classification.",
+  "env_mode": "RBG_CORE_PROVISION_MODE",
+  "modes": {
+    "PUBLIC_BROWSER": "Provision/serve only AUTHORIZED_BROWSER_DISTRIBUTABLE paths",
+    "LOCAL_FULL": "Provision all private-core-binaries.manifest entries for local authorized use"
+  },
+  "default_mode_production": "PUBLIC_BROWSER",
+  "default_mode_compose_local": "LOCAL_FULL",
+  "files": [
+    {
+      "path": "ejs-4.2.3/compression/libunrar.wasm",
+      "sha256": "e4ea9bd0b13a9767916b424469e30205f47f267ecd9125ed56fb9ff0b9bc1b58",
+      "byteSize": 173799,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/81-legacy-wasm.data",
+      "sha256": "3876882dad34573e43809519805db9398d63c40caf8a6464520fd3b111422432",
+      "byteSize": 885589,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/81-wasm.data",
+      "sha256": "61d7bad7bd3d1e1a375798d724679fb466d8132823aa8f0fdc02704e83273767",
+      "byteSize": 885523,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/81_eo-legacy-wasm.data",
+      "sha256": "a5a3eb292163426ce0836edb452d89eed377031994c6e72fc226981a63902664",
+      "byteSize": 744425,
+      "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+      "reason": "Independently modified; patch sources not checked into scripts/patches/ \u2014 NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+      "corresponding_source_class": "incomplete"
+    },
+    {
+      "path": "ejs-4.2.3/cores/81_eo-wasm.data",
+      "sha256": "ce6f24ba97915c0de17cc3a764cdb0c60a34e0e172b3c670e3c6d71f3b5ee046",
+      "byteSize": 744308,
+      "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+      "reason": "Independently modified; patch sources not checked into scripts/patches/ \u2014 NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+      "corresponding_source_class": "incomplete"
+    },
+    {
+      "path": "ejs-4.2.3/cores/a5200-legacy-wasm.data",
+      "sha256": "f1813f8e316c59cd62ff93512389abb5a3471843557880fd3b2abd5f10d993b7",
+      "byteSize": 880582,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/a5200-wasm.data",
+      "sha256": "c82476478d6b70b9da80cccc27ca06a5fd85acf7cdd5643f230cc4d6777990ef",
+      "byteSize": 881560,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/beetle_vb-legacy-wasm.data",
+      "sha256": "0a48fe957c002e01f7c5801765af36e5dd82410900727db5ac51459631aa888d",
+      "byteSize": 857641,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/beetle_vb-wasm.data",
+      "sha256": "3db727a78b6a6551a4024c273069eb39c8e8f33aa78ef16a073ed7460f6ce692",
+      "byteSize": 858313,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/bluemsx-legacy-wasm.data",
+      "sha256": "52c8d6ff9f49004743625af4703e3ed3bf3a370019d68f35c387e15effd6ff9f",
+      "byteSize": 4085848,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Independently rebuilt with scripts/patches/bluemsx + rebuild script; CS offer includes patches",
+      "corresponding_source_class": "patches_in_repo"
+    },
+    {
+      "path": "ejs-4.2.3/cores/bluemsx-wasm.data",
+      "sha256": "3f00670fdd789d8fbf6ff43b90f4634c5ac87c4d767fe25ac0eb8405fe1381da",
+      "byteSize": 4084613,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Independently rebuilt with scripts/patches/bluemsx + rebuild script; CS offer includes patches",
+      "corresponding_source_class": "patches_in_repo"
+    },
+    {
+      "path": "ejs-4.2.3/cores/cap32-legacy-wasm.data",
+      "sha256": "a5dbecdcf1e98976c760f1d2037d78d1a73d8f6f4f6c1546d53897dcea6844f2",
+      "byteSize": 1018339,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/cap32-wasm.data",
+      "sha256": "a6ab367842fb8f0c25d8fcb7c7ba359941dca529a93dbf1c86979dc4d67f664e",
+      "byteSize": 1018926,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/desmume-legacy-wasm.data",
+      "sha256": "2af5d9642356b9ff8460a04ae5ab013afe34825abaded974a9b613dab73c1d4b",
+      "byteSize": 1171393,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/desmume-wasm.data",
+      "sha256": "a9fddaa4bd742e558dfe5095fa4eaf074493b591a7bc18c5f7c65d64b9fa7572",
+      "byteSize": 1172604,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/dosbox_pure-thread-legacy-wasm.data",
+      "sha256": "08091b90db3d99cbcc571512b909906033d2957c290cd1865ba957dadc994f21",
+      "byteSize": 1792195,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/dosbox_pure-thread-wasm.data",
+      "sha256": "d96b657d3f2be94fec41531575e2afafd1f3cceed046b73ca34d69564aa4cc11",
+      "byteSize": 1793257,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/fceumm-legacy-wasm.data",
+      "sha256": "f1054b094e7149fd6278485bc1b2e51ff75c5259048ddb1134171e53d651f239",
+      "byteSize": 1053006,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/fceumm-wasm.data",
+      "sha256": "8c449fd5c36646fb0769423ed6ffa9efbdfc21fbfdc9bac7952b559d34d5b493",
+      "byteSize": 1054015,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/fuse-legacy-wasm.data",
+      "sha256": "86d844184aade4e22b7306a09da8fa109d26316aa2eb3cc67a033cccca46671d",
+      "byteSize": 1218410,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/fuse-wasm.data",
+      "sha256": "791fe40dfba9ac236c5c14d629d555133c5fe3c36d1dbdc2a48ced487da51373",
+      "byteSize": 1218229,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/gambatte-legacy-wasm.data",
+      "sha256": "940a7381d51223c0be0c0f98d1a988d42cc98d03c27b392cbd29cb9f357b5f62",
+      "byteSize": 967022,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/gambatte-wasm.data",
+      "sha256": "ad67c7bf57f8f8b62606048e6ea498afac5b5abc76ad8de5f9dfc2a6719374bb",
+      "byteSize": 967156,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/genesis_plus_gx-legacy-wasm.data",
+      "sha256": "2a1edeb68d7ec882149ed3cd5d3aa95a6ac231ebabaf82cdb56175a8b62967cc",
+      "byteSize": 1204803,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/genesis_plus_gx-wasm.data",
+      "sha256": "190297a6f86757405090f1a2266f67dfe1a570a528c583434ed3641a5664f768",
+      "byteSize": 1203661,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/handy-legacy-wasm.data",
+      "sha256": "6fadae42b263deca542d5de8ff6b663ebfbf03d2b013b89e980b9273b873bd84",
+      "byteSize": 862944,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/handy-wasm.data",
+      "sha256": "ab49f61338fcc3b79a945b02005815066c4d9aadb8de6ab59c408dc158aaeeff",
+      "byteSize": 862304,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/mednafen_ngp-legacy-wasm.data",
+      "sha256": "694089f04886d400b3672077ec9f32f408df26a8b204af6b4f3723197ea749c8",
+      "byteSize": 872066,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/mednafen_ngp-wasm.data",
+      "sha256": "cdfe377bd380e418507dccda50d8664eecb06ebe1d2e5fbf5f397be859d1c83d",
+      "byteSize": 871904,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/mednafen_pce-legacy-wasm.data",
+      "sha256": "c3d6e52680175b5528964b2c506a462bfd330d856661f28c5a54f7114b9b9a4c",
+      "byteSize": 995095,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/mednafen_pce-wasm.data",
+      "sha256": "29cebda0c7a93bbcb5e67e97fe28a1886bd030715d5a25224e7d9175d1d985c3",
+      "byteSize": 994844,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/mednafen_wswan-legacy-wasm.data",
+      "sha256": "5f75fd9d9b93a5e807ef086843c603371eb1a17fed73ff7398e16c5f5ba72605",
+      "byteSize": 879089,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/mednafen_wswan-wasm.data",
+      "sha256": "234397276e4a8ff01485e0135ea8e89e78e60fc156120e41bd0a4dd3b4c71626",
+      "byteSize": 879301,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/mgba-legacy-wasm.data",
+      "sha256": "e300d2f368c82bf61d77c972c36e367cf16408ec3d50beede080337519a3d696",
+      "byteSize": 1054993,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/mgba-wasm.data",
+      "sha256": "01fcaf6d4296ef1db6676e0c69400c4474e24572d0b2b99cc097e4ae885e02d7",
+      "byteSize": 1055616,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/mupen64plus_next-legacy-wasm.data",
+      "sha256": "425072f4bf94eec02633cbe9b84f47d6803dc0ec1b3c3b8de3ebbd2eb5617c3f",
+      "byteSize": 1451870,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/mupen64plus_next-wasm.data",
+      "sha256": "2da1cbce9fda395e3ae83ca5787353baa159142d45ef3ea90f108b92524f76cc",
+      "byteSize": 1451795,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/pcsx_rearmed-legacy-wasm.data",
+      "sha256": "88faee73d06c597a68a8b78e5621d97feefca134c64b623e65f0a900037456da",
+      "byteSize": 1038636,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/pcsx_rearmed-wasm.data",
+      "sha256": "fe5515f6c29f093f0e8c01824b213804f1f76eb9cb4c97c72fe2cc17606bfbc2",
+      "byteSize": 1039627,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/ppsspp-thread-wasm.data",
+      "sha256": "cb46c33a3a8444b707f7a03fe00414d916ab55a41e85fbf0c59611aa643252da",
+      "byteSize": 4581537,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/prosystem-legacy-wasm.data",
+      "sha256": "18cb399796b85461bd357bd17b08171b3728758eed170a9992dfc79ee071864e",
+      "byteSize": 852780,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/prosystem-wasm.data",
+      "sha256": "d3483e1c155c8d26e6b7b299c8ecc58c5abcfa0c5af5f03b75a55d219e71c3c8",
+      "byteSize": 852864,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/puae-legacy-wasm.data",
+      "sha256": "8d49f7b0bdb83992904a5f9a0d4b0c12e6e6b9b2e9bb619095b5ca6e6547279b",
+      "byteSize": 4138844,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/puae-wasm.data",
+      "sha256": "8b58d776244c650c872dcaaf8693a2d75fd92a5219c7250cf5be5f517b11f1b5",
+      "byteSize": 4140232,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/smsplus-legacy-wasm.data",
+      "sha256": "9fcc16b3e4ad662c395542bc96a0142cded1d17cbd8e43f0d5b3205cf4f7d340",
+      "byteSize": 855316,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/smsplus-wasm.data",
+      "sha256": "0f197c5e0000f17b2d072122a72b3f8fc1693514c4014fcd9694eec78584aa08",
+      "byteSize": 855876,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/snes9x-legacy-wasm.data",
+      "sha256": "7d427a575cefad98ff400493fa1d7e892da63fe7bab68979babd9cea0bfaaf3b",
+      "byteSize": 1092437,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/snes9x-wasm.data",
+      "sha256": "eaa0bcfce67673809886e50387a80a616b719502175db64c090d04c9d75958ee",
+      "byteSize": 1093765,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/stella2014-legacy-wasm.data",
+      "sha256": "6dc81bb0c3c5833af69aa750491a6ecd547ec9b91c21bd55ed9a77d5b0a8dd08",
+      "byteSize": 1051741,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/stella2014-wasm.data",
+      "sha256": "6c96c6b1746f3f05ca599066abe131a36c77ca61fc20a9e2a7560540457c487d",
+      "byteSize": 1051659,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/vice_x64sc-legacy-wasm.data",
+      "sha256": "8a22bc81c0dd7104cd23ceec5117a9f47ca9503e280e4fbc9d0346f51b75253e",
+      "byteSize": 1523390,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/vice_x64sc-wasm.data",
+      "sha256": "77f58884c81b58721cbc4754ffc5574838219258e9390630c352a494a3f335ab",
+      "byteSize": 1523457,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/virtualjaguar-legacy-wasm.data",
+      "sha256": "7bc810ba5a62377ccd59c859aa7904961e3d15480e06b9737fbd32d00bb8a887",
+      "byteSize": 943525,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/virtualjaguar-wasm.data",
+      "sha256": "584bcd9d0e051ec3cfe690d32e516cf677a9ff7e207118f4a8cc147a6e123de9",
+      "byteSize": 942590,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/virtualjaguar_js-legacy-wasm.data",
+      "sha256": "a266ef2c176cc418250ed5a37dcb19b64a6c975f1e7b67e59a7fc0969b68e4e4",
+      "byteSize": 796907,
+      "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+      "reason": "Independently rebuilt EXPERIMENTAL; no complete corresponding-source package \u2014 NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+      "corresponding_source_class": "incomplete"
+    },
+    {
+      "path": "ejs-4.2.3/cores/virtualjaguar_js-wasm.data",
+      "sha256": "6f7f5ec554f4a9c881e1fa8ed78a389e6b6711371c231d05b99cdad7268985ff",
+      "byteSize": 797157,
+      "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+      "reason": "Independently rebuilt EXPERIMENTAL; no complete corresponding-source package \u2014 NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+      "corresponding_source_class": "incomplete"
+    },
+    {
+      "path": "ejs-4.2.3/system/bluemsx-system.data",
+      "sha256": "ab7c010122e4ab3fa8a8ff5716fe379e6984a668f90f21af8e9d66034086cb1c",
+      "byteSize": 323087,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Independently rebuilt with scripts/patches/bluemsx + rebuild script; CS offer includes patches",
+      "corresponding_source_class": "patches_in_repo"
+    },
+    {
+      "path": "jsdos-8.3.8/wdosbox.wasm",
+      "sha256": "6c3e68a2669cbde5a2b9c920e64248b15c23b38c0b6080814aff0542676b6e98",
+      "byteSize": 1458714,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "jsdos-8.3.8/wlibzip.wasm",
+      "sha256": "cff5e8e1600ba7c589e43966613956060b4696924355714faf6b28e4c35db48f",
+      "byteSize": 113081,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    }
+  ]
+}

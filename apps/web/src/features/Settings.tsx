@@ -85,11 +85,15 @@ export default function Settings({
             </ul>
             <p className="small">
               Emulator <code>.data</code>/<code>.wasm</code> payloads are not
-              bundled in public source clones. When a deployment provisions them
-              for browser play, GPL corresponding-source duties still apply.
-              Maintainers: see <code>docs/open-source/third-party-notices.md</code>{" "}
-              and <code>docs/open-source/corresponding-source.md</code> in the
-              source tree. Proprietary BIOS/ROMs are not included.
+              bundled in public source clones. Public deployments sync only
+              allowlisted browser-distributable cores; some experimental
+              rebuilds are excluded until corresponding source is complete.
+              GPL corresponding-source duties still apply when binaries are
+              served. Maintainers: see{" "}
+              <code>docs/open-source/third-party-notices.md</code>,{" "}
+              <code>corresponding-source.md</code>, and{" "}
+              <code>browser-distributable-allowlist.json</code>. Proprietary
+              BIOS/ROMs are not included.
             </p>
           </div>
         </>

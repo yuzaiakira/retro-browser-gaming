@@ -65,6 +65,8 @@ services:
       API_INTERNAL_URL: http://api:8000
       NODE_ENV: production
       RBG_PRIVATE_ASSET_DIR: /private-runtime
+      # Local Compose: full private store. Production must set PUBLIC_BROWSER.
+      RBG_CORE_PROVISION_MODE: ${RBG_CORE_PROVISION_MODE:-LOCAL_FULL}
       J2ME_RUNTIME_HOST: j2me.localhost
       LAUNCHER_HOST: launcher.localhost
       LAUNCHER_FRAME_ANCESTORS: ${LAUNCHER_FRAME_ANCESTORS:-http://launcher.localhost:13000 http://launcher.localhost:3000 https://launcher.localhost:13443 https://launcher.localhost:3443 http://localhost:13000 http://localhost:3000 https://localhost:13443}
