@@ -262,9 +262,8 @@ export default function App({ route }: { route: string[] }) {
   }
   const card = (game: Game) => {
     const release = game.releases[0];
-    const ready = installs.some(
-      (i) => i.game.id === game.id && i.state === "ready-offline",
-    );
+    const install = installs.find((i) => i.game.id === game.id);
+    const ready = install?.state === "ready-offline";
     const blurb = game.description.split(".")[0]?.trim();
     return (
       <article className="game-card" key={game.id}>
@@ -274,6 +273,7 @@ export default function App({ route }: { route: string[] }) {
         </a>
         <div className="card-content">
           <div className="tags">
+            <span>{release?.console.name || "System"}</span>
             <span>{game.genre || "Homebrew"}</span>
             <span>{ready ? "● READY OFFLINE" : "DOWNLOAD TO PLAY"}</span>
           </div>
@@ -281,13 +281,22 @@ export default function App({ route }: { route: string[] }) {
             <h3>{game.title}</h3>
           </a>
           <p>{blurb ? `${blurb}.` : "Open for controls and install options."}</p>
-          <a className="card-link" href={"/games/" + game.slug}>
-            View game <span>↗</span>
-          </a>
+          {ready && install ? (
+            <a className="button" href={"/play/" + install.id}>
+              ▶ Play
+            </a>
+          ) : (
+            <a className="card-link" href={"/games/" + game.slug}>
+              View & download <span>↗</span>
+            </a>
+          )}
         </div>
       </article>
     );
   };
+  const continuePlaying = [...installs]
+    .filter((i) => i.state === "ready-offline")
+    .slice(0, 6);
   const genreOptions = Array.from(
     new Set(
       [
@@ -308,8 +317,8 @@ export default function App({ route }: { route: string[] }) {
     ...consoles.map((c): [string, string] => [c.slug, c.name]),
   ];
   return (
-    <div className="app">
-      <aside className="sidebar">
+    <div className={"app" + (page === "play" ? " immersive-play" : "")}>
+      <aside className="sidebar" hidden={page === "play"}>
         <a href="/" className="brand">
           <span className="brand-symbol">◀◀</span>
           <strong>
@@ -344,20 +353,22 @@ export default function App({ route }: { route: string[] }) {
         </div>
       </aside>
       <div className="main-shell">
-        <header className="topbar">
-          <span className="breadcrumb">
-            THE ARCADE <span>/</span>{" "}
-            {page === "home" ? "DISCOVER" : page.toUpperCase()}
-          </span>
-          <div className="network">
-            <span className={"status-dot " + (offline ? "amber" : "")} />
-            {offline ? "Offline mode" : "Online"}
-            <a href="/settings" aria-label="Open settings">
-              ⚙
-            </a>
-          </div>
-        </header>
-        <main id="main">
+        {page !== "play" && (
+          <header className="topbar">
+            <span className="breadcrumb">
+              THE ARCADE <span>/</span>{" "}
+              {page === "home" ? "DISCOVER" : page.toUpperCase()}
+            </span>
+            <div className="network">
+              <span className={"status-dot " + (offline ? "amber" : "")} />
+              {offline ? "Offline mode" : "Online"}
+              <a href="/settings" aria-label="Open settings">
+                ⚙
+              </a>
+            </div>
+          </header>
+        )}
+        <main id="main" className={page === "play" ? "main-play" : undefined}>
           {page === "play" ? (
             <Player id={route[1]} />
           ) : page === "settings" || page === "diagnostics" ? (
@@ -455,34 +466,66 @@ export default function App({ route }: { route: string[] }) {
                   <a href="/games">Explore the catalog →</a>
                 </div>
               )}
-              {downloads.map((d) => (
+              {downloads.map((d) => {
+                const pct =
+                  d.asset.byteSize > 0
+                    ? Math.min(
+                        100,
+                        Math.round((d.bytesVerified / d.asset.byteSize) * 100),
+                      )
+                    : 0;
+                const label =
+                  d.state === "verified"
+                    ? "Verified · ready to install"
+                    : d.state === "paused"
+                      ? "Paused"
+                      : d.state === "recoverable-error" || d.state === "fatal-error"
+                        ? "Needs retry"
+                        : d.state === "downloading"
+                          ? "Downloading"
+                          : d.state === "verifying"
+                            ? "Verifying"
+                            : d.state === "checking-space"
+                              ? "Checking storage"
+                              : d.state.toUpperCase();
+                return (
                 <div className="panel download-row" key={d.id}>
                   <div>
                     <h3>{d.asset.filename}</h3>
-                    <span className="badge">
-                      {d.state === "downloading" && !busy
-                        ? "RESUMABLE"
-                        : d.state.toUpperCase()}
-                    </span>
+                    <span className="badge">{label}</span>
                     <p>
-                      {formatBytes(d.bytesVerified)} /{" "}
+                      {pct}% · {formatBytes(d.bytesVerified)} /{" "}
                       {formatBytes(d.asset.byteSize)}{" "}
-                      {busy && d.speed > 0
-                        ? `· ${formatBytes(d.speed)}/s · ~${Math.ceil((d.asset.byteSize - d.bytesVerified) / d.speed)}s remaining`
+                      {d.state === "downloading" && d.speed > 0
+                        ? `· ${formatBytes(d.speed)}/s · ~${Math.max(1, Math.ceil((d.asset.byteSize - d.bytesVerified) / d.speed))}s remaining`
                         : ""}
                     </p>
-                    {d.error && <p className="error-text">{d.error}</p>}
-                    <progress max={d.asset.byteSize} value={d.bytesVerified} />
+                    {d.error && (
+                      <p className="error-text" role="alert">
+                        {d.error}. Free browser storage or tap Resume / retry.
+                      </p>
+                    )}
+                    <progress
+                      max={d.asset.byteSize || 1}
+                      value={d.bytesVerified}
+                      aria-label={`Download progress ${pct} percent`}
+                    />
                   </div>
                   <div className="row">
                     <button
                       disabled={busy || d.state === "verified"}
                       onClick={() => resume(d)}
                     >
-                      Resume / retry
+                      {d.state === "recoverable-error" ||
+                      d.state === "fatal-error" ||
+                      d.state === "paused" ||
+                      d.state === "cancelled"
+                        ? "Resume / retry"
+                        : "Download"}
                     </button>
                     <button
                       className="secondary"
+                      disabled={d.state !== "downloading"}
                       onClick={() => pauseAsset(d.asset)}
                     >
                       Pause
@@ -502,7 +545,8 @@ export default function App({ route }: { route: string[] }) {
                     </button>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </section>
           ) : page === "games" && route[1] ? (
             <section>
@@ -650,8 +694,9 @@ export default function App({ route }: { route: string[] }) {
                       <br />
                       Browser-native play, built to go offline.
                     </p>
-                    <a className="button" href="/games">
-                      Explore the collection <span>↗</span>
+                    <a className="button" href={continuePlaying[0] ? "/play/" + continuePlaying[0].id : "/games"}>
+                      {continuePlaying[0] ? "Continue playing" : "Explore the collection"}{" "}
+                      <span>↗</span>
                     </a>
                     <span className="hero-note">
                       NO INSTALLER · NO ACCOUNT · JUST PLAY
@@ -662,6 +707,32 @@ export default function App({ route }: { route: string[] }) {
                     <span className="hero-chip">
                       PLAYER 01 <b>READY</b>
                     </span>
+                  </div>
+                </section>
+              )}
+              {page === "home" && continuePlaying.length > 0 && (
+                <section className="continue-strip">
+                  <div className="section-head">
+                    <div>
+                      <span className="eyebrow">ON THIS DEVICE</span>
+                      <h2>Continue playing</h2>
+                    </div>
+                    <a href="/library">My library →</a>
+                  </div>
+                  <div className="game-grid compact-grid">
+                    {continuePlaying.map((i) => (
+                      <article className="game-card" key={"cont-" + i.id}>
+                        <Art kind={i.release.console.slug} />
+                        <div className="card-content">
+                          <span className="badge">● READY OFFLINE</span>
+                          <h3>{i.game.title}</h3>
+                          <p>{i.release.console.name}</p>
+                          <a className="button" href={"/play/" + i.id}>
+                            ▶ Play
+                          </a>
+                        </div>
+                      </article>
+                    ))}
                   </div>
                 </section>
               )}
@@ -817,29 +888,33 @@ export default function App({ route }: { route: string[] }) {
             </div>
           )}
         </main>
-        <footer>
-          <span>◀◀ REWIND</span>
-          <p>Built for the games you come back to.</p>
-          <p className="small">
-            Public Alpha — supported browsers and offline install tips live in
-            diagnostics. Source clones do not include private WASM core
-            binaries.
-          </p>
-          <a href="/diagnostics#alpha-feedback">
-            Alpha limits & feedback ↗
-          </a>
-          <a href="/diagnostics#licensing-notices">Licensing notices ↗</a>
-          <a href="/diagnostics">Compatibility & diagnostics ↗</a>
-        </footer>
+        {page !== "play" && (
+          <footer>
+            <span>◀◀ REWIND</span>
+            <p>Built for the games you come back to.</p>
+            <p className="small">
+              Public Alpha — supported browsers and offline install tips live in
+              diagnostics. Source clones do not include private WASM core
+              binaries.
+            </p>
+            <a href="/diagnostics#alpha-feedback">
+              Alpha limits & feedback ↗
+            </a>
+            <a href="/diagnostics#licensing-notices">Licensing notices ↗</a>
+            <a href="/diagnostics">Compatibility & diagnostics ↗</a>
+          </footer>
+        )}
       </div>
-      <nav className="mobile-nav">
-        {nav.map(([href, icon, label]) => (
-          <a key={href} href={href}>
-            <span>{icon}</span>
-            {label}
-          </a>
-        ))}
-      </nav>
+      {page !== "play" && (
+        <nav className="mobile-nav">
+          {nav.map(([href, icon, label]) => (
+            <a key={href} href={href}>
+              <span>{icon}</span>
+              {label}
+            </a>
+          ))}
+        </nav>
+      )}
     </div>
   );
 }

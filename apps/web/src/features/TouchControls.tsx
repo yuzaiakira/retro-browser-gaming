@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { setting, setSetting } from "@/lib/db";
 import { commands, type InputRouter } from "./input";
+
 type Button = {
   name: string;
   x: number;
@@ -9,6 +10,9 @@ type Button = {
   size: number;
   opacity: number;
 };
+
+const LAYOUT_SCHEMA = 2;
+
 const defaults: Button[] = [
   ["Up", 17, 25],
   ["Left", 7, 48],
@@ -26,46 +30,148 @@ const defaults: Button[] = [
   name: String(name),
   x: Number(x),
   y: Number(y),
-  size: 48,
-  opacity: 0.8,
+  size: 52,
+  opacity: 0.72,
 }));
+
+function clamp(n: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, n));
+}
+
+function normalizeLayout(raw: unknown): Button[] {
+  if (!Array.isArray(raw) || !raw.length) return defaults.map((b) => ({ ...b }));
+  const byName = new Map(
+    raw
+      .filter((b): b is Button => !!b && typeof b === "object" && "name" in b)
+      .map((b) => [String((b as Button).name), b as Button]),
+  );
+  return defaults.map((d) => {
+    const hit = byName.get(d.name);
+    if (!hit) return { ...d };
+    return {
+      name: d.name,
+      x: clamp(Number(hit.x ?? d.x), 5, 95),
+      y: clamp(Number(hit.y ?? d.y), 6, 94),
+      size: clamp(Number(hit.size ?? d.size), 36, 84),
+      opacity: clamp(Number(hit.opacity ?? d.opacity), 0.25, 1),
+    };
+  });
+}
+
 export default function TouchControls({
   router,
   system,
   edit,
   analog,
+  overlay = false,
+  onEditCancel,
 }: {
   router: InputRouter | null;
   system: string;
   edit: boolean;
   analog: boolean;
+  /** When true, fill the player stage instead of a separate strip. */
+  overlay?: boolean;
+  onEditCancel?: () => void;
 }) {
   const [orientation, setOrientation] = useState("landscape");
   const [layout, setLayout] = useState(defaults);
+  const [draft, setDraft] = useState<Button[] | null>(null);
   const [selected, setSelected] = useState("A");
+  const [dirty, setDirty] = useState(false);
   const area = useRef<HTMLDivElement>(null);
-  const key = `layout:${system}:${orientation}`;
+  const key = `layout:v${LAYOUT_SCHEMA}:${system}:${orientation}`;
+  const legacyKey = `layout:${system}:${orientation}`;
+  const active = draft ?? layout;
+  const current = active.find((b) => b.name === selected) ?? active[0];
+
   useEffect(() => {
     const update = () =>
       setOrientation(innerWidth > innerHeight ? "landscape" : "portrait");
     update();
     addEventListener("resize", update);
-    return () => removeEventListener("resize", update);
+    addEventListener("orientationchange", update);
+    return () => {
+      removeEventListener("resize", update);
+      removeEventListener("orientationchange", update);
+    };
   }, []);
+
   useEffect(() => {
-    setting<Button[]>(key, defaults).then(setLayout);
-  }, [key]);
-  const change = (name: string, patch: Partial<Button>) =>
-    setLayout((old) =>
-      old.map((b) => (b.name === name ? { ...b, ...patch } : b)),
-    );
-  const current = layout.find((b) => b.name === selected)!;
+    let cancelled = false;
+    (async () => {
+      const modern = await setting<Button[] | null>(key, null as unknown as Button[]);
+      if (cancelled) return;
+      if (modern && Array.isArray(modern) && modern.length) {
+        setLayout(normalizeLayout(modern));
+        return;
+      }
+      const legacy = await setting<Button[]>(legacyKey, defaults);
+      if (cancelled) return;
+      const migrated = normalizeLayout(legacy);
+      setLayout(migrated);
+      await setSetting(key, migrated);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [key, legacyKey]);
+
+  useEffect(() => {
+    if (edit) {
+      setDraft(layout.map((b) => ({ ...b })));
+      setDirty(false);
+    } else {
+      setDraft(null);
+      setDirty(false);
+    }
+  }, [edit, layout]);
+
+  const change = (name: string, patch: Partial<Button>) => {
+    setDraft((old) => {
+      const base = old ?? layout;
+      return base.map((b) => (b.name === name ? { ...b, ...patch } : b));
+    });
+    setDirty(true);
+  };
+
+  async function saveLayout() {
+    if (!draft) return;
+    const next = normalizeLayout(draft);
+    setLayout(next);
+    await setSetting(key, next);
+    setDraft(null);
+    setDirty(false);
+  }
+
+  function cancelEdit() {
+    setDraft(null);
+    setDirty(false);
+    onEditCancel?.();
+  }
+
   return (
     <>
-      <div className={"touch-area " + (edit ? "editing" : "")} ref={area}>
-        {layout.map((button) => (
+      {overlay &&
+        orientation === "portrait" &&
+        !edit && (
+          <p className="orientation-hint" role="status">
+            Rotate to landscape for more control space when you can — portrait
+            still works.
+          </p>
+        )}
+      <div
+        className={
+          "touch-area " +
+          (overlay ? "touch-overlay " : "") +
+          (edit ? "editing" : "")
+        }
+        ref={area}
+      >
+        {active.map((button) => (
           <button
             key={button.name}
+            type="button"
             className={
               "touch-button " +
               (selected === button.name && edit ? "selected" : "")
@@ -92,14 +198,8 @@ export default function TouchControls({
               if (!edit || !e.buttons || !area.current) return;
               const box = area.current.getBoundingClientRect();
               change(button.name, {
-                x: Math.max(
-                  7,
-                  Math.min(93, ((e.clientX - box.left) / box.width) * 100),
-                ),
-                y: Math.max(
-                  8,
-                  Math.min(88, ((e.clientY - box.top) / box.height) * 100),
-                ),
+                x: clamp(((e.clientX - box.left) / box.width) * 100, 5, 95),
+                y: clamp(((e.clientY - box.top) / box.height) * 100, 6, 94),
               });
             }}
             onPointerUp={(e) => router?.release(`touch:${e.pointerId}`)}
@@ -118,28 +218,30 @@ export default function TouchControls({
         ))}
         {analog && !edit && (
           <button
+            type="button"
             className="analog"
             aria-label="Analog stick"
-            onPointerDown={(e) =>
-              e.currentTarget.setPointerCapture(e.pointerId)
-            }
+            onPointerDown={(e) => {
+              e.preventDefault();
+              try {
+                e.currentTarget.setPointerCapture(e.pointerId);
+              } catch {
+                /* ignore */
+              }
+            }}
             onPointerMove={(e) => {
               if (!e.buttons) return;
               const b = e.currentTarget.getBoundingClientRect();
-              const x = Math.max(
-                  -1,
-                  Math.min(
-                    1,
-                    (e.clientX - b.left - b.width / 2) / (b.width / 2),
-                  ),
-                ),
-                y = Math.max(
-                  -1,
-                  Math.min(
-                    1,
-                    (e.clientY - b.top - b.height / 2) / (b.height / 2),
-                  ),
-                );
+              const x = clamp(
+                (e.clientX - b.left - b.width / 2) / (b.width / 2),
+                -1,
+                1,
+              );
+              const y = clamp(
+                (e.clientY - b.top - b.height / 2) / (b.height / 2),
+                -1,
+                1,
+              );
               router?.press(
                 `analog:${e.pointerId}:x`,
                 16,
@@ -165,16 +267,19 @@ export default function TouchControls({
         )}
       </div>
       {edit && (
-        <div className="panel layout-editor">
+        <div className="panel layout-editor" role="region" aria-label="Touch layout editor">
           <h3>Touch layout · {orientation}</h3>
-          <p>Drag a button, then adjust its size and opacity.</p>
+          <p>
+            Drag buttons on the game surface. Changes stay local until you save.
+            {dirty ? " Unsaved changes." : ""}
+          </p>
           <label>
             Button
             <select
               value={selected}
               onChange={(e) => setSelected(e.target.value)}
             >
-              {layout.map((b) => (
+              {active.map((b) => (
                 <option key={b.name}>{b.name}</option>
               ))}
             </select>
@@ -184,7 +289,7 @@ export default function TouchControls({
             <input
               type="range"
               min="36"
-              max="72"
+              max="84"
               value={current.size}
               onChange={(e) => change(selected, { size: +e.target.value })}
             />
@@ -200,21 +305,21 @@ export default function TouchControls({
               onChange={(e) => change(selected, { opacity: +e.target.value })}
             />
           </label>
-          <button
-            onClick={async () => {
-              await setSetting(key, layout);
-            }}
-          >
+          <button type="button" onClick={() => void saveLayout()}>
             Save layout
           </button>
           <button
+            type="button"
             className="secondary"
-            onClick={async () => {
-              setLayout(defaults);
-              await setSetting(key, defaults);
+            onClick={() => {
+              setDraft(defaults.map((b) => ({ ...b })));
+              setDirty(true);
             }}
           >
             Restore defaults
+          </button>
+          <button type="button" className="secondary" onClick={cancelEdit}>
+            Cancel
           </button>
         </div>
       )}
