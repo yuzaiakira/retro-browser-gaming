@@ -30,8 +30,39 @@ Before company or public browser delivery of a **modified** core binary:
 
 Upstream CDN or GitHub links alone may be insufficient if the shipped binary differs from upstream.
 
-## NEEDS_LEGAL_REVIEW
+## Machine-readable matrix
+
+`docs/open-source/corresponding-source-matrix.json` maps each of the 59 private binaries (SHA-256, license, modification class, patches/evidence).
+
+## Assembled offer package (offline, not in Git)
+
+```bash
+python3 scripts/assemble-corresponding-source-offer.py \
+  --output /path/outside/repo/RetroBrowserGaming-Corresponding-Source-Offer
+```
+
+Includes tracked EmulatorJS/jsdos/js2me JS (skipping `.data`/`.wasm`), `LICENSES/`, BlueMSX patches, rebuild script, and PH-05 build notes. Does **not** embed private binaries.
+
+Verified local example (2026-10-26):  
+`/home/akira/Projects/git-contribute/RetroBrowserGaming-Corresponding-Source-Offer-20261026/`
+
+## How end users / counsel obtain Corresponding Source
+
+1. Clone the public source repository (Option B candidate once published).
+2. Read this document + `third-party-notices.md` + `LICENSES/`.
+3. For BlueMSX rebuilds: apply `scripts/patches/bluemsx/` with `scripts/rebuild-bluemsx-emscripten.sh` against the pinned upstream revisions in PH-05 evidence.
+4. Company deployments that **serve** GPL WASM to browsers should publish a durable URL to the assembled offer (or equivalent) matching the shipped binary hashes in `private-core-binaries.manifest.json` / `core-package-lock.json`.
+
+## Gaps (NEEDS_LEGAL_REVIEW)
+
+| Binary class | Gap |
+| --- | --- |
+| `81_eo` | Build notes exist; **patch files not checked into** `scripts/patches/` — do not treat upstream URL alone as sufficient for the modified binary |
+| `virtualjaguar_js` | Rebuild notes only; **EXPERIMENTAL** — withhold product redistribution until source package complete |
+| Stock EJS CDN cores | Prefer lock hashes as shipped truth; counsel confirm unmodified packaging vs upstream |
+| Combined work | iframe isolation used; counsel confirm distribution model vs GPL |
+
+Also:
 
 - Product-wide publication of independently rebuilt experimental cores.
 - Any future proprietary BIOS workflow (currently none tracked; must stay out of public delivery).
-- Combined work / linking analysis between Next.js host and GPL emulator frames (iframe isolation is used; counsel should confirm distribution model).

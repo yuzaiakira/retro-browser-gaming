@@ -28,6 +28,10 @@ docs/test-evidence/PH-06/.sec-tmp/
 RetroBrowserGaming-Asset-Backup/
 RetroBrowserGaming-Asset-Backup-*/
 
+# Corresponding-source offer assemblies (operator-built; keep outside Git).
+RetroBrowserGaming-Corresponding-Source-Offer/
+RetroBrowserGaming-Corresponding-Source-Offer-*/
+
 # Working-tree copies of private core binaries (provisioned; not for public Git).
 apps/web/public/cores/**/*.data
 apps/web/public/cores/**/*.wasm
