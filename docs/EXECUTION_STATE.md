@@ -3,7 +3,7 @@
 ## Verdict
 
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
-**Open-source prep:** **PARTIAL** — emulator `.data`/`.wasm` moved to private asset root; tracking removed; Compose provision verified; history rewrite dry-run PASSED in disposable clone — **awaiting owner approval** before active history rewrite / remote force-push (`docs/open-source/`).
+**Open-source prep:** **PARTIAL** — private cores + offline backup/restore **PASS**; history rewrite dry-run PASSED in disposable clone — **awaiting owner approval** before active history rewrite / remote force-push (`docs/open-source/`).
 
 ## Deferred physical / external (do not rediscover)
 
@@ -72,9 +72,17 @@ After web CSP / FrameAdapter / `public/runtime` changes:
 | Binaries untracked | 59 `.data`/`.wasm` |
 | Compose provision | `PRIVATE_CORE_SYNC_OK`; Genesis + Orbit smoke PASS |
 | History dry-run | PASS in disposable clone — **STOP** before rewriting owner repo / origin |
-| Backup | `/home/akira/Projects/git-contribute/retro-browser-gaming-os-backup-20261026/` |
+| Immutable OS migration backup | `/home/akira/Projects/git-contribute/retro-browser-gaming-os-backup-20261026/` (**do not modify**) |
+| Portable asset backup | `/home/akira/Projects/git-contribute/RetroBrowserGaming-Asset-Backup-20261026/` (59 files, `rbg-private-asset-backup-v1`) |
+| Backup CLI | `scripts/private-asset-backup.py` — export/list/verify/import; unit tests PASS |
+| Isolated restore + gameplay | LOCAL_FULL + Genesis/Orbit/MSX PASS (`docs/open-source/backup-restore-acceptance-20261026.md`) |
 
 ```bash
+python3 scripts/test_private_asset_backup.py -v
+python3 scripts/private-asset-backup.py export --output /path/to/RetroBrowserGaming-Asset-Backup
+python3 scripts/private-asset-backup.py verify --backup /path/to/RetroBrowserGaming-Asset-Backup
+python3 scripts/private-asset-backup.py import --backup /path/to/RetroBrowserGaming-Asset-Backup
+python3 scripts/provision-private-cores.py
 python3 scripts/verify-core-lock.py --mode SOURCE_ONLY
 python3 scripts/verify-core-lock.py --mode LOCAL_FULL
 python3 scripts/check-no-private-cores-tracked.py
@@ -84,7 +92,8 @@ python3 scripts/provision-private-cores.py --check
 ## Remaining blockers / next
 
 1. **Owner:** approve or reject applying history rewrite to active repo + remote (`docs/open-source/history-migration-runbook.md`)
-2. QA: physical gamepad + iOS
-3. Ops: staging HTTPS
-4. Product owner: shortlist approvals
-5. Do **not** tag COMPLETE; do **not** reopen emulator expansion for P0
+2. **Legal/owner:** public GitHub publication Options A/B (`docs/open-source/github-publication-plan.md`)
+3. QA: physical gamepad + iOS
+4. Ops: staging HTTPS
+5. Product owner: shortlist approvals
+6. Do **not** tag COMPLETE; do **not** reopen emulator expansion for P0
