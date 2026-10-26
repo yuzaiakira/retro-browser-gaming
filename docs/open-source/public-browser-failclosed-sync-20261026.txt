@@ -1,0 +1,6 @@
+web-1  | ▲ Next.js 16.4.2
+web-1  | - Local:         http://localhost:3000
+web-1  | - Network:       http://0.0.0.0:3000
+web-1  | ✓ Ready in 0ms
+web-1  | ✓ Running next.config took 0.8ms
+1:web-1  | PRIVATE_CORE_SYNC_OK mode=PUBLIC_BROWSER selected=55 copied=55 blocked_skipped=4 removed_public=0 allowlist=/app/policy/browser-distributable-allowlist.json

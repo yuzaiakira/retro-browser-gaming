@@ -3,7 +3,7 @@
 ## Verdict
 
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
-**Open-source prep:** **PUBLIC_REPOSITORY_READY_FOR_OWNER_APPROVAL** (updated) — browser allowlist enforced (`PUBLIC_BROWSER` 55/59; `81_eo`/`virtualjaguar_js` blocked); CS offer gate + disposition docs; root LICENSE still owner-blocked; refresh Option B candidate after these commits; **STOP** before GitHub publish.
+**Open-source prep:** **PUBLIC_BROWSER hardened** — Compose/image default `PUBLIC_BROWSER`; LOCAL_FULL opt-in only; fail-closed sync + middleware allowlist-only; CS gate levels separated; **STOP** before GitHub publish / root LICENSE / counsel auto-approval.
 
 ## Deferred physical / external (do not rediscover)
 
@@ -22,46 +22,37 @@
 | Core lock | **373 files** |
 | Tracker | `docs/platform-expansion-master-plan.md` |
 
-## Release acceptance (2026-10-22)
+## Harden pass (2026-10-26)
 
 | Check | Result | Evidence |
 |---|---|---|
-| Django 43 tests | OK | `PH-11/django-tests-20261022.txt` |
-| Storage Range probe | PASS | `PH-11/verify-storage-20261022.txt` |
-| `catalog.E001` | PASS (errors when misconfigured) | `PH-11/catalog-e001-20261022.txt` |
-| Acceptance gates | PASS | `PH-11/acceptance-gates-20261022.txt` |
-| Emulator regression | PASS | `PH-11/emulator-regression-20261022.txt` |
-| Orbit HTML5 after CSP+origin fix | PASS | `PH-11/screenshots/orbit-fixed.png` |
-| Amiga after probe scope fix | PASS | `PH-11/amiga-fix-20261022.txt` |
-
-Handover: `docs/release-manager-handover.md`, report: `docs/release-acceptance-report.md`.
+| Fail-closed sync unit | OK (6) | `scripts/test_sync_fail_closed.py` |
+| Allowlist unit | OK (4) | `scripts/test_browser_allowlist.py` |
+| LOCAL_FULL→PUBLIC purge | `removed_public=5` | `docs/open-source/local-full-to-public-purge-20261026.txt` |
+| Anonymous HTTP PUBLIC | genesis/bluemsx 200; 81_eo/vj_js/unknown 404 | `docs/open-source/anonymous-core-access-failclosed-20261026.txt` |
+| Missing private dir | FAIL closed | `docs/open-source/missing-private-dir-fail-20261026.txt` |
+| Corrupt allowlist | FAIL closed | `docs/open-source/corrupt-allowlist-fail-20261026.txt` |
+| Source-offer levels | META=55 ARCHIVE=55 DELIVERY=0 LEGAL_REVIEW=59 | gate stdout |
+| SOURCE_ONLY lock | OK skipped 59 | `docs/open-source/source-only-lock-20261026.txt` |
+| Django 43 | OK | `docs/open-source/django-tests-harden-20261026.txt` |
+| Vitest 21 / typecheck | OK | `docs/open-source/*harden-20261026.txt` |
+| Acceptance gates | PASS | `docs/open-source/acceptance-gates-harden-20261026.txt` |
+| Genesis / MSX / Orbit | PASS | genesis-core-smoke / msx-smoke / acceptance+smoke |
+| Portable backup verify | 59 OK | `docs/open-source/portable-backup-verify-harden-20261026.txt` |
+| Compose default | PUBLIC_BROWSER | `compose.yaml` + `docs/open-source/provision-mode-defaults.md` |
+| Local override | LOCAL_FULL opt-in (gitignored) | `compose.override.example.yaml` |
 
 ## Exact commands
 
 ```bash
-python3 scripts/verify-core-lock.py
-# CORE_LOCK_OK 373 files
+python3 scripts/test_sync_fail_closed.py
+python3 scripts/test_browser_allowlist.py
+python3 scripts/check-source-offer-gate.py
+RBG_CORE_PROVISION_MODE=PUBLIC_BROWSER ./scripts/compose.sh up -d --force-recreate web
+# HTTP evidence via Host: launcher.localhost on edge port
 
+python3 scripts/verify-core-lock.py --mode SOURCE_ONLY
 ./scripts/compose.sh exec -T api python manage.py test tests -v 1
-./scripts/compose.sh exec -T api env DJANGO_DEBUG=false CATALOG_ALLOW_ENGINEERING=false \
-  python manage.py check --deploy
-
-RETRO_TEST_BASE_URL=http://launcher.localhost:13000 CHROMIUM_EXECUTABLE=/usr/bin/chromium \
-  node apps/web/tests/acceptance-gates.cjs
-
-CHROMIUM_EXECUTABLE=/usr/bin/chromium PLATFORM=msx SKIP_OFFLINE=1 \
-  node apps/web/tests/libretro-family-smoke.cjs
-# MSX_GAMEPLAY_PASS … saveState:true
-
-CHROMIUM_EXECUTABLE=/usr/bin/chromium PLATFORM=amiga SKIP_OFFLINE=1 \
-  node apps/web/tests/libretro-family-smoke.cjs
-# AMIGA_GAMEPLAY_PASS … saveState:true stateBytes:1104272
-```
-
-After web CSP / FrameAdapter / `public/runtime` changes:
-
-```bash
-./scripts/compose.sh up -d --build web
 ```
 
 ## Open-source private assets (2026-10-26)
@@ -70,31 +61,18 @@ After web CSP / FrameAdapter / `public/runtime` changes:
 |---|---|
 | Private root | `.private-runtime/cores/` (gitignored); env `RBG_PRIVATE_ASSET_DIR` |
 | Binaries untracked | 59 `.data`/`.wasm` |
-| Compose provision | `PRIVATE_CORE_SYNC_OK`; Genesis + Orbit smoke PASS |
-| History dry-run | PASS in disposable clone — **STOP** before rewriting owner repo / origin |
 | Immutable OS migration backup | `/home/akira/Projects/git-contribute/retro-browser-gaming-os-backup-20261026/` (**do not modify**) |
-| Portable asset backup | `/home/akira/Projects/git-contribute/RetroBrowserGaming-Asset-Backup-20261026/` (59 files, `rbg-private-asset-backup-v1`) |
-| Backup CLI | `scripts/private-asset-backup.py` — export/list/verify/import; unit tests PASS |
-| Isolated restore + gameplay | LOCAL_FULL + Genesis/Orbit/MSX PASS (`docs/open-source/backup-restore-acceptance-20261026.md`) |
-
-```bash
-python3 scripts/test_private_asset_backup.py -v
-python3 scripts/private-asset-backup.py export --output /path/to/RetroBrowserGaming-Asset-Backup
-python3 scripts/private-asset-backup.py verify --backup /path/to/RetroBrowserGaming-Asset-Backup
-python3 scripts/private-asset-backup.py import --backup /path/to/RetroBrowserGaming-Asset-Backup
-python3 scripts/provision-private-cores.py
-python3 scripts/verify-core-lock.py --mode SOURCE_ONLY
-python3 scripts/verify-core-lock.py --mode LOCAL_FULL
-python3 scripts/check-no-private-cores-tracked.py
-python3 scripts/provision-private-cores.py --check
-```
+| Portable asset backup | `/home/akira/Projects/git-contribute/RetroBrowserGaming-Asset-Backup-20261026/` (59 files, verified) |
+| History dry-run | PASS in disposable clone — **STOP** before rewriting owner repo / origin |
 
 ## Remaining blockers / next
 
 1. **Owner:** choose root LICENSE (`docs/open-source/license-decision-sheet.md`)
 2. **Owner:** authorize Option B new public repo push (`docs/open-source/option-b-publication-steps.md`) — keep private origin intact
-3. **Counsel:** review `docs/open-source/legal-review-package.md`
-4. Product: approve minimal Alpha set (`docs/open-source/public-alpha-game-set.md`) — none auto-approved
-5. QA: physical gamepad + iOS; Ops: staging HTTPS
-6. Do **not** tag COMPLETE; do **not** reopen emulator expansion for P0
-7. Store a second verified portable backup on independent media
+3. **Counsel:** review `docs/open-source/legal-review-package.md` — `NEEDS_LEGAL_REVIEW` ≠ approval
+4. **Owner:** publish corresponding-source offer URL, then set `RBG_SOURCE_OFFER_PUBLIC_URL` (until then `OFFER_DELIVERY_VERIFIED=0`)
+5. Product: approve minimal Alpha set (`docs/open-source/public-alpha-game-set.md`) — none auto-approved
+6. Resolve CS for `81_eo` / `virtualjaguar_js` before any browser authorization
+7. QA: physical gamepad + iOS; Ops: staging HTTPS
+8. Do **not** tag COMPLETE; do **not** reopen emulator expansion for P0
+9. Store a second verified portable backup on independent media

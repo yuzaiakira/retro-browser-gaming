@@ -4,24 +4,45 @@ import allowlist from './policy/browser-distributable-allowlist.json';
 
 const J2ME_HOST = process.env.J2ME_RUNTIME_HOST || 'j2me.localhost';
 const LAUNCHER_HOST = process.env.LAUNCHER_HOST || 'launcher.localhost';
-const PROVISION_MODE = (process.env.RBG_CORE_PROVISION_MODE || 'PUBLIC_BROWSER').trim();
+const PROVISION_MODE = (
+  process.env.RBG_CORE_PROVISION_MODE ||
+  process.env.NEXT_PUBLIC_RBG_CORE_PROVISION_MODE ||
+  'PUBLIC_BROWSER'
+).trim();
 
-const blockedCorePaths = new Set(
+/** Paths authorized for anonymous browser delivery under PUBLIC_BROWSER. */
+const authorizedCorePaths = new Set(
   (allowlist.files || [])
-    .filter((row: { browser_distribution?: string }) =>
-      row.browser_distribution === 'NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION',
+    .filter(
+      (row: { browser_distribution?: string }) =>
+        row.browser_distribution === 'AUTHORIZED_BROWSER_DISTRIBUTABLE',
     )
     .map((row: { path: string }) => `/cores/${row.path}`),
 );
 
-function denyBlockedCore(pathname: string): NextResponse | null {
-  if (PROVISION_MODE !== 'PUBLIC_BROWSER') return null;
-  if (!pathname.startsWith('/cores/')) return null;
-  if (!pathname.endsWith('.data') && !pathname.endsWith('.wasm')) return null;
-  if (blockedCorePaths.has(pathname)) {
-    return new NextResponse('Core not cleared for public distribution', { status: 404 });
+function normalizeCorePath(pathname: string): string {
+  try {
+    return decodeURIComponent(pathname).replace(/\\/g, '/');
+  } catch {
+    return pathname.replace(/\\/g, '/');
   }
-  return null;
+}
+
+/**
+ * PUBLIC_BROWSER: allow only AUTHORIZED_BROWSER_DISTRIBUTABLE .data/.wasm under /cores/.
+ * Unknown, not-cleared, and unclassified binaries are denied (404).
+ * LOCAL_FULL: no middleware deny (authorized local/dev; sync still controls disk).
+ */
+function denyUnauthorizedCore(pathname: string): NextResponse | null {
+  if (PROVISION_MODE !== 'PUBLIC_BROWSER') return null;
+  const normalized = normalizeCorePath(pathname);
+  if (!normalized.startsWith('/cores/')) return null;
+  const lower = normalized.toLowerCase();
+  if (!lower.endsWith('.data') && !lower.endsWith('.wasm')) return null;
+  if (authorizedCorePaths.has(normalized)) return null;
+  return new NextResponse('Core not authorized for public browser distribution', {
+    status: 404,
+  });
 }
 
 function isJ2meHost(host: string) {
@@ -54,7 +75,7 @@ function j2mePathAllowed(pathname: string) {
     pathname.startsWith('/cores/js2me/') ||
     pathname === '/j2me-sw.js' ||
     pathname === '/j2me-install.html' ||
-    pathname.startsWith('/_next/static/') // not required for static public assets
+    pathname.startsWith('/_next/static/')
   );
 }
 
@@ -62,7 +83,7 @@ export function middleware(request: NextRequest) {
   const host = request.headers.get('host') || '';
   const { pathname } = request.nextUrl;
 
-  const blocked = denyBlockedCore(pathname);
+  const blocked = denyUnauthorizedCore(pathname);
   if (blocked) return blocked;
 
   if (isJ2meHost(host)) {

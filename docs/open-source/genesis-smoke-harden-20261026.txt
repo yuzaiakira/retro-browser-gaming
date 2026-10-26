@@ -1,0 +1,1 @@
+Unknown PLATFORM=genesis; expected snes|gb|gbc|gba|a2600|a5200|vb|n64|c64|spectrum|amiga|zx81|cpc|msx|nds|jaguar|pce|sg1000|wswan|a7800|lynx|ngp|ngpc

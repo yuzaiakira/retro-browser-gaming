@@ -1,11 +1,17 @@
-# Copy to compose.override.yaml (gitignored) when host :3000/:8000 are occupied.
+# Copy to compose.override.yaml (gitignored) for local developer preferences.
 # Browsers must use Host names launcher.localhost / j2me.localhost on the edge port.
+#
+# LOCAL_FULL must be opted into explicitly — compose.yaml defaults to PUBLIC_BROWSER.
+# Host env RBG_CORE_PROVISION_MODE=PUBLIC_BROWSER overrides this for fail-closed tests.
 services:
   api:
     ports: !override
       - "127.0.0.1:18000:8000"
   web:
     ports: !override []
+    environment:
+      RBG_CORE_PROVISION_MODE: ${RBG_CORE_PROVISION_MODE:-LOCAL_FULL}
+      NEXT_PUBLIC_RBG_CORE_PROVISION_MODE: ${RBG_CORE_PROVISION_MODE:-LOCAL_FULL}
   edge:
     ports: !override
       - "127.0.0.1:13000:80"
