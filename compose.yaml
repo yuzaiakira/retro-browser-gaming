@@ -64,12 +64,16 @@ services:
     environment:
       API_INTERNAL_URL: http://api:8000
       NODE_ENV: production
+      RBG_PRIVATE_ASSET_DIR: /private-runtime
       J2ME_RUNTIME_HOST: j2me.localhost
       LAUNCHER_HOST: launcher.localhost
       LAUNCHER_FRAME_ANCESTORS: ${LAUNCHER_FRAME_ANCESTORS:-http://launcher.localhost:13000 http://launcher.localhost:3000 https://launcher.localhost:13443 https://launcher.localhost:3443 http://localhost:13000 http://localhost:3000 https://localhost:13443}
       NEXT_PUBLIC_J2ME_DEDICATED_ORIGIN: ${NEXT_PUBLIC_J2ME_DEDICATED_ORIGIN:-true}
       NEXT_PUBLIC_J2ME_RUNTIME_ORIGIN: ${NEXT_PUBLIC_J2ME_RUNTIME_ORIGIN:-}
       NEXT_PUBLIC_LAUNCHER_ORIGIN: ${NEXT_PUBLIC_LAUNCHER_ORIGIN:-}
+    volumes:
+      # Authorized emulator .data/.wasm payloads (not tracked by Git). Read-only.
+      - ${RBG_PRIVATE_ASSET_DIR:-.private-runtime}:/private-runtime:ro
     depends_on:
       api: {condition: service_healthy}
     # Published only on the docker network; browsers enter via `edge`.
