@@ -21,7 +21,10 @@ async function openGameMenu(page) {
 
 async function quickSaveFromHud(page) {
   await page.getByRole('button', { name: 'Quick save', exact: true }).first().click();
-  await page.getByText(/saved successfully|Quick save saved/i).waitFor({ timeout: 15000 });
+  await page
+    .locator('.player-status')
+    .filter({ hasText: /Quick save stored|saved successfully|Quick save saved/i })
+    .waitFor({ timeout: 15000 });
 }
 
 async function installOrbit(page) {
