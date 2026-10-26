@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { sortContinuePlaying } from "./hub-sort";
+import {
+  hasSaveForInstall,
+  sortContinuePlaying,
+  sortReadyNeverPlayed,
+} from "./hub-sort";
 import type { Installation } from "@/lib/types";
 
 function install(
@@ -64,26 +68,44 @@ function install(
 }
 
 describe("sortContinuePlaying", () => {
-  it("orders by recent play timestamps before verifiedAt", () => {
+  it("only includes installs with genuine recent play timestamps", () => {
     const a = install("a", 100);
-    const b = install("b", 200);
+    const b = install("b", 999);
     const c = install("c", 300);
     const recent = new Map([
       ["a", 50],
       ["c", 90],
     ]);
-    expect(sortContinuePlaying([a, b, c], recent, 3).map((i) => i.id)).toEqual([
+    expect(sortContinuePlaying([a, b, c], recent, 6).map((i) => i.id)).toEqual([
       "c",
       "a",
-      "b",
     ]);
   });
 
-  it("excludes non-ready installs", () => {
+  it("excludes never-played ready installs from Continue Playing", () => {
     const ready = install("ok", 1);
-    const missing = install("bad", 2, "missing");
+    expect(sortContinuePlaying([ready], new Map()).map((i) => i.id)).toEqual([]);
+  });
+});
+
+describe("sortReadyNeverPlayed", () => {
+  it("lists ready installs without recent timestamps", () => {
+    const played = install("played", 1);
+    const fresh = install("fresh", 2);
+    const recent = new Map([["played", 10]]);
     expect(
-      sortContinuePlaying([ready, missing], new Map()).map((i) => i.id),
-    ).toEqual(["ok"]);
+      sortReadyNeverPlayed([played, fresh], recent).map((i) => i.id),
+    ).toEqual(["fresh"]);
+  });
+});
+
+describe("hasSaveForInstall", () => {
+  it("detects save-state keys for an installation", () => {
+    const keys = [
+      "abc:native-html:1:state:0",
+      "other:native-html:1:state:9",
+    ];
+    expect(hasSaveForInstall("abc", keys)).toBe(true);
+    expect(hasSaveForInstall("missing", keys)).toBe(false);
   });
 });

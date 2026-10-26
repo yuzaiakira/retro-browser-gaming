@@ -162,11 +162,13 @@ export default function Player({ id }: { id: string }) {
       routerRef.current = input;
       setRouter(input);
       setCaps(runtime.capabilities);
+      // Persist local play history before unlocking HUD so Continue Playing is accurate.
+      await setSetting("recent:" + id, Date.now());
+      if (disposed || disposedRef.current) return;
       setRunning(true);
       // New session: treat as dirty only when save-states exist (exit risk).
       setSessionDirty(runtime.capabilities.saveState);
       setMessage("Playing on this device");
-      await setSetting("recent:" + id, Date.now());
       if (runtime.capabilities.saveState) {
         interval = setInterval(() => {
           void (async () => {
