@@ -1,0 +1,17 @@
+test_default_is_not_verified (__main__.SourceOfferDeliveryTests.test_default_is_not_verified) ... ok
+test_env_url_alone_does_not_verify (__main__.SourceOfferDeliveryTests.test_env_url_alone_does_not_verify) ... ok
+test_http_url_rejected (__main__.SourceOfferDeliveryTests.test_http_url_rejected) ... ok
+test_mock_delivery_checked_not_public_verified (__main__.SourceOfferDeliveryTests.test_mock_delivery_checked_not_public_verified) ... ok
+test_mock_hash_tamper_fails (__main__.SourceOfferDeliveryTests.test_mock_hash_tamper_fails) ... ok
+test_mock_missing_file_outside_core_subset_fails (__main__.SourceOfferDeliveryTests.test_mock_missing_file_outside_core_subset_fails)
+Regression: verifier must check every SHA256SUMS entry, not a short allowlist. ... ok
+test_mock_missing_manifest_fails (__main__.SourceOfferDeliveryTests.test_mock_missing_manifest_fails) ... ok
+test_require_public_delivery_fails_without_url (__main__.SourceOfferDeliveryTests.test_require_public_delivery_fails_without_url) ... ok
+test_require_public_delivery_rejects_mock (__main__.SourceOfferDeliveryTests.test_require_public_delivery_rejects_mock) ... ok
+test_sha256sums_duplicate_rejected (__main__.SourceOfferDeliveryTests.test_sha256sums_duplicate_rejected) ... ok
+test_sha256sums_path_traversal_rejected (__main__.SourceOfferDeliveryTests.test_sha256sums_path_traversal_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 1.323s
+
+OK

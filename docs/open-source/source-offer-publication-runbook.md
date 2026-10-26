@@ -8,48 +8,38 @@
 | --- | --- |
 | `METADATA_VALIDATED` | Allowlist + matrix rows consistent; CS class not incomplete |
 | `SOURCE_ARCHIVE_VERIFIED` | Referenced patches/scripts/evidence paths exist in-tree |
-| `OFFER_DELIVERY_VERIFIED` | Only when `RBG_SOURCE_OFFER_PUBLIC_URL` is set after a real public publish |
+| `OFFER_ARCHIVE_INTEGRITY_OK` | Every `SHA256SUMS` entry fetched and hash-matched (technical) |
+| `OFFER_DELIVERY_VERIFIED` | Live HTTPS anonymous delivery + full archive integrity |
+| `MOCK_DELIVERY_CHECKED` | Local fixture only — **never** public delivery |
 | `NEEDS_LEGAL_REVIEW` | Counsel still required — **not** approval |
 
-`READY_FOR_LEGAL_REVIEW` / gate OK ≠ counsel approval. Missing public URL ⇒ record
-publication dependency (`OFFER_DELIVERY_VERIFIED=0`), do not claim public delivery.
+Archive integrity ≠ legal completeness of Corresponding Source.  
+`READY_FOR_LEGAL_REVIEW` / gate OK ≠ counsel approval.  
+A nonempty `RBG_SOURCE_OFFER_PUBLIC_URL` alone never verifies delivery.
 
 Blocked from browser distribution until CS resolved: `81_eo*`, `virtualjaguar_js*`.
 
-## Local assemble (verified)
+## Local assemble
 
 ```bash
 python3 scripts/assemble-corresponding-source-offer.py \
   --output /path/outside/repo/RetroBrowserGaming-Corresponding-Source-Offer-<date>
 python3 scripts/check-source-offer-gate.py
+# Optional mock integrity exercise (not public verification):
+RBG_SOURCE_OFFER_MOCK_DIR=/path/to/offer python3 scripts/check-source-offer-gate.py
 ```
 
-Offer must include: `LICENSES/`, EmulatorJS/jsdos/js2me JS (no private `.data`/`.wasm`),
-`scripts/patches/bluemsx/`, rebuild script, PH-05 notes, matrix + allowlist docs.
-
-## Version binding
-
-- Bind offer to `docs/core-package-lock.json` + allowlist SHA-256 rows.
-- When any AUTHORIZED binary hash changes: rebuild offer, re-run gate, bump offer label.
-
-## User-facing pointer (after public repo exists)
-
-1. README / diagnostics licensing panel already point at `docs/open-source/corresponding-source.md`.
-2. Company production should publish a durable URL, e.g.  
-   `https://<public-docs-or-releases>/corresponding-source/<git-sha>/`
-3. Export `RBG_SOURCE_OFFER_PUBLIC_URL` in deploy env only after that URL serves the offer.
-4. Place a short `SOURCE` note near emulator download/runtime docs.
-
-## Deploy gate
+## Production gate (GPL binaries served to users)
 
 ```bash
 RBG_CORE_PROVISION_MODE=PUBLIC_BROWSER python3 scripts/provision-private-cores.py --check
-python3 scripts/check-source-offer-gate.py
+RBG_SOURCE_OFFER_PUBLIC_URL=https://…/corresponding-source/<git-sha>/ \
+  python3 scripts/check-source-offer-gate.py --require-public-delivery
 ```
 
-Fail closed if an AUTHORIZED allowlist row lacks CS mapping.
+Source-only CI must **omit** `--require-public-delivery` / `RBG_SOURCE_OFFER_REQUIRE_PUBLIC`.
 
-## Legal
+## Counsel (separate from automation)
 
-Operational readiness for counsel review only — not a determination of GPL compliance
-sufficiency and not product/legal approval.
+Technical `OFFER_DELIVERY_VERIFIED` does not decide GPL offer adequacy, copyright ownership,
+or product approval. Counsel must still review `docs/open-source/legal-review-package.md`.
