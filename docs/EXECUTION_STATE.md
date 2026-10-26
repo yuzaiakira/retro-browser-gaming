@@ -3,7 +3,7 @@
 ## Verdict
 
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
-**Player UX (PH-UX):** immersive PlayerShell, capability-gated Game Menu, safe confirms, Quick Save/Load (slot 0), overlay touch (`layout:v2`), Continue Playing / Ready Offline CTAs — verified 2026-10-26.  
+**Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability (input suspension, change-based pad dispatch, dirty/autosave/reset consistency, dialog a11y, touch guards) — verified 2026-10-26.  
 **Open-source prep:** source-offer gate verifies **every** `SHA256SUMS` entry; `--require-public-delivery` for prod GPL serving; LOCAL_FULL needs `RBG_ALLOW_LOCAL_FULL=1`; MIT LICENSE proposed (not enacted). Sanitized candidate `77110c5` ← private `501ed79` (re-filter after newer tip before push). **STOP** before GitHub publish.
 
 ## Deferred physical / external (do not rediscover)
@@ -33,6 +33,18 @@
 | MSX smoke | `MSX_GAMEPLAY_PASS` |
 | Vitest / typecheck | 23 passed / `tsc --noEmit` OK |
 
+## Gameplay UX reliability pass (2026-10-26 evening)
+
+| Check | Result |
+|---|---|
+| Input suspension + change-based dispatch (unit) | 6 InputRouter tests pass |
+| Player UX reliability E2E | `PLAYER_UX_PASS` → `docs/test-evidence/PH-UX/player-ux-reliability-20261026.txt` (+ `.json`) |
+| Perf evidence | held key presses=1 releases=1; menu-open pad events=0 |
+| Genesis quick save/load/reload + pause→reset | PASS in reliability suite |
+| Acceptance gates | `ACCEPTANCE_GATES_PASS` → `docs/test-evidence/PH-UX/acceptance-gates-reliability-20261026.txt` |
+| Genesis / MSX smokes | `GENESIS_GAMEPLAY_PASS` / `MSX_GAMEPLAY_PASS` |
+| Vitest / typecheck | 28 passed / `tsc --noEmit` OK |
+
 ## Release-candidate pass (2026-10-26 evening)
 
 | Check | Result |
@@ -54,4 +66,4 @@
 5. Product: Alpha game set approvals
 6. Resolve CS for `81_eo` / `virtualjaguar_js`
 7. QA: physical gamepad + iOS; Ops: staging HTTPS
-8. Optional UX polish: deeper orientation guidance, InputRouter redundant-dispatch skip, further library density pass
+8. Optional UX polish: deeper orientation guidance, further library density pass

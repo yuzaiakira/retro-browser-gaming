@@ -38,8 +38,8 @@
   "sav003": {
     "ok": true,
     "rejected": true,
-    "priorSha": "d50a2d6a9bf1f6288225f0d0562ae88b01e52a5da84adf7f98309aaf3e505c77",
-    "stillSha": "d50a2d6a9bf1f6288225f0d0562ae88b01e52a5da84adf7f98309aaf3e505c77"
+    "priorSha": "22eda07c77c59d469e8287172de8f76c02365519659a69831f77bb3210f1f887",
+    "stillSha": "22eda07c77c59d469e8287172de8f76c02365519659a69831f77bb3210f1f887"
   },
   "emu005": true,
   "emu006": true
