@@ -1,0 +1,2 @@
+PRIVATE_CORE_SYNC_FAILED: private cores directory missing: /tmp/rbg-missing-private-test/cores
+exit:1

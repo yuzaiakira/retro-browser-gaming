@@ -153,10 +153,14 @@ def main() -> int:
     parser.add_argument(
         "--mode",
         choices=("LOCAL_FULL", "PUBLIC_BROWSER"),
-        default=os.environ.get("RBG_CORE_PROVISION_MODE", "LOCAL_FULL"),
+        default=None,
+        help="Override RBG_CORE_PROVISION_MODE (default PUBLIC_BROWSER when unset)",
     )
     args = parser.parse_args()
-    return provision(link=args.link, check_only=args.check, mode=args.mode)
+    mode = args.mode or os.environ.get("RBG_CORE_PROVISION_MODE", "PUBLIC_BROWSER").strip()
+    if mode not in ("LOCAL_FULL", "PUBLIC_BROWSER"):
+        raise SystemExit(f"invalid RBG_CORE_PROVISION_MODE={mode!r}")
+    return provision(link=args.link, check_only=args.check, mode=mode)
 
 
 if __name__ == "__main__":
