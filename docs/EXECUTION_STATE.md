@@ -4,7 +4,8 @@
 
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
 **Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability — verified 2026-10-26.  
-**Hub UX (PH-UX-HUB):** Premium Gaming Hub — Continue Playing from local history, catalog URL sync, library maintenance separation, download grouping, settings everyday/advanced, design tokens — verified 2026-10-26.  
+**Hub UX (PH-UX-HUB):** Premium Gaming Hub — verified 2026-10-26.  
+**Hub UX Acceptance (Sprint 3.1):** offline persistent-profile journey, catalog Back/Forward history, Continue Playing accuracy, stable hub shots — verified 2026-10-26.  
 **Open-source prep:** source-offer gate verifies **every** `SHA256SUMS` entry; `--require-public-delivery` for prod GPL serving; LOCAL_FULL needs `RBG_ALLOW_LOCAL_FULL=1`; MIT LICENSE proposed (not enacted). Sanitized candidate `77110c5` ← private `501ed79` (re-filter after newer tip before push). **STOP** before GitHub publish.
 
 ## Deferred physical / external (do not rediscover)
@@ -67,6 +68,18 @@
 | Genesis smoke | `GENESIS_GAMEPLAY_PASS` |
 | Vitest / typecheck | 30 passed / `tsc --noEmit` OK |
 
+## Sprint 3.1 Hub UX acceptance (2026-10-26 late)
+
+| Check | Result |
+|---|---|
+| Hub UX (history Back/Forward, Continue Playing, slow/error catalog, responsive) | `HUB_UX_PASS` → `docs/test-evidence/PH-UX-HUB/hub-ux-sprint31-20261026.txt` |
+| Persistent offline journey (Orbit + Genesis) | `HUB_OFFLINE_JOURNEY_PASS` → `hub-offline-journey-20261026.*` |
+| Offline PWA (OFF-001…005, PlayerShell Quick save) | `OFFLINE_PWA_PASS` |
+| Player UX reliability regression | `PLAYER_UX_PASS` |
+| Download faults regression | all `DOWNLOAD_*_PASS` incl. 100MiB restart |
+| Vitest / typecheck | 36 passed / `tsc --noEmit` OK |
+| Bugs fixed | (1) first filter used `replaceState` so Back failed; (2) Menu visible≠enabled race before `recent:*`; (3) Continue Playing required genuine `recent:*`; (4) mid-load responsive screenshots |
+
 ## Remaining blockers / next
 
 1. Owner: confirm copyright holder + authority; enact MIT root LICENSE only then
@@ -76,4 +89,4 @@
 5. Product: Alpha game set approvals
 6. Resolve CS for `81_eo` / `virtualjaguar_js`
 7. QA: physical gamepad + iOS; Ops: staging HTTPS
-8. Optional: deeper hub offline-journey automation (Journey C) on a dedicated offline profile
+8. Playwright offline ≠ physical-device offline certification (document only)
