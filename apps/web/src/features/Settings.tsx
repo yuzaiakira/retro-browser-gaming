@@ -4,6 +4,7 @@ import { db, setting, setSetting } from "@/lib/db";
 import { commands, defaultKeys } from "./input";
 import { benchmark, inspectDevice, type Device } from "./compatibility";
 import { candidates } from "@/emulators/registry";
+
 export default function Settings({
   diagnostics = false,
 }: {
@@ -43,6 +44,12 @@ export default function Settings({
     <section>
       <span className="eyebrow">MAKE IT YOURS</span>
       <h1>{diagnostics ? "Device diagnostics" : "Settings & controls"}</h1>
+      {!diagnostics && (
+        <p className="lead">
+          Everyday controls for play and storage. Technical diagnostics live
+          below and on the diagnostics page.
+        </p>
+      )}
       {diagnostics && (
         <>
           <div className="panel" id="browser-support">
@@ -136,24 +143,11 @@ export default function Settings({
           </div>
         </>
       )}
-      <div className="settings-grid">
-        <div className="panel">
-          <h2>On-device storage</h2>
-          <p>
-            {device?.quota
-              ? `${((device.usage ?? 0) / 1048576).toFixed(1)} MiB used of ${(device.quota / 1073741824).toFixed(1)} GiB estimated quota`
-              : "Storage quota unavailable."}
-          </p>
-          <button onClick={persist}>Request persistent storage</button>
-          <p role="status">{message}</p>
-          <p>
-            Browser cleanup can remove local data. Export important saves.
-            Downloads resume when you return; they do not continue with the
-            browser fully closed.
-          </p>
-        </div>
+
+      <div className="settings-everyday">
         <div className="panel">
           <h2>Keyboard mapping</h2>
+          <p>Used while playing. Does not change touch layouts.</p>
           <label>
             Action
             <select
@@ -176,7 +170,7 @@ export default function Settings({
                 e.preventDefault();
                 const next = { ...keys, [e.code]: command };
                 setKeys(next);
-                setSetting("keymap", next);
+                void setSetting("keymap", next);
               }}
             />
           </label>
@@ -192,7 +186,7 @@ export default function Settings({
                     const next = { ...keys };
                     delete next[key];
                     setKeys(next);
-                    setSetting("keymap", next);
+                    void setSetting("keymap", next);
                   }}
                 >
                   ×
@@ -201,63 +195,35 @@ export default function Settings({
             ))}
           </div>
           <button
+            type="button"
             className="secondary"
             onClick={() => {
               setKeys(defaultKeys);
-              setSetting("keymap", defaultKeys);
+              void setSetting("keymap", defaultKeys);
             }}
           >
             Restore keyboard defaults
           </button>
         </div>
         <div className="panel">
-          <h2>Device capabilities</h2>
-          {device && (
-            <dl>
-              {Object.entries(device)
-                .filter(
-                  ([key]) => !["userAgent", "quota", "usage"].includes(key),
-                )
-                .map(([key, value]) => (
-                  <div key={key}>
-                    <dt>{key}</dt>
-                    <dd>{value ? "Available" : "Unavailable"}</dd>
-                  </div>
-                ))}
-            </dl>
-          )}
-          {!device?.opfs && (
-            <p role="status">
-              OPFS is unavailable in this browser. Catalog browsing may work,
-              but download/install stays disabled until Origin Private File
-              System is present (Chromium/Firefox desktop and supported mobile
-              browsers). Playwright WebKit often lacks{" "}
-              <code>navigator.storage</code>; that is not proof of real Safari.
-            </p>
-          )}
-          <p className="small">{device?.userAgent}</p>
-        </div>
-        <div className="panel">
-          <h2>Optional performance check</h2>
-          <p>{benchmarkResult}</p>
-          <button
-            onClick={async () => {
-              try {
-                const result = await benchmark();
-                await setSetting("benchmark", result);
-                setBenchmarkResult(
-                  `${result.iterations.toLocaleString()} integer operations in ${result.milliseconds.toFixed(0)} ms. Game performance still requires an actual play test.`,
-                );
-              } catch (e) {
-                setBenchmarkResult(String(e));
-              }
-            }}
-          >
-            Run 250 ms worker benchmark
+          <h2>On-device storage</h2>
+          <p>
+            {device?.quota
+              ? `${((device.usage ?? 0) / 1048576).toFixed(1)} MiB used of ${(device.quota / 1073741824).toFixed(1)} GiB estimated quota`
+              : "Storage quota unavailable."}
+          </p>
+          <button type="button" onClick={() => void persist()}>
+            Request persistent storage
           </button>
-          <p>Skipping this check does not block play.</p>
+          <p role="status">{message}</p>
+          <p>
+            Browser cleanup can remove local data. Export important saves.
+            Downloads resume when you return; they do not continue with the
+            browser fully closed.
+          </p>
         </div>
       </div>
+
       <div className="panel">
         <h2>Save management</h2>
         <p>
@@ -265,6 +231,7 @@ export default function Settings({
           all local save states and backups.
         </p>
         <button
+          type="button"
           className="danger"
           onClick={async () => {
             if (confirm("Permanently delete all save states and backups?")) {
@@ -276,20 +243,75 @@ export default function Settings({
           Delete all saves…
         </button>
       </div>
-      <details className="panel">
-        <summary>Expansion & experimental systems</summary>
-        <p>
-          These are research candidates. They cannot be launched as supported
-          systems.
-        </p>
-        <div className="candidate-grid">
-          {candidates.map((c) => (
-            <span key={c.id}>
-              {c.name}
-              <small>RESEARCH</small>
-            </span>
-          ))}
+
+      <details className="panel settings-advanced">
+        <summary>Advanced · device capabilities & diagnostics</summary>
+        <div className="settings-grid" style={{ marginTop: 16 }}>
+          <div className="panel">
+            <h3>Device capabilities</h3>
+            {device && (
+              <dl>
+                {Object.entries(device)
+                  .filter(
+                    ([key]) => !["userAgent", "quota", "usage"].includes(key),
+                  )
+                  .map(([key, value]) => (
+                    <div key={key}>
+                      <dt>{key}</dt>
+                      <dd>{value ? "Available" : "Unavailable"}</dd>
+                    </div>
+                  ))}
+              </dl>
+            )}
+            {!device?.opfs && (
+              <p role="status">
+                OPFS is unavailable in this browser. Catalog browsing may work,
+                but download/install stays disabled until Origin Private File
+                System is present.
+              </p>
+            )}
+            <p className="small">{device?.userAgent}</p>
+            <p>
+              <a href="/diagnostics">Open full diagnostics →</a>
+            </p>
+          </div>
+          <div className="panel">
+            <h3>Optional performance check</h3>
+            <p>{benchmarkResult}</p>
+            <button
+              type="button"
+              onClick={async () => {
+                try {
+                  const result = await benchmark();
+                  await setSetting("benchmark", result);
+                  setBenchmarkResult(
+                    `${result.iterations.toLocaleString()} integer operations in ${result.milliseconds.toFixed(0)} ms. Game performance still requires an actual play test.`,
+                  );
+                } catch (e) {
+                  setBenchmarkResult(String(e));
+                }
+              }}
+            >
+              Run 250 ms worker benchmark
+            </button>
+            <p>Skipping this check does not block play.</p>
+          </div>
         </div>
+        <details className="panel">
+          <summary>Expansion & experimental systems</summary>
+          <p>
+            These are research candidates. They cannot be launched as supported
+            systems.
+          </p>
+          <div className="candidate-grid">
+            {candidates.map((c) => (
+              <span key={c.id}>
+                {c.name}
+                <small>RESEARCH</small>
+              </span>
+            ))}
+          </div>
+        </details>
       </details>
     </section>
   );
