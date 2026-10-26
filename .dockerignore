@@ -9,5 +9,7 @@ node_modules
 **/.next
 # Never bake private emulator binaries or the private asset root into images.
 .private-runtime
+RetroBrowserGaming-Asset-Backup
+RetroBrowserGaming-Asset-Backup-*
 **/apps/web/public/cores/**/*.data
 **/apps/web/public/cores/**/*.wasm

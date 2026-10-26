@@ -810,6 +810,14 @@ export default function App({ route }: { route: string[] }) {
         <footer>
           <span>◀◀ REWIND</span>
           <p>Built for the games you come back to.</p>
+          <p className="small">
+            Public Alpha — supported browsers and offline install tips live in
+            diagnostics. Source clones do not include private WASM core
+            binaries.
+          </p>
+          <a href="/diagnostics#alpha-feedback">
+            Alpha limits & feedback ↗
+          </a>
           <a href="/diagnostics">Compatibility & diagnostics ↗</a>
         </footer>
       </div>
