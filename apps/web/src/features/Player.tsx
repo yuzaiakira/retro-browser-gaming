@@ -10,6 +10,7 @@ import type { Installation } from "@/lib/types";
 import { defaultKeys, InputRouter } from "./input";
 import TouchControls from "./TouchControls";
 import { exportSave, importSave, readSave, storeSave } from "./saves";
+import { isMissingRuntimeError, missingRuntimeMessage } from "./runtime-errors";
 export default function Player({ id }: { id: string }) {
   const [installation, setInstallation] = useState<Installation>();
   const [message, setMessage] = useState("Checking local game integrity…");
@@ -126,15 +127,7 @@ export default function Player({ id }: { id: string }) {
     })().catch((error) => {
       if (disposed) return;
       const raw = String(error instanceof Error ? error.message : error);
-      const missingRuntime =
-        /Failed to fetch|404|Load failed|net::ERR|wasm|\.data/i.test(raw) ||
-        /beacuse it's likly that the minified files are missing/i.test(raw);
-      setMessage(
-        missingRuntime
-          ? "Emulator runtime files are missing, blocked for public distribution, or unreachable. Source-only clones need an authorized private-asset import; public deployments only sync allowlisted cores (81_eo / virtualjaguar_js are not cleared). See docs/open-source/private-asset-backup.md and browser-distributable-allowlist.json. Original error: " +
-            raw
-          : raw,
-      );
+      setMessage(isMissingRuntimeError(raw) ? missingRuntimeMessage(raw) : raw);
     });
     return () => {
       disposed = true;

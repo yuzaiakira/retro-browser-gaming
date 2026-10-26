@@ -10,6 +10,8 @@ services:
   web:
     ports: !override []
     environment:
+      # Break-glass: required whenever mode is LOCAL_FULL (entrypoint enforces).
+      RBG_ALLOW_LOCAL_FULL: "1"
       RBG_CORE_PROVISION_MODE: ${RBG_CORE_PROVISION_MODE:-LOCAL_FULL}
       NEXT_PUBLIC_RBG_CORE_PROVISION_MODE: ${RBG_CORE_PROVISION_MODE:-LOCAL_FULL}
   edge:

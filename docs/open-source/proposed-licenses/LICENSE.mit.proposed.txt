@@ -1,7 +1,8 @@
 MIT License
 
-Copyright (c) 2026 Akira Yuzai / Retro Browser Gaming contributors
-# OWNER: replace the copyright line with the confirmed legal copyright holder before enacting.
+Copyright (c) 2026 <COPYRIGHT_HOLDER_LEGAL_NAME>
+# OWNER/COUNSEL: replace <COPYRIGHT_HOLDER_LEGAL_NAME> with the confirmed legal
+# copyright holder before enacting. Do NOT infer ownership from Git author names.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ---------------------------------------------------------------------------
-IMPORTANT — SCOPE
+IMPORTANT — SCOPE (first-party only)
 
 This license applies only to first-party Retro Browser Gaming application
 code and first-party assets clearly marked as such.

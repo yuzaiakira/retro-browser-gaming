@@ -1,0 +1,1 @@
+FATAL: LOCAL_FULL refused without RBG_ALLOW_LOCAL_FULL=1 (use compose.override for loopback)

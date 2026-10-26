@@ -8,3 +8,5 @@
 | `scripts/provision-private-cores.py` | PUBLIC_BROWSER when unset | `--mode LOCAL_FULL` for local |
 
 Invalid modes fail closed. Missing private asset directory fails sync unless `RBG_SYNC_ALLOW_EMPTY_PRIVATE=1` (source-only shells).
+
+`LOCAL_FULL` additionally requires `RBG_ALLOW_LOCAL_FULL=1` (set only in local override / explicit break-glass). Production compose must not set that flag.
