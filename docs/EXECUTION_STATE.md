@@ -3,7 +3,7 @@
 ## Verdict
 
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
-**Open-source prep:** **PARTIAL** — P1 backup **reverified PASS**; Option B sanitized candidate prepared locally (`9b8c3c1` from `df9cb63`, refresh after new commits); legal package `READY_FOR_LEGAL_REVIEW`; **STOP** before any public push / visibility change.
+**Open-source prep:** **PARTIAL** — P1 backup **reverified PASS**; Option B candidate tip `914f826` ← private `01d6449`; legal package `READY_FOR_LEGAL_REVIEW`; **STOP** before any public push / visibility change.
 
 ## Deferred physical / external (do not rediscover)
 
