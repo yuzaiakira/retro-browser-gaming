@@ -3,7 +3,7 @@
 ## Verdict
 
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
-**Open-source prep:** source-offer **delivery** no longer trusts env URL alone; LOCAL_FULL requires `RBG_ALLOW_LOCAL_FULL=1`; allowlist policy copies consistent; MIT LICENSE proposed (not enacted). Sanitized candidate `77110c5` ← private `501ed79`. **STOP** before GitHub publish.
+**Open-source prep:** source-offer gate verifies **every** `SHA256SUMS` entry; `--require-public-delivery` for prod GPL serving; LOCAL_FULL needs `RBG_ALLOW_LOCAL_FULL=1`; MIT LICENSE proposed (not enacted). Sanitized candidate `77110c5` ← private `501ed79` (re-filter after newer tip before push). **STOP** before GitHub publish.
 
 ## Deferred physical / external (do not rediscover)
 
