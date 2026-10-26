@@ -2,7 +2,8 @@
 
 ## Verdict
 
-**RELEASE CANDIDATE / NOT COMPLETE** — IN-002-P/D, IOS-001, and production staging HTTPS remain **BLOCKED_EXTERNAL** (re-probed; still no hardware/staging — `PH-11/external-gates-availability-20261022.txt`). Product approval: **42 pending / 0 approved**; shortlist prepared at `docs/product-release-shortlist-20261022.md` (no approvals applied).
+**RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
+**Open-source prep:** **PARTIAL** — emulator `.data`/`.wasm` moved to private asset root; tracking removed; Compose provision verified; history rewrite dry-run PASSED in disposable clone — **awaiting owner approval** before active history rewrite / remote force-push (`docs/open-source/`).
 
 ## Deferred physical / external (do not rediscover)
 
@@ -63,10 +64,27 @@ After web CSP / FrameAdapter / `public/runtime` changes:
 ./scripts/compose.sh up -d --build web
 ```
 
+## Open-source private assets (2026-10-26)
+
+| Item | Status |
+|---|---|
+| Private root | `.private-runtime/cores/` (gitignored); env `RBG_PRIVATE_ASSET_DIR` |
+| Binaries untracked | 59 `.data`/`.wasm` |
+| Compose provision | `PRIVATE_CORE_SYNC_OK`; Genesis + Orbit smoke PASS |
+| History dry-run | PASS in disposable clone — **STOP** before rewriting owner repo / origin |
+| Backup | `/home/akira/Projects/git-contribute/retro-browser-gaming-os-backup-20261026/` |
+
+```bash
+python3 scripts/verify-core-lock.py --mode SOURCE_ONLY
+python3 scripts/verify-core-lock.py --mode LOCAL_FULL
+python3 scripts/check-no-private-cores-tracked.py
+python3 scripts/provision-private-cores.py --check
+```
+
 ## Remaining blockers / next
 
-1. QA: physical gamepad + iOS per `docs/physical-device-acceptance.md`
-2. Ops: staging HTTPS per `docs/production-staging-verification.md`
-3. Product owner: approve/reject from `docs/product-release-shortlist-20261022.md` via Admin (`catalog.approve_game_product`)
-4. Do **not** tag COMPLETE until mandatory gates clear or PDR explicitly changes
-5. Do **not** reopen emulator expansion for P0
+1. **Owner:** approve or reject applying history rewrite to active repo + remote (`docs/open-source/history-migration-runbook.md`)
+2. QA: physical gamepad + iOS
+3. Ops: staging HTTPS
+4. Product owner: shortlist approvals
+5. Do **not** tag COMPLETE; do **not** reopen emulator expansion for P0

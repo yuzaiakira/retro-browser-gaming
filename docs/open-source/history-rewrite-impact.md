@@ -41,3 +41,24 @@ Record old→new tip SHA mapping in this file after the dry-run executes.
 ## STOP
 
 Do **not** replace the owner's working repository history or update `origin` until the owner authorizes Phase J.
+
+## Dry-run executed (2026-10-26)
+
+Isolated disposable clone only. Owner working repository **not** rewritten. **No force-push.**
+
+| Field | Value |
+| --- | --- |
+| Tool | `git-filter-repo` (venv) `--invert-paths --paths-from-file history-removal-manifest.txt` |
+| Commits parsed | 79 |
+| Tip before (owner HEAD) | `6b0608c42332f67dc1442fe99f7f32a19f24600b` |
+| Tip after (dry-run only) | `36b187a3f1b17cefa023a29dcdc44cb2f2a6a5ef` |
+| Binary paths remaining in history | **none** (`HISTORY_PATHS_CLEAN`) |
+| Loader present at tip | yes (`ejs-4.2.3/loader.js`) |
+| SOURCE_ONLY lock | PASS |
+| Tracked-binary CI check | PASS |
+
+Backup: `/home/akira/Projects/git-contribute/retro-browser-gaming-os-backup-20261026/`  
+(SHA map also at `filter-sha-map.txt` in that backup directory.)
+
+**Owner decision required** before applying this rewrite to the active repo or `origin`.
+

@@ -1,0 +1,6 @@
+web-1  | PRIVATE_CORE_SYNC_OK root=/private-runtime
+web-1  | ▲ Next.js 16.4.2
+web-1  | - Local:         http://localhost:3000
+web-1  | - Network:       http://0.0.0.0:3000
+web-1  | ✓ Ready in 0ms
+web-1  | ✓ Running next.config took 0.7ms
