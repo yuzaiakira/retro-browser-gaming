@@ -5,12 +5,15 @@
 
 | Role | SHA |
 | --- | --- |
-| Private HEAD | `5b9359fbc8b024624c64579260bcf608b0f27f46` |
-| Candidate HEAD | `698c3afc28b6b2acd2cb360d015a923d0c662a04` |
-| Map | `5b9359f…` → `698c3af…` |
+| Private HEAD (at filter) | see `ORIGINAL_HEAD.txt` in candidate dir |
+| Candidate HEAD | see `CANDIDATE_HEAD.txt` in candidate dir |
 
-Path: `/home/akira/Projects/git-contribute/retro-browser-gaming-public-candidate-20261026-harden/tree/`
+Authoritative path: `/home/akira/Projects/git-contribute/retro-browser-gaming-public-candidate-20261026-harden/`
 
-Machine summary: `public-candidate-summary-20261026.json`
+Last verified mapping (refresh if private tip advances):
 
-Includes fail-closed PUBLIC_BROWSER defaults, sync purge, middleware allowlist-only, source-offer verification levels. History clean of 59 private binary paths. Re-filter again after any root LICENSE enactment before push.
+| Private | Candidate |
+| --- | --- |
+| `53567d241e5fdfb786e3187e740183a918b40c28` | `6d46176121ce7ef4118bcf1922ba6258d209131f` |
+
+Includes fail-closed PUBLIC_BROWSER defaults, sync purge, middleware allowlist-only, source-offer verification levels. History clean of 59 private binary paths. Re-filter again after any root LICENSE enactment or newer private tip before push.

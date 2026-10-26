@@ -3,7 +3,7 @@
 ## Verdict
 
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
-**Open-source prep:** **PUBLIC_BROWSER hardened** — Compose/image default `PUBLIC_BROWSER`; LOCAL_FULL opt-in only; fail-closed sync + middleware allowlist-only; CS gate levels separated; **STOP** before GitHub publish / root LICENSE / counsel auto-approval.
+**Open-source prep:** **PUBLIC_BROWSER hardened** — Compose/image default `PUBLIC_BROWSER`; LOCAL_FULL opt-in only; fail-closed sync + middleware allowlist-only; CS gate levels separated. Sanitized candidate `6d46176` (private `53567d2`); **STOP** before GitHub publish / root LICENSE / counsel auto-approval.
 
 ## Deferred physical / external (do not rediscover)
 

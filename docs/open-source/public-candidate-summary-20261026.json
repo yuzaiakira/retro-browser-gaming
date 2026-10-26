@@ -1,17 +1,15 @@
 {
   "schema": "rbg-public-candidate-summary-v1",
-  "created_utc": "2026-10-26T16:00:00Z",
+  "created_utc": "2026-10-26T16:10:00Z",
   "strategy": "OPTION_B_ISOLATED_SANITIZED_CLONE",
   "publication_status": "STOP_BEFORE_GITHUB",
   "status_tag": "PUBLIC_REPOSITORY_READY_FOR_OWNER_APPROVAL",
-  "original_private_head": "5b9359fbc8b024624c64579260bcf608b0f27f46",
-  "candidate_rewritten_head": "698c3afc28b6b2acd2cb360d015a923d0c662a04",
+  "original_private_head": "53567d241e5fdfb786e3187e740183a918b40c28",
+  "candidate_rewritten_head": "6d46176121ce7ef4118bcf1922ba6258d209131f",
   "candidate_path": "/home/akira/Projects/git-contribute/retro-browser-gaming-public-candidate-20261026-harden/tree",
   "paths_removed_count": 59,
-  "commits_parsed": 91,
-  "refs_in_candidate": [
-    "refs/heads/main"
-  ],
+  "commits_parsed": 92,
+  "refs_in_candidate": ["refs/heads/main"],
   "history_core_binary_paths_remaining": 0,
   "tip_tracked_path_count": 1291,
   "tip_tree_matches_private": true,
@@ -43,13 +41,13 @@
     "private_core_tracked_check": "PASS",
     "source_offer_gate": "PASS",
     "sync_fail_closed_unit": "PASS",
-    "browser_allowlist_unit": "PASS",
+    "next_build_candidate": "PASS",
     "anonymous_http_public_browser": "PASS_genesis_bluemsx_200_blocked_unknown_404",
     "local_full_to_public_purge": "PASS_removed_public_5",
     "django_vitest_typecheck": "PASS",
-    "genesis_msx_acceptance_gates": "PASS",
-    "next_build_candidate": "PASS"
+    "genesis_msx_acceptance_gates": "PASS"
   },
   "owner_repo_unchanged_history": true,
-  "remote_actions": "none"
+  "remote_actions": "none",
+  "note": "If private tip advances after this summary, re-filter before push; authoritative SHAs are ORIGINAL_HEAD.txt / CANDIDATE_HEAD.txt in the candidate directory."
 }

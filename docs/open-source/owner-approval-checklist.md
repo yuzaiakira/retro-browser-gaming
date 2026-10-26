@@ -17,7 +17,7 @@
 
 ## 3. Sanitized candidate SHA
 
-- [ ] Approve candidate tip **`698c3afc28b6b2acd2cb360d015a923d0c662a04`** (from private `5b9359f…`) **or** re-filter after root LICENSE / newer tip
+- [ ] Approve candidate tip **`6d46176121ce7ef4118bcf1922ba6258d209131f`** (from private `53567d2…`) **or** re-filter after root LICENSE / newer tip (confirm `CANDIDATE_HEAD.txt`)
 - [ ] Confirm `PUBLIC_BROWSER` allowlist (55 authorized / 4 NOT_CLEARED) is accepted
 - [ ] Confirm candidate was built from the intended private tip before push
 
