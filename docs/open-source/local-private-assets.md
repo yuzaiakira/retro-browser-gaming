@@ -29,6 +29,21 @@ python3 scripts/provision-private-cores.py          # copy
 python3 scripts/provision-private-cores.py --link   # symlink
 ```
 
+## Offline backup / restore (portable directory)
+
+Use `scripts/private-asset-backup.py` to export the private store to a directory you can copy to another disk, then import into a fresh clone. See `docs/open-source/private-asset-backup.md`.
+
+```bash
+python3 scripts/private-asset-backup.py export \
+  --output /path/to/RetroBrowserGaming-Asset-Backup
+
+python3 scripts/private-asset-backup.py import \
+  --backup /path/to/RetroBrowserGaming-Asset-Backup
+
+python3 scripts/provision-private-cores.py
+python3 scripts/verify-core-lock.py --mode LOCAL_FULL
+```
+
 ## Source-only clone (no private binaries)
 
 ```bash

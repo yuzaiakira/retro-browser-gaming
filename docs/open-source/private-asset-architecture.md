@@ -20,10 +20,13 @@ retro-browser-gaming/
 ├── docs/open-source/private-core-binaries.manifest.json  # Tracked inventory
 └── scripts/
     ├── provision-private-cores.py
+    ├── private-asset-backup.py      # offline export / verify / import
     ├── verify-core-lock.py          # SOURCE_ONLY | LOCAL_FULL | PRODUCTION_FULL
     ├── check-no-private-cores-tracked.py
     └── web-entrypoint.sh            # Container sync then Next
 ```
+
+Portable offline backup format and restore steps: `docs/open-source/private-asset-backup.md`.
 
 Environment:
 

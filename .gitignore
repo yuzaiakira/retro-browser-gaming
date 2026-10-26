@@ -24,6 +24,10 @@ docs/test-evidence/PH-06/.sec-tmp/
 # Canonical local default; override with RBG_PRIVATE_ASSET_DIR.
 .private-runtime/
 
+# Portable private-asset backups must never enter Git (keep outside the repo).
+RetroBrowserGaming-Asset-Backup/
+RetroBrowserGaming-Asset-Backup-*/
+
 # Working-tree copies of private core binaries (provisioned; not for public Git).
 apps/web/public/cores/**/*.data
 apps/web/public/cores/**/*.wasm
