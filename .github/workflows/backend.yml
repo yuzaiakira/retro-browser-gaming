@@ -40,7 +40,10 @@ jobs:
         working-directory: apps/web
       - run: npm test && npm run lint && npm run typecheck && npm run build
         working-directory: apps/web
-      - run: python3 scripts/verify-core-lock.py
+      # Public CI is SOURCE_ONLY: private .data/.wasm cores are not in Git.
+      - run: python3 scripts/verify-core-lock.py --mode SOURCE_ONLY
+      - run: python3 scripts/check-no-private-cores-tracked.py
+      - run: python3 scripts/test_private_asset_backup.py
   browser-html5:
     runs-on: ubuntu-24.04
     steps:
@@ -52,7 +55,11 @@ jobs:
       - run: python -m venv .venv && .venv/bin/pip install --require-hashes -r apps/api/requirements-dev.lock
       - run: npm ci && npm run build && npx playwright install --with-deps chromium
         working-directory: apps/web
+      # HTML5 Orbit path does not need private WASM cores.
       - run: ./scripts/browser-smoke.sh
-      - run: GENESIS_FIXTURE=mit-genesis-pong.bin node tests/core-smoke.cjs
-        working-directory: apps/web
-# This workflow is supplied but has not been run remotely. It is not a complete PDR release gate.
+      - run: python3 scripts/verify-core-lock.py --mode SOURCE_ONLY
+# WASM core smokes (Genesis/PS1/PSP/…) require authorized private assets locally:
+#   python3 scripts/private-asset-backup.py import --backup <dir>
+#   python3 scripts/provision-private-cores.py
+#   python3 scripts/verify-core-lock.py --mode LOCAL_FULL
+# This workflow is supplied for public source CI. It is not a complete PDR release gate.

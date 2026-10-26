@@ -1,7 +1,9 @@
 # Asset and license audit — open-source preparation
 
-**Date:** 2026-10-26  
-**HEAD at audit start:** `758fb1be971331aabd0b0381aeebde54b7c67831`  
+**Date:** 2026-10-26 (rechecked after private-asset backup CLI)  
+**HEAD at last recheck:** see `git rev-parse HEAD` on the machine performing publication  
+**Prior audit start HEAD:** `758fb1be971331aabd0b0381aeebde54b7c67831`  
+**Legal tag:** `READY_FOR_LEGAL_REVIEW` (not a guarantee of compliance)  
 **Scope:** Git-tracked trees, core lock, fixtures, licenses. No secrets disclosed.
 
 ## Summary counts
@@ -72,4 +74,17 @@ Independently rebuilt experimental cores (`81_eo`, `virtualjaguar_js`, etc.) rem
 
 ## History note
 
-The 59 binary paths previously existed in Git history. Removing them from **current** tracking does not erase history. See `history-removal-manifest.txt` and the isolated rewrite dry-run report.
+The 59 binary paths previously existed in Git history. Removing them from **current** tracking does not erase history. Tip tree is clean of those paths; reachable historical blobs remain until Option A/B publication (`github-publication-plan.md`). See `history-removal-manifest.txt` and the isolated rewrite dry-run report.
+
+## Recheck notes (2026-10-26)
+
+| Check | Result |
+| --- | --- |
+| Tracked `.data`/`.wasm` under `public/cores` | **0** |
+| Fixture-related tracked paths | **153** (unchanged order of magnitude; still MIT/GPL/CC0/first-party per `licenses-and-assets.md`) |
+| Git LFS | none |
+| Proprietary BIOS tracked | **0** |
+| Portable backup of 59 private cores | PASS (`private-asset-backup.py`) |
+| CI without private binaries | SOURCE_ONLY + HTML5 smoke (Genesis WASM smoke removed from public workflow) |
+
+Corresponding-source duties: `docs/open-source/corresponding-source.md`.
