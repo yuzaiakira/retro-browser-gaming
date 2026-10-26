@@ -40,35 +40,59 @@ export default function Settings({
       <span className="eyebrow">MAKE IT YOURS</span>
       <h1>{diagnostics ? "Device diagnostics" : "Settings & controls"}</h1>
       {diagnostics && (
-        <div className="panel" id="alpha-feedback">
-          <h2>Public Alpha limits</h2>
-          <p>
-            This build is an early Alpha. Catalog titles may change; some
-            systems need separately provisioned emulator binaries that are not
-            shipped in a public source clone. Experimental platforms are not
-            product releases. Physical gamepad, iOS Safari, and staging HTTPS
-            gates remain open until verified separately.
-          </p>
-          <p className="small">
-            Feedback is optional and privacy-conscious: use the link below only
-            if you choose to contact the maintainers. No analytics or third-party
-            trackers are loaded by this page. Do not attach proprietary ROMs,
-            BIOS files, or personal save data.
-          </p>
-          {feedbackMailto ? (
-            <a
-              href={`mailto:${encodeURIComponent(feedbackMailto)}?subject=${encodeURIComponent("Retro Browser Gaming Alpha feedback")}`}
-            >
-              Email Alpha feedback
-            </a>
-          ) : (
-            <p className="small" role="note">
-              Feedback mailto is not configured in this deployment (
-              <code>NEXT_PUBLIC_ALPHA_FEEDBACK_MAILTO</code>). Use your
-              maintainer’s published contact channel when available.
+        <>
+          <div className="panel" id="alpha-feedback">
+            <h2>Public Alpha limits</h2>
+            <p>
+              This build is an early Alpha. Catalog titles may change; some
+              systems need separately provisioned emulator binaries that are not
+              shipped in a public source clone. Experimental platforms are not
+              product releases. Physical gamepad, iOS Safari, and staging HTTPS
+              gates remain open until verified separately.
             </p>
-          )}
-        </div>
+            <p className="small">
+              Feedback is optional and privacy-conscious: use the link below only
+              if you choose to contact the maintainers. No analytics or
+              third-party trackers are loaded by this page. Do not attach
+              proprietary ROMs, BIOS files, or personal save data.
+            </p>
+            {feedbackMailto ? (
+              <a
+                href={`mailto:${encodeURIComponent(feedbackMailto)}?subject=${encodeURIComponent("Retro Browser Gaming Alpha feedback")}`}
+              >
+                Email Alpha feedback
+              </a>
+            ) : (
+              <p className="small" role="note">
+                Feedback mailto is not configured in this deployment (
+                <code>NEXT_PUBLIC_ALPHA_FEEDBACK_MAILTO</code>). Use your
+                maintainer’s published contact channel when available.
+              </p>
+            )}
+          </div>
+          <div className="panel" id="licensing-notices">
+            <h2>Licensing & third-party notices</h2>
+            <p>
+              First-party application code is intended for a separate open-source
+              license chosen by the project owner (proposed MIT — not yet enacted
+              as a root LICENSE). Emulator runtimes remain under their own terms:
+            </p>
+            <ul>
+              <li>EmulatorJS loaders — GPL-3.0</li>
+              <li>jsdos / emulators — GPL-2.0</li>
+              <li>js2me — MIT</li>
+              <li>Homebrew fixtures — MIT / GPL / CC0 as labeled in the repo</li>
+            </ul>
+            <p className="small">
+              Emulator <code>.data</code>/<code>.wasm</code> payloads are not
+              bundled in public source clones. When a deployment provisions them
+              for browser play, GPL corresponding-source duties still apply.
+              Maintainers: see <code>docs/open-source/third-party-notices.md</code>{" "}
+              and <code>docs/open-source/corresponding-source.md</code> in the
+              source tree. Proprietary BIOS/ROMs are not included.
+            </p>
+          </div>
+        </>
       )}
       <div className="settings-grid">
         <div className="panel">

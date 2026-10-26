@@ -11,5 +11,7 @@ node_modules
 .private-runtime
 RetroBrowserGaming-Asset-Backup
 RetroBrowserGaming-Asset-Backup-*
+RetroBrowserGaming-Corresponding-Source-Offer
+RetroBrowserGaming-Corresponding-Source-Offer-*
 **/apps/web/public/cores/**/*.data
 **/apps/web/public/cores/**/*.wasm

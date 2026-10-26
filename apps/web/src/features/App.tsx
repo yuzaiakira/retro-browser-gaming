@@ -818,6 +818,7 @@ export default function App({ route }: { route: string[] }) {
           <a href="/diagnostics#alpha-feedback">
             Alpha limits & feedback ↗
           </a>
+          <a href="/diagnostics#licensing-notices">Licensing notices ↗</a>
           <a href="/diagnostics">Compatibility & diagnostics ↗</a>
         </footer>
       </div>

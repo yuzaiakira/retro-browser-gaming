@@ -1,7 +1,8 @@
 # Root application license — owner decision sheet
 
 **Status:** `BLOCKED_HUMAN` — no root `LICENSE` file has been enacted.  
-**Tag:** `READY_FOR_LEGAL_REVIEW`
+**Tag:** `READY_FOR_LEGAL_REVIEW` (copyright holder confirmation may be `BLOCKED_RIGHTS` until company assignment is clear)  
+**Proposed texts:** `docs/open-source/proposed-licenses/` (MIT complete; Apache-2.0 / GPL-3.0 official texts with scope banners)
 
 This sheet compares options for **first-party** Retro Browser Gaming application code only. It does **not** relicense EmulatorJS, jsdos, GPL fixtures, or other third-party trees.
 
