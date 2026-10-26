@@ -1,52 +1,46 @@
 # Public sanitized candidate verification (2026-10-26)
 
 **Strategy:** Option B — isolated sanitized clone; original private repository untouched.  
+**Status tag:** `PUBLIC_REPOSITORY_READY_FOR_OWNER_APPROVAL`  
 **STOP:** No public remote created; no visibility change; no force-push.
 
-## Locations (filesystem only)
+Machine-readable summary: `docs/open-source/public-candidate-summary-20261026.json`
+
+## Locations
 
 | Artifact | Path |
 | --- | --- |
 | Candidate root | `/home/akira/Projects/git-contribute/retro-browser-gaming-public-candidate-20261026/` |
-| Working tree (current) | `…/tree/` |
-| Prior filter snapshot | `…/tree-from-df9cb63.bak/` (superseded; keep offline) |
-| Source bundle used as input | `…/source-all-refs.bundle` |
-| Paths removed | `…/paths-to-remove.txt` (59) |
+| Working tree | `…/tree/` |
 | Commit map | `…/commit-map.txt` |
+| Paths removed | `…/paths-to-remove.txt` (59) |
 
-## SHA mapping (refreshed from owner tip `01d6449`)
+## SHA mapping (current)
 
 | Role | SHA |
 | --- | --- |
-| Original owner HEAD | `01d644998cd975f9dd2cef1eae446fe6af2c2336` |
-| Candidate rewritten HEAD | `914f826f72f3e81e69f4117811324db20f5daa36` |
-| Tip map | `01d6449…` → `914f826…` |
-| Commits in candidate | 83 |
-| Branches in candidate | `main` only |
+| Private HEAD filtered | `60c8327f6916ec94c47bf739f449a7fe05538e50` |
+| Candidate rewritten HEAD | `b306ebe7e24a494a884dcb31134c085343422302` |
+| Tip map | `60c8327…` → `b306ebe…` |
+| Commits parsed | 86 |
+| Branches | `main` |
 | Tags | none |
 
-Earlier dry filter from `df9cb63` → `9b8c3c1` is superseded; **publish only from a candidate rebuilt at the approved tip.**
+Supersedes earlier candidate tips `9b8c3c1` / `914f826`. **Re-filter again after enacting root LICENSE** before any public push.
 
-## History / tip audits (current candidate)
-
-| Check | Result |
-| --- | --- |
-| Core `.data`/`.wasm` paths in candidate history | **none** (`HISTORY_PATHS_CLEAN`) |
-| Tip path set vs owner tip | **identical** (1248 paths) |
-| Alpha UX present in candidate tip | yes (`Public Alpha limits`) |
-| SOURCE_ONLY lock | PASS |
-| Private-core track check | PASS |
-
-## Owner repository preservation
+## Audits
 
 | Check | Result |
 | --- | --- |
-| Owner HEAD after filter | `01d6449…` (unchanged by filter) |
-| `origin` on owner | untouched / not force-pushed |
-| Private assets / backups | untouched |
+| Historical core `.data`/`.wasm` paths | **0** (`HISTORY_PATHS_CLEAN`) |
+| Tip vs private tracked paths | **match** (1256) |
+| Secret heuristic | **0** hits |
+| SOURCE_ONLY / track check / backup unit tests | PASS |
+| Vitest / tsc / Next build | PASS |
+| License proposals + CS matrix + owner checklist present | yes |
+| Owner `origin` | untouched |
 
-## Publication (not executed)
+## Owner gate
 
-See `legal-review-package.md` §8 and `option-b-publication-steps.md`.
-
-**Owner approval gate:** authorize creating a **new** public GitHub repo and pushing candidate `914f826…` (or a newer refreshed tip) — never flip visibility on `yuzaiakira/retro-browser-gaming`.
+Checklist: `docs/open-source/owner-approval-checklist.md`  
+Push steps (not executed): `docs/open-source/option-b-publication-steps.md`
