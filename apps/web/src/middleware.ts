@@ -1,8 +1,28 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import allowlist from './policy/browser-distributable-allowlist.json';
 
 const J2ME_HOST = process.env.J2ME_RUNTIME_HOST || 'j2me.localhost';
 const LAUNCHER_HOST = process.env.LAUNCHER_HOST || 'launcher.localhost';
+const PROVISION_MODE = (process.env.RBG_CORE_PROVISION_MODE || 'PUBLIC_BROWSER').trim();
+
+const blockedCorePaths = new Set(
+  (allowlist.files || [])
+    .filter((row: { browser_distribution?: string }) =>
+      row.browser_distribution === 'NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION',
+    )
+    .map((row: { path: string }) => `/cores/${row.path}`),
+);
+
+function denyBlockedCore(pathname: string): NextResponse | null {
+  if (PROVISION_MODE !== 'PUBLIC_BROWSER') return null;
+  if (!pathname.startsWith('/cores/')) return null;
+  if (!pathname.endsWith('.data') && !pathname.endsWith('.wasm')) return null;
+  if (blockedCorePaths.has(pathname)) {
+    return new NextResponse('Core not cleared for public distribution', { status: 404 });
+  }
+  return null;
+}
 
 function isJ2meHost(host: string) {
   const name = host.split(':')[0].toLowerCase();
@@ -41,6 +61,9 @@ function j2mePathAllowed(pathname: string) {
 export function middleware(request: NextRequest) {
   const host = request.headers.get('host') || '';
   const { pathname } = request.nextUrl;
+
+  const blocked = denyBlockedCore(pathname);
+  if (blocked) return blocked;
 
   if (isJ2meHost(host)) {
     if (pathname.startsWith('/api/') || pathname.startsWith('/dev-assets/')) {

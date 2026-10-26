@@ -60,9 +60,11 @@
       "evidence": [
         "docs/test-evidence/PH-05/zx81-eo-loadp-build-20261022.md"
       ],
-      "corresponding_source_status": "NEEDS_LEGAL_REVIEW",
+      "corresponding_source_status": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
       "source_offer_class": "incomplete_patches_missing_in_repo",
-      "upstream": "https://github.com/libretro/81-libretro (independently versioned 81_eo EmulatorJS build with eo_loadp; evidence PH-05/zx81-eo-loadp-build-20261022.md)"
+      "upstream": "https://github.com/libretro/81-libretro (independently versioned 81_eo EmulatorJS build with eo_loadp; evidence PH-05/zx81-eo-loadp-build-20261022.md)",
+      "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+      "missing_material": "Complete modified preferred-form source / patch series not present under scripts/patches/; only PH-05 notes (and optional zx81 snippet). Upstream URL insufficient for local modifications."
     },
     {
       "path": "ejs-4.2.3/cores/81_eo-wasm.data",
@@ -77,9 +79,11 @@
       "evidence": [
         "docs/test-evidence/PH-05/zx81-eo-loadp-build-20261022.md"
       ],
-      "corresponding_source_status": "NEEDS_LEGAL_REVIEW",
+      "corresponding_source_status": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
       "source_offer_class": "incomplete_patches_missing_in_repo",
-      "upstream": "https://github.com/libretro/81-libretro (independently versioned 81_eo EmulatorJS build with eo_loadp; evidence PH-05/zx81-eo-loadp-build-20261022.md)"
+      "upstream": "https://github.com/libretro/81-libretro (independently versioned 81_eo EmulatorJS build with eo_loadp; evidence PH-05/zx81-eo-loadp-build-20261022.md)",
+      "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+      "missing_material": "Complete modified preferred-form source / patch series not present under scripts/patches/; only PH-05 notes (and optional zx81 snippet). Upstream URL insufficient for local modifications."
     },
     {
       "path": "ejs-4.2.3/cores/a5200-legacy-wasm.data",
@@ -162,7 +166,8 @@
       ],
       "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
       "source_offer_class": "patches_and_rebuild_script_in_repo",
-      "upstream": "https://github.com/EmulatorJS/blueMSX-libretro (e3086eb; independently built; Board.saveState WASM arity fix; board.saveState zero-arity WASM fix; PH-05/msx-savestate-abi-20261022.md)"
+      "upstream": "https://github.com/EmulatorJS/blueMSX-libretro (e3086eb; independently built; Board.saveState WASM arity fix; board.saveState zero-arity WASM fix; PH-05/msx-savestate-abi-20261022.md)",
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE"
     },
     {
       "path": "ejs-4.2.3/cores/bluemsx-wasm.data",
@@ -185,7 +190,8 @@
       ],
       "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
       "source_offer_class": "patches_and_rebuild_script_in_repo",
-      "upstream": "https://github.com/EmulatorJS/blueMSX-libretro (e3086eb; independently built; Board.saveState WASM arity fix; board.saveState zero-arity WASM fix; PH-05/msx-savestate-abi-20261022.md)"
+      "upstream": "https://github.com/EmulatorJS/blueMSX-libretro (e3086eb; independently built; Board.saveState WASM arity fix; board.saveState zero-arity WASM fix; PH-05/msx-savestate-abi-20261022.md)",
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE"
     },
     {
       "path": "ejs-4.2.3/cores/cap32-legacy-wasm.data",
@@ -845,9 +851,11 @@
       "evidence": [
         "docs/test-evidence/PH-05/jaguar-vj-js-build-20261022.md"
       ],
-      "corresponding_source_status": "NEEDS_LEGAL_REVIEW",
+      "corresponding_source_status": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
       "source_offer_class": "rebuild_notes_only",
-      "upstream": "https://github.com/libretro/virtualjaguar-libretro (independently versioned virtualjaguar_js EmulatorJS build; evidence PH-05/jaguar-vj-js-build-20261022.md)"
+      "upstream": "https://github.com/libretro/virtualjaguar-libretro (independently versioned virtualjaguar_js EmulatorJS build; evidence PH-05/jaguar-vj-js-build-20261022.md)",
+      "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+      "missing_material": "Complete modified preferred-form source / patch series not present under scripts/patches/; only PH-05 notes (and optional zx81 snippet). Upstream URL insufficient for local modifications."
     },
     {
       "path": "ejs-4.2.3/cores/virtualjaguar_js-wasm.data",
@@ -862,9 +870,11 @@
       "evidence": [
         "docs/test-evidence/PH-05/jaguar-vj-js-build-20261022.md"
       ],
-      "corresponding_source_status": "NEEDS_LEGAL_REVIEW",
+      "corresponding_source_status": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
       "source_offer_class": "rebuild_notes_only",
-      "upstream": "https://github.com/libretro/virtualjaguar-libretro (independently versioned virtualjaguar_js EmulatorJS build; evidence PH-05/jaguar-vj-js-build-20261022.md)"
+      "upstream": "https://github.com/libretro/virtualjaguar-libretro (independently versioned virtualjaguar_js EmulatorJS build; evidence PH-05/jaguar-vj-js-build-20261022.md)",
+      "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+      "missing_material": "Complete modified preferred-form source / patch series not present under scripts/patches/; only PH-05 notes (and optional zx81 snippet). Upstream URL insufficient for local modifications."
     },
     {
       "path": "ejs-4.2.3/system/bluemsx-system.data",
@@ -887,7 +897,8 @@
       ],
       "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
       "source_offer_class": "patches_and_rebuild_script_in_repo",
-      "upstream": "https://github.com/openMSX/cbios (C-BIOS 0.23 Machines) + https://github.com/EmulatorJS/blueMSX-libretro Databases; extracted from locked bluemsx-wasm.data for EmulatorJS SYSTEM mount"
+      "upstream": "https://github.com/openMSX/cbios (C-BIOS 0.23 Machines) + https://github.com/EmulatorJS/blueMSX-libretro Databases; extracted from locked bluemsx-wasm.data for EmulatorJS SYSTEM mount",
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE"
     },
     {
       "path": "jsdos-8.3.8/wdosbox.wasm",
@@ -943,9 +954,8 @@
     }
   ],
   "gaps": [
-    "No scripts/patches/81_eo* checked in \u2014 product redistribution of 81_eo WASM is NEEDS_LEGAL_REVIEW",
-    "No scripts/patches/virtualjaguar_js* \u2014 EXPERIMENTAL; do not Alpha-product redistribute until source complete",
-    "PH-05 bluemsx build log hashes may differ from current lock; prefer docs/core-package-lock.json + private manifest as shipped truth"
+    "81_eo and virtualjaguar_js: NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION until complete CS trees exist",
+    "PH-05 bluemsx historical build hashes may differ from current lock; shipped truth is core-package-lock + private manifest"
   ],
   "user_facing_offer": [
     "Public source clone (Option B) containing tracked JS + LICENSES + scripts/patches/bluemsx",

@@ -25,6 +25,8 @@ COPY --from=build --chown=retro:retro /app/.next/static ./.next/static
 COPY --from=build --chown=retro:retro /app/public ./public
 # Emulator .data/.wasm are provisioned at runtime from RBG_PRIVATE_ASSET_DIR (not baked into the image).
 COPY --chown=retro:retro scripts/web-entrypoint.sh /app/web-entrypoint.sh
+COPY --chown=retro:retro scripts/sync-private-cores.mjs /app/sync-private-cores.mjs
+COPY --chown=retro:retro docs/open-source/browser-distributable-allowlist.json /app/policy/browser-distributable-allowlist.json
 RUN chmod 755 /app/web-entrypoint.sh
 USER retro
 EXPOSE 3000
