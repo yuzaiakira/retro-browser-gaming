@@ -12,6 +12,7 @@ does not by itself certify legal compliance.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import shutil
 import sys
@@ -20,6 +21,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "docs" / "open-source" / "private-core-binaries.manifest.json"
+ALLOWLIST = ROOT / "docs" / "open-source" / "browser-distributable-allowlist.json"
+
+
+def sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
 
 def copy_tree(src: Path, dst: Path) -> int:
@@ -109,11 +119,26 @@ def main() -> int:
             continue
         copied += copy_tree(src, dest if src.is_dir() else dest)
 
+    allow = json.loads(ALLOWLIST.read_text(encoding="utf-8"))
+    binary_bindings = {}
+    for row in allow.get("files", []):
+        if row.get("browser_distribution") != "AUTHORIZED_BROWSER_DISTRIBUTABLE":
+            continue
+        binary_bindings[row["path"]] = {
+            "sha256": row.get("sha256"),
+            "byteSize": row.get("byteSize"),
+            "browser_distribution": row.get("browser_distribution"),
+            "corresponding_source_class": row.get("corresponding_source_class"),
+        }
+
+    allowlist_sha = sha256_file(ALLOWLIST)
     meta = {
         "format": "rbg-corresponding-source-offer-v1",
         "created_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "files_copied": copied,
         "private_binary_count_referenced": len(inventory.get("files", [])),
+        "allowlist_sha256": allowlist_sha,
+        "binary_bindings": binary_bindings,
         "gaps": [
             "81_eo: NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION — incomplete corresponding source",
             "virtualjaguar_js: NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION — incomplete corresponding source",
@@ -134,6 +159,18 @@ def main() -> int:
         "Does NOT certify legal compliance — for operator/counsel review.\n",
         encoding="utf-8",
     )
+
+    # Integrity index for public delivery verification (relative paths under out/).
+    sums_lines: list[str] = []
+    for path in sorted(out.rglob("*")):
+        if not path.is_file():
+            continue
+        if path.name == "SHA256SUMS":
+            continue
+        rel = path.relative_to(out).as_posix()
+        sums_lines.append(f"{sha256_file(path)}  {rel}")
+    (out / "SHA256SUMS").write_text("\n".join(sums_lines) + "\n", encoding="utf-8")
+
     print(f"CORRESPONDING_SOURCE_OFFER_OK files={copied} output={out}")
     for gap in meta["gaps"]:
         print(f"GAP: {gap}")

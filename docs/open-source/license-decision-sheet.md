@@ -45,7 +45,10 @@ Do **not** place a blanket MIT header claiming the entire repository is MIT.
 
 ## Required owner / counsel inputs
 
-1. Copyright holder legal name and year for the LICENSE copyright line.
-2. Choose MIT vs Apache-2.0 vs GPL-3.0 for first-party code.
-3. Confirm no first-party file embeds incompatible third-party code without notice.
-4. Confirm company policy for offering corresponding source when serving GPL WASM.
+1. Copyright holder legal name and year for the LICENSE copyright line (**not** inferred from Git authors).
+2. Confirm authority to release the first-party code under the chosen license.
+3. Choose MIT vs Apache-2.0 vs GPL-3.0 for first-party code (recommendation: MIT).
+4. Confirm no first-party file embeds incompatible third-party code without notice.
+5. Confirm company policy for offering corresponding source when serving GPL WASM.
+
+**Do not enact** root `LICENSE` until items 1–3 are confirmed in writing.

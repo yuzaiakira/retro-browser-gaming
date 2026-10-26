@@ -1,0 +1,16 @@
+Retro Browser Gaming — proposed NOTICE (not enacted)
+
+Copyright holder for first-party code: <COPYRIGHT_HOLDER_LEGAL_NAME>
+Proposed first-party license: MIT (see LICENSE.mit.proposed.txt)
+
+This NOTICE does not relicense third-party materials. Preserve upstream
+notices under LICENSES/ and docs/open-source/third-party-notices.md, including
+but not limited to:
+
+- EmulatorJS (GPL-3.0)
+- jsdos / emulators (GPL-2.0)
+- js2me (MIT)
+- C-BIOS and other fixture/runtime notices as listed in LICENSES/
+
+Do not enact root LICENSE/NOTICE until the owner confirms copyright holder,
+authority to release, and license choice.

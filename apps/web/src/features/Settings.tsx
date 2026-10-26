@@ -35,12 +35,42 @@ export default function Settings({
     typeof process !== "undefined"
       ? process.env.NEXT_PUBLIC_ALPHA_FEEDBACK_MAILTO?.trim()
       : undefined;
+  const feedbackUrl =
+    typeof process !== "undefined"
+      ? process.env.NEXT_PUBLIC_ALPHA_FEEDBACK_URL?.trim()
+      : undefined;
   return (
     <section>
       <span className="eyebrow">MAKE IT YOURS</span>
       <h1>{diagnostics ? "Device diagnostics" : "Settings & controls"}</h1>
       {diagnostics && (
         <>
+          <div className="panel" id="browser-support">
+            <h2>Browser support</h2>
+            <p>
+              Installs need a secure context, Origin Private File System (OPFS),
+              and the Web Locks API. Chromium and Firefox desktop/mobile builds
+              that expose these APIs are the supported Alpha path. Playwright
+              WebKit gaps are not evidence of real Safari.
+            </p>
+            {!device?.opfs && (
+              <p role="status">
+                This browser reports no OPFS — download/install is disabled until
+                <code> navigator.storage.getDirectory</code> is available.
+              </p>
+            )}
+            {!device?.locks && (
+              <p role="status">
+                Web Locks API unavailable — safe concurrent downloads cannot run
+                here.
+              </p>
+            )}
+            {!device?.secure && (
+              <p role="status">
+                Secure context required (HTTPS or localhost).
+              </p>
+            )}
+          </div>
           <div className="panel" id="alpha-feedback">
             <h2>Public Alpha limits</h2>
             <p>
@@ -51,24 +81,32 @@ export default function Settings({
               gates remain open until verified separately.
             </p>
             <p className="small">
-              Feedback is optional and privacy-conscious: use the link below only
+              Feedback is optional and privacy-conscious: use a link below only
               if you choose to contact the maintainers. No analytics or
               third-party trackers are loaded by this page. Do not attach
               proprietary ROMs, BIOS files, or personal save data.
             </p>
+            {feedbackUrl ? (
+              <p>
+                <a href={feedbackUrl} rel="noopener noreferrer">
+                  Open Alpha feedback form
+                </a>
+              </p>
+            ) : null}
             {feedbackMailto ? (
               <a
                 href={`mailto:${encodeURIComponent(feedbackMailto)}?subject=${encodeURIComponent("Retro Browser Gaming Alpha feedback")}`}
               >
                 Email Alpha feedback
               </a>
-            ) : (
+            ) : !feedbackUrl ? (
               <p className="small" role="note">
-                Feedback mailto is not configured in this deployment (
+                Feedback contact is not configured (
+                <code>NEXT_PUBLIC_ALPHA_FEEDBACK_URL</code> or{" "}
                 <code>NEXT_PUBLIC_ALPHA_FEEDBACK_MAILTO</code>). Use your
-                maintainer’s published contact channel when available.
+                maintainer’s published channel when available.
               </p>
-            )}
+            ) : null}
           </div>
           <div className="panel" id="licensing-notices">
             <h2>Licensing & third-party notices</h2>

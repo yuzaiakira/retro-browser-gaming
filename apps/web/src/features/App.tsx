@@ -539,6 +539,16 @@ export default function App({ route }: { route: string[] }) {
                         <strong>
                           Compatibility · {compat?.status ?? "checking"}
                         </strong>
+                        {compat?.status === "unsupported" && (
+                          <p role="status">
+                            This browser cannot install or play this title yet.
+                            See reasons below, or open{" "}
+                            <a href="/diagnostics#browser-support">
+                              Diagnostics · browser support
+                            </a>
+                            .
+                          </p>
+                        )}
                         {compat?.reasons.map((r) => <p key={r}>{r}</p>)}
                         <p>
                           Core: {detail.releases[0].recommended_core.code} ·{" "}

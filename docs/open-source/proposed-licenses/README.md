@@ -4,13 +4,14 @@ These files are **proposals for owner selection**. None are applied as the repos
 
 **Status:** `BLOCKED_HUMAN` / possible `BLOCKED_RIGHTS` until copyright ownership is confirmed.
 
-Suggested copyright line (from git authorship + existing Orbit notice — **confirm before use**):
+Copyright line must use the **confirmed legal copyright holder**. Do **not**
+choose ownership from Git author names or commit metadata.
 
 ```text
-Copyright (c) 2026 Akira Yuzai / Retro Browser Gaming contributors
+Copyright (c) 2026 <COPYRIGHT_HOLDER_LEGAL_NAME>
 ```
 
-If the company owns the work, replace with the company’s legal name after assignment review.
+Owner/counsel replace the placeholder after assignment review.
 
 ## Recommendation
 

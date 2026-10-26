@@ -1,0 +1,12 @@
+test_default_is_not_verified (__main__.SourceOfferDeliveryTests.test_default_is_not_verified) ... ok
+test_env_url_alone_does_not_verify (__main__.SourceOfferDeliveryTests.test_env_url_alone_does_not_verify)
+Nonempty URL without reachable offer must FAIL (not silent PASS). ... ok
+test_http_url_rejected (__main__.SourceOfferDeliveryTests.test_http_url_rejected) ... ok
+test_mock_delivery_checked_not_public_verified (__main__.SourceOfferDeliveryTests.test_mock_delivery_checked_not_public_verified) ... ok
+test_mock_hash_tamper_fails (__main__.SourceOfferDeliveryTests.test_mock_hash_tamper_fails) ... ok
+test_mock_missing_manifest_fails (__main__.SourceOfferDeliveryTests.test_mock_missing_manifest_fails) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.476s
+
+OK

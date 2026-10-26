@@ -1,0 +1,8 @@
+=== PUBLIC_BROWSER negative/positive HTTP ===
+genesis: 200
+bluemsx: 200
+81_eo: 404
+vj_js: 404
+unknown: 404
+renamed: 404
+encoded_81: 404

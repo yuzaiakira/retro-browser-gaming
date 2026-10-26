@@ -13,6 +13,12 @@ case "$RBG_CORE_PROVISION_MODE" in
     exit 1
     ;;
 esac
+# Production images default PUBLIC_BROWSER. LOCAL_FULL requires an explicit
+# break-glass flag so a stray env cannot ship restricted cores publicly.
+if [ "$RBG_CORE_PROVISION_MODE" = "LOCAL_FULL" ] && [ "${RBG_ALLOW_LOCAL_FULL:-}" != "1" ]; then
+  echo "FATAL: LOCAL_FULL refused without RBG_ALLOW_LOCAL_FULL=1 (use compose.override for loopback)" >&2
+  exit 1
+fi
 if [ ! -f /app/sync-private-cores.mjs ]; then
   echo "FATAL: sync-private-cores.mjs missing — refusing unfiltered sync" >&2
   exit 1
