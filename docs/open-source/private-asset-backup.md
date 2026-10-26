@@ -89,6 +89,38 @@ Paths are relative to the private asset root. Do not auto-discover home director
 python3 scripts/test_private_asset_backup.py -v
 ```
 
+## Recommended second copy
+
+Keep at least **two** verified offline copies of the portable backup on
+**independent** media (for example: workstation SSD + external/offline drive).
+Do not rely solely on the Git clone or a single disk.
+
+Re-verify after copying:
+
+```bash
+python3 scripts/private-asset-backup.py verify --backup /path/to/copy
+```
+
+## Recover after total loss of the source checkout
+
+1. Clone the application source (private or future public candidate) without expecting binaries in Git.
+2. Copy a verified `RetroBrowserGaming-Asset-Backup` directory from offline media.
+3. Import into a new private root:
+
+```bash
+python3 scripts/private-asset-backup.py verify --backup /media/Backup
+python3 scripts/private-asset-backup.py import --backup /media/Backup
+# or: --destination /srv/retro-browser-gaming/private-assets
+python3 scripts/provision-private-cores.py
+python3 scripts/verify-core-lock.py --mode LOCAL_FULL
+```
+
+4. Start Compose / local servers as usual. Do **not** download proprietary BIOS.
+
+The immutable migration backup at
+`retro-browser-gaming-os-backup-20261026/` (Git bundle + private-runtime snapshot)
+is a separate disaster-recovery artifact — do not modify it.
+
 ## Related
 
 - `docs/open-source/local-private-assets.md`

@@ -34,9 +34,14 @@ Legal readiness tag: **`READY_FOR_LEGAL_REVIEW`** (not a compliance guarantee).
 
 ## Recommendation for owner review
 
-Prefer **Option A** if preserving contributor history on the same GitHub URL matters.  
-Prefer **Option B1** if the existing GitHub remote should remain private/archive and a new public URL is acceptable.  
-Prefer **B2** only if counsel/ops accept a fresh public history.
+**Prepared default for this milestone: Option B1** — keep `yuzaiakira/retro-browser-gaming` private; push a freshly filtered candidate (full rewritten history, tip tree matching private tip) to a **new** public repository after approval.
+
+Prefer **Option A** only if the same GitHub URL must become the public history (requires force-push coordination).  
+Prefer **B2** (fresh root commit) only if counsel/ops explicitly accept discarding granular history in the public copy.
+
+Isolated candidate already prepared locally (not published):  
+`docs/open-source/public-candidate-verification-20261026.md`  
+Exact push steps: `docs/open-source/option-b-publication-steps.md`
 
 In all cases: keep `.private-runtime` and `RetroBrowserGaming-Asset-Backup-*` offline; never push private binaries or the immutable backup bundle to a public remote.
 

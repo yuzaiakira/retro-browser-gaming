@@ -31,10 +31,45 @@ export default function Settings({
       setMessage(String(e));
     }
   }
+  const feedbackMailto =
+    typeof process !== "undefined"
+      ? process.env.NEXT_PUBLIC_ALPHA_FEEDBACK_MAILTO?.trim()
+      : undefined;
   return (
     <section>
       <span className="eyebrow">MAKE IT YOURS</span>
       <h1>{diagnostics ? "Device diagnostics" : "Settings & controls"}</h1>
+      {diagnostics && (
+        <div className="panel" id="alpha-feedback">
+          <h2>Public Alpha limits</h2>
+          <p>
+            This build is an early Alpha. Catalog titles may change; some
+            systems need separately provisioned emulator binaries that are not
+            shipped in a public source clone. Experimental platforms are not
+            product releases. Physical gamepad, iOS Safari, and staging HTTPS
+            gates remain open until verified separately.
+          </p>
+          <p className="small">
+            Feedback is optional and privacy-conscious: use the link below only
+            if you choose to contact the maintainers. No analytics or third-party
+            trackers are loaded by this page. Do not attach proprietary ROMs,
+            BIOS files, or personal save data.
+          </p>
+          {feedbackMailto ? (
+            <a
+              href={`mailto:${encodeURIComponent(feedbackMailto)}?subject=${encodeURIComponent("Retro Browser Gaming Alpha feedback")}`}
+            >
+              Email Alpha feedback
+            </a>
+          ) : (
+            <p className="small" role="note">
+              Feedback mailto is not configured in this deployment (
+              <code>NEXT_PUBLIC_ALPHA_FEEDBACK_MAILTO</code>). Use your
+              maintainer’s published contact channel when available.
+            </p>
+          )}
+        </div>
+      )}
       <div className="settings-grid">
         <div className="panel">
           <h2>On-device storage</h2>

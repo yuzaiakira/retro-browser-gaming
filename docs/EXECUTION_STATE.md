@@ -3,7 +3,7 @@
 ## Verdict
 
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
-**Open-source prep:** **PARTIAL** — P1 backup/restore **PASS**; P2 legal docs `READY_FOR_LEGAL_REVIEW`; public CI SOURCE_ONLY; history rewrite still **STOP** for owner approval (`docs/open-source/`).
+**Open-source prep:** **PARTIAL** — P1 backup **reverified PASS**; Option B sanitized candidate prepared locally (`9b8c3c1` from `df9cb63`, refresh after new commits); legal package `READY_FOR_LEGAL_REVIEW`; **STOP** before any public push / visibility change.
 
 ## Deferred physical / external (do not rediscover)
 
@@ -91,9 +91,10 @@ python3 scripts/provision-private-cores.py --check
 
 ## Remaining blockers / next
 
-1. **Owner:** approve or reject applying history rewrite to active repo + remote (`docs/open-source/history-migration-runbook.md`)
-2. **Legal/owner:** public GitHub publication Options A/B (`docs/open-source/github-publication-plan.md`)
-3. QA: physical gamepad + iOS
-4. Ops: staging HTTPS
-5. Product owner: shortlist approvals
+1. **Owner:** choose root LICENSE (`docs/open-source/license-decision-sheet.md`)
+2. **Owner:** authorize Option B new public repo push (`docs/open-source/option-b-publication-steps.md`) — keep private origin intact
+3. **Counsel:** review `docs/open-source/legal-review-package.md`
+4. Product: approve minimal Alpha set (`docs/open-source/public-alpha-game-set.md`) — none auto-approved
+5. QA: physical gamepad + iOS; Ops: staging HTTPS
 6. Do **not** tag COMPLETE; do **not** reopen emulator expansion for P0
+7. Store a second verified portable backup on independent media
