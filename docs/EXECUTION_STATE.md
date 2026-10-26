@@ -3,7 +3,7 @@
 ## Verdict
 
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
-**Open-source prep:** **PARTIAL** — private cores + offline backup/restore **PASS**; history rewrite dry-run PASSED in disposable clone — **awaiting owner approval** before active history rewrite / remote force-push (`docs/open-source/`).
+**Open-source prep:** **PARTIAL** — P1 backup/restore **PASS**; P2 legal docs `READY_FOR_LEGAL_REVIEW`; public CI SOURCE_ONLY; history rewrite still **STOP** for owner approval (`docs/open-source/`).
 
 ## Deferred physical / external (do not rediscover)
 

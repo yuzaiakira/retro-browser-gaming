@@ -62,3 +62,9 @@ Backup: `/home/akira/Projects/git-contribute/retro-browser-gaming-os-backup-2026
 
 **Owner decision required** before applying this rewrite to the active repo or `origin`.
 
+## Post-dry-run commits (must be included before apply)
+
+The disposable dry-run tip (`36b187a`) was produced from owner tip `6b0608c`. Later local commits (backup CLI, docs, CI SOURCE_ONLY, Player messaging, etc.) **do not re-add** the 59 binary paths to the tip tree, but a **fresh** isolated `git-filter-repo` run from the approved publication tip is required before any remote rewrite so SHA mappings stay accurate.
+
+Publication Options A/B: `docs/open-source/github-publication-plan.md`.
+

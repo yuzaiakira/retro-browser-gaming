@@ -68,16 +68,44 @@ Compose contains PostgreSQL, persistent S3-compatible SeaweedFS development stor
 
 ## Assets and licenses
 
-The user-facing seed contains only the first-party MIT game `Orbit Catch`. The repository also includes MIT Genesis, PS1, and PSP homebrew fixtures solely for reproducible core tests; SHA-256 values and notices are in `docs/licenses-and-assets.md`.
+The user-facing seed contains only the first-party MIT game `Orbit Catch`. Tracked homebrew fixtures (MIT/GPL/CC0/first-party) are for engineering tests; provenance is in `docs/licenses-and-assets.md` and `LICENSES/`.
 
-EmulatorJS data is vendored at the pinned source revision recorded in `docs/core-package-lock.json`; `scripts/verify-core-lock.py` verifies all 47 files. No commercial ROM or BIOS is included. Do not publish any console catalog release until the core’s redistribution license and every required game/BIOS asset have been reviewed and approved.
+This repository is **not** uniformly MIT-licensed. EmulatorJS is GPL-3.0; jsdos components are GPL-2.0; js2me is MIT. See `docs/open-source/third-party-notices.md` and `docs/open-source/corresponding-source.md`.
+
+Emulator **binary** payloads (59 `.data`/`.wasm` files, ~75 MiB) are **not** stored in public Git. The core lock tracks **373** files total; use:
+
+```bash
+python3 scripts/verify-core-lock.py --mode SOURCE_ONLY   # public clone / CI
+python3 scripts/verify-core-lock.py --mode LOCAL_FULL    # after private assets
+```
+
+No commercial ROM or proprietary BIOS is included. Do not publish console catalog titles until redistribution rights and product approval are confirmed.
+
+## Private emulator assets (full runtime)
+
+Authorized operators restore binaries offline (no automatic proprietary download):
+
+```bash
+python3 scripts/private-asset-backup.py import \
+  --backup /path/to/RetroBrowserGaming-Asset-Backup
+python3 scripts/provision-private-cores.py
+python3 scripts/verify-core-lock.py --mode LOCAL_FULL
+```
+
+Details: `docs/open-source/private-asset-backup.md`, `docs/open-source/local-private-assets.md`.
+
+## Open-source publication
+
+History cleanup and GitHub publication require explicit owner approval. See `docs/open-source/github-publication-plan.md` and `docs/open-source/public-repository-readiness.md`.
 
 ## Documentation
 
+- `CONTRIBUTING.md` / `SECURITY.md` — contributor and disclosure guidance
 - `docs/architecture.md` — boundaries and data flow
 - `docs/deployment.md` — deployment configuration and current verification state
 - `docs/browser-support.md` — support and physical-device status
 - `docs/licenses-and-assets.md` — provenance and restrictions
 - `docs/acceptance-matrix.md` — every PDR acceptance ID
 - `docs/EMULATOR_SUPPORT_MATRIX.md` — evidence-based platform inventory and emulator roadmap
+- `docs/open-source/` — private assets, backup/restore, legal readiness
 - `docs/final-handover.md` — verified results, blockers, and next acceptance run

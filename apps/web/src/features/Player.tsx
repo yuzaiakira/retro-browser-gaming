@@ -124,8 +124,17 @@ export default function Player({ id }: { id: string }) {
           }
         }, 30000);
     })().catch((error) => {
-      if (!disposed)
-        setMessage(String(error instanceof Error ? error.message : error));
+      if (disposed) return;
+      const raw = String(error instanceof Error ? error.message : error);
+      const missingRuntime =
+        /Failed to fetch|404|Load failed|net::ERR|wasm|\.data/i.test(raw) ||
+        /beacuse it's likly that the minified files are missing/i.test(raw);
+      setMessage(
+        missingRuntime
+          ? "Emulator runtime files are missing or unreachable. On a source-only checkout, import authorized private cores (see docs/open-source/private-asset-backup.md), run provision-private-cores.py, then retry. Original error: " +
+            raw
+          : raw,
+      );
     });
     return () => {
       disposed = true;
