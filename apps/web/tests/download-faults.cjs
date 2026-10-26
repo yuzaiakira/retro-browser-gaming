@@ -289,8 +289,13 @@ async function run() {
           });
           const page = await resumed.newPage();
           await page.goto(`${baseUrl}/downloads`);
-          await page.getByRole('button', { name: 'Resume / retry' }).click();
-          await page.getByText('Ready offline. Your game is stored on this device.').waitFor({ timeout: 120000 });
+          // After a hard browser kill the journaled row may still say "downloading"
+          // (Continue) or paused/error (Resume / retry) — both resume the same path.
+          await page.getByRole('button', { name: /Resume \/ retry|Continue/i }).first().click();
+          await page
+            .getByText(/Ready [Oo]ffline|stored on this device|is Ready Offline/i)
+            .first()
+            .waitFor({ timeout: 120000 });
           const result = await downloads(page);
           if (result.installations.length !== 1 || result.downloads[0]?.state !== 'verified') throw new Error('100 MiB recovery did not produce a verified installation');
           if (resumedRanges.length !== 11 || resumedRanges.some((start) => start < 16 * 1024 * 1024)) throw new Error(`browser restart re-fetched journaled bytes: ${resumedRanges.join(',')}`);
