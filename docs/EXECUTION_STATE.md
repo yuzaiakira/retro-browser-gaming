@@ -3,7 +3,8 @@
 ## Verdict
 
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
-**Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability (input suspension, change-based pad dispatch, dirty/autosave/reset consistency, dialog a11y, touch guards) — verified 2026-10-26.  
+**Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability — verified 2026-10-26.  
+**Hub UX (PH-UX-HUB):** Premium Gaming Hub — Continue Playing from local history, catalog URL sync, library maintenance separation, download grouping, settings everyday/advanced, design tokens — verified 2026-10-26.  
 **Open-source prep:** source-offer gate verifies **every** `SHA256SUMS` entry; `--require-public-delivery` for prod GPL serving; LOCAL_FULL needs `RBG_ALLOW_LOCAL_FULL=1`; MIT LICENSE proposed (not enacted). Sanitized candidate `77110c5` ← private `501ed79` (re-filter after newer tip before push). **STOP** before GitHub publish.
 
 ## Deferred physical / external (do not rediscover)
@@ -57,6 +58,15 @@
 | Genesis / MSX | GAMEPLAY_PASS |
 | Django / Vitest / typecheck | OK |
 
+## Hub UX pass (2026-10-26 night)
+
+| Check | Result |
+|---|---|
+| Hub Playwright journeys + responsive | `HUB_UX_PASS` → `docs/test-evidence/PH-UX-HUB/` |
+| Player UX reliability (regression) | `PLAYER_UX_PASS` |
+| Genesis smoke | `GENESIS_GAMEPLAY_PASS` |
+| Vitest / typecheck | 30 passed / `tsc --noEmit` OK |
+
 ## Remaining blockers / next
 
 1. Owner: confirm copyright holder + authority; enact MIT root LICENSE only then
@@ -66,4 +76,4 @@
 5. Product: Alpha game set approvals
 6. Resolve CS for `81_eo` / `virtualjaguar_js`
 7. QA: physical gamepad + iOS; Ops: staging HTTPS
-8. Optional UX polish: deeper orientation guidance, further library density pass
+8. Optional: deeper hub offline-journey automation (Journey C) on a dedicated offline profile

@@ -1,0 +1,5 @@
+PLAYER_UX_STEP orbit:start
+PLAYER_UX_STEP genesis:start
+PLAYER_UX_STEP msx:start
+PLAYER_UX_STEP mobile:start
+PLAYER_UX_PASS {"orbit":{"noUnsupportedAudio":true,"quickSaveOffered":true,"pauseResume":true,"escape":true,"noInputLeak":true,"fullscreenAttempted":true,"fullscreenActive":true,"mountStable":true},"genesis":{"inputOk":true,"quickSave":true,"loadConfirmEscape":true,"quickLoad":true,"pauseResetResume":true,"inputAfterMenu":true,"saveSurvivesReload":true,"playUrl":"http://launcher.localhost:13000/play/ed2a282c-70e7-4442-aa6b-6c25b00e32d7"},"msx":{"hasQuickSave":true,"quickSave":true,"inputOk":true},"mobile":{"multitouchCancel":true,"menuBlocksTouch":true,"editCancel":true,"landscape":true},"performance":{"heldKeyPresses":1,"heldKeyReleases":1,"menuOpenPadEvents":0}}
