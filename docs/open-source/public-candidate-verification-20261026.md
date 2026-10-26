@@ -1,46 +1,16 @@
-# Public sanitized candidate verification (2026-10-26)
+# Public sanitized candidate verification (final refresh)
 
-**Strategy:** Option B — isolated sanitized clone; original private repository untouched.  
-**Status tag:** `PUBLIC_REPOSITORY_READY_FOR_OWNER_APPROVAL`  
-**STOP:** No public remote created; no visibility change; no force-push.
-
-Machine-readable summary: `docs/open-source/public-candidate-summary-20261026.json`
-
-## Locations
-
-| Artifact | Path |
-| --- | --- |
-| Candidate root | `/home/akira/Projects/git-contribute/retro-browser-gaming-public-candidate-20261026/` |
-| Working tree | `…/tree/` |
-| Commit map | `…/commit-map.txt` |
-| Paths removed | `…/paths-to-remove.txt` (59) |
-
-## SHA mapping (current)
+**Status:** `PUBLIC_REPOSITORY_READY_FOR_OWNER_APPROVAL`  
+**STOP:** No public GitHub action performed.
 
 | Role | SHA |
 | --- | --- |
-| Private HEAD filtered | `60c8327f6916ec94c47bf739f449a7fe05538e50` |
-| Candidate rewritten HEAD | `b306ebe7e24a494a884dcb31134c085343422302` |
-| Tip map | `60c8327…` → `b306ebe…` |
-| Commits parsed | 86 |
-| Branches | `main` |
-| Tags | none |
+| Private HEAD | `23bc620da6da3a1069011ffa90b2e499dc2dd702` |
+| Candidate HEAD | `b0fbab1fed22519953c430ef4164b1fe9fb141a4` |
+| Map | `23bc620…` → `b0fbab1…` |
 
-Supersedes earlier candidate tips `9b8c3c1` / `914f826`. **Re-filter again after enacting root LICENSE** before any public push.
+Path: `/home/akira/Projects/git-contribute/retro-browser-gaming-public-candidate-20261026-final/tree/`
 
-## Audits
+Machine summary: `public-candidate-summary-20261026.json`
 
-| Check | Result |
-| --- | --- |
-| Historical core `.data`/`.wasm` paths | **0** (`HISTORY_PATHS_CLEAN`) |
-| Tip vs private tracked paths | **match** (1256) |
-| Secret heuristic | **0** hits |
-| SOURCE_ONLY / track check / backup unit tests | PASS |
-| Vitest / tsc / Next build | PASS |
-| License proposals + CS matrix + owner checklist present | yes |
-| Owner `origin` | untouched |
-
-## Owner gate
-
-Checklist: `docs/open-source/owner-approval-checklist.md`  
-Push steps (not executed): `docs/open-source/option-b-publication-steps.md`
+Includes allowlist enforcement, NOT_CLEARED dispositions, source-offer gate. History clean of 59 private binary paths. Re-filter again after any root LICENSE enactment before push.

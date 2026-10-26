@@ -1,27 +1,37 @@
 {
   "schema": "rbg-public-candidate-summary-v1",
-  "created_utc": "2026-10-26T15:51:00Z",
+  "created_utc": "2026-10-26T15:40:00Z",
   "strategy": "OPTION_B_ISOLATED_SANITIZED_CLONE",
   "publication_status": "STOP_BEFORE_GITHUB",
-  "original_private_head": "60c8327f6916ec94c47bf739f449a7fe05538e50",
-  "candidate_rewritten_head": "b306ebe7e24a494a884dcb31134c085343422302",
-  "candidate_path": "/home/akira/Projects/git-contribute/retro-browser-gaming-public-candidate-20261026/tree",
+  "status_tag": "PUBLIC_REPOSITORY_READY_FOR_OWNER_APPROVAL",
+  "original_private_head": "23bc620da6da3a1069011ffa90b2e499dc2dd702",
+  "candidate_rewritten_head": "b0fbab1fed22519953c430ef4164b1fe9fb141a4",
+  "candidate_path": "/home/akira/Projects/git-contribute/retro-browser-gaming-public-candidate-20261026-final/tree",
   "paths_removed_count": 59,
-  "paths_removed_manifest": "docs/open-source/history-removal-manifest.txt",
-  "commits_parsed": 86,
+  "commits_parsed": 89,
   "refs_in_candidate": ["refs/heads/main"],
-  "tags_in_candidate": [],
   "history_core_binary_paths_remaining": 0,
-  "tip_tracked_path_count": 1256,
+  "tip_tracked_path_count": 1272,
   "tip_tree_matches_private": true,
   "secret_heuristic_hits": 0,
+  "browser_allowlist": {
+    "authorized": 55,
+    "not_cleared": 4,
+    "not_cleared_paths": [
+      "ejs-4.2.3/cores/81_eo-wasm.data",
+      "ejs-4.2.3/cores/81_eo-legacy-wasm.data",
+      "ejs-4.2.3/cores/virtualjaguar_js-wasm.data",
+      "ejs-4.2.3/cores/virtualjaguar_js-legacy-wasm.data"
+    ]
+  },
   "tests": {
     "SOURCE_ONLY_core_lock": "PASS",
     "private_core_tracked_check": "PASS",
-    "private_asset_backup_unit_tests": "PASS",
-    "vitest": "PASS_21",
-    "typescript": "PASS",
-    "next_build": "PASS"
+    "source_offer_gate": "PASS",
+    "browser_allowlist_unit": "PASS",
+    "next_build": "PASS",
+    "anonymous_http_public_browser": "PASS_genesis_200_blocked_404",
+    "genesis_orbit_django_after_fix": "PASS"
   },
   "owner_repo_unchanged": true,
   "remote_actions": "none"
