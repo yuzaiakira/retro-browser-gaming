@@ -17,8 +17,8 @@
 
 ## 3. Sanitized candidate SHA
 
-- [ ] Approve publishing candidate tip recorded in `public-candidate-verification-20261026.md` **or** demand a fresh re-filter after LICENSE commit
-- [ ] Confirm candidate was built from the intended private tip
+- [ ] Approve candidate tip **`b306ebe7e24a494a884dcb31134c085343422302`** (from private `60c8327…`) **or** demand a fresh re-filter after root LICENSE + any newer private tip (current private may be ahead by docs-only commits such as `4665cb5`)
+- [ ] Confirm candidate was built from the intended private tip before push
 
 ## 4. History-removal summary
 
