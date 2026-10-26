@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { api, getManifest, type Catalog } from "@/lib/api";
 import { verifyAsset } from "@/lib/storage";
 import { db, setSetting } from "@/lib/db";
@@ -20,7 +20,18 @@ import Player from "./Player";
 import Settings from "./Settings";
 import GameCard from "./GameCard";
 import ConfirmDialog from "./ConfirmDialog";
-import { loadRecentPlayMap, sortContinuePlaying } from "./hub-history";
+import {
+  hasSaveForInstall,
+  loadRecentPlayMap,
+  loadSavePresence,
+  sortContinuePlaying,
+  sortReadyNeverPlayed,
+} from "./hub-history";
+import {
+  buildCatalogPath,
+  parseCatalogQuery,
+  type CatalogQuery,
+} from "./catalog-query";
 
 const nav = [
   ["/", "⌂", "Discover"],
@@ -54,17 +65,11 @@ function downloadLabel(state: Download["state"]) {
   }
 }
 
-function readCatalogQuery() {
+function readCatalogQuery(): CatalogQuery {
   if (typeof window === "undefined") {
     return { search: "", consoleFilter: "", genreFilter: "", pageNumber: 1 };
   }
-  const params = new URLSearchParams(window.location.search);
-  return {
-    search: params.get("q") || params.get("search") || "",
-    consoleFilter: params.get("console") || "",
-    genreFilter: params.get("genre") || "",
-    pageNumber: Math.max(1, Number(params.get("page") || 1) || 1),
-  };
+  return parseCatalogQuery(window.location.search);
 }
 
 export default function App({ route }: { route: string[] }) {
@@ -74,6 +79,7 @@ export default function App({ route }: { route: string[] }) {
   const [detailManifest, setDetailManifest] = useState<Manifest>();
   const [count, setCount] = useState(0);
   const initialQuery = page === "games" && !route[1] ? readCatalogQuery() : null;
+  const [searchDraft, setSearchDraft] = useState(initialQuery?.search ?? "");
   const [search, setSearch] = useState(initialQuery?.search ?? "");
   const [consoleFilter, setConsoleFilter] = useState(
     initialQuery?.consoleFilter || (route[0] === "consoles" ? route[1] || "" : ""),
@@ -88,10 +94,17 @@ export default function App({ route }: { route: string[] }) {
   const [installs, setInstalls] = useState<Installation[]>([]);
   const [downloads, setDownloads] = useState<Download[]>([]);
   const [recentMap, setRecentMap] = useState<Map<string, number>>(new Map());
+  const [saveIds, setSaveIds] = useState<Set<string>>(new Set());
   const [busy, setBusy] = useState(false);
   const [refresh, setRefresh] = useState(0);
   const [compat, setCompat] = useState<{ status: string; reasons: string[] }>();
   const [deleteTarget, setDeleteTarget] = useState<Installation | null>(null);
+  const applyingHistory = useRef(false);
+  const lastUrl = useRef(
+    typeof window !== "undefined"
+      ? window.location.pathname + window.location.search
+      : "",
+  );
   const engineeringDemo = games.some((g) => g.catalog_scope === "engineering-demo");
 
   const activeDownloads = useMemo(
@@ -114,6 +127,11 @@ export default function App({ route }: { route: string[] }) {
     };
   }, []);
 
+  // Re-read local installs/history when the route changes (e.g. leaving the player).
+  useEffect(() => {
+    setRefresh((n) => n + 1);
+  }, [page]);
+
   useEffect(() => {
     let cancelled = false;
     async function sync() {
@@ -121,10 +139,12 @@ export default function App({ route }: { route: string[] }) {
       const values = await database.getAll("installations");
       const dl = await database.getAll("downloads");
       const recent = await loadRecentPlayMap();
+      const saves = await loadSavePresence();
       if (!cancelled) {
         setInstalls(values);
         setDownloads(dl);
         setRecentMap(recent);
+        setSaveIds(saves);
       }
     }
     sync();
@@ -148,31 +168,72 @@ export default function App({ route }: { route: string[] }) {
     return () => abort.abort();
   }, []);
 
-  // Keep /games filters shareable via URL query (Back/Forward friendly).
+  // Debounce search input so typing does not spam history or API.
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearch((prev) => {
+        if (prev !== searchDraft) setPageNumber(1);
+        return searchDraft;
+      });
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchDraft]);
+
+  // Keep /games filters shareable; filters/page push history, search replaces.
   useEffect(() => {
     if (page !== "games" || route[1]) return;
     const onPop = () => {
+      applyingHistory.current = true;
       const next = readCatalogQuery();
+      setSearchDraft(next.search);
       setSearch(next.search);
       setConsoleFilter(next.consoleFilter);
       setGenreFilter(next.genreFilter);
       setPageNumber(next.pageNumber);
+      lastUrl.current = window.location.pathname + window.location.search;
+      queueMicrotask(() => {
+        applyingHistory.current = false;
+      });
     };
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
   }, [page, route]);
 
   useEffect(() => {
-    if (page !== "games" || route[1]) return;
-    const params = new URLSearchParams();
-    if (search) params.set("q", search);
-    if (consoleFilter) params.set("console", consoleFilter);
-    if (genreFilter) params.set("genre", genreFilter);
-    if (pageNumber > 1) params.set("page", String(pageNumber));
-    const qs = params.toString();
-    const next = qs ? `/games?${qs}` : "/games";
-    const current = window.location.pathname + window.location.search;
-    if (current !== next) window.history.replaceState(null, "", next);
+    if (page !== "games" || route[1] || applyingHistory.current) return;
+    const next = buildCatalogPath({
+      search,
+      consoleFilter,
+      genreFilter,
+      pageNumber,
+    });
+    if (next === lastUrl.current) return;
+    // Search edits replace the current entry; explicit filter/page changes push.
+    const prev = parseCatalogQuery(
+      lastUrl.current.includes("?")
+        ? lastUrl.current.slice(lastUrl.current.indexOf("?"))
+        : "",
+    );
+    const onlySearchChanged =
+      prev.consoleFilter === consoleFilter &&
+      prev.genreFilter === genreFilter &&
+      prev.pageNumber === pageNumber &&
+      prev.search !== search;
+    // Explicit filter/page changes push so Back/Forward works. Search-only
+    // edits replace. Never treat a clean `/games` URL as "always replace" —
+    // that collapsed the first filter click into the landing entry.
+    if (onlySearchChanged) {
+      window.history.replaceState(null, "", next);
+    } else if (
+      prev.consoleFilter !== consoleFilter ||
+      prev.genreFilter !== genreFilter ||
+      prev.pageNumber !== pageNumber
+    ) {
+      window.history.pushState(null, "", next);
+    } else {
+      window.history.replaceState(null, "", next);
+    }
+    lastUrl.current = next;
   }, [page, route, search, consoleFilter, genreFilter, pageNumber]);
 
   useEffect(() => {
@@ -302,7 +363,9 @@ export default function App({ route }: { route: string[] }) {
       await (await db()).put("installations", pending);
       setMessage("Verifying bundle and preparing offline resources…");
       await install(pending);
-      setMessage("Ready offline. Your game is stored on this device.");
+      setMessage(
+        `${game.title} is Ready Offline. Open Play from the library or details — Continue Playing appears after you launch it once.`,
+      );
       setRefresh((x) => x + 1);
     } catch (error) {
       setMessage(String(error instanceof Error ? error.message : error));
@@ -342,12 +405,22 @@ export default function App({ route }: { route: string[] }) {
   }
 
   const continuePlaying = sortContinuePlaying(installs, recentMap, 6);
+  const readyNeverPlayed = sortReadyNeverPlayed(installs, recentMap, 6);
+  const heroPlayTarget = continuePlaying[0] ?? readyNeverPlayed[0];
   const librarySorted = [...installs].sort((a, b) => {
     const ra = recentMap.get(a.id) ?? 0;
     const rb = recentMap.get(b.id) ?? 0;
     if (rb !== ra) return rb - ra;
     return (b.verifiedAt || 0) - (a.verifiedAt || 0);
   });
+
+  function playNote(i: Installation) {
+    const parts = [i.release.console.name, "Ready offline"];
+    if (hasSaveForInstall(i.id, saveIds)) {
+      parts.push("Local save available");
+    }
+    return parts.join(" · ");
+  }
 
   const genreOptions = Array.from(
     new Set(
@@ -482,16 +555,16 @@ export default function App({ route }: { route: string[] }) {
                 </div>
               )}
               {continuePlaying.length > 0 && (
-                <section className="continue-strip">
+                <section className="continue-strip" data-testid="continue-playing">
                   <div className="section-head">
                     <div>
-                      <span className="eyebrow">PICK UP WHERE YOU LEFT OFF</span>
+                      <span className="eyebrow">RECENTLY PLAYED</span>
                       <h2>Continue playing</h2>
                     </div>
                   </div>
                   <p className="small">
-                    Opens the game on this device. In-game resume needs a save
-                    state from Quick save or autosave when the core supports it.
+                    Games you launched here. A local save badge means a stored
+                    state exists — restore it from the player menu after launch.
                   </p>
                   <div className="game-grid compact-grid">
                     {continuePlaying.map((i) => (
@@ -500,7 +573,28 @@ export default function App({ route }: { route: string[] }) {
                         game={i.game}
                         install={i}
                         compact
-                        note={i.release.console.name}
+                        note={playNote(i)}
+                      />
+                    ))}
+                  </div>
+                </section>
+              )}
+              {readyNeverPlayed.length > 0 && (
+                <section className="continue-strip" data-testid="ready-to-play">
+                  <div className="section-head">
+                    <div>
+                      <span className="eyebrow">READY OFFLINE</span>
+                      <h2>Installed · not opened yet</h2>
+                    </div>
+                  </div>
+                  <div className="game-grid compact-grid">
+                    {readyNeverPlayed.map((i) => (
+                      <GameCard
+                        key={"ready-lib-" + i.id}
+                        game={i.game}
+                        install={i}
+                        compact
+                        note={playNote(i)}
                       />
                     ))}
                   </div>
@@ -874,8 +968,10 @@ export default function App({ route }: { route: string[] }) {
                     </h1>
                     <p>
                       {continuePlaying.length
-                        ? "Your arcade is ready on this device. Jump back in or explore something new."
-                        : "Download once, play offline. Browser-native retro games with no account required."}
+                        ? "Pick up a game you already opened on this device, or explore something new."
+                        : readyNeverPlayed.length
+                          ? "You have games Ready Offline. Launch one to start your local play history."
+                          : "Download once, play offline. Browser-native retro games with no account required."}
                     </p>
                     <div className="hero-cta-row">
                       <a
@@ -883,15 +979,19 @@ export default function App({ route }: { route: string[] }) {
                         href={
                           continuePlaying[0]
                             ? "/play/" + continuePlaying[0].id
-                            : "/games"
+                            : heroPlayTarget
+                              ? "/play/" + heroPlayTarget.id
+                              : "/games"
                         }
                       >
                         {continuePlaying[0]
                           ? "Continue playing"
-                          : "Explore games"}{" "}
+                          : heroPlayTarget
+                            ? "Play installed game"
+                            : "Explore games"}{" "}
                         <span>↗</span>
                       </a>
-                      {continuePlaying[0] && (
+                      {(continuePlaying[0] || heroPlayTarget) && (
                         <a className="button secondary" href="/games">
                           Browse catalog
                         </a>
@@ -928,18 +1028,21 @@ export default function App({ route }: { route: string[] }) {
                 </section>
               )}
               {page === "home" && continuePlaying.length > 0 && (
-                <section className="continue-strip">
+                <section className="continue-strip" data-testid="continue-playing">
                   <div className="section-head">
                     <div>
-                      <span className="eyebrow">ON THIS DEVICE</span>
+                      <span className="eyebrow">RECENTLY PLAYED</span>
                       <h2>Continue playing</h2>
                     </div>
                     <a href="/library">My library →</a>
                   </div>
                   <p className="small">
-                    Based on games you recently opened here. Launch starts the
-                    title; use Quick save in the player when you want a restore
-                    point.
+                    Games you launched on this device. Opening a title is not the
+                    same as restoring a save — use Quick save in the player when
+                    you want a restore point.
+                    {continuePlaying.some((i) => hasSaveForInstall(i.id, saveIds))
+                      ? " Titles marked with a local save have a stored state available after launch."
+                      : ""}
                   </p>
                   <div className="game-grid compact-grid">
                     {continuePlaying.map((i) => (
@@ -948,7 +1051,32 @@ export default function App({ route }: { route: string[] }) {
                         game={i.game}
                         install={i}
                         compact
-                        note={i.release.console.name + " · Ready offline"}
+                        note={playNote(i)}
+                      />
+                    ))}
+                  </div>
+                </section>
+              )}
+              {page === "home" && readyNeverPlayed.length > 0 && (
+                <section className="continue-strip" data-testid="ready-to-play">
+                  <div className="section-head">
+                    <div>
+                      <span className="eyebrow">INSTALLED · NOT OPENED YET</span>
+                      <h2>Ready to play</h2>
+                    </div>
+                  </div>
+                  <p className="small">
+                    Ready Offline on this device, but not in Continue Playing until
+                    you launch them once.
+                  </p>
+                  <div className="game-grid compact-grid">
+                    {readyNeverPlayed.map((i) => (
+                      <GameCard
+                        key={"ready-" + i.id}
+                        game={i.game}
+                        install={i}
+                        compact
+                        note={playNote(i)}
                       />
                     ))}
                   </div>
@@ -968,11 +1096,8 @@ export default function App({ route }: { route: string[] }) {
                     <input
                       aria-label="Search games"
                       placeholder="Search the arcade…"
-                      value={search}
-                      onChange={(e) => {
-                        setSearch(e.target.value);
-                        setPageNumber(1);
-                      }}
+                      value={searchDraft}
+                      onChange={(e) => setSearchDraft(e.target.value)}
                     />
                   </label>
                 </div>
@@ -988,6 +1113,7 @@ export default function App({ route }: { route: string[] }) {
                       type="button"
                       className="secondary clear-filters"
                       onClick={() => {
+                        setSearchDraft("");
                         setSearch("");
                         setConsoleFilter("");
                         setGenreFilter("");
@@ -1076,6 +1202,7 @@ export default function App({ route }: { route: string[] }) {
                       className="secondary"
                       type="button"
                       onClick={() => {
+                        setSearchDraft("");
                         setSearch("");
                         setConsoleFilter("");
                         setGenreFilter("");
