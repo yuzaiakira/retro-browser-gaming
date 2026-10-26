@@ -38,6 +38,11 @@ function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
 }
 
+function finiteOr(n: unknown, fallback: number) {
+  const v = typeof n === "number" ? n : Number(n);
+  return Number.isFinite(v) ? v : fallback;
+}
+
 function normalizeLayout(raw: unknown): Button[] {
   if (!Array.isArray(raw) || !raw.length) return defaults.map((b) => ({ ...b }));
   const byName = new Map(
@@ -50,10 +55,10 @@ function normalizeLayout(raw: unknown): Button[] {
     if (!hit) return { ...d };
     return {
       name: d.name,
-      x: clamp(Number(hit.x ?? d.x), 5, 95),
-      y: clamp(Number(hit.y ?? d.y), 6, 94),
-      size: clamp(Number(hit.size ?? d.size), 36, 84),
-      opacity: clamp(Number(hit.opacity ?? d.opacity), 0.25, 1),
+      x: clamp(finiteOr(hit.x, d.x), 5, 95),
+      y: clamp(finiteOr(hit.y, d.y), 6, 94),
+      size: clamp(finiteOr(hit.size, d.size), 44, 84),
+      opacity: clamp(finiteOr(hit.opacity, d.opacity), 0.25, 1),
     };
   });
 }
@@ -64,6 +69,7 @@ export default function TouchControls({
   edit,
   analog,
   overlay = false,
+  blocked = false,
   onEditCancel,
 }: {
   router: InputRouter | null;
@@ -72,6 +78,8 @@ export default function TouchControls({
   analog: boolean;
   /** When true, fill the player stage instead of a separate strip. */
   overlay?: boolean;
+  /** Menus/dialogs open — ignore gameplay presses. */
+  blocked?: boolean;
   onEditCancel?: () => void;
 }) {
   const [orientation, setOrientation] = useState("landscape");
@@ -164,9 +172,11 @@ export default function TouchControls({
         className={
           "touch-area " +
           (overlay ? "touch-overlay " : "") +
-          (edit ? "editing" : "")
+          (edit ? "editing " : "") +
+          (blocked ? "blocked" : "")
         }
         ref={area}
+        aria-hidden={blocked || undefined}
       >
         {active.map((button) => (
           <button
@@ -177,15 +187,17 @@ export default function TouchControls({
               (selected === button.name && edit ? "selected" : "")
             }
             aria-label={`Touch ${button.name}`}
+            tabIndex={blocked || edit ? -1 : 0}
             style={{
-              left: button.x + "%",
-              top: button.y + "%",
-              width: button.size,
-              height: button.size,
-              opacity: button.opacity,
+              left: `${Number.isFinite(button.x) ? button.x : 50}%`,
+              top: `${Number.isFinite(button.y) ? button.y : 50}%`,
+              width: Number.isFinite(button.size) ? button.size : 52,
+              height: Number.isFinite(button.size) ? button.size : 52,
+              opacity: Number.isFinite(button.opacity) ? button.opacity : 0.72,
             }}
             onPointerDown={(e) => {
               e.preventDefault();
+              if (blocked) return;
               try {
                 e.currentTarget.setPointerCapture(e.pointerId);
               } catch {
@@ -195,18 +207,23 @@ export default function TouchControls({
               else router?.press(`touch:${e.pointerId}`, commands[button.name]);
             }}
             onPointerMove={(e) => {
-              if (!edit || !e.buttons || !area.current) return;
+              if (blocked || !edit || !e.buttons || !area.current) return;
               const box = area.current.getBoundingClientRect();
+              if (!box.width || !box.height) return;
               change(button.name, {
                 x: clamp(((e.clientX - box.left) / box.width) * 100, 5, 95),
                 y: clamp(((e.clientY - box.top) / box.height) * 100, 6, 94),
               });
             }}
-            onPointerUp={(e) => router?.release(`touch:${e.pointerId}`)}
-            onPointerCancel={(e) => router?.release(`touch:${e.pointerId}`)}
-            onLostPointerCapture={(e) =>
-              router?.release(`touch:${e.pointerId}`)
-            }
+            onPointerUp={(e) => {
+              if (!edit) router?.release(`touch:${e.pointerId}`);
+            }}
+            onPointerCancel={(e) => {
+              if (!edit) router?.release(`touch:${e.pointerId}`);
+            }}
+            onLostPointerCapture={(e) => {
+              if (!edit) router?.release(`touch:${e.pointerId}`);
+            }}
           >
             {(
               { Up: "↑", Down: "↓", Left: "←", Right: "→" } as Record<
@@ -221,8 +238,10 @@ export default function TouchControls({
             type="button"
             className="analog"
             aria-label="Analog stick"
+            tabIndex={blocked ? -1 : 0}
             onPointerDown={(e) => {
               e.preventDefault();
+              if (blocked) return;
               try {
                 e.currentTarget.setPointerCapture(e.pointerId);
               } catch {
@@ -230,7 +249,7 @@ export default function TouchControls({
               }
             }}
             onPointerMove={(e) => {
-              if (!e.buttons) return;
+              if (blocked || !e.buttons) return;
               const b = e.currentTarget.getBoundingClientRect();
               const x = clamp(
                 (e.clientX - b.left - b.width / 2) / (b.width / 2),
@@ -242,15 +261,18 @@ export default function TouchControls({
                 -1,
                 1,
               );
+              // Dead-zone recentering: near-center snaps to 0.
+              const dx = Math.abs(x) < 0.18 ? 0 : x;
+              const dy = Math.abs(y) < 0.18 ? 0 : y;
               router?.press(
                 `analog:${e.pointerId}:x`,
                 16,
-                Math.round(x * 32767),
+                Math.round(dx * 32767),
               );
               router?.press(
                 `analog:${e.pointerId}:y`,
                 17,
-                Math.round(y * 32767),
+                Math.round(dy * 32767),
               );
             }}
             onPointerUp={(e) => {
@@ -258,6 +280,10 @@ export default function TouchControls({
               router?.release(`analog:${e.pointerId}:y`);
             }}
             onPointerCancel={(e) => {
+              router?.release(`analog:${e.pointerId}:x`);
+              router?.release(`analog:${e.pointerId}:y`);
+            }}
+            onLostPointerCapture={(e) => {
               router?.release(`analog:${e.pointerId}:x`);
               router?.release(`analog:${e.pointerId}:y`);
             }}
@@ -288,7 +314,7 @@ export default function TouchControls({
             Size
             <input
               type="range"
-              min="36"
+              min="44"
               max="84"
               value={current.size}
               onChange={(e) => change(selected, { size: +e.target.value })}

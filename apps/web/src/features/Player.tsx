@@ -39,15 +39,48 @@ export default function Player({ id }: { id: string }) {
   const [confirm, setConfirm] = useState<ConfirmKind>(null);
   const [pendingLoadSlot, setPendingLoadSlot] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
 
   const host = useRef<HTMLDivElement>(null);
   const shell = useRef<HTMLElement>(null);
   const adapter = useRef<EmulatorAdapter | null>(null);
   const local = useRef<Installation | undefined>(undefined);
   const menuBtn = useRef<HTMLButtonElement>(null);
+  const routerRef = useRef<InputRouter | null>(null);
+  const pausedRef = useRef(false);
+  const busyRef = useRef(false);
+  const autosavingRef = useRef(false);
+  const disposedRef = useRef(false);
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
+
+  const setStatus = useCallback((text: string) => {
+    if (disposedRef.current) return;
+    setMessage(text);
+  }, []);
+
+  const flashToast = useCallback((text: string) => {
+    if (disposedRef.current) return;
+    setToast(text);
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => {
+      if (!disposedRef.current) setToast(null);
+    }, 2200);
+  }, []);
+
+  const markDirty = useCallback(() => {
+    if (disposedRef.current) return;
+    setSessionDirty(true);
+  }, []);
+
+  useEffect(() => {
+    pausedRef.current = paused;
+  }, [paused]);
 
   useEffect(() => {
     setTouch(navigator.maxTouchPoints > 0);
+    disposedRef.current = false;
     let disposed = false;
     let input: InputRouter | undefined;
     let runtime: EmulatorAdapter | undefined;
@@ -122,27 +155,54 @@ export default function Player({ id }: { id: string }) {
         }
       }
       await runtime.start();
-      input = new InputRouter(
-        (c, v) => runtime!.input(c, v),
-        await setting("keymap", defaultKeys),
-      );
+      input = new InputRouter((c, v) => {
+        runtime!.input(c, v);
+        if (v !== 0) markDirty();
+      }, await setting("keymap", defaultKeys));
+      routerRef.current = input;
       setRouter(input);
       setCaps(runtime.capabilities);
       setRunning(true);
-      setSessionDirty(true);
+      // New session: treat as dirty only when save-states exist (exit risk).
+      setSessionDirty(runtime.capabilities.saveState);
       setMessage("Playing on this device");
       await setSetting("recent:" + id, Date.now());
       if (runtime.capabilities.saveState) {
-        interval = setInterval(async () => {
-          try {
-            await storeSave(item, await runtime!.exportState(), AUTOSAVE_SLOT);
-          } catch (error) {
-            if (!disposed)
-              setMessage(
-                "Autosave unavailable: " +
-                  String(error instanceof Error ? error.message : error),
+        interval = setInterval(() => {
+          void (async () => {
+            if (
+              disposed ||
+              disposedRef.current ||
+              autosavingRef.current ||
+              busyRef.current ||
+              pausedRef.current
+            ) {
+              return;
+            }
+            const current = adapter.current;
+            const install = local.current;
+            if (!current || !install) return;
+            autosavingRef.current = true;
+            try {
+              await storeSave(
+                install,
+                await current.exportState(),
+                AUTOSAVE_SLOT,
               );
-          }
+              if (!disposed && !disposedRef.current) {
+                setSessionDirty(false);
+              }
+            } catch (error) {
+              if (!disposed && !disposedRef.current) {
+                setMessage(
+                  "Autosave unavailable: " +
+                    String(error instanceof Error ? error.message : error),
+                );
+              }
+            } finally {
+              autosavingRef.current = false;
+            }
+          })();
         }, 30000);
       }
     })().catch((error) => {
@@ -152,38 +212,62 @@ export default function Player({ id }: { id: string }) {
     });
     return () => {
       disposed = true;
+      disposedRef.current = true;
       clearInterval(interval);
+      if (toastTimer.current) clearTimeout(toastTimer.current);
       input?.dispose();
+      routerRef.current = null;
       runtime?.dispose();
       adapter.current = null;
     };
-  }, [id]);
+  }, [id, markDirty]);
+
+  // Suspend gameplay input for overlays / pause / layout editing.
+  useEffect(() => {
+    const block = menuOpen || !!confirm || edit || paused;
+    router?.setSuspended(block);
+  }, [menuOpen, confirm, edit, paused, router]);
 
   useEffect(() => {
     if (!running) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "Escape") return;
+      // Topmost dialog owns Escape — confirms take priority over the game menu.
       if (confirm) return;
       e.preventDefault();
       e.stopPropagation();
       if (menuOpen) {
         setMenuOpen(false);
         menuBtn.current?.focus();
-      } else {
+      } else if (!edit) {
         setMenuOpen(true);
-        router?.clear();
       }
     };
     window.addEventListener("keydown", onKey, true);
     return () => window.removeEventListener("keydown", onKey, true);
-  }, [running, menuOpen, confirm, router]);
+  }, [running, menuOpen, confirm, edit]);
 
-  const setStatus = useCallback((text: string) => setMessage(text), []);
+  async function withBusy<T>(fn: () => Promise<T>): Promise<T | undefined> {
+    if (busyRef.current) {
+      setStatus("Please wait — another action is in progress");
+      return undefined;
+    }
+    busyRef.current = true;
+    try {
+      return await fn();
+    } finally {
+      busyRef.current = false;
+    }
+  }
 
   async function persistSlot(target: number, label: string) {
     if (!local.current || !adapter.current)
       throw new Error("Runtime unavailable");
     if (!caps.saveState) throw new Error("Save states unsupported for this core");
+    if (autosavingRef.current) {
+      setStatus("Autosave in progress — try again in a moment");
+      return;
+    }
     setSaving(true);
     setStatus("Saving…");
     try {
@@ -192,13 +276,17 @@ export default function Player({ id }: { id: string }) {
         await adapter.current.exportState(),
         target,
       );
+      if (disposedRef.current) return;
       setSessionDirty(false);
       setStatus(label);
+      flashToast(label);
     } catch (error) {
-      setStatus(
+      if (disposedRef.current) return;
+      const msg =
         "Save failed: " +
-          String(error instanceof Error ? error.message : error),
-      );
+        String(error instanceof Error ? error.message : error);
+      setStatus(msg);
+      flashToast(msg);
       throw error;
     } finally {
       setSaving(false);
@@ -212,22 +300,56 @@ export default function Player({ id }: { id: string }) {
     setStatus("Restoring…");
     const saved = await readSave(local.current, target);
     await adapter.current.importState(saved.bytes);
+    if (disposedRef.current) return;
+    // Keep UI pause state consistent with the adapter after load.
+    if (pausedRef.current) {
+      await adapter.current.pause().catch(() => undefined);
+    } else {
+      await adapter.current.resume().catch(() => undefined);
+    }
     setSessionDirty(false);
     setStatus("Restored successfully");
+    flashToast("Restored successfully");
   }
 
   async function togglePause() {
-    if (!adapter.current) return;
-    if (paused) {
-      await adapter.current.resume();
-      setPaused(false);
-      setStatus("Resumed");
-    } else {
-      await adapter.current.pause();
-      setPaused(true);
-      router?.clear();
-      setStatus("Paused");
-    }
+    await withBusy(async () => {
+      if (!adapter.current) return;
+      if (paused) {
+        await adapter.current.resume();
+        if (disposedRef.current) return;
+        setPaused(false);
+        setStatus("Resumed");
+      } else {
+        await adapter.current.pause();
+        if (disposedRef.current) return;
+        setPaused(true);
+        setStatus("Paused");
+      }
+    });
+  }
+
+  async function doRestart() {
+    await withBusy(async () => {
+      if (!adapter.current) return;
+      try {
+        await adapter.current.reset();
+        // reset() does not guarantee resume — always resume to match Playing UI.
+        await adapter.current.resume();
+        if (disposedRef.current) return;
+        setPaused(false);
+        setSessionDirty(caps.saveState);
+        setStatus("Game reset");
+        flashToast("Game reset");
+        setMenuOpen(false);
+      } catch (error) {
+        if (disposedRef.current) return;
+        setStatus(
+          "Reset failed: " +
+            String(error instanceof Error ? error.message : error),
+        );
+      }
+    });
   }
 
   async function doFullscreen() {
@@ -259,18 +381,22 @@ export default function Player({ id }: { id: string }) {
           setConfirm("restart");
           break;
         case "quick-save":
-          await persistSlot(QUICK_SLOT, "Quick save saved successfully");
+          await withBusy(() =>
+            persistSlot(QUICK_SLOT, "Quick save stored"),
+          );
           break;
         case "quick-load":
           setPendingLoadSlot(QUICK_SLOT);
           setConfirm("load");
           break;
         case "save-slot":
-          await persistSlot(
-            slot,
-            slot === AUTOSAVE_SLOT
-              ? "Autosave slot saved successfully"
-              : `Slot ${slot + 1} saved successfully`,
+          await withBusy(() =>
+            persistSlot(
+              slot,
+              slot === AUTOSAVE_SLOT
+                ? "Autosave slot stored"
+                : `Slot ${slot + 1} stored`,
+            ),
           );
           break;
         case "load-slot":
@@ -302,7 +428,6 @@ export default function Player({ id }: { id: string }) {
         case "touch-edit":
           setTouch(true);
           setEdit(true);
-          router?.clear();
           setMenuOpen(false);
           break;
         case "exit":
@@ -319,7 +444,8 @@ export default function Player({ id }: { id: string }) {
       className="player-shell"
       ref={shell}
       data-paused={paused || undefined}
-      data-menu={menuOpen || undefined}
+      data-menu={menuOpen || confirm ? "open" : undefined}
+      data-editing={edit || undefined}
     >
       <header className="player-hud">
         <div className="player-hud-text">
@@ -337,7 +463,8 @@ export default function Player({ id }: { id: string }) {
               <button
                 type="button"
                 className="secondary hud-btn"
-                disabled={saving}
+                disabled={saving || busyRef.current}
+                title="Store progress to the quick-save slot"
                 onClick={() =>
                   void handleMenuAction("quick-save").catch(() => {})
                 }
@@ -347,6 +474,7 @@ export default function Player({ id }: { id: string }) {
               <button
                 type="button"
                 className="secondary hud-btn"
+                title="Restore the quick-save slot"
                 onClick={() =>
                   void handleMenuAction("quick-load").catch(() => {})
                 }
@@ -370,20 +498,22 @@ export default function Player({ id }: { id: string }) {
             className="hud-btn"
             aria-haspopup="dialog"
             aria-expanded={menuOpen}
-            onClick={() => {
-              setMenuOpen(true);
-              router?.clear();
-            }}
+            title="Open game menu"
+            onClick={() => setMenuOpen(true)}
             disabled={!running}
           >
             Menu
           </button>
-          <a className="button secondary hud-btn" href="/library" onClick={(e) => {
-            if (sessionDirty && caps.saveState) {
-              e.preventDefault();
-              requestExit();
-            }
-          }}>
+          <a
+            className="button secondary hud-btn"
+            href="/library"
+            onClick={(e) => {
+              if (sessionDirty && caps.saveState) {
+                e.preventDefault();
+                requestExit();
+              }
+            }}
+          >
             Library
           </a>
         </div>
@@ -402,18 +532,24 @@ export default function Player({ id }: { id: string }) {
             edit={edit}
             analog={caps.analog}
             overlay
+            blocked={menuOpen || !!confirm}
             onEditCancel={() => setEdit(false)}
           />
         )}
-        {paused && !menuOpen && (
+        {paused && !menuOpen && !confirm && (
           <div className="player-paused-badge" aria-hidden="true">
             Paused
+          </div>
+        )}
+        {toast && (
+          <div className="player-toast" role="status" aria-live="polite">
+            {toast}
           </div>
         )}
       </div>
 
       <GameMenu
-        open={menuOpen}
+        open={menuOpen && !confirm}
         paused={paused}
         caps={caps}
         volume={volume}
@@ -457,17 +593,7 @@ export default function Player({ id }: { id: string }) {
         onCancel={() => setConfirm(null)}
         onConfirm={() => {
           setConfirm(null);
-          void adapter.current
-            ?.reset()
-            .then(() => {
-              setSessionDirty(true);
-              setPaused(false);
-              setStatus("Game reset");
-              setMenuOpen(false);
-            })
-            .catch((error) =>
-              setStatus(String(error instanceof Error ? error.message : error)),
-            );
+          void doRestart();
         }}
       />
       <ConfirmDialog
@@ -484,11 +610,13 @@ export default function Player({ id }: { id: string }) {
           const target = pendingLoadSlot ?? slot;
           setConfirm(null);
           setPendingLoadSlot(null);
-          void restoreSlot(target)
-            .then(() => setMenuOpen(false))
-            .catch((error) =>
-              setStatus(String(error instanceof Error ? error.message : error)),
-            );
+          void withBusy(() =>
+            restoreSlot(target).then(() => {
+              if (!disposedRef.current) setMenuOpen(false);
+            }),
+          ).catch((error) =>
+            setStatus(String(error instanceof Error ? error.message : error)),
+          );
         }}
       />
       <ConfirmDialog
