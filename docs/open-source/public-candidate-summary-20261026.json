@@ -1,17 +1,19 @@
 {
   "schema": "rbg-public-candidate-summary-v1",
-  "created_utc": "2026-10-26T15:40:00Z",
+  "created_utc": "2026-10-26T16:00:00Z",
   "strategy": "OPTION_B_ISOLATED_SANITIZED_CLONE",
   "publication_status": "STOP_BEFORE_GITHUB",
   "status_tag": "PUBLIC_REPOSITORY_READY_FOR_OWNER_APPROVAL",
-  "original_private_head": "23bc620da6da3a1069011ffa90b2e499dc2dd702",
-  "candidate_rewritten_head": "b0fbab1fed22519953c430ef4164b1fe9fb141a4",
-  "candidate_path": "/home/akira/Projects/git-contribute/retro-browser-gaming-public-candidate-20261026-final/tree",
+  "original_private_head": "5b9359fbc8b024624c64579260bcf608b0f27f46",
+  "candidate_rewritten_head": "698c3afc28b6b2acd2cb360d015a923d0c662a04",
+  "candidate_path": "/home/akira/Projects/git-contribute/retro-browser-gaming-public-candidate-20261026-harden/tree",
   "paths_removed_count": 59,
-  "commits_parsed": 89,
-  "refs_in_candidate": ["refs/heads/main"],
+  "commits_parsed": 91,
+  "refs_in_candidate": [
+    "refs/heads/main"
+  ],
   "history_core_binary_paths_remaining": 0,
-  "tip_tracked_path_count": 1272,
+  "tip_tracked_path_count": 1291,
   "tip_tree_matches_private": true,
   "secret_heuristic_hits": 0,
   "browser_allowlist": {
@@ -24,15 +26,30 @@
       "ejs-4.2.3/cores/virtualjaguar_js-legacy-wasm.data"
     ]
   },
+  "provision_defaults": {
+    "compose_yaml": "PUBLIC_BROWSER",
+    "web_dockerfile_env": "PUBLIC_BROWSER",
+    "local_override_example": "LOCAL_FULL opt-in"
+  },
+  "source_offer_levels": {
+    "METADATA_VALIDATED": 55,
+    "SOURCE_ARCHIVE_VERIFIED": 55,
+    "OFFER_DELIVERY_VERIFIED": 0,
+    "NEEDS_LEGAL_REVIEW": 59,
+    "note": "NEEDS_LEGAL_REVIEW is not counsel approval; OFFER_DELIVERY requires RBG_SOURCE_OFFER_PUBLIC_URL"
+  },
   "tests": {
     "SOURCE_ONLY_core_lock": "PASS",
     "private_core_tracked_check": "PASS",
     "source_offer_gate": "PASS",
+    "sync_fail_closed_unit": "PASS",
     "browser_allowlist_unit": "PASS",
-    "next_build": "PASS",
-    "anonymous_http_public_browser": "PASS_genesis_200_blocked_404",
-    "genesis_orbit_django_after_fix": "PASS"
+    "anonymous_http_public_browser": "PASS_genesis_bluemsx_200_blocked_unknown_404",
+    "local_full_to_public_purge": "PASS_removed_public_5",
+    "django_vitest_typecheck": "PASS",
+    "genesis_msx_acceptance_gates": "PASS",
+    "next_build_candidate": "PASS"
   },
-  "owner_repo_unchanged": true,
+  "owner_repo_unchanged_history": true,
   "remote_actions": "none"
 }
