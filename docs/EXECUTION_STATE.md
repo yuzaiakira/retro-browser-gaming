@@ -6,6 +6,7 @@
 **Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability — verified 2026-10-26.  
 **Hub UX (PH-UX-HUB):** Premium Gaming Hub — verified 2026-10-26.  
 **Hub UX Acceptance (Sprint 3.1):** offline persistent-profile journey, catalog Back/Forward history, Continue Playing accuracy, stable hub shots — verified 2026-10-26.  
+**Sprint 4 Personalization:** per-release prefs, shell display modes, shortcuts, save manager, HUD comfort — verified 2026-10-27.  
 **Open-source prep:** source-offer gate verifies **every** `SHA256SUMS` entry; `--require-public-delivery` for prod GPL serving; LOCAL_FULL needs `RBG_ALLOW_LOCAL_FULL=1`; MIT LICENSE proposed (not enacted). Sanitized candidate `77110c5` ← private `501ed79` (re-filter after newer tip before push). **STOP** before GitHub publish.
 
 ## Deferred physical / external (do not rediscover)
@@ -79,6 +80,17 @@
 | Download faults regression | all `DOWNLOAD_*_PASS` incl. 100MiB restart |
 | Vitest / typecheck | 36 passed / `tsc --noEmit` OK |
 | Bugs fixed | (1) first filter used `replaceState` so Back failed; (2) Menu visible≠enabled race before `recent:*`; (3) Continue Playing required genuine `recent:*`; (4) mid-load responsive screenshots |
+
+## Sprint 4 personalization (2026-10-27)
+
+| Check | Result |
+|---|---|
+| Preference unit tests | 50 Vitest passed (prefs/display/shortcuts/slots) |
+| Player personalization E2E | `PLAYER_PERSONALIZATION_PASS` → `docs/test-evidence/PH-UX-PERSONALIZE/` |
+| Player UX reliability regression | `PLAYER_UX_PASS` (Orbit/Genesis/MSX/mobile) |
+| Typecheck | `tsc --noEmit` OK |
+| Architecture | Prefs keyed by release id; Fit/Original shell CSS; integer scaling disabled honestly; no emulator remount on display change |
+| Limitations | No native framebuffer → no integer scaling; gamepad menu nav is simulated Start/Select only; physical gamepad NOT_VERIFIED |
 
 ## Remaining blockers / next
 
