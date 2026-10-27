@@ -323,7 +323,10 @@ async function measureInputWhileMenuOpen(page) {
       .count();
     evidence.msx.hasQuickSave = hasQuick > 0;
     if (hasQuick) {
-      await page.getByRole('dialog').getByRole('button', { name: 'Quick save' }).click();
+      await page
+        .getByRole('dialog')
+        .getByRole('button', { name: 'Quick save', exact: true })
+        .click();
       await page.getByText(/Quick save stored|saved successfully/i).first().waitFor({
         timeout: 45000,
       });
