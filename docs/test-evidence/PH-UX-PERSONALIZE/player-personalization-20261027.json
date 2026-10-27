@@ -1,0 +1,23 @@
+{
+  "display": {
+    "modeOriginal": true,
+    "filterSharp": true,
+    "noRemount": true,
+    "integerHonest": true
+  },
+  "prefs": {
+    "persistedOriginal": true,
+    "settingsEveryday": true
+  },
+  "saves": {
+    "slotList": true,
+    "emptyLoadDisabled": true
+  },
+  "hud": {
+    "minimal": true,
+    "restored": true
+  },
+  "shortcuts": {
+    "escapeMenu": true
+  }
+}
