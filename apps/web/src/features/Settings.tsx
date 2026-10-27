@@ -4,6 +4,21 @@ import { db, setting, setSetting } from "@/lib/db";
 import { commands, defaultKeys } from "./input";
 import { benchmark, inspectDevice, type Device } from "./compatibility";
 import { candidates } from "@/emulators/registry";
+import {
+  DEFAULT_PLAYER_PREFS,
+  DEFAULT_SHORTCUTS,
+  type DisplayMode,
+  type PlayerPrefs,
+  type RenderFilter,
+  type ShortcutAction,
+} from "./player-prefs";
+import {
+  loadGlobalPrefs,
+  resetGlobalPrefs,
+  saveGlobalPrefs,
+} from "./player-prefs-store";
+import { formatShortcutCode, shortcutLabel } from "./player-shortcuts";
+import { integerScalingSupport } from "./player-display";
 
 export default function Settings({
   diagnostics = false,
@@ -13,6 +28,8 @@ export default function Settings({
   const [device, setDevice] = useState<Device>();
   const [keys, setKeys] = useState(defaultKeys);
   const [command, setCommand] = useState(0);
+  const [prefs, setPrefs] = useState<PlayerPrefs>(DEFAULT_PLAYER_PREFS);
+  const [bindAction, setBindAction] = useState<ShortcutAction | null>(null);
   const [message, setMessage] = useState("");
   const [benchmarkResult, setBenchmarkResult] = useState(
     "Not run. This optional estimate does not predict game FPS.",
@@ -20,7 +37,12 @@ export default function Settings({
   useEffect(() => {
     inspectDevice().then(setDevice);
     setting("keymap", defaultKeys).then(setKeys);
+    loadGlobalPrefs().then(setPrefs);
   }, []);
+  async function persistPrefs(next: PlayerPrefs) {
+    setPrefs(next);
+    await saveGlobalPrefs(next);
+  }
   async function persist() {
     try {
       setMessage(
@@ -145,6 +167,152 @@ export default function Settings({
       )}
 
       <div className="settings-everyday">
+        <div className="panel">
+          <h2>Play defaults</h2>
+          <p>
+            Global comfort defaults for every game. Opening a title can override
+            these locally on this device — reset from the in-game menu.
+          </p>
+          <label>
+            Display mode
+            <select
+              value={prefs.displayMode}
+              onChange={(e) =>
+                void persistPrefs({
+                  ...prefs,
+                  displayMode: e.target.value as DisplayMode,
+                })
+              }
+            >
+              <option value="fit">Fit (maximize, keep ratio)</option>
+              <option value="original">Original aspect (documented ratio)</option>
+            </select>
+          </label>
+          <p className="small">{integerScalingSupport().reason}</p>
+          <label>
+            Frame scaling
+            <select
+              value={prefs.renderFilter}
+              onChange={(e) =>
+                void persistPrefs({
+                  ...prefs,
+                  renderFilter: e.target.value as RenderFilter,
+                })
+              }
+            >
+              <option value="auto">Browser default</option>
+              <option value="sharp">Sharp (iframe only)</option>
+              <option value="smooth">Smooth</option>
+            </select>
+          </label>
+          <label>
+            Default volume
+            <input
+              aria-label="Default volume"
+              type="range"
+              min="0"
+              max="1"
+              step="0.05"
+              value={prefs.volume}
+              onChange={(e) =>
+                void persistPrefs({ ...prefs, volume: +e.target.value })
+              }
+            />
+          </label>
+          <label>
+            Touch controls
+            <select
+              value={String(prefs.touchVisible)}
+              onChange={(e) => {
+                const v = e.target.value;
+                void persistPrefs({
+                  ...prefs,
+                  touchVisible:
+                    v === "auto" ? "auto" : v === "true" ? true : false,
+                });
+              }}
+            >
+              <option value="auto">Auto (follow device)</option>
+              <option value="true">Always show</option>
+              <option value="false">Hide by default</option>
+            </select>
+          </label>
+          <label className="row" style={{ gap: 10 }}>
+            <input
+              type="checkbox"
+              checked={prefs.shortcutsEnabled}
+              onChange={(e) =>
+                void persistPrefs({
+                  ...prefs,
+                  shortcutsEnabled: e.target.checked,
+                })
+              }
+            />
+            Enable player shortcuts
+          </label>
+          <div className="shortcut-list" style={{ marginTop: 12 }}>
+            {(Object.keys(DEFAULT_SHORTCUTS) as ShortcutAction[]).map(
+              (action) => (
+                <div key={action} className="row" style={{ marginBottom: 8 }}>
+                  <span style={{ flex: 1 }}>{shortcutLabel(action)}</span>
+                  <kbd>{formatShortcutCode(prefs.shortcuts[action])}</kbd>
+                  <button
+                    type="button"
+                    className="secondary"
+                    onClick={() => setBindAction(action)}
+                  >
+                    {bindAction === action ? "Press a key…" : "Rebind"}
+                  </button>
+                  <button
+                    type="button"
+                    className="text-button"
+                    onClick={() =>
+                      void persistPrefs({
+                        ...prefs,
+                        shortcuts: { ...prefs.shortcuts, [action]: null },
+                      })
+                    }
+                  >
+                    Off
+                  </button>
+                </div>
+              ),
+            )}
+          </div>
+          {bindAction && (
+            <input
+              autoFocus
+              readOnly
+              aria-label={`Bind shortcut for ${shortcutLabel(bindAction)}`}
+              placeholder="Press a key (Esc cancels)"
+              onKeyDown={(e) => {
+                e.preventDefault();
+                if (e.key === "Escape") {
+                  setBindAction(null);
+                  return;
+                }
+                const action = bindAction;
+                setBindAction(null);
+                void persistPrefs({
+                  ...prefs,
+                  shortcuts: { ...prefs.shortcuts, [action]: e.code },
+                });
+              }}
+            />
+          )}
+          <button
+            type="button"
+            className="secondary"
+            onClick={() =>
+              void resetGlobalPrefs().then((p) => {
+                setPrefs(p);
+                setMessage("Global play defaults restored.");
+              })
+            }
+          >
+            Restore play defaults
+          </button>
+        </div>
         <div className="panel">
           <h2>Keyboard mapping</h2>
           <p>Used while playing. Does not change touch layouts.</p>
