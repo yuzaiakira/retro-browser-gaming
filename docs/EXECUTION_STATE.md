@@ -9,6 +9,7 @@
 **Sprint 4 Personalization:** per-release prefs, shell display modes, shortcuts, save manager, HUD comfort — verified 2026-10-27.  
 **Sprint 4.1 Personalization reliability:** sparse layered prefs + migration, iframe-focus shell-key bridge, real no-remount identity, honest filter copy, save-manager comfort — verified 2026-10-27.  
 **Sprint 5 Console Experience:** shortcut safety (F5 reject + modifiers + live allowlist), controller-first launcher nav (simulated), session/audio/fullscreen polish, console journeys — verified 2026-10-27.  
+**Sprint 6 Stability:** long-session soak (smoke+full), save integrity, offline/download regressions, final UX A–F, launcher gamepad rAF pause when hidden — verified 2026-10-27. Evidence `docs/test-evidence/PH-UX-STABILITY/`.  
 **Open-source prep:** source-offer gate verifies **every** `SHA256SUMS` entry; `--require-public-delivery` for prod GPL serving; LOCAL_FULL needs `RBG_ALLOW_LOCAL_FULL=1`; MIT LICENSE proposed (not enacted). Sanitized candidate `77110c5` ← private `501ed79` (re-filter after newer tip before push). **STOP** before GitHub publish.
 
 ## Deferred physical / external (do not rediscover)
@@ -133,6 +134,26 @@
 1. Physical gamepad acceptance when hardware available
 2. Owner gates: copyright / public push / legal review / source-offer HTTPS
 3. Optional: richer catalog spatial (2D) focus grid for large libraries
+
+## Sprint 6 stability (2026-10-27)
+
+| Check | Result |
+|---|---|
+| Long-session soak smoke/full | `LONG_SESSION_SOAK_PASS` — Orbit/Genesis/MSX; distinct boots; no duplicate iframes |
+| Heap (CDP) | Measured page JS heap; Genesis trend OK; RSS unavailable; no leak claim |
+| Performance fix | Launcher gamepad cancels rAF while `document.hidden` (+ Vitest) |
+| Final UX A–F | `FINAL_UX_ACCEPTANCE_PASS` |
+| PS1 / PSP smokes | `PS1_GAMEPLAY_PASS` / see PSP evidence |
+| Firefox launcher | Playwright Firefox 142.0.1 PASS (system Firefox 158 blocked by concurrent instance) |
+| Regressions | Console / Personalization / Player UX / Hub / Offline PWA / Downloads / Genesis / MSX / Orbit PASS; Vitest 66; tsc OK |
+| Physical gamepad / iOS / Android re-cert | **BLOCKED_EXTERNAL** — checklist `docs/physical-device-acceptance-checklist-sprint6.md` |
+| Report | `docs/test-evidence/PH-UX-STABILITY/sprint6-final-report.md` |
+
+### Sprint 6 next concrete task
+
+1. Physical gamepad + iOS when hardware available (do not mark passed without devices)
+2. Owner gates unchanged (copyright / public push / legal / source-offer HTTPS)
+3. Stop — do not start an unrelated feature sprint from this milestone
 
 ## Remaining blockers / next
 

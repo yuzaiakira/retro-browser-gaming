@@ -1,0 +1,31 @@
+{
+  "A": {
+    "home": true,
+    "downloaded": "downloaded",
+    "played": true
+  },
+  "B": {
+    "continueSection": "fallback-details-play",
+    "saved": true,
+    "exited": true
+  },
+  "C": {
+    "offlineLibrary": true,
+    "offlinePlay": true,
+    "load": true
+  },
+  "D": {
+    "nav": true,
+    "paused": true,
+    "exited": true
+  },
+  "E": {
+    "libraryReachable": true,
+    "downloadsReachable": true
+  },
+  "F": {
+    "backgroundResume": true,
+    "saved": true,
+    "reopened": true
+  }
+}

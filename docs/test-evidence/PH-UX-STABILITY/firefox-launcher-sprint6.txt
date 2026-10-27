@@ -1,0 +1,1 @@
+MATRIX_FIREFOX_LAUNCHER_PASS {"version":"142.0.1"}
