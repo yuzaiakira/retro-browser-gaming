@@ -1,14 +1,22 @@
 "use client";
 import { useEffect, useId, useRef } from "react";
 import type { RuntimeCapabilities } from "@/emulators/contracts";
-import type { DisplayMode, PlayerPrefs, RenderFilter } from "./player-prefs";
+import type {
+  DisplayMode,
+  PlayerPrefs,
+  PlayerPrefsPatch,
+  RenderFilter,
+} from "./player-prefs";
 import { DEFAULT_SHORTCUTS } from "./player-prefs";
 import {
   formatShortcutCode,
   shortcutLabel,
 } from "./player-shortcuts";
 import type { AspectInfo } from "./player-display";
-import { integerScalingSupport } from "./player-display";
+import {
+  integerScalingSupport,
+  renderFilterHonesty,
+} from "./player-display";
 import type { SaveSlotInfo } from "./save-slots";
 import { canLoadSlot } from "./save-slots";
 
@@ -69,7 +77,7 @@ export default function GameMenu({
   hudMinimized: boolean;
   onClose: () => void;
   onAction: (action: GameMenuAction) => void;
-  onPrefsPatch: (patch: Partial<PlayerPrefs>) => void;
+  onPrefsPatch: (patch: PlayerPrefsPatch) => void;
   onSlot: (slot: number) => void;
   onImportFile: (file: File) => void;
 }) {
@@ -285,11 +293,14 @@ export default function GameMenu({
                 })
               }
             >
-              <option value="auto">Browser default</option>
-              <option value="sharp">Sharp (nearest / pixelated on iframe)</option>
-              <option value="smooth">Smooth</option>
+              <option value="auto">Browser default (iframe CSS)</option>
+              <option value="sharp">Sharp attempt (iframe CSS pixelated)</option>
+              <option value="smooth">Smooth attempt (iframe CSS)</option>
             </select>
           </label>
+          <p className="small" role="note">
+            {renderFilterHonesty(prefs.renderFilter)}
+          </p>
         </div>
 
         {caps.audio && (
@@ -330,8 +341,11 @@ export default function GameMenu({
             )}
           </ul>
           <p className="small">
-            Customize or disable shortcuts in Settings. Shortcuts never reach the
-            emulator as gameplay input.
+            Customize or disable shortcuts in Settings. When the emulator iframe
+            has focus, matching keys are forwarded over the authenticated session
+            channel (not injected into game content). F5 may still reload the
+            browser if it is bound and the frame cannot claim it — default quick
+            save uses F8. On-screen HUD / menu controls remain available.
           </p>
         </div>
 

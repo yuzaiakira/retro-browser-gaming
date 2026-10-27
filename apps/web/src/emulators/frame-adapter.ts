@@ -32,6 +32,7 @@ export class FrameAdapter implements EmulatorAdapter {
   private targetOrigin: string = '';
   private disposed = false;
   private core = '';
+  private shellKeyHandler: ((detail: { code: string; key: string }) => void) | null = null;
 
   constructor(
     container: HTMLElement,
@@ -45,6 +46,7 @@ export class FrameAdapter implements EmulatorAdapter {
       native ? 'allow-scripts' : 'allow-scripts allow-same-origin',
     );
     this.frame.className = 'game-frame';
+    this.frame.dataset.runtimeSession = this.session;
     this.ready = new Promise((resolve, reject) => {
       this.readyResolve = resolve;
       this.readyReject = reject;
@@ -55,6 +57,30 @@ export class FrameAdapter implements EmulatorAdapter {
     );
     window.addEventListener('message', this.onMessage);
     container.append(this.frame);
+  }
+
+  runtimeSessionId() {
+    return this.session;
+  }
+
+  runtimeFrame() {
+    return this.disposed ? null : this.frame;
+  }
+
+  setShellKeyHandler(
+    handler: ((detail: { code: string; key: string }) => void) | null,
+  ) {
+    this.shellKeyHandler = handler;
+  }
+
+  async setShellShortcutCodes(codes: string[]) {
+    const cleaned = codes.filter((c) => typeof c === 'string' && c.length > 0 && c.length <= 40);
+    if (this.native) {
+      // Dedicated message type — native fixtures ignore unknown `command` methods.
+      this.post({ type: 'setShellKeys', session: this.session, value: cleaned });
+      return;
+    }
+    await this.call('setShellKeys', cleaned);
   }
 
   private onMessage = (event: MessageEvent) => {
@@ -75,6 +101,14 @@ export class FrameAdapter implements EmulatorAdapter {
       clearTimeout(this.timer);
       this.readyReject(new Error(data.error));
     }
+    if (data.type === 'shell-key') {
+      const code = typeof data.code === 'string' ? data.code : '';
+      const key = typeof data.key === 'string' ? data.key : '';
+      if (code || key === 'Escape') {
+        this.shellKeyHandler?.({ code, key });
+      }
+      return;
+    }
     if (data.type === 'reply') {
       const entry = this.pending.get(data.id);
       if (entry) {
@@ -93,7 +127,9 @@ export class FrameAdapter implements EmulatorAdapter {
     this.core = options.core;
     if (this.native) {
       const html = await file.text();
-      const sessionScript = `<script>window.RETRO_SESSION=${JSON.stringify(this.session)};<\/script>`;
+      // Trusted first-party bridge only — session-scoped shell shortcut forwarder.
+      // Does not weaken sandbox; messages still require matching RETRO_SESSION.
+      const sessionScript = `<script>window.RETRO_SESSION=${JSON.stringify(this.session)};(function(){var codes=new Set(['Escape','KeyP','KeyF','F5','F8','F9']);addEventListener('message',function(ev){var d=ev.data;if(!d||d.session!==window.RETRO_SESSION)return;if(d.type==='setShellKeys'&&Array.isArray(d.value)){codes=new Set(d.value.filter(function(c){return typeof c==='string'&&c.length&&c.length<=40;}));}});addEventListener('keydown',function(e){if(!(codes.has(e.code)||e.key==='Escape'))return;e.preventDefault();e.stopPropagation();parent.postMessage({type:'shell-key',session:window.RETRO_SESSION,code:e.code,key:e.key},'*');},true);})();<\/script>`;
       const url = URL.createObjectURL(
         new Blob([html.replace('<script>', sessionScript + '<script>')], { type: 'text/html' }),
       );

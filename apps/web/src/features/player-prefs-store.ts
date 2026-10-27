@@ -4,11 +4,14 @@ import {
   DEFAULT_PLAYER_PREFS,
   DEFAULT_SHORTCUTS,
   globalPrefsKey,
+  mergePatches,
   mergePlayerPrefs,
   normalizePlayerPrefs,
+  parseReleaseOverlay,
   releaseKeymapKey,
   releasePrefsKey,
   sanitizeKeymap,
+  toReleaseOverlayRecord,
   type PlayerPrefs,
   type PlayerPrefsPatch,
 } from "./player-prefs";
@@ -18,12 +21,16 @@ export async function loadGlobalPrefs(): Promise<PlayerPrefs> {
   return normalizePlayerPrefs(raw, DEFAULT_PLAYER_PREFS);
 }
 
+/**
+ * Sparse per-release overrides only. Missing keys inherit from global.
+ * Legacy full snapshots keep every present field as an explicit override.
+ */
 export async function loadReleasePrefsOverlay(
   releaseId: string,
 ): Promise<PlayerPrefsPatch | null> {
   const raw = await setting<unknown>(releasePrefsKey(releaseId), null);
   if (raw == null) return null;
-  return normalizePlayerPrefs(raw, DEFAULT_PLAYER_PREFS);
+  return parseReleaseOverlay(raw);
 }
 
 export async function loadEffectivePrefs(
@@ -38,11 +45,35 @@ export async function saveGlobalPrefs(prefs: PlayerPrefs): Promise<void> {
   await setSetting(globalPrefsKey(), normalizePlayerPrefs(prefs));
 }
 
+/**
+ * @deprecated Prefer patchReleasePrefs — writing a full prefs blob freezes
+ * unrelated keys as release overrides. Kept for migration callers only.
+ */
 export async function saveReleasePrefs(
   releaseId: string,
   prefs: PlayerPrefs,
 ): Promise<void> {
-  await setSetting(releasePrefsKey(releaseId), normalizePlayerPrefs(prefs));
+  // Persist as a full overlay of present fields (legacy-compatible snapshot).
+  // New UI paths must use patchReleasePrefs with intentional keys only.
+  const patch = parseReleaseOverlay(prefs);
+  if (!patch) {
+    await clearReleasePrefs(releaseId);
+    return;
+  }
+  const record = toReleaseOverlayRecord(patch);
+  await setSetting(releasePrefsKey(releaseId), record);
+}
+
+/** Merge intentional keys into the sparse release overlay and persist. */
+export async function patchReleasePrefs(
+  releaseId: string,
+  patch: PlayerPrefsPatch,
+): Promise<PlayerPrefsPatch | null> {
+  const existing = await loadReleasePrefsOverlay(releaseId);
+  const merged = mergePatches(existing, patch);
+  const record = toReleaseOverlayRecord(merged);
+  await setSetting(releasePrefsKey(releaseId), record);
+  return record ? merged : null;
 }
 
 export async function clearReleasePrefs(releaseId: string): Promise<void> {

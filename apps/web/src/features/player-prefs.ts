@@ -50,7 +50,8 @@ export const DEFAULT_SHORTCUTS: ShortcutMap = {
   menu: "Escape",
   pause: "KeyP",
   fullscreen: "KeyF",
-  quickSave: "F5",
+  // F5 often triggers browser reload before the player can claim it; F8 is safer.
+  quickSave: "F8",
   quickLoad: "F9",
 };
 
@@ -164,6 +165,136 @@ export function mergePlayerPrefs(
     },
     base,
   );
+}
+
+const SCALAR_KEYS = [
+  "displayMode",
+  "renderFilter",
+  "volume",
+  "touchVisible",
+  "hudMinimized",
+  "shortcutsEnabled",
+] as const;
+
+/**
+ * Parse a stored release record as a **sparse** patch.
+ * Only keys present in the raw object become overrides — missing keys inherit.
+ * Legacy full snapshots (every scalar present) are preserved as full overrides
+ * so previously frozen values are not silently discarded.
+ */
+export function parseReleaseOverlay(raw: unknown): PlayerPrefsPatch | null {
+  if (raw == null) return null;
+  if (!isRecord(raw)) return null;
+
+  // Explicit overlay envelope (Sprint 4.1+)
+  if (raw.kind === "overlay" && isRecord(raw.patch)) {
+    return parseReleaseOverlay(raw.patch);
+  }
+
+  const patch: PlayerPrefsPatch = {};
+
+  if ("displayMode" in raw) {
+    const v = parseDisplayMode(raw.displayMode, DEFAULT_PLAYER_PREFS.displayMode);
+    if (raw.displayMode === "fit" || raw.displayMode === "original") {
+      patch.displayMode = v;
+    }
+  }
+  if ("renderFilter" in raw) {
+    if (
+      raw.renderFilter === "auto" ||
+      raw.renderFilter === "sharp" ||
+      raw.renderFilter === "smooth"
+    ) {
+      patch.renderFilter = raw.renderFilter;
+    }
+  }
+  if ("volume" in raw) {
+    const n = typeof raw.volume === "number" ? raw.volume : Number(raw.volume);
+    if (Number.isFinite(n)) patch.volume = Math.min(1, Math.max(0, n));
+  }
+  if ("touchVisible" in raw) {
+    if (raw.touchVisible === "auto" || raw.touchVisible === true || raw.touchVisible === false) {
+      patch.touchVisible = raw.touchVisible;
+    }
+  }
+  if ("hudMinimized" in raw && typeof raw.hudMinimized === "boolean") {
+    patch.hudMinimized = raw.hudMinimized;
+  }
+  if ("shortcutsEnabled" in raw && typeof raw.shortcutsEnabled === "boolean") {
+    patch.shortcutsEnabled = raw.shortcutsEnabled;
+  }
+  if ("shortcuts" in raw && isRecord(raw.shortcuts)) {
+    const sc: Partial<ShortcutMap> = {};
+    for (const action of Object.keys(DEFAULT_SHORTCUTS) as ShortcutAction[]) {
+      if (!(action in raw.shortcuts)) continue;
+      const parsed = parseShortcutCode(raw.shortcuts[action]);
+      if (parsed === undefined) continue;
+      sc[action] = parsed;
+    }
+    if (Object.keys(sc).length) patch.shortcuts = sc;
+  }
+
+  if (
+    !("displayMode" in patch) &&
+    !("renderFilter" in patch) &&
+    !("volume" in patch) &&
+    !("touchVisible" in patch) &&
+    !("hudMinimized" in patch) &&
+    !("shortcutsEnabled" in patch) &&
+    !patch.shortcuts
+  ) {
+    return null;
+  }
+  return patch;
+}
+
+/** Merge intentional patches; later patch wins per key (shortcuts deep-merged). */
+export function mergePatches(
+  a: PlayerPrefsPatch | null | undefined,
+  b: PlayerPrefsPatch | null | undefined,
+): PlayerPrefsPatch {
+  const out: PlayerPrefsPatch = { ...(a || {}) };
+  if (!b) return out;
+  if (b.displayMode !== undefined) out.displayMode = b.displayMode;
+  if (b.renderFilter !== undefined) out.renderFilter = b.renderFilter;
+  if (b.volume !== undefined) out.volume = b.volume;
+  if (b.touchVisible !== undefined) out.touchVisible = b.touchVisible;
+  if (b.hudMinimized !== undefined) out.hudMinimized = b.hudMinimized;
+  if (b.shortcutsEnabled !== undefined) out.shortcutsEnabled = b.shortcutsEnabled;
+  if (b.shortcuts) {
+    out.shortcuts = { ...(out.shortcuts || {}), ...b.shortcuts };
+  }
+  return out;
+}
+
+function isEmptyPatch(patch: PlayerPrefsPatch): boolean {
+  return !SCALAR_KEYS.some((key) => patch[key] !== undefined) && !patch.shortcuts;
+}
+
+/** Persistable release overlay envelope (sparse). */
+export function toReleaseOverlayRecord(patch: PlayerPrefsPatch): Record<string, unknown> | null {
+  const clean = parseReleaseOverlay({ ...patch }) || {};
+  if (isEmptyPatch(clean)) return null;
+  return {
+    schemaVersion: PREFS_SCHEMA,
+    kind: "overlay",
+    patch: clean,
+  };
+}
+
+/** Codes currently bound as shell shortcuts (for frame capture allow-list). */
+export function shellShortcutCodes(prefs: PlayerPrefs): string[] {
+  const codes = new Set<string>();
+  if (!prefs.shortcutsEnabled) {
+    // Menu Escape still useful when shortcuts disabled? Keep Escape always.
+    codes.add("Escape");
+    return [...codes];
+  }
+  for (const code of Object.values(prefs.shortcuts)) {
+    if (code) codes.add(code);
+  }
+  codes.add("Escape");
+  return [...codes];
 }
 
 export function sanitizeKeymap(

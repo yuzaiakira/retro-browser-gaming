@@ -18,7 +18,10 @@ import {
   saveGlobalPrefs,
 } from "./player-prefs-store";
 import { formatShortcutCode, shortcutLabel } from "./player-shortcuts";
-import { integerScalingSupport } from "./player-display";
+import {
+  integerScalingSupport,
+  renderFilterHonesty,
+} from "./player-display";
 
 export default function Settings({
   diagnostics = false,
@@ -200,11 +203,12 @@ export default function Settings({
                 })
               }
             >
-              <option value="auto">Browser default</option>
-              <option value="sharp">Sharp (iframe only)</option>
-              <option value="smooth">Smooth</option>
+              <option value="auto">Browser default (iframe CSS)</option>
+              <option value="sharp">Sharp attempt (iframe CSS pixelated)</option>
+              <option value="smooth">Smooth attempt (iframe CSS)</option>
             </select>
           </label>
+          <p className="small">{renderFilterHonesty(prefs.renderFilter)}</p>
           <label>
             Default volume
             <input

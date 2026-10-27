@@ -15,14 +15,17 @@ import GameMenu, { type GameMenuAction } from "./GameMenu";
 import ConfirmDialog from "./ConfirmDialog";
 import {
   DEFAULT_PLAYER_PREFS,
+  mergePlayerPrefs,
   resolveTouchVisible,
+  shellShortcutCodes,
   type PlayerPrefs,
+  type PlayerPrefsPatch,
 } from "./player-prefs";
 import {
   clearReleasePrefs,
   loadEffectiveKeymap,
   loadEffectivePrefs,
-  saveReleasePrefs,
+  patchReleasePrefs,
 } from "./player-prefs-store";
 import {
   aspectForConsole,
@@ -35,6 +38,7 @@ import {
 } from "./player-shortcuts";
 import {
   AUTOSAVE_SLOT,
+  canLoadSlot,
   findLatestCompatibleSave,
   listSaveSlots,
   type SaveSlotInfo,
@@ -68,6 +72,7 @@ export default function Player({ id }: { id: string }) {
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [iframeEpoch] = useState(0); // remount detector for tests — never increment on prefs
+  const [runtimeSession, setRuntimeSession] = useState<string | null>(null);
 
   const host = useRef<HTMLDivElement>(null);
   const shell = useRef<HTMLElement>(null);
@@ -84,6 +89,7 @@ export default function Player({ id }: { id: string }) {
   const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
   );
+  const handleShortcutRef = useRef<(action: string) => void>(() => undefined);
 
   prefsRef.current = prefs;
 
@@ -129,14 +135,15 @@ export default function Player({ id }: { id: string }) {
     }
   }, []);
 
-  const persistPrefs = useCallback(
-    async (next: PlayerPrefs) => {
-      setPrefs(next);
-      prefsRef.current = next;
-      await saveReleasePrefs(id, next);
-    },
-    [id],
-  );
+  const syncShellKeys = useCallback(async (next: PlayerPrefs) => {
+    const runtime = adapter.current;
+    if (!runtime?.setShellShortcutCodes) return;
+    try {
+      await runtime.setShellShortcutCodes(shellShortcutCodes(next));
+    } catch {
+      /* frame may not support setShellKeys yet during boot */
+    }
+  }, []);
 
   useEffect(() => {
     pausedRef.current = paused;
@@ -229,6 +236,30 @@ export default function Player({ id }: { id: string }) {
       if (runtime.capabilities.audio) {
         await runtime.setVolume(effectivePrefs.volume).catch(() => undefined);
       }
+      if (runtime.runtimeSessionId) {
+        setRuntimeSession(runtime.runtimeSessionId());
+      }
+      runtime.setShellKeyHandler?.((detail) => {
+        if (disposedRef.current) return;
+        if (uiBlocksShortcuts()) return;
+        const action = matchShortcut(
+          {
+            code: detail.code,
+            key: detail.key,
+            metaKey: false,
+            ctrlKey: false,
+            altKey: false,
+            repeat: false,
+          } as KeyboardEvent,
+          prefsRef.current.shortcuts,
+          prefsRef.current.shortcutsEnabled,
+        );
+        if (!action) return;
+        handleShortcutRef.current(action);
+      });
+      await runtime
+        .setShellShortcutCodes?.(shellShortcutCodes(effectivePrefs))
+        .catch(() => undefined);
       input = new InputRouter((c, v) => {
         runtime!.input(c, v);
         if (v !== 0) markDirty();
@@ -294,8 +325,10 @@ export default function Player({ id }: { id: string }) {
       if (toastTimer.current) clearTimeout(toastTimer.current);
       input?.dispose();
       routerRef.current = null;
+      runtime?.setShellKeyHandler?.(null);
       runtime?.dispose();
       adapter.current = null;
+      setRuntimeSession(null);
     };
   }, [id, markDirty, refreshSlots, flashToast]);
 
@@ -320,9 +353,37 @@ export default function Player({ id }: { id: string }) {
 
   useEffect(() => {
     if (!running) return;
+
+    const dispatchShortcut = (action: string) => {
+      if (confirm) return;
+      if (edit) return;
+      if (action === "menu") {
+        setMenuOpen((open) => {
+          if (open) {
+            queueMicrotask(() => {
+              (prefsRef.current.hudMinimized
+                ? floatMenuBtn.current
+                : menuBtn.current
+              )?.focus();
+            });
+            return false;
+          }
+          return true;
+        });
+        return;
+      }
+      if (menuOpen) return;
+      if (action === "pause") void togglePause();
+      if (action === "fullscreen") void doFullscreen();
+      if (action === "quickSave" && caps.saveState)
+        void handleMenuAction("quick-save");
+      if (action === "quickLoad" && caps.saveState)
+        void handleMenuAction("quick-load");
+    };
+    handleShortcutRef.current = dispatchShortcut;
+
     const onKey = (e: KeyboardEvent) => {
       if (uiBlocksShortcuts()) return;
-      // Confirm dialogs own Escape / destructive flows.
       if (confirm) return;
       if (edit) return;
 
@@ -333,29 +394,9 @@ export default function Player({ id }: { id: string }) {
       );
       if (!action) return;
 
-      // Menu Escape still works when menu is open even if shortcuts disabled? handled via match.
       e.preventDefault();
       e.stopPropagation();
-
-      if (action === "menu") {
-        if (menuOpen) {
-          setMenuOpen(false);
-          (prefsRef.current.hudMinimized
-            ? floatMenuBtn.current
-            : menuBtn.current
-          )?.focus();
-        } else {
-          setMenuOpen(true);
-        }
-        return;
-      }
-      if (menuOpen) return; // other shortcuts only when menu closed
-      if (action === "pause") void togglePause();
-      if (action === "fullscreen") void doFullscreen();
-      if (action === "quickSave" && caps.saveState)
-        void handleMenuAction("quick-save");
-      if (action === "quickLoad" && caps.saveState)
-        void handleMenuAction("quick-load");
+      dispatchShortcut(action);
     };
     window.addEventListener("keydown", onKey, true);
     return () => window.removeEventListener("keydown", onKey, true);
@@ -414,18 +455,37 @@ export default function Player({ id }: { id: string }) {
     if (!local.current || !adapter.current)
       throw new Error("Runtime unavailable");
     if (!caps.saveState) throw new Error("Save states unsupported for this core");
-    setStatus("Restoring…");
-    const saved = await readSave(local.current, target);
-    await adapter.current.importState(saved.bytes);
-    if (disposedRef.current) return;
-    if (pausedRef.current) {
-      await adapter.current.pause().catch(() => undefined);
-    } else {
-      await adapter.current.resume().catch(() => undefined);
+    const infos = await listSaveSlots(local.current);
+    const info = infos.find((s) => s.slot === target);
+    if (!info || !canLoadSlot(info)) {
+      const reason = info?.detail || "Empty slot";
+      const msg = `Cannot load: ${reason}`;
+      setStatus(msg);
+      flashToast(msg);
+      throw new Error(msg);
     }
-    setSessionDirty(false);
-    setStatus("Restored successfully");
-    flashToast("Restored successfully");
+    setStatus("Restoring…");
+    try {
+      const saved = await readSave(local.current, target);
+      await adapter.current.importState(saved.bytes);
+      if (disposedRef.current) return;
+      if (pausedRef.current) {
+        await adapter.current.pause().catch(() => undefined);
+      } else {
+        await adapter.current.resume().catch(() => undefined);
+      }
+      setSessionDirty(false);
+      setStatus("Restored successfully");
+      flashToast("Restored successfully");
+    } catch (error) {
+      if (disposedRef.current) return;
+      const msg =
+        "Load failed: " +
+        String(error instanceof Error ? error.message : error);
+      setStatus(msg);
+      flashToast(msg);
+      throw error;
+    }
   }
 
   async function togglePause() {
@@ -491,12 +551,13 @@ export default function Player({ id }: { id: string }) {
     else window.location.href = "/library";
   }
 
-  async function applyPrefsPatch(patch: Partial<PlayerPrefs>) {
-    const next = { ...prefsRef.current, ...patch, schemaVersion: 1 as const };
-    if (patch.shortcuts) {
-      next.shortcuts = { ...prefsRef.current.shortcuts, ...patch.shortcuts };
-    }
-    await persistPrefs(next);
+  async function applyPrefsPatch(patch: PlayerPrefsPatch) {
+    // Intentional release overrides only — never snapshot the full effective prefs.
+    const next = mergePlayerPrefs(prefsRef.current, patch);
+    setPrefs(next);
+    prefsRef.current = next;
+    await patchReleasePrefs(id, patch);
+    await syncShellKeys(next);
     if (typeof patch.volume === "number" && adapter.current && caps.audio) {
       await adapter.current.setVolume(patch.volume).catch(() => undefined);
       setStatus("Volume updated");
@@ -592,6 +653,7 @@ export default function Player({ id }: { id: string }) {
             const restored = await loadEffectivePrefs(id);
             setPrefs(restored);
             prefsRef.current = restored;
+            await syncShellKeys(restored);
             setTouch(
               resolveTouchVisible(
                 restored.touchVisible,
@@ -627,6 +689,7 @@ export default function Player({ id }: { id: string }) {
       data-editing={edit || undefined}
       data-hud={hudMinimal ? "minimal" : "full"}
       data-iframe-epoch={iframeEpoch}
+      data-runtime-session={runtimeSession || undefined}
     >
       <header className="player-hud" hidden={hudMinimal || undefined}>
         <div className="player-hud-text">

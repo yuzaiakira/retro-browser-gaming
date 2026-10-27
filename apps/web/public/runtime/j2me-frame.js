@@ -10,6 +10,7 @@ let session,
   killTimer = 0,
   pressedKeys = new Set(),
   screenProfile = { width: 240, height: 320, label: '240x320' };
+let shellCodes = new Set(['Escape', 'KeyP', 'KeyF', 'F5', 'F8', 'F9']);
 
 const SCREEN_PROFILES = {
   '128x160': { width: 128, height: 160 },
@@ -31,6 +32,18 @@ const KEY_MAP = {
 };
 
 const reply = (data) => parent.postMessage({ ...data, session }, location.origin);
+
+addEventListener(
+  'keydown',
+  (e) => {
+    if (!session) return;
+    if (!(shellCodes.has(e.code) || e.key === 'Escape')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    reply({ type: 'shell-key', code: e.code, key: e.key });
+  },
+  true,
+);
 
 js2me.showError = function (message) {
   const alertEl = document.getElementById('alert');
@@ -316,6 +329,14 @@ addEventListener('message', async (event) => {
     return;
   }
   if (d.session !== session) return;
+  if (d.type === 'command' && d.method === 'setShellKeys') {
+    const list = Array.isArray(d.value) ? d.value : [];
+    shellCodes = new Set(
+      list.filter((c) => typeof c === 'string' && c.length > 0 && c.length <= 40),
+    );
+    reply({ type: 'reply', id: d.id, value: true });
+    return;
+  }
   if (d.type === 'input') {
     if (!started) return;
     const code = KEY_MAP[d.command];

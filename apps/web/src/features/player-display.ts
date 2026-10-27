@@ -107,3 +107,18 @@ export function iframeImageRendering(
   if (filter === "smooth") return "smooth";
   return "auto";
 }
+
+/**
+ * Honest copy: CSS on the iframe host is not the same as emulator framebuffer
+ * filtering or true integer scaling.
+ */
+export function renderFilterHonesty(filter: RenderFilter): string {
+  switch (filter) {
+    case "sharp":
+      return "Sets CSS image-rendering: pixelated on the iframe element. This does not change the emulator’s internal framebuffer filter and is not true integer scaling.";
+    case "smooth":
+      return "Sets CSS image-rendering: smooth on the iframe element. Softens how the browser paints the iframe box; the core may still scale internally.";
+    default:
+      return "Leaves iframe image-rendering to the browser default. Display mode only resizes the stage container — it does not remount the runtime.";
+  }
+}
