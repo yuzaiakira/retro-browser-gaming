@@ -69,7 +69,8 @@ export function matchShortcut(
 ): ShortcutAction | null {
   if (!enabled) return null;
   if (e.metaKey || e.ctrlKey || e.altKey) return null;
-  if (e.repeat && (e.code === "F5" || e.code === "F9")) return null;
+  if (e.repeat && (e.code === "F5" || e.code === "F8" || e.code === "F9"))
+    return null;
   for (const action of Object.keys(DEFAULT_SHORTCUTS) as ShortcutAction[]) {
     const code = map[action];
     if (!code) continue;

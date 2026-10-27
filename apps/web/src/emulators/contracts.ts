@@ -24,4 +24,14 @@ export interface EmulatorAdapter {
   importRmsMigration?(payload: unknown): Promise<unknown>;
   /** Dedicated-origin J2ME only — export suite snapshots for rollback merge. */
   exportRmsMigration?(): Promise<unknown>;
+  /** Stable session id for remount / probe evidence (FrameAdapter). */
+  runtimeSessionId?(): string;
+  /** Live iframe element when available (FrameAdapter). */
+  runtimeFrame?(): HTMLIFrameElement | null;
+  /** Receive authenticated shell-key forwards from the frame. */
+  setShellKeyHandler?(
+    handler: ((detail: { code: string; key: string }) => void) | null,
+  ): void;
+  /** Allow-list of KeyboardEvent.code values the frame may claim for the shell. */
+  setShellShortcutCodes?(codes: string[]): Promise<void>;
 }

@@ -1,12 +1,20 @@
 import { describe, expect, it } from "vitest";
 import {
   DEFAULT_PLAYER_PREFS,
+  mergePatches,
   mergePlayerPrefs,
   normalizePlayerPrefs,
+  parseReleaseOverlay,
   resolveTouchVisible,
   sanitizeKeymap,
+  toReleaseOverlayRecord,
 } from "./player-prefs";
-import { aspectForConsole, integerScalingSupport, iframeImageRendering } from "./player-display";
+import {
+  aspectForConsole,
+  integerScalingSupport,
+  iframeImageRendering,
+  renderFilterHonesty,
+} from "./player-display";
 import { matchShortcut, conflictsWithDefaultGameplay } from "./player-shortcuts";
 
 describe("normalizePlayerPrefs", () => {
@@ -47,6 +55,88 @@ describe("normalizePlayerPrefs", () => {
   });
 });
 
+describe("layered release overlays", () => {
+  it("parses sparse overlays without inventing volume", () => {
+    const patch = parseReleaseOverlay({ displayMode: "original" });
+    expect(patch).toEqual({ displayMode: "original" });
+    expect(patch && "volume" in patch).toBe(false);
+  });
+
+  it("display override does not freeze global volume", () => {
+    const global = normalizePlayerPrefs({ volume: 0.15, displayMode: "fit" });
+    const overlay = parseReleaseOverlay({ displayMode: "original" });
+    const merged = mergePlayerPrefs(global, overlay);
+    expect(merged.displayMode).toBe("original");
+    expect(merged.volume).toBe(0.15);
+    const afterGlobalVolume = mergePlayerPrefs(
+      normalizePlayerPrefs({ ...global, volume: 0.7 }),
+      overlay,
+    );
+    expect(afterGlobalVolume.volume).toBe(0.7);
+    expect(afterGlobalVolume.displayMode).toBe("original");
+  });
+
+  it("explicit volume override stays independent of global", () => {
+    const global = normalizePlayerPrefs({ volume: 0.2 });
+    const overlay = mergePatches(
+      parseReleaseOverlay({ displayMode: "original" }),
+      { volume: 0.95 },
+    );
+    expect(mergePlayerPrefs(global, overlay).volume).toBe(0.95);
+    const louderGlobal = normalizePlayerPrefs({ volume: 0.5 });
+    expect(mergePlayerPrefs(louderGlobal, overlay).volume).toBe(0.95);
+  });
+
+  it("deep-merges nested shortcut mappings", () => {
+    const global = normalizePlayerPrefs({
+      shortcuts: { pause: "KeyP", quickSave: "F8" },
+    });
+    const overlay = parseReleaseOverlay({
+      shortcuts: { pause: "KeyO" },
+    });
+    const merged = mergePlayerPrefs(global, overlay);
+    expect(merged.shortcuts.pause).toBe("KeyO");
+    expect(merged.shortcuts.quickSave).toBe("F8");
+    expect(merged.shortcuts.menu).toBe("Escape");
+  });
+
+  it("preserves legacy full snapshots as full overrides (no silent discard)", () => {
+    const legacy = {
+      schemaVersion: 1,
+      displayMode: "original",
+      renderFilter: "sharp",
+      volume: 0.33,
+      touchVisible: "auto",
+      hudMinimized: true,
+      shortcutsEnabled: true,
+      shortcuts: { ...DEFAULT_PLAYER_PREFS.shortcuts, pause: "KeyQ" },
+    };
+    const patch = parseReleaseOverlay(legacy);
+    expect(patch?.volume).toBe(0.33);
+    expect(patch?.displayMode).toBe("original");
+    expect(patch?.hudMinimized).toBe(true);
+    expect(patch?.shortcuts?.pause).toBe("KeyQ");
+    const global = normalizePlayerPrefs({ volume: 0.9, displayMode: "fit" });
+    const merged = mergePlayerPrefs(global, patch);
+    expect(merged.volume).toBe(0.33);
+    expect(merged.displayMode).toBe("original");
+  });
+
+  it("writes overlay envelope without expanding missing keys", () => {
+    const record = toReleaseOverlayRecord({ displayMode: "original" });
+    expect(record?.kind).toBe("overlay");
+    expect(record?.patch).toEqual({ displayMode: "original" });
+    const roundTrip = parseReleaseOverlay(record);
+    expect(roundTrip).toEqual({ displayMode: "original" });
+  });
+
+  it("reset overlay restores global inheritance", () => {
+    const global = normalizePlayerPrefs({ volume: 0.55, displayMode: "fit" });
+    expect(mergePlayerPrefs(global, null).volume).toBe(0.55);
+    expect(mergePlayerPrefs(global, undefined).displayMode).toBe("fit");
+  });
+});
+
 describe("sanitizeKeymap", () => {
   it("drops bad codes and commands", () => {
     const k = sanitizeKeymap({ KeyZ: 0, bad: 99, KeyX: "nope", ArrowUp: 4 });
@@ -83,6 +173,12 @@ describe("player-display", () => {
     expect(iframeImageRendering("sharp")).toBe("pixelated");
     expect(iframeImageRendering("smooth")).toBe("smooth");
     expect(iframeImageRendering("auto")).toBe("auto");
+  });
+
+  it("documents filter honesty (iframe CSS ≠ framebuffer)", () => {
+    expect(renderFilterHonesty("sharp")).toMatch(/iframe/i);
+    expect(renderFilterHonesty("sharp")).toMatch(/not true integer/i);
+    expect(renderFilterHonesty("smooth")).toMatch(/iframe/i);
   });
 });
 

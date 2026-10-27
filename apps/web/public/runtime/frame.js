@@ -2,8 +2,23 @@
 // Internal methods are isolated here, audited against the vendored source and runtime-tested.
 let session, started = false, seekableBridge;
 const urls = [];
+/** Shell shortcuts claimed by the parent (session-scoped). Prevents F5 reload etc. */
+let shellCodes = new Set(['Escape', 'KeyP', 'KeyF', 'F5', 'F8', 'F9']);
 const reply = (data) => parent.postMessage({ ...data, session }, location.origin);
 addEventListener('error', (e) => reply({ type: 'error', error: e.message }));
+
+// Capture before EmulatorJS so Pause/Menu/Fullscreen/QuickSave reach the shell.
+addEventListener(
+  'keydown',
+  (e) => {
+    if (!session) return;
+    if (!(shellCodes.has(e.code) || e.key === 'Escape')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    reply({ type: 'shell-key', code: e.code, key: e.key });
+  },
+  true,
+);
 
 function revoke() {
   for (const url of urls) URL.revokeObjectURL(url);
@@ -299,7 +314,16 @@ addEventListener('message', async (event) => {
     }
     return;
   }
-  if (d.session !== session || !started) return;
+  if (d.session !== session) return;
+  if (d.type === 'command' && d.method === 'setShellKeys') {
+    const list = Array.isArray(d.value) ? d.value : [];
+    shellCodes = new Set(
+      list.filter((c) => typeof c === 'string' && c.length > 0 && c.length <= 40),
+    );
+    reply({ type: 'reply', id: d.id, value: true });
+    return;
+  }
+  if (!started) return;
   const e = window.EJS_emulator,
     g = e.gameManager;
   if (d.type === 'input') {
