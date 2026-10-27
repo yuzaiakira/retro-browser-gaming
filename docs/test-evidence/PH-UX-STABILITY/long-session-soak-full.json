@@ -1,0 +1,283 @@
+{
+  "mode": "full",
+  "soakSeconds": 90,
+  "cycles": 4,
+  "startedAt": "2026-10-27T14:42:56.497Z",
+  "games": {
+    "orbit": {
+      "installed": true,
+      "cycles": [
+        {
+          "n": 1,
+          "session": "8b7e6a41-254d-47fb-8a1e-cba61d07c7bb",
+          "iframeCount": 1,
+          "heapBefore": 8623656,
+          "heapAfter": 10994372,
+          "heapDelta": 2370716
+        },
+        {
+          "n": 2,
+          "session": "8b7e6a41-254d-47fb-8a1e-cba61d07c7bb",
+          "iframeCount": 1,
+          "heapBefore": 10994372,
+          "heapAfter": 10162860,
+          "heapDelta": -831512
+        },
+        {
+          "n": 3,
+          "session": "8b7e6a41-254d-47fb-8a1e-cba61d07c7bb",
+          "iframeCount": 1,
+          "heapBefore": 10162860,
+          "heapAfter": 11990060,
+          "heapDelta": 1827200
+        },
+        {
+          "n": 4,
+          "session": "8b7e6a41-254d-47fb-8a1e-cba61d07c7bb",
+          "iframeCount": 1,
+          "heapBefore": 11990060,
+          "heapAfter": 10808152,
+          "heapDelta": -1181908
+        }
+      ],
+      "boots": [
+        "8b7e6a41-254d-47fb-8a1e-cba61d07c7bb"
+      ],
+      "saveOk": true,
+      "loadConfirm": true,
+      "pauseResume": 4,
+      "menuOpenClose": 4,
+      "fullscreenToggle": 4
+    },
+    "genesis": {
+      "installed": true,
+      "cycles": [
+        {
+          "n": 1,
+          "session": "fd7a80c6-6b88-4044-9049-165e461601e2",
+          "iframeCount": 1,
+          "heapBefore": 11974368,
+          "heapAfter": 14507352,
+          "heapDelta": 2532984
+        },
+        {
+          "n": 2,
+          "session": "fd7a80c6-6b88-4044-9049-165e461601e2",
+          "iframeCount": 1,
+          "heapBefore": 14507352,
+          "heapAfter": 10680308,
+          "heapDelta": -3827044
+        },
+        {
+          "n": 3,
+          "session": "fd7a80c6-6b88-4044-9049-165e461601e2",
+          "iframeCount": 1,
+          "heapBefore": 10680308,
+          "heapAfter": 12570908,
+          "heapDelta": 1890600
+        },
+        {
+          "n": 4,
+          "session": "fd7a80c6-6b88-4044-9049-165e461601e2",
+          "iframeCount": 1,
+          "heapBefore": 12570908,
+          "heapAfter": 14530864,
+          "heapDelta": 1959956
+        }
+      ],
+      "boots": [
+        "fd7a80c6-6b88-4044-9049-165e461601e2"
+      ],
+      "saveOk": true,
+      "loadConfirm": true,
+      "pauseResume": 4,
+      "menuOpenClose": 4,
+      "fullscreenToggle": 4
+    },
+    "msx": {
+      "installed": true,
+      "cycles": [
+        {
+          "n": 1,
+          "session": "9d54ff5f-4631-42d1-8393-f57cc14ae3cc",
+          "iframeCount": 1,
+          "heapBefore": 12471024,
+          "heapAfter": 13445868,
+          "heapDelta": 974844
+        },
+        {
+          "n": 2,
+          "session": "9d54ff5f-4631-42d1-8393-f57cc14ae3cc",
+          "iframeCount": 1,
+          "heapBefore": 13445868,
+          "heapAfter": 14150780,
+          "heapDelta": 704912
+        },
+        {
+          "n": 3,
+          "session": "9d54ff5f-4631-42d1-8393-f57cc14ae3cc",
+          "iframeCount": 1,
+          "heapBefore": 14150780,
+          "heapAfter": 14879020,
+          "heapDelta": 728240
+        },
+        {
+          "n": 4,
+          "session": "9d54ff5f-4631-42d1-8393-f57cc14ae3cc",
+          "iframeCount": 1,
+          "heapBefore": 14879020,
+          "heapAfter": 15567268,
+          "heapDelta": 688248
+        }
+      ],
+      "boots": [
+        "9d54ff5f-4631-42d1-8393-f57cc14ae3cc"
+      ],
+      "saveOk": false,
+      "loadConfirm": false,
+      "pauseResume": 4,
+      "menuOpenClose": 4,
+      "fullscreenToggle": 4
+    }
+  },
+  "crossLaunch": {
+    "sessions": [
+      "7a894af5-dfef-4723-a087-d7715304dfc6",
+      "1f11755e-3b87-40a3-be9e-a0fc20f8a33a",
+      "c42bbeb6-e2a7-4764-9d27-c4e2a9eab1b6"
+    ],
+    "distinctBoots": true,
+    "noDuplicateIframes": true
+  },
+  "saveIntegrity": {
+    "emptyLoadDisabled": true,
+    "quickAndAutosaveListed": true,
+    "reloadThenLoad": true,
+    "orbitHasOwnSlotList": true
+  },
+  "background": {
+    "blurFired": true,
+    "hideProbe": {
+      "probeRafTicksDuringHide": 36,
+      "note": "Probe rAF is test-owned; launcher should cancel its own rAF on hide",
+      "kind": "measured-probe-only"
+    },
+    "gamepadDisconnectSim": true
+  },
+  "memory": {
+    "samples": [
+      {
+        "game": "orbit",
+        "cycle": 1,
+        "usedSize": 10994372,
+        "rssKb": null,
+        "rssNote": "unavailable(browser.process null)"
+      },
+      {
+        "game": "orbit",
+        "cycle": 2,
+        "usedSize": 10162860,
+        "rssKb": null,
+        "rssNote": "unavailable(browser.process null)"
+      },
+      {
+        "game": "orbit",
+        "cycle": 3,
+        "usedSize": 11990060,
+        "rssKb": null,
+        "rssNote": "unavailable(browser.process null)"
+      },
+      {
+        "game": "orbit",
+        "cycle": 4,
+        "usedSize": 10808152,
+        "rssKb": null,
+        "rssNote": "unavailable(browser.process null)"
+      },
+      {
+        "game": "genesis",
+        "cycle": 1,
+        "usedSize": 14507352,
+        "rssKb": null,
+        "rssNote": "unavailable(browser.process null)"
+      },
+      {
+        "game": "genesis",
+        "cycle": 2,
+        "usedSize": 10680308,
+        "rssKb": null,
+        "rssNote": "unavailable(browser.process null)"
+      },
+      {
+        "game": "genesis",
+        "cycle": 3,
+        "usedSize": 12570908,
+        "rssKb": null,
+        "rssNote": "unavailable(browser.process null)"
+      },
+      {
+        "game": "genesis",
+        "cycle": 4,
+        "usedSize": 14530864,
+        "rssKb": null,
+        "rssNote": "unavailable(browser.process null)"
+      },
+      {
+        "game": "msx",
+        "cycle": 1,
+        "usedSize": 13445868,
+        "rssKb": null,
+        "rssNote": "unavailable(browser.process null)"
+      },
+      {
+        "game": "msx",
+        "cycle": 2,
+        "usedSize": 14150780,
+        "rssKb": null,
+        "rssNote": "unavailable(browser.process null)"
+      },
+      {
+        "game": "msx",
+        "cycle": 3,
+        "usedSize": 14879020,
+        "rssKb": null,
+        "rssNote": "unavailable(browser.process null)"
+      },
+      {
+        "game": "msx",
+        "cycle": 4,
+        "usedSize": 15567268,
+        "rssKb": null,
+        "rssNote": "unavailable(browser.process null)"
+      }
+    ],
+    "kind": "measured-cdp-Runtime.getHeapUsage",
+    "baseline": {
+      "usedSize": 611544,
+      "totalSize": 1310720,
+      "rssKb": null,
+      "rssNote": "unavailable(browser.process null)",
+      "scope": "page-js-heap",
+      "kind": "measured"
+    },
+    "final": {
+      "usedSize": 17849464,
+      "totalSize": 43065344,
+      "rssKb": null,
+      "rssNote": "unavailable(browser.process null)",
+      "scope": "page-js-heap",
+      "kind": "measured"
+    },
+    "growthBytes": 17237920,
+    "growthNote": "Growth across multi-game soak is expected from emulator WASM/JS; not classified as leak without unbounded trend across identical cycles.",
+    "genesisPerCycleGrowth": 7837.333333333333,
+    "genesisTrendOk": true
+  },
+  "limitations": {
+    "physicalGamepad": "NOT_VERIFIED",
+    "iosSafari": "NOT_VERIFIED",
+    "fps": "not measured — no trusted FPS API",
+    "cpu": "not measured — no process CPU sampler in this harness"
+  },
+  "finishedAt": "2026-10-27T14:43:14.247Z"
+}

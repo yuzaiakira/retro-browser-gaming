@@ -17,11 +17,11 @@
 | EMU-005, EMU-006 | PASSED | Lifecycle + unsupported core (`PH-11/acceptance-gates-20261022.txt`) |
 | CMP-001, CMP-002 | PASSED (unit) | `compatibility.test.ts` |
 | IN-001 | PASSED (Chromium) | Keyboard → InputRouter (`PH-11`) |
-| IN-002 | PASSED (simulated) | Gamepad API mock; **physical gamepad NOT_VERIFIED** |
-| IN-002-P, IN-002-D | BLOCKED_EXTERNAL | No controller — `docs/physical-device-acceptance.md` |
+| IN-002 | PASSED (simulated) | Gamepad API mock; Sprint 6 console + soak disconnect sim; **physical gamepad NOT_VERIFIED** |
+| IN-002-P, IN-002-D | BLOCKED_EXTERNAL | No controller — `docs/physical-device-acceptance.md` + Sprint 6 checklist |
 | IN-003, IN-004, IN-005 | PASSED (Chromium + Android physical) | Desktop sim + USB Android Chrome CDP (`PH-08`) |
-| SAV-001 | PASSED | HTML5 + console offline load; Amiga/MSX saveState re-PASS 2026-10-22 |
-| SAV-002, SAV-003 | PASSED | Delete keeps saves; invalid import rejected (`PH-11`) |
+| SAV-001 | PASSED | HTML5 + console offline load; Amiga/MSX saveState re-PASS 2026-10-22; Sprint 6 soak + final UX save/load |
+| SAV-002, SAV-003 | PASSED | Delete keeps saves; invalid import rejected (`PH-11`); Sprint 6 slot isolation checks |
 | SEC-001–SEC-003 | PASSED | Security evidence; product-approval + deploy `catalog.E001` (`PH-11/catalog-e001-20261022.txt`) |
 | SEC-004 | PASSED | Hostile sandboxed HTML denied launcher IndexedDB (`PH-11`) |
 | UX-001, UX-002 | PASSED (basic + Android) | Mobile layout + keyboard focus; Android fullscreen/orientation (`PH-08`) |
