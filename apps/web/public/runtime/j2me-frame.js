@@ -10,7 +10,7 @@ let session,
   killTimer = 0,
   pressedKeys = new Set(),
   screenProfile = { width: 240, height: 320, label: '240x320' };
-let shellCodes = new Set(['Escape', 'KeyP', 'KeyF', 'F5', 'F8', 'F9']);
+let shellCodes = new Set(['Escape', 'KeyP', 'KeyF', 'F8', 'F9']);
 
 const SCREEN_PROFILES = {
   '128x160': { width: 128, height: 160 },
@@ -33,14 +33,32 @@ const KEY_MAP = {
 
 const reply = (data) => parent.postMessage({ ...data, session }, location.origin);
 
+function editableTarget(t) {
+  if (!t || typeof t.closest !== 'function') return false;
+  if (t.isContentEditable) return true;
+  return !!t.closest('input,select,textarea,[contenteditable="true"]');
+}
+
 addEventListener(
   'keydown',
   (e) => {
     if (!session) return;
+    if (editableTarget(e.target)) return;
     if (!(shellCodes.has(e.code) || e.key === 'Escape')) return;
+    if (e.code === 'F5') return;
     e.preventDefault();
     e.stopPropagation();
-    reply({ type: 'shell-key', code: e.code, key: e.key });
+    reply({
+      type: 'shell-key',
+      code: e.code,
+      key: e.key,
+      ctrlKey: !!e.ctrlKey,
+      altKey: !!e.altKey,
+      metaKey: !!e.metaKey,
+      shiftKey: !!e.shiftKey,
+      repeat: !!e.repeat,
+      isComposing: !!e.isComposing,
+    });
   },
   true,
 );

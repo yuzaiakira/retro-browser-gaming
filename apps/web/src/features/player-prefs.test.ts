@@ -15,7 +15,13 @@ import {
   iframeImageRendering,
   renderFilterHonesty,
 } from "./player-display";
-import { matchShortcut, conflictsWithDefaultGameplay } from "./player-shortcuts";
+import {
+  matchShortcut,
+  conflictsWithDefaultGameplay,
+  validateShortcutBinding,
+  parseShellKeyDetail,
+  isOsReservedCode,
+} from "./player-shortcuts";
 
 describe("normalizePlayerPrefs", () => {
   it("returns defaults for garbage", () => {
@@ -186,17 +192,97 @@ describe("player-shortcuts", () => {
   it("matches codes without modifier chords", () => {
     const map = { ...DEFAULT_PLAYER_PREFS.shortcuts };
     const pause = matchShortcut(
-      { code: "KeyP", key: "p", metaKey: false, ctrlKey: false, altKey: false, repeat: false } as KeyboardEvent,
+      {
+        code: "KeyP",
+        key: "p",
+        metaKey: false,
+        ctrlKey: false,
+        altKey: false,
+        shiftKey: false,
+        repeat: false,
+        isComposing: false,
+      },
       map,
       true,
     );
     expect(pause).toBe("pause");
     const blocked = matchShortcut(
-      { code: "KeyP", key: "p", metaKey: true, ctrlKey: false, altKey: false, repeat: false } as KeyboardEvent,
+      {
+        code: "KeyP",
+        key: "p",
+        metaKey: false,
+        ctrlKey: true,
+        altKey: false,
+        shiftKey: false,
+        repeat: false,
+        isComposing: false,
+      },
       map,
       true,
     );
     expect(blocked).toBeNull();
+  });
+
+  it("ignores key-repeat and composing", () => {
+    const map = { ...DEFAULT_PLAYER_PREFS.shortcuts };
+    expect(
+      matchShortcut(
+        {
+          code: "KeyP",
+          key: "p",
+          metaKey: false,
+          ctrlKey: false,
+          altKey: false,
+          shiftKey: false,
+          repeat: true,
+          isComposing: false,
+        },
+        map,
+        true,
+      ),
+    ).toBeNull();
+  });
+
+  it("rejects F5 and detects duplicates", () => {
+    expect(isOsReservedCode("F5")).toBe(true);
+    const map = { ...DEFAULT_PLAYER_PREFS.shortcuts };
+    const f5 = validateShortcutBinding("F5", "quickSave", map);
+    expect(f5.ok).toBe(false);
+    const dup = validateShortcutBinding("KeyP", "fullscreen", map);
+    expect(dup.ok).toBe(false);
+  });
+
+  it("migrates legacy F5 quickSave to F8", () => {
+    const p = normalizePlayerPrefs({
+      shortcuts: { quickSave: "F5", pause: "KeyP" },
+    });
+    expect(p.shortcuts.quickSave).toBe("F8");
+  });
+
+  it("parses shell-key metadata without fabricating modifiers", () => {
+    expect(parseShellKeyDetail({ code: "KeyP", key: "p" })).toEqual({
+      code: "KeyP",
+      key: "p",
+      ctrlKey: false,
+      altKey: false,
+      metaKey: false,
+      shiftKey: false,
+      repeat: false,
+      isComposing: false,
+    });
+    expect(
+      parseShellKeyDetail({
+        code: "KeyP",
+        key: "p",
+        ctrlKey: true,
+        altKey: false,
+        metaKey: false,
+        shiftKey: false,
+        repeat: false,
+        isComposing: false,
+      })?.ctrlKey,
+    ).toBe(true);
+    expect(parseShellKeyDetail({ code: 1, key: "p" })).toBeNull();
   });
 
   it("flags default gameplay conflicts", () => {

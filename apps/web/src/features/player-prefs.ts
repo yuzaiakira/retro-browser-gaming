@@ -109,6 +109,12 @@ function parseShortcutCode(v: unknown): string | null | undefined {
   return code;
 }
 
+/** F5 triggers browser reload — migrate quickSave→F8; disable other F5 binds. */
+function migrateF5(action: ShortcutAction, code: string | null): string | null {
+  if (code !== "F5") return code;
+  return action === "quickSave" ? "F8" : null;
+}
+
 function parseShortcuts(
   raw: unknown,
   base: ShortcutMap,
@@ -119,7 +125,10 @@ function parseShortcuts(
     if (!(action in raw)) continue;
     const parsed = parseShortcutCode(raw[action]);
     if (parsed === undefined) continue;
-    out[action] = parsed;
+    out[action] = migrateF5(action, parsed);
+  }
+  for (const action of Object.keys(DEFAULT_SHORTCUTS) as ShortcutAction[]) {
+    out[action] = migrateF5(action, out[action]);
   }
   return out;
 }
@@ -229,7 +238,7 @@ export function parseReleaseOverlay(raw: unknown): PlayerPrefsPatch | null {
       if (!(action in raw.shortcuts)) continue;
       const parsed = parseShortcutCode(raw.shortcuts[action]);
       if (parsed === undefined) continue;
-      sc[action] = parsed;
+      sc[action] = migrateF5(action, parsed);
     }
     if (Object.keys(sc).length) patch.shortcuts = sc;
   }
@@ -291,7 +300,8 @@ export function shellShortcutCodes(prefs: PlayerPrefs): string[] {
     return [...codes];
   }
   for (const code of Object.values(prefs.shortcuts)) {
-    if (code) codes.add(code);
+    // Never allow-list F5 even if a stale record somehow retained it.
+    if (code && code !== "F5") codes.add(code);
   }
   codes.add("Escape");
   return [...codes];

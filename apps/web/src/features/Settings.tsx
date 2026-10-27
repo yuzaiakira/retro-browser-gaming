@@ -17,7 +17,12 @@ import {
   resetGlobalPrefs,
   saveGlobalPrefs,
 } from "./player-prefs-store";
-import { formatShortcutCode, shortcutLabel } from "./player-shortcuts";
+import {
+  F5_MIGRATION_NOTE,
+  formatShortcutCode,
+  shortcutLabel,
+  validateShortcutBinding,
+} from "./player-shortcuts";
 import {
   integerScalingSupport,
   renderFilterHonesty,
@@ -254,6 +259,11 @@ export default function Settings({
             />
             Enable player shortcuts
           </label>
+          <p className="small">
+            F5 cannot be bound (browser reload). Disabled shortcuts show as Off
+            and are ignored during play. Chorded Ctrl/Alt/Meta keys never fire
+            player shortcuts.
+          </p>
           <div className="shortcut-list" style={{ marginTop: 12 }}>
             {(Object.keys(DEFAULT_SHORTCUTS) as ShortcutAction[]).map(
               (action) => (
@@ -270,12 +280,13 @@ export default function Settings({
                   <button
                     type="button"
                     className="text-button"
-                    onClick={() =>
+                    onClick={() => {
                       void persistPrefs({
                         ...prefs,
                         shortcuts: { ...prefs.shortcuts, [action]: null },
-                      })
-                    }
+                      });
+                      setMessage(`${shortcutLabel(action)} shortcut disabled.`);
+                    }}
                   >
                     Off
                   </button>
@@ -296,13 +307,31 @@ export default function Settings({
                   return;
                 }
                 const action = bindAction;
+                const result = validateShortcutBinding(
+                  e.code,
+                  action,
+                  prefs.shortcuts,
+                  keys,
+                );
                 setBindAction(null);
+                if (!result.ok) {
+                  setMessage(result.message);
+                  return;
+                }
                 void persistPrefs({
                   ...prefs,
-                  shortcuts: { ...prefs.shortcuts, [action]: e.code },
+                  shortcuts: { ...prefs.shortcuts, [action]: result.code },
                 });
+                setMessage(
+                  `${shortcutLabel(action)} bound to ${formatShortcutCode(result.code)}.`,
+                );
               }}
             />
+          )}
+          {prefs.shortcuts.quickSave === "F8" && (
+            <p className="small" role="note">
+              {F5_MIGRATION_NOTE}
+            </p>
           )}
           <button
             type="button"
