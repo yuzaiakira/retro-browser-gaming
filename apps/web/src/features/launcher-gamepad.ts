@@ -187,7 +187,8 @@ export class LauncherGamepadNav {
     this.presence = "none";
     window.addEventListener("gamepadconnected", this.onConnect);
     window.addEventListener("gamepaddisconnected", this.onDisconnect);
-    this.raf = requestAnimationFrame(this.tick);
+    document.addEventListener("visibilitychange", this.onVisibility);
+    this.scheduleTick();
     this.options.onPresence?.(this.presence);
   }
 
@@ -207,9 +208,30 @@ export class LauncherGamepadNav {
     cancelAnimationFrame(this.raf);
     window.removeEventListener("gamepadconnected", this.onConnect);
     window.removeEventListener("gamepaddisconnected", this.onDisconnect);
+    document.removeEventListener("visibilitychange", this.onVisibility);
     this.seen.clear();
     this.sticky.clear();
   }
+
+  private scheduleTick() {
+    if (this.disposed) return;
+    // Stop polling while the tab is hidden — resume on visibilitychange.
+    if (typeof document !== "undefined" && document.hidden) return;
+    this.raf = requestAnimationFrame(this.tick);
+  }
+
+  private onVisibility = () => {
+    if (this.disposed) return;
+    if (document.hidden) {
+      cancelAnimationFrame(this.raf);
+      this.raf = 0;
+      this.seen.clear();
+      this.sticky.clear();
+      return;
+    }
+    this.requireNeutral();
+    this.scheduleTick();
+  };
 
   private onConnect = (e: Event) => {
     const pad = (e as GamepadEvent).gamepad;
@@ -252,7 +274,8 @@ export class LauncherGamepadNav {
 
   private tick = () => {
     if (this.disposed) return;
-    this.raf = requestAnimationFrame(this.tick);
+    this.scheduleTick();
+    if (typeof document !== "undefined" && document.hidden) return;
     if (typeof navigator.getGamepads !== "function") return;
 
     // GameMenu has its own Start/Select navigator — avoid duplicate clicks.

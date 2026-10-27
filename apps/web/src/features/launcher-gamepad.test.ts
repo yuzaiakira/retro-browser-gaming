@@ -42,6 +42,7 @@ describe("LauncherGamepadNav", () => {
     };
     const documentMock = {
       body: { innerHTML: "" },
+      hidden: false,
       activeElement: buttons.a as unknown as Element,
       querySelector: (sel: string): unknown => {
         if (sel === "[data-nav-root]" || sel === "main") return root;
@@ -55,6 +56,13 @@ describe("LauncherGamepadNav", () => {
         return [];
       },
       getElementById: (id: string) => (id === "a" ? buttons.a : buttons.b),
+      addEventListener: (type: string, fn: EventListener) => {
+        if (!listeners.has(`document:${type}`)) listeners.set(`document:${type}`, new Set());
+        listeners.get(`document:${type}`)!.add(fn);
+      },
+      removeEventListener: (type: string, fn: EventListener) => {
+        listeners.get(`document:${type}`)?.delete(fn);
+      },
     };
 
     Object.defineProperty(documentMock, "activeElement", {
@@ -137,6 +145,24 @@ describe("LauncherGamepadNav", () => {
       onPresence: (s) => presence.push(s),
     });
     expect(presence).toContain("unsupported");
+    nav.dispose();
+  });
+
+  it("stops scheduling ticks while document is hidden", () => {
+    const nav = new LauncherGamepadNav({
+      isGameplayActive: () => false,
+    });
+    rafCbs = [];
+    (document as { hidden: boolean }).hidden = true;
+    for (const fn of listeners.get("document:visibilitychange") || []) {
+      fn(new Event("visibilitychange"));
+    }
+    expect(rafCbs.length).toBe(0);
+    (document as { hidden: boolean }).hidden = false;
+    for (const fn of listeners.get("document:visibilitychange") || []) {
+      fn(new Event("visibilitychange"));
+    }
+    expect(rafCbs.length).toBeGreaterThan(0);
     nav.dispose();
   });
 });
