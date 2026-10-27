@@ -8,6 +8,7 @@
 **Hub UX Acceptance (Sprint 3.1):** offline persistent-profile journey, catalog Back/Forward history, Continue Playing accuracy, stable hub shots — verified 2026-10-26.  
 **Sprint 4 Personalization:** per-release prefs, shell display modes, shortcuts, save manager, HUD comfort — verified 2026-10-27.  
 **Sprint 4.1 Personalization reliability:** sparse layered prefs + migration, iframe-focus shell-key bridge, real no-remount identity, honest filter copy, save-manager comfort — verified 2026-10-27.  
+**Sprint 5 Console Experience:** shortcut safety (F5 reject + modifiers + live allowlist), controller-first launcher nav (simulated), session/audio/fullscreen polish, console journeys — verified 2026-10-27.  
 **Open-source prep:** source-offer gate verifies **every** `SHA256SUMS` entry; `--require-public-delivery` for prod GPL serving; LOCAL_FULL needs `RBG_ALLOW_LOCAL_FULL=1`; MIT LICENSE proposed (not enacted). Sanitized candidate `77110c5` ← private `501ed79` (re-filter after newer tip before push). **STOP** before GitHub publish.
 
 ## Deferred physical / external (do not rediscover)
@@ -110,9 +111,28 @@
 
 ### Sprint 4.1 next concrete task
 
-1. Optional: bind customizable shell-key allow-list live when Settings changes mid-session without remount
+1. ~~Optional: live shell-key allow-list~~ — done in Sprint 5
 2. Owner gates: copyright / public push / legal review / source-offer HTTPS (unchanged)
 3. QA: physical gamepad + iOS; Ops: staging HTTPS
+
+## Sprint 5 console experience (2026-10-27)
+
+| Check | Result |
+|---|---|
+| Shortcut safety | F5 rejected + migrated to F8; Ctrl/Alt/Meta blocked; repeat/composing ignored; editable targets skipped; shell-key forwards real modifiers |
+| Live allowlist sync | `setShellShortcutCodes` on prefs change without remount |
+| Controller-first launcher | `LauncherGamepadNav` D-pad/stick + Start/A confirm + Select/B back; neutral gate; GameMenu keeps Start/Select; status chip |
+| Console journeys | `CONSOLE_JOURNEY_PASS` A–F → `docs/test-evidence/PH-UX-CONSOLE/` (**simulated** pad) |
+| Player personalization / UX / Hub / Offline / Downloads | All PASS (Sprint 5 regression) |
+| Vitest / typecheck | 65 passed / `tsc --noEmit` OK |
+| Perf (player-ux) | heldKey presses=1 releases=1; menuOpenPadEvents=0 |
+| Limitations | Physical gamepad / iOS Safari / staging HTTPS **NOT_VERIFIED**; integer scaling unsupported |
+
+### Sprint 5 next concrete task
+
+1. Physical gamepad acceptance when hardware available
+2. Owner gates: copyright / public push / legal review / source-offer HTTPS
+3. Optional: richer catalog spatial (2D) focus grid for large libraries
 
 ## Remaining blockers / next
 
