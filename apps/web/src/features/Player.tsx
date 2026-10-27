@@ -1,21 +1,46 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { db, setting, setSetting } from "@/lib/db";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { db, setSetting } from "@/lib/db";
 import { assetFile } from "@/lib/storage";
 import { auditInstallation } from "./offline";
 import { createAdapter } from "@/emulators/registry";
 import { loadLaunchMedia } from "@/emulators/media";
 import type { EmulatorAdapter } from "@/emulators/contracts";
 import type { Installation } from "@/lib/types";
-import { defaultKeys, InputRouter } from "./input";
+import { InputRouter } from "./input";
 import TouchControls from "./TouchControls";
 import { exportSave, importSave, readSave, storeSave } from "./saves";
 import { isMissingRuntimeError, missingRuntimeMessage } from "./runtime-errors";
 import GameMenu, { type GameMenuAction } from "./GameMenu";
 import ConfirmDialog from "./ConfirmDialog";
+import {
+  DEFAULT_PLAYER_PREFS,
+  resolveTouchVisible,
+  type PlayerPrefs,
+} from "./player-prefs";
+import {
+  clearReleasePrefs,
+  loadEffectiveKeymap,
+  loadEffectivePrefs,
+  saveReleasePrefs,
+} from "./player-prefs-store";
+import {
+  aspectForConsole,
+  iframeImageRendering,
+  stageStyle,
+} from "./player-display";
+import {
+  matchShortcut,
+  uiBlocksShortcuts,
+} from "./player-shortcuts";
+import {
+  AUTOSAVE_SLOT,
+  findLatestCompatibleSave,
+  listSaveSlots,
+  type SaveSlotInfo,
+} from "./save-slots";
 
 const QUICK_SLOT = 0;
-const AUTOSAVE_SLOT = 9;
 
 type ConfirmKind = "restart" | "load" | "exit" | null;
 
@@ -34,25 +59,41 @@ export default function Player({ id }: { id: string }) {
     analog: false,
   });
   const [slot, setSlot] = useState(QUICK_SLOT);
-  const [volume, setVolume] = useState(0.4);
+  const [prefs, setPrefs] = useState<PlayerPrefs>(DEFAULT_PLAYER_PREFS);
+  const [slots, setSlots] = useState<SaveSlotInfo[]>([]);
+  const [latestSlot, setLatestSlot] = useState<SaveSlotInfo | null>(null);
   const [sessionDirty, setSessionDirty] = useState(false);
   const [confirm, setConfirm] = useState<ConfirmKind>(null);
   const [pendingLoadSlot, setPendingLoadSlot] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [iframeEpoch] = useState(0); // remount detector for tests — never increment on prefs
 
   const host = useRef<HTMLDivElement>(null);
   const shell = useRef<HTMLElement>(null);
   const adapter = useRef<EmulatorAdapter | null>(null);
   const local = useRef<Installation | undefined>(undefined);
   const menuBtn = useRef<HTMLButtonElement>(null);
+  const floatMenuBtn = useRef<HTMLButtonElement>(null);
   const routerRef = useRef<InputRouter | null>(null);
+  const prefsRef = useRef(prefs);
   const pausedRef = useRef(false);
   const busyRef = useRef(false);
   const autosavingRef = useRef(false);
   const disposedRef = useRef(false);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
+  );
+
+  prefsRef.current = prefs;
+
+  const aspect = useMemo(
+    () => aspectForConsole(installation?.release.console.slug),
+    [installation?.release.console.slug],
+  );
+  const stage = useMemo(
+    () => stageStyle(prefs.displayMode, aspect),
+    [prefs.displayMode, aspect],
   );
 
   const setStatus = useCallback((text: string) => {
@@ -74,19 +115,46 @@ export default function Player({ id }: { id: string }) {
     setSessionDirty(true);
   }, []);
 
+  const refreshSlots = useCallback(async () => {
+    const item = local.current;
+    if (!item || !item.manifest?.core) return;
+    try {
+      const list = await listSaveSlots(item);
+      const latest = await findLatestCompatibleSave(item);
+      if (disposedRef.current) return;
+      setSlots(list);
+      setLatestSlot(latest);
+    } catch {
+      /* ignore listing errors during boot */
+    }
+  }, []);
+
+  const persistPrefs = useCallback(
+    async (next: PlayerPrefs) => {
+      setPrefs(next);
+      prefsRef.current = next;
+      await saveReleasePrefs(id, next);
+    },
+    [id],
+  );
+
   useEffect(() => {
     pausedRef.current = paused;
   }, [paused]);
 
   useEffect(() => {
-    setTouch(navigator.maxTouchPoints > 0);
+    const hasTouch = navigator.maxTouchPoints > 0;
     disposedRef.current = false;
     let disposed = false;
     let input: InputRouter | undefined;
     let runtime: EmulatorAdapter | undefined;
     let interval: ReturnType<typeof setInterval> | undefined;
     (async () => {
-      const item = await (await db()).get("installations", id);
+      const [item, effectivePrefs, keymap] = await Promise.all([
+        (await db()).get("installations", id),
+        loadEffectivePrefs(id),
+        loadEffectiveKeymap(id),
+      ]);
       if (!item)
         throw new Error(
           "Game is not installed. Open the catalog to download it.",
@@ -100,6 +168,9 @@ export default function Player({ id }: { id: string }) {
       if (disposed) return;
       local.current = item;
       setInstallation(item);
+      setPrefs(effectivePrefs);
+      prefsRef.current = effectivePrefs;
+      setTouch(resolveTouchVisible(effectivePrefs.touchVisible, hasTouch));
       setMessage("Starting the local runtime…");
       runtime = createAdapter(host.current!, item.release);
       adapter.current = runtime;
@@ -155,20 +226,22 @@ export default function Player({ id }: { id: string }) {
         }
       }
       await runtime.start();
+      if (runtime.capabilities.audio) {
+        await runtime.setVolume(effectivePrefs.volume).catch(() => undefined);
+      }
       input = new InputRouter((c, v) => {
         runtime!.input(c, v);
         if (v !== 0) markDirty();
-      }, await setting("keymap", defaultKeys));
+      }, keymap);
       routerRef.current = input;
       setRouter(input);
       setCaps(runtime.capabilities);
-      // Persist local play history before unlocking HUD so Continue Playing is accurate.
       await setSetting("recent:" + id, Date.now());
       if (disposed || disposedRef.current) return;
       setRunning(true);
-      // New session: treat as dirty only when save-states exist (exit risk).
       setSessionDirty(runtime.capabilities.saveState);
       setMessage("Playing on this device");
+      await refreshSlots();
       if (runtime.capabilities.saveState) {
         interval = setInterval(() => {
           void (async () => {
@@ -193,6 +266,8 @@ export default function Player({ id }: { id: string }) {
               );
               if (!disposed && !disposedRef.current) {
                 setSessionDirty(false);
+                flashToast("Autosave stored");
+                await refreshSlots();
               }
             } catch (error) {
               if (!disposed && !disposedRef.current) {
@@ -222,32 +297,71 @@ export default function Player({ id }: { id: string }) {
       runtime?.dispose();
       adapter.current = null;
     };
-  }, [id, markDirty]);
+  }, [id, markDirty, refreshSlots, flashToast]);
 
-  // Suspend gameplay input for overlays / pause / layout editing.
   useEffect(() => {
     const block = menuOpen || !!confirm || edit || paused;
     router?.setSuspended(block);
   }, [menuOpen, confirm, edit, paused, router]);
 
+  // Apply display styles to stage without remounting the iframe.
+  useEffect(() => {
+    const stageEl = host.current;
+    if (!stageEl) return;
+    stageEl.style.aspectRatio = stage.aspectRatio;
+    stageEl.style.width = stage.width;
+    stageEl.style.maxHeight = stage.maxHeight;
+    stageEl.style.maxWidth = stage.maxWidth;
+    const iframe = stageEl.querySelector("iframe");
+    if (iframe) {
+      iframe.style.imageRendering = iframeImageRendering(prefs.renderFilter);
+    }
+  }, [stage, prefs.renderFilter, running, iframeEpoch]);
+
   useEffect(() => {
     if (!running) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key !== "Escape") return;
-      // Topmost dialog owns Escape — confirms take priority over the game menu.
+      if (uiBlocksShortcuts()) return;
+      // Confirm dialogs own Escape / destructive flows.
       if (confirm) return;
+      if (edit) return;
+
+      const action = matchShortcut(
+        e,
+        prefsRef.current.shortcuts,
+        prefsRef.current.shortcutsEnabled,
+      );
+      if (!action) return;
+
+      // Menu Escape still works when menu is open even if shortcuts disabled? handled via match.
       e.preventDefault();
       e.stopPropagation();
-      if (menuOpen) {
-        setMenuOpen(false);
-        menuBtn.current?.focus();
-      } else if (!edit) {
-        setMenuOpen(true);
+
+      if (action === "menu") {
+        if (menuOpen) {
+          setMenuOpen(false);
+          (prefsRef.current.hudMinimized
+            ? floatMenuBtn.current
+            : menuBtn.current
+          )?.focus();
+        } else {
+          setMenuOpen(true);
+        }
+        return;
       }
+      if (menuOpen) return; // other shortcuts only when menu closed
+      if (action === "pause") void togglePause();
+      if (action === "fullscreen") void doFullscreen();
+      if (action === "quickSave" && caps.saveState)
+        void handleMenuAction("quick-save");
+      if (action === "quickLoad" && caps.saveState)
+        void handleMenuAction("quick-load");
     };
     window.addEventListener("keydown", onKey, true);
     return () => window.removeEventListener("keydown", onKey, true);
-  }, [running, menuOpen, confirm, edit]);
+    // togglePause/handleMenuAction are stable enough via refs for this session
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [running, menuOpen, confirm, edit, caps.saveState]);
 
   async function withBusy<T>(fn: () => Promise<T>): Promise<T | undefined> {
     if (busyRef.current) {
@@ -282,6 +396,7 @@ export default function Player({ id }: { id: string }) {
       setSessionDirty(false);
       setStatus(label);
       flashToast(label);
+      await refreshSlots();
     } catch (error) {
       if (disposedRef.current) return;
       const msg =
@@ -303,7 +418,6 @@ export default function Player({ id }: { id: string }) {
     const saved = await readSave(local.current, target);
     await adapter.current.importState(saved.bytes);
     if (disposedRef.current) return;
-    // Keep UI pause state consistent with the adapter after load.
     if (pausedRef.current) {
       await adapter.current.pause().catch(() => undefined);
     } else {
@@ -336,7 +450,6 @@ export default function Player({ id }: { id: string }) {
       if (!adapter.current) return;
       try {
         await adapter.current.reset();
-        // reset() does not guarantee resume — always resume to match Playing UI.
         await adapter.current.resume();
         if (disposedRef.current) return;
         setPaused(false);
@@ -357,18 +470,45 @@ export default function Player({ id }: { id: string }) {
   async function doFullscreen() {
     const node = shell.current;
     if (!node) return;
-    if (document.fullscreenElement) {
-      await document.exitFullscreen();
-      setStatus("Exited fullscreen");
-    } else {
-      await node.requestFullscreen();
-      setStatus("Fullscreen");
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+        setStatus("Exited fullscreen");
+      } else {
+        await node.requestFullscreen();
+        setStatus("Fullscreen");
+      }
+    } catch (error) {
+      setStatus(
+        "Fullscreen unavailable: " +
+          String(error instanceof Error ? error.message : error),
+      );
     }
   }
 
   function requestExit() {
     if (sessionDirty && caps.saveState) setConfirm("exit");
     else window.location.href = "/library";
+  }
+
+  async function applyPrefsPatch(patch: Partial<PlayerPrefs>) {
+    const next = { ...prefsRef.current, ...patch, schemaVersion: 1 as const };
+    if (patch.shortcuts) {
+      next.shortcuts = { ...prefsRef.current.shortcuts, ...patch.shortcuts };
+    }
+    await persistPrefs(next);
+    if (typeof patch.volume === "number" && adapter.current && caps.audio) {
+      await adapter.current.setVolume(patch.volume).catch(() => undefined);
+      setStatus("Volume updated");
+    }
+    if (patch.touchVisible !== undefined) {
+      setTouch(
+        resolveTouchVisible(
+          next.touchVisible,
+          navigator.maxTouchPoints > 0,
+        ),
+      );
+    }
   }
 
   async function handleMenuAction(action: GameMenuAction) {
@@ -383,9 +523,7 @@ export default function Player({ id }: { id: string }) {
           setConfirm("restart");
           break;
         case "quick-save":
-          await withBusy(() =>
-            persistSlot(QUICK_SLOT, "Quick save stored"),
-          );
+          await withBusy(() => persistSlot(QUICK_SLOT, "Quick save stored"));
           break;
         case "quick-load":
           setPendingLoadSlot(QUICK_SLOT);
@@ -405,6 +543,12 @@ export default function Player({ id }: { id: string }) {
           setPendingLoadSlot(slot);
           setConfirm("load");
           break;
+        case "load-last":
+          if (latestSlot) {
+            setPendingLoadSlot(latestSlot.slot);
+            setConfirm("load");
+          }
+          break;
         case "export": {
           if (!installation) break;
           const blob = await exportSave(installation, slot);
@@ -422,15 +566,46 @@ export default function Player({ id }: { id: string }) {
         case "fullscreen":
           await doFullscreen();
           break;
-        case "touch-toggle":
-          setTouch((v) => !v);
-          if (touch) setEdit(false);
+        case "touch-toggle": {
+          const next = !touch;
+          setTouch(next);
+          if (!next) setEdit(false);
+          await applyPrefsPatch({ touchVisible: next });
           setMenuOpen(false);
           break;
+        }
         case "touch-edit":
           setTouch(true);
           setEdit(true);
           setMenuOpen(false);
+          break;
+        case "hud-toggle": {
+          const nextMinimal = !prefs.hudMinimized;
+          await applyPrefsPatch({ hudMinimized: nextMinimal });
+          // Closing the menu reveals the float control when minimized.
+          if (nextMinimal) setMenuOpen(false);
+          break;
+        }
+        case "reset-prefs":
+          await clearReleasePrefs(id);
+          {
+            const restored = await loadEffectivePrefs(id);
+            setPrefs(restored);
+            prefsRef.current = restored;
+            setTouch(
+              resolveTouchVisible(
+                restored.touchVisible,
+                navigator.maxTouchPoints > 0,
+              ),
+            );
+            if (caps.audio && adapter.current) {
+              await adapter.current
+                .setVolume(restored.volume)
+                .catch(() => undefined);
+            }
+            setStatus("Preferences reset for this game");
+            flashToast("Preferences reset");
+          }
           break;
         case "exit":
           requestExit();
@@ -441,6 +616,8 @@ export default function Player({ id }: { id: string }) {
     }
   }
 
+  const hudMinimal = prefs.hudMinimized && running;
+
   return (
     <section
       className="player-shell"
@@ -448,8 +625,10 @@ export default function Player({ id }: { id: string }) {
       data-paused={paused || undefined}
       data-menu={menuOpen || confirm ? "open" : undefined}
       data-editing={edit || undefined}
+      data-hud={hudMinimal ? "minimal" : "full"}
+      data-iframe-epoch={iframeEpoch}
     >
-      <header className="player-hud">
+      <header className="player-hud" hidden={hudMinimal || undefined}>
         <div className="player-hud-text">
           <span className="eyebrow">
             {installation?.release.console.name ?? "LOCAL"} ·{" "}
@@ -521,12 +700,34 @@ export default function Player({ id }: { id: string }) {
         </div>
       </header>
 
-      <p role="status" className="player-status" aria-live="polite">
-        {message}
-      </p>
+      {!hudMinimal && (
+        <p role="status" className="player-status" aria-live="polite">
+          {message}
+        </p>
+      )}
+
+      {hudMinimal && (
+        <button
+          ref={floatMenuBtn}
+          type="button"
+          className="player-float-menu"
+          aria-haspopup="dialog"
+          aria-expanded={menuOpen}
+          aria-label="Open game menu"
+          disabled={!running}
+          onClick={() => setMenuOpen(true)}
+        >
+          Menu
+        </button>
+      )}
 
       <div className="player-viewport">
-        <div className="player-stage" ref={host} />
+        <div
+          className="player-stage"
+          ref={host}
+          data-display={prefs.displayMode}
+          data-filter={prefs.renderFilter}
+        />
         {running && touch && (
           <TouchControls
             router={router}
@@ -554,32 +755,28 @@ export default function Player({ id }: { id: string }) {
         open={menuOpen && !confirm}
         paused={paused}
         caps={caps}
-        volume={volume}
+        prefs={prefs}
+        aspect={aspect}
         slot={slot}
+        slots={slots}
+        latestSlot={latestSlot}
         touchVisible={touch}
         editingTouch={edit}
+        hudMinimized={prefs.hudMinimized}
         onClose={() => {
           setMenuOpen(false);
-          menuBtn.current?.focus();
+          (hudMinimal ? floatMenuBtn.current : menuBtn.current)?.focus();
         }}
         onAction={(a) => void handleMenuAction(a)}
-        onVolume={(value) => {
-          setVolume(value);
-          void adapter.current?.setVolume(value).then(
-            () => setStatus("Volume updated"),
-            (error) =>
-              setStatus(
-                String(error instanceof Error ? error.message : error),
-              ),
-          );
-        }}
+        onPrefsPatch={(patch) => void applyPrefsPatch(patch)}
         onSlot={setSlot}
         onImportFile={(file) => {
           if (!installation) return;
           void importSave(installation, file)
-            .then(() =>
-              setStatus("Backup imported; use Load slot to restore."),
-            )
+            .then(async () => {
+              setStatus("Backup imported; use Load to restore.");
+              await refreshSlots();
+            })
             .catch((error) =>
               setStatus(String(error instanceof Error ? error.message : error)),
             );
