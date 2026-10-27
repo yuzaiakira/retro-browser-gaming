@@ -1,0 +1,78 @@
+{
+  "display": {
+    "modeOriginal": true,
+    "filterSharp": true,
+    "noRemount": true,
+    "filterHonesty": true,
+    "integerHonest": true
+  },
+  "prefs": {
+    "volumeSkippedNative": true,
+    "resetRestoresInheritance": true,
+    "persistedOriginal": true,
+    "inheritanceProbe": {
+      "releaseKind": "overlay",
+      "releaseHasVolume": false,
+      "releaseHasDisplay": true
+    },
+    "sparseOverlay": true,
+    "settingsEveryday": true
+  },
+  "saves": {
+    "slotList": true,
+    "timestampPresent": true,
+    "timestampUpdates": true,
+    "emptyLoadDisabled": true,
+    "loadConfirm": true
+  },
+  "hud": {
+    "minimal": true,
+    "restored": true
+  },
+  "shortcuts": {
+    "escapeMenu": true,
+    "iframeFocusEscape": true,
+    "iframeFocusPause": true,
+    "iframeFocusQuickSave": true
+  },
+  "remount": {
+    "before": {
+      "session": "0b2511db-53b8-48b6-afba-57f116707929",
+      "epoch": "0",
+      "iframeSession": "0b2511db-53b8-48b6-afba-57f116707929",
+      "src": "blob:http://launcher.localhost:13000/f1183cef-68c2-468a-bd5b-07ec71115d33",
+      "nodeMark": "n-57r124kohom"
+    },
+    "afterDisplay": {
+      "session": "0b2511db-53b8-48b6-afba-57f116707929",
+      "epoch": "0",
+      "iframeSession": "0b2511db-53b8-48b6-afba-57f116707929",
+      "src": "blob:http://launcher.localhost:13000/f1183cef-68c2-468a-bd5b-07ec71115d33",
+      "nodeMark": "n-57r124kohom"
+    },
+    "afterHud": {
+      "session": "0b2511db-53b8-48b6-afba-57f116707929",
+      "epoch": "0",
+      "iframeSession": "0b2511db-53b8-48b6-afba-57f116707929",
+      "src": "blob:http://launcher.localhost:13000/f1183cef-68c2-468a-bd5b-07ec71115d33",
+      "nodeMark": "n-57r124kohom"
+    },
+    "hudPreserved": true,
+    "afterVolume": {
+      "session": "0b2511db-53b8-48b6-afba-57f116707929",
+      "epoch": "0",
+      "iframeSession": "0b2511db-53b8-48b6-afba-57f116707929",
+      "src": "blob:http://launcher.localhost:13000/f1183cef-68c2-468a-bd5b-07ec71115d33",
+      "nodeMark": "n-57r124kohom"
+    },
+    "volumePreserved": true,
+    "afterFullscreen": {
+      "session": "d64d1bad-7211-4ed7-a01b-eb091b211354",
+      "epoch": "0",
+      "iframeSession": "d64d1bad-7211-4ed7-a01b-eb091b211354",
+      "src": "/runtime/frame.html",
+      "nodeMark": "n-995clk6p99i"
+    },
+    "fullscreenPreserved": true
+  }
+}
