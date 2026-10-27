@@ -2,20 +2,39 @@
 // Internal methods are isolated here, audited against the vendored source and runtime-tested.
 let session, started = false, seekableBridge;
 const urls = [];
-/** Shell shortcuts claimed by the parent (session-scoped). Prevents F5 reload etc. */
-let shellCodes = new Set(['Escape', 'KeyP', 'KeyF', 'F5', 'F8', 'F9']);
+/** Shell shortcuts claimed by the parent (session-scoped). Never allow-list F5. */
+let shellCodes = new Set(['Escape', 'KeyP', 'KeyF', 'F8', 'F9']);
 const reply = (data) => parent.postMessage({ ...data, session }, location.origin);
 addEventListener('error', (e) => reply({ type: 'error', error: e.message }));
+
+function editableTarget(t) {
+  if (!t || typeof t.closest !== 'function') return false;
+  if (t.isContentEditable) return true;
+  return !!t.closest('input,select,textarea,[contenteditable="true"]');
+}
 
 // Capture before EmulatorJS so Pause/Menu/Fullscreen/QuickSave reach the shell.
 addEventListener(
   'keydown',
   (e) => {
     if (!session) return;
+    if (editableTarget(e.target)) return;
     if (!(shellCodes.has(e.code) || e.key === 'Escape')) return;
+    // Never claim F5 — browsers may reload; parent rejects the binding.
+    if (e.code === 'F5') return;
     e.preventDefault();
     e.stopPropagation();
-    reply({ type: 'shell-key', code: e.code, key: e.key });
+    reply({
+      type: 'shell-key',
+      code: e.code,
+      key: e.key,
+      ctrlKey: !!e.ctrlKey,
+      altKey: !!e.altKey,
+      metaKey: !!e.metaKey,
+      shiftKey: !!e.shiftKey,
+      repeat: !!e.repeat,
+      isComposing: !!e.isComposing,
+    });
   },
   true,
 );

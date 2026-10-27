@@ -5,6 +5,10 @@ import {
   j2meRuntimeOrigin,
   launcherOrigin,
 } from './j2me-origin';
+import {
+  parseShellKeyDetail,
+  type ShellKeyDetail,
+} from '../features/player-shortcuts';
 
 type Pending = {
   resolve: (v: unknown) => void;
@@ -32,7 +36,7 @@ export class FrameAdapter implements EmulatorAdapter {
   private targetOrigin: string = '';
   private disposed = false;
   private core = '';
-  private shellKeyHandler: ((detail: { code: string; key: string }) => void) | null = null;
+  private shellKeyHandler: ((detail: ShellKeyDetail) => void) | null = null;
 
   constructor(
     container: HTMLElement,
@@ -67,14 +71,14 @@ export class FrameAdapter implements EmulatorAdapter {
     return this.disposed ? null : this.frame;
   }
 
-  setShellKeyHandler(
-    handler: ((detail: { code: string; key: string }) => void) | null,
-  ) {
+  setShellKeyHandler(handler: ((detail: ShellKeyDetail) => void) | null) {
     this.shellKeyHandler = handler;
   }
 
   async setShellShortcutCodes(codes: string[]) {
-    const cleaned = codes.filter((c) => typeof c === 'string' && c.length > 0 && c.length <= 40);
+    const cleaned = codes.filter(
+      (c) => typeof c === 'string' && c.length > 0 && c.length <= 40 && c !== 'F5',
+    );
     if (this.native) {
       // Dedicated message type — native fixtures ignore unknown `command` methods.
       this.post({ type: 'setShellKeys', session: this.session, value: cleaned });
@@ -102,10 +106,9 @@ export class FrameAdapter implements EmulatorAdapter {
       this.readyReject(new Error(data.error));
     }
     if (data.type === 'shell-key') {
-      const code = typeof data.code === 'string' ? data.code : '';
-      const key = typeof data.key === 'string' ? data.key : '';
-      if (code || key === 'Escape') {
-        this.shellKeyHandler?.({ code, key });
+      const detail = parseShellKeyDetail(data);
+      if (detail && detail.code !== 'F5') {
+        this.shellKeyHandler?.(detail);
       }
       return;
     }
@@ -129,7 +132,7 @@ export class FrameAdapter implements EmulatorAdapter {
       const html = await file.text();
       // Trusted first-party bridge only — session-scoped shell shortcut forwarder.
       // Does not weaken sandbox; messages still require matching RETRO_SESSION.
-      const sessionScript = `<script>window.RETRO_SESSION=${JSON.stringify(this.session)};(function(){var codes=new Set(['Escape','KeyP','KeyF','F5','F8','F9']);addEventListener('message',function(ev){var d=ev.data;if(!d||d.session!==window.RETRO_SESSION)return;if(d.type==='setShellKeys'&&Array.isArray(d.value)){codes=new Set(d.value.filter(function(c){return typeof c==='string'&&c.length&&c.length<=40;}));}});addEventListener('keydown',function(e){if(!(codes.has(e.code)||e.key==='Escape'))return;e.preventDefault();e.stopPropagation();parent.postMessage({type:'shell-key',session:window.RETRO_SESSION,code:e.code,key:e.key},'*');},true);})();<\/script>`;
+      const sessionScript = `<script>window.RETRO_SESSION=${JSON.stringify(this.session)};(function(){var codes=new Set(['Escape','KeyP','KeyF','F8','F9']);function editable(t){return!!(t&&t.closest&&(t.isContentEditable||t.closest('input,select,textarea,[contenteditable="true"]')));}addEventListener('message',function(ev){var d=ev.data;if(!d||d.session!==window.RETRO_SESSION)return;if(d.type==='setShellKeys'&&Array.isArray(d.value)){codes=new Set(d.value.filter(function(c){return typeof c==='string'&&c.length&&c.length<=40&&c!=='F5';}));}});addEventListener('keydown',function(e){if(editable(e.target))return;if(!(codes.has(e.code)||e.key==='Escape'))return;if(e.code==='F5')return;e.preventDefault();e.stopPropagation();parent.postMessage({type:'shell-key',session:window.RETRO_SESSION,code:e.code,key:e.key,ctrlKey:!!e.ctrlKey,altKey:!!e.altKey,metaKey:!!e.metaKey,shiftKey:!!e.shiftKey,repeat:!!e.repeat,isComposing:!!e.isComposing},'*');},true);})();<\/script>`;
       const url = URL.createObjectURL(
         new Blob([html.replace('<script>', sessionScript + '<script>')], { type: 'text/html' }),
       );

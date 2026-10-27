@@ -34,6 +34,7 @@ import {
 } from "./player-display";
 import {
   matchShortcut,
+  shellKeyAsKeyboardLike,
   uiBlocksShortcuts,
 } from "./player-shortcuts";
 import {
@@ -73,6 +74,8 @@ export default function Player({ id }: { id: string }) {
   const [toast, setToast] = useState<string | null>(null);
   const [iframeEpoch] = useState(0); // remount detector for tests — never increment on prefs
   const [runtimeSession, setRuntimeSession] = useState<string | null>(null);
+  const [fullscreenOn, setFullscreenOn] = useState(false);
+  const volumeBeforeMute = useRef<number | null>(null);
 
   const host = useRef<HTMLDivElement>(null);
   const shell = useRef<HTMLElement>(null);
@@ -90,8 +93,16 @@ export default function Player({ id }: { id: string }) {
     undefined,
   );
   const handleShortcutRef = useRef<(action: string) => void>(() => undefined);
+  const confirmRef = useRef(confirm);
+  const menuOpenRef = useRef(menuOpen);
+  const editRef = useRef(edit);
+  const capsRef = useRef(caps);
 
   prefsRef.current = prefs;
+  confirmRef.current = confirm;
+  menuOpenRef.current = menuOpen;
+  editRef.current = edit;
+  capsRef.current = caps;
 
   const aspect = useMemo(
     () => aspectForConsole(installation?.release.console.slug),
@@ -241,20 +252,22 @@ export default function Player({ id }: { id: string }) {
       }
       runtime.setShellKeyHandler?.((detail) => {
         if (disposedRef.current) return;
+        if (busyRef.current) return;
+        if (confirmRef.current || editRef.current) return;
         if (uiBlocksShortcuts()) return;
+        // Use real modifier/repeat metadata — never fabricate false.
         const action = matchShortcut(
-          {
-            code: detail.code,
-            key: detail.key,
-            metaKey: false,
-            ctrlKey: false,
-            altKey: false,
-            repeat: false,
-          } as KeyboardEvent,
+          shellKeyAsKeyboardLike(detail),
           prefsRef.current.shortcuts,
           prefsRef.current.shortcutsEnabled,
         );
         if (!action) return;
+        if (
+          (action === "quickSave" || action === "quickLoad") &&
+          !capsRef.current.saveState
+        ) {
+          return;
+        }
         handleShortcutRef.current(action);
       });
       await runtime
@@ -326,6 +339,10 @@ export default function Player({ id }: { id: string }) {
       input?.dispose();
       routerRef.current = null;
       runtime?.setShellKeyHandler?.(null);
+      // Best-effort silence — not all runtimes expose global mute.
+      if (runtime?.capabilities.audio) {
+        void runtime.setVolume(0).catch(() => undefined);
+      }
       runtime?.dispose();
       adapter.current = null;
       setRuntimeSession(null);
@@ -351,12 +368,35 @@ export default function Player({ id }: { id: string }) {
     }
   }, [stage, prefs.renderFilter, running, iframeEpoch]);
 
+  // Live-sync iframe capture allow-list when shortcuts change (no remount).
+  useEffect(() => {
+    if (!running) return;
+    void syncShellKeys(prefsRef.current);
+  }, [
+    running,
+    prefs.shortcutsEnabled,
+    prefs.shortcuts.menu,
+    prefs.shortcuts.pause,
+    prefs.shortcuts.fullscreen,
+    prefs.shortcuts.quickSave,
+    prefs.shortcuts.quickLoad,
+    syncShellKeys,
+  ]);
+
+  useEffect(() => {
+    const onFs = () => setFullscreenOn(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", onFs);
+    onFs();
+    return () => document.removeEventListener("fullscreenchange", onFs);
+  }, []);
+
   useEffect(() => {
     if (!running) return;
 
     const dispatchShortcut = (action: string) => {
-      if (confirm) return;
-      if (edit) return;
+      if (confirmRef.current) return;
+      if (editRef.current) return;
+      if (busyRef.current) return;
       if (action === "menu") {
         setMenuOpen((open) => {
           if (open) {
@@ -372,20 +412,21 @@ export default function Player({ id }: { id: string }) {
         });
         return;
       }
-      if (menuOpen) return;
+      if (menuOpenRef.current) return;
       if (action === "pause") void togglePause();
       if (action === "fullscreen") void doFullscreen();
-      if (action === "quickSave" && caps.saveState)
+      if (action === "quickSave" && capsRef.current.saveState)
         void handleMenuAction("quick-save");
-      if (action === "quickLoad" && caps.saveState)
+      if (action === "quickLoad" && capsRef.current.saveState)
         void handleMenuAction("quick-load");
     };
     handleShortcutRef.current = dispatchShortcut;
 
     const onKey = (e: KeyboardEvent) => {
-      if (uiBlocksShortcuts()) return;
-      if (confirm) return;
-      if (edit) return;
+      if (uiBlocksShortcuts(e.target)) return;
+      if (confirmRef.current) return;
+      if (editRef.current) return;
+      if (busyRef.current) return;
 
       const action = matchShortcut(
         e,
@@ -393,6 +434,12 @@ export default function Player({ id }: { id: string }) {
         prefsRef.current.shortcutsEnabled,
       );
       if (!action) return;
+      if (
+        (action === "quickSave" || action === "quickLoad") &&
+        !capsRef.current.saveState
+      ) {
+        return;
+      }
 
       e.preventDefault();
       e.stopPropagation();
@@ -402,7 +449,7 @@ export default function Player({ id }: { id: string }) {
     return () => window.removeEventListener("keydown", onKey, true);
     // togglePause/handleMenuAction are stable enough via refs for this session
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [running, menuOpen, confirm, edit, caps.saveState]);
+  }, [running]);
 
   async function withBusy<T>(fn: () => Promise<T>): Promise<T | undefined> {
     if (busyRef.current) {
@@ -690,12 +737,18 @@ export default function Player({ id }: { id: string }) {
       data-hud={hudMinimal ? "minimal" : "full"}
       data-iframe-epoch={iframeEpoch}
       data-runtime-session={runtimeSession || undefined}
+      data-fullscreen={fullscreenOn || undefined}
+      data-audio={
+        !caps.audio ? "none" : prefs.volume <= 0 ? "muted" : "on"
+      }
     >
       <header className="player-hud" hidden={hudMinimal || undefined}>
         <div className="player-hud-text">
           <span className="eyebrow">
             {installation?.release.console.name ?? "LOCAL"} ·{" "}
             {paused ? "PAUSED" : running ? "PLAYING" : "LOADING"}
+            {fullscreenOn ? " · FULLSCREEN" : ""}
+            {caps.audio && prefs.volume <= 0 ? " · MUTED" : ""}
           </span>
           <h1 className="player-title">
             {installation?.game.title ?? "Opening your game"}
@@ -736,13 +789,51 @@ export default function Player({ id }: { id: string }) {
               {paused ? "Resume" : "Pause"}
             </button>
           )}
+          {running && caps.audio && (
+            <button
+              type="button"
+              className={
+                "secondary hud-btn" +
+                (prefs.volume <= 0 ? " player-audio-muted" : "")
+              }
+              aria-pressed={prefs.volume <= 0}
+              title={
+                prefs.volume <= 0
+                  ? "Unmute (restore previous volume)"
+                  : "Mute this game"
+              }
+              onClick={() => {
+                if (prefs.volume > 0) {
+                  volumeBeforeMute.current = prefs.volume;
+                  void applyPrefsPatch({ volume: 0 });
+                } else {
+                  const restore = volumeBeforeMute.current ?? 0.4;
+                  volumeBeforeMute.current = null;
+                  void applyPrefsPatch({ volume: restore });
+                }
+              }}
+            >
+              {prefs.volume <= 0 ? "Unmute" : "Mute"}
+            </button>
+          )}
+          {running && (
+            <button
+              type="button"
+              className="secondary hud-btn"
+              aria-pressed={fullscreenOn}
+              title="Toggle fullscreen"
+              onClick={() => void doFullscreen()}
+            >
+              {fullscreenOn ? "Exit full" : "Fullscreen"}
+            </button>
+          )}
           <button
             ref={menuBtn}
             type="button"
             className="hud-btn"
             aria-haspopup="dialog"
             aria-expanded={menuOpen}
-            title="Open game menu"
+            title="Open game menu (Esc)"
             onClick={() => setMenuOpen(true)}
             disabled={!running}
           >

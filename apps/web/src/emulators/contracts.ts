@@ -30,7 +30,16 @@ export interface EmulatorAdapter {
   runtimeFrame?(): HTMLIFrameElement | null;
   /** Receive authenticated shell-key forwards from the frame. */
   setShellKeyHandler?(
-    handler: ((detail: { code: string; key: string }) => void) | null,
+    handler: ((detail: {
+      code: string;
+      key: string;
+      ctrlKey: boolean;
+      altKey: boolean;
+      metaKey: boolean;
+      shiftKey: boolean;
+      repeat: boolean;
+      isComposing: boolean;
+    }) => void) | null,
   ): void;
   /** Allow-list of KeyboardEvent.code values the frame may claim for the shell. */
   setShellShortcutCodes?(codes: string[]): Promise<void>;
