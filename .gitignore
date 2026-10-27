@@ -20,6 +20,10 @@ fixtures/*/PARAM.SFO
 fixtures/*/assets/tone.wav
 docs/test-evidence/PH-06/.sec-tmp/
 
+# Ephemeral Chromium profiles created by offline/console journey tests.
+docs/test-evidence/**/.offline-profile*/
+docs/test-evidence/**/.offline-profile/
+
 # Private runtime asset root (emulator .data/.wasm and company-provisioned payloads).
 # Canonical local default; override with RBG_PRIVATE_ASSET_DIR.
 .private-runtime/
@@ -35,3 +39,4 @@ RetroBrowserGaming-Corresponding-Source-Offer-*/
 # Working-tree copies of private core binaries (provisioned; not for public Git).
 apps/web/public/cores/**/*.data
 apps/web/public/cores/**/*.wasm
+apps/web/.playwright-browsers/
