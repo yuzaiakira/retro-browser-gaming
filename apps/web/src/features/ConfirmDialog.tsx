@@ -37,6 +37,7 @@ export default function ConfirmDialog({
   useEffect(() => {
     if (!open) return;
     closed.current = false;
+    window.dispatchEvent(new CustomEvent("rbg:overlay-open"));
     // Prefer Cancel for destructive confirms so Enter/Space cannot fire accidentally.
     (danger ? cancelRef.current : confirmRef.current)?.focus();
     const onKey = (e: KeyboardEvent) => {

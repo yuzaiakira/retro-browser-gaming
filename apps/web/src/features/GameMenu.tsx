@@ -111,7 +111,11 @@ export default function GameMenu({
       }
     };
 
+    // Require released inputs so a held gameplay button cannot activate UI.
+    window.dispatchEvent(new CustomEvent("rbg:overlay-open"));
+
     // Simulated gamepad menu navigation (not physical verification).
+    // Start confirms; Select backs — matches launcher mapping for Back/Confirm.
     let raf = 0;
     const seen = new Set<string>();
     const pollPad = () => {

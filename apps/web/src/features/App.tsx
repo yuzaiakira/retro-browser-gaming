@@ -20,6 +20,7 @@ import Player from "./Player";
 import Settings from "./Settings";
 import GameCard from "./GameCard";
 import ConfirmDialog from "./ConfirmDialog";
+import GamepadStatus from "./GamepadStatus";
 import {
   hasSaveForInstall,
   loadRecentPlayMap,
@@ -467,7 +468,11 @@ export default function App({ route }: { route: string[] }) {
   }, [downloads, installs]);
 
   return (
-    <div className={"app" + (page === "play" ? " immersive-play" : "")}>
+    <div
+      className={"app" + (page === "play" ? " immersive-play" : "")}
+      data-nav-root
+    >
+      <GamepadStatus gameplayActive={page === "play"} />
       <aside className="sidebar" hidden={page === "play"}>
         <a href="/" className="brand">
           <span className="brand-symbol">◀◀</span>
