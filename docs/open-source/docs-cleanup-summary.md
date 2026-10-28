@@ -49,3 +49,15 @@ Sanitized public candidate must include `docs/test-evidence/` in the history-rem
 ## Remaining blockers
 
 Root LICENSE still **BLOCKED_HUMAN**. Physical gamepad / iOS / staging HTTPS unchanged. Publication still requires owner authorization.
+
+
+## Identity (post-cleanup)
+
+| Item | Value |
+|---|---|
+| Private original HEAD | `6c5ec32ffc444066f0268a97c09affac4cdd8200` |
+| Sanitized candidate HEAD | `8367724ab7f20caef2a0f0a223e8df54a7721187` |
+| Candidate path | `retro-browser-gaming-public-candidate-20261028-docs-clean/tree` |
+| Public history cleanliness | PASS — no `docs/test-evidence/` directory objects; no Chromium offline profiles |
+| Vitest | 66 passed |
+| Corresponding-source assemble | PASS |
