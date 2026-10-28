@@ -3,6 +3,7 @@
  * Usage: CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/j2me-multi-smoke.cjs
  */
 const { chromium } = require('@playwright/test');
+const { evidenceDir: resolveEvidenceDir } = require('./evidence-dir');
 const { createServer } = require('node:http');
 const { readFile, mkdir } = require('node:fs/promises');
 const { extname, join, normalize } = require('node:path');
@@ -10,7 +11,7 @@ const { PNG } = require('pngjs');
 
 const root = join(__dirname, '..', 'public');
 const fixturesRoot = join(__dirname, '..', '..', '..', '.fixtures');
-const evidenceDir = join(__dirname, '..', '..', '..', 'docs', 'test-evidence', 'PH-06');
+const evidenceDir = resolveEvidenceDir('PH-06');
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
 
 const types = {

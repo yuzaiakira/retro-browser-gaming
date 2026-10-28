@@ -21,13 +21,13 @@ Every mandatory P0 gate PASS (or an **authorized** PDR change removing/altering 
 
 ## Quick health (local Compose)
 
-```bash
+``bash
 ./scripts/compose.sh ps
 curl -sI -H 'Host: launcher.localhost' http://127.0.0.1:13000/ | head
 ./scripts/compose.sh exec -T api python manage.py verify_storage
 ./scripts/compose.sh exec -T api python manage.py test tests -v 1
 python3 scripts/verify-core-lock.py
-```
+``
 
 Staging smoke (after access granted): use staging URLs; never production. Commands pattern in `docs/production-staging-verification.md`.
 
@@ -56,7 +56,7 @@ Staging smoke (after access granted): use staging URLs; never production. Comman
 3. Admin → Approve / Reject / Clear — confirm `ProductApprovalDecision` history row.
 4. Expect: API/gateway hide immediately on revoke; direct S3 URLs may live until TTL (default 900 s); offline OPFS copies are **not** remotely wiped.
 
-Inventory snapshot 2026-10-22 (re-checked): **42 pending, 0 approved** — `docs/test-evidence/PH-11/external-gates-availability-20261022.txt`.  
+Inventory snapshot 2026-10-22 (re-checked): **42 pending, 0 approved** — `private QA archive (see docs/qa-summary.md)`.  
 Proposed public shortlist: `docs/product-release-shortlist-20261022.md`.  
 Packets: `docs/catalog-product-approval-report-20261021.md` (update counts when approving).
 
@@ -66,14 +66,14 @@ Packets: `docs/catalog-product-approval-report-20261021.md` (update counts when 
 
 ## Staging smoke test commands (template)
 
-```bash
+``bash
 # After staging deploy of SHA <COMMIT>
 curl -fsSI https://<launcher-host>/ | grep -i content-security
 # Expect frame-src includes blob: and https://<j2me-host>
 ./scripts/compose.sh exec -T api env DJANGO_DEBUG=false CATALOG_ALLOW_ENGINEERING=false \
   python manage.py check --deploy
 # Browser: install one product-approved title, offline cold-start, Genesis + PSP COI check
-```
+``
 
 ---
 
@@ -126,4 +126,4 @@ Tracker: `docs/platform-expansion-master-plan.md`, `docs/EMULATOR_SUPPORT_MATRIX
 | `docs/production-staging-verification.md` | Staging HTTPS runbook |
 | `docs/EXECUTION_STATE.md` | Live agent/ops snapshot |
 | `docs/final-handover.md` | Earlier implementation handover (still valid context) |
-| `docs/test-evidence/PH-11/` | 2026-10-22 verification artifacts |
+| `private QA archive (see docs/qa-summary.md)` | 2026-10-22 verification artifacts |

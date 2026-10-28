@@ -1,3 +1,0 @@
-CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
-Error: N64 framebuffer unchanged after directional/A input (delta=0 menuDelta=0 lit=49292 beforeHash=2544325072 movedHash=2544325072 bootHash=2544325072)
-    at run (/home/akira/Projects/git-contribute/retro-browser-gaming/apps/web/tests/libretro-family-smoke.cjs:447:13)

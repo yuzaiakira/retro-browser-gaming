@@ -7,9 +7,9 @@ These files are **proposals for owner selection**. None are applied as the repos
 Copyright line must use the **confirmed legal copyright holder**. Do **not**
 choose ownership from Git author names or commit metadata.
 
-```text
+``text
 Copyright (c) 2026 <COPYRIGHT_HOLDER_LEGAL_NAME>
-```
+``
 
 Owner/counsel replace the placeholder after assignment review.
 

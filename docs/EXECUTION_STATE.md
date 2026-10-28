@@ -9,7 +9,7 @@
 **Sprint 4 Personalization:** per-release prefs, shell display modes, shortcuts, save manager, HUD comfort — verified 2026-10-27.  
 **Sprint 4.1 Personalization reliability:** sparse layered prefs + migration, iframe-focus shell-key bridge, real no-remount identity, honest filter copy, save-manager comfort — verified 2026-10-27.  
 **Sprint 5 Console Experience:** shortcut safety (F5 reject + modifiers + live allowlist), controller-first launcher nav (simulated), session/audio/fullscreen polish, console journeys — verified 2026-10-27.  
-**Sprint 6 Stability:** long-session soak (smoke+full), save integrity, offline/download regressions, final UX A–F, launcher gamepad rAF pause when hidden — verified 2026-10-27. Evidence `docs/test-evidence/PH-UX-STABILITY/`.  
+**Sprint 6 Stability:** long-session soak (smoke+full), save integrity, offline/download regressions, final UX A–F, launcher gamepad rAF pause when hidden — verified 2026-10-27. Evidence `.runtime/test-evidence/ or private archive; see docs/qa-summary.md — PH-UX-STABILITY/`.  
 **Open-source SOURCE prep (2026-10-28 final):** Safe candidate builder; full history audit (59/59 clean on candidate); proposed MIT `Copyright (c) 2026 Akira Yuzai` **not enacted** (`first-party-license-scope.md`). Candidate `eb35bf7` ← private `7f81b7f` at `…/public-candidate-20261028-final/`. **STOP** before publish — `docs/open-source/FINAL-PUBLICATION-READINESS.md`.
 
 ## Deferred physical / external (do not rediscover)
@@ -32,9 +32,9 @@
 
 | Check | Result |
 |---|---|
-| Acceptance gates (IN/SAV/EMU/CAT/SEC) | `ACCEPTANCE_GATES_PASS` → `docs/test-evidence/PH-UX/acceptance-gates-20261026.txt` |
-| Player UX Playwright | `PLAYER_UX_PASS` → `docs/test-evidence/PH-UX/player-ux-20261026.txt` |
-| Screenshots | `docs/test-evidence/PH-UX/screenshots/` (desktop shell, game menu, mobile portrait/landscape) |
+| Acceptance gates (IN/SAV/EMU/CAT/SEC) | `ACCEPTANCE_GATES_PASS` → `.runtime/test-evidence/ or private archive; see docs/qa-summary.md — PH-UX/acceptance-gates-20261026.txt` |
+| Player UX Playwright | `PLAYER_UX_PASS` → `.runtime/test-evidence/ or private archive; see docs/qa-summary.md — PH-UX/player-ux-20261026.txt` |
+| Screenshots | `.runtime/test-evidence/ or private archive; see docs/qa-summary.md — PH-UX/screenshots/` (desktop shell, game menu, mobile portrait/landscape) |
 | Genesis smoke | `GENESIS_GAMEPLAY_PASS` |
 | MSX smoke | `MSX_GAMEPLAY_PASS` |
 | Vitest / typecheck | 23 passed / `tsc --noEmit` OK |
@@ -44,10 +44,10 @@
 | Check | Result |
 |---|---|
 | Input suspension + change-based dispatch (unit) | 6 InputRouter tests pass |
-| Player UX reliability E2E | `PLAYER_UX_PASS` → `docs/test-evidence/PH-UX/player-ux-reliability-20261026.txt` (+ `.json`) |
+| Player UX reliability E2E | `PLAYER_UX_PASS` → `.runtime/test-evidence/ or private archive; see docs/qa-summary.md — PH-UX/player-ux-reliability-20261026.txt` (+ `.json`) |
 | Perf evidence | held key presses=1 releases=1; menu-open pad events=0 |
 | Genesis quick save/load/reload + pause→reset | PASS in reliability suite |
-| Acceptance gates | `ACCEPTANCE_GATES_PASS` → `docs/test-evidence/PH-UX/acceptance-gates-reliability-20261026.txt` |
+| Acceptance gates | `ACCEPTANCE_GATES_PASS` → `.runtime/test-evidence/ or private archive; see docs/qa-summary.md — PH-UX/acceptance-gates-reliability-20261026.txt` |
 | Genesis / MSX smokes | `GENESIS_GAMEPLAY_PASS` / `MSX_GAMEPLAY_PASS` |
 | Vitest / typecheck | 28 passed / `tsc --noEmit` OK |
 
@@ -67,7 +67,7 @@
 
 | Check | Result |
 |---|---|
-| Hub Playwright journeys + responsive | `HUB_UX_PASS` → `docs/test-evidence/PH-UX-HUB/` |
+| Hub Playwright journeys + responsive | `HUB_UX_PASS` → `.runtime/test-evidence/ or private archive; see docs/qa-summary.md — PH-UX-HUB/` |
 | Player UX reliability (regression) | `PLAYER_UX_PASS` |
 | Genesis smoke | `GENESIS_GAMEPLAY_PASS` |
 | Vitest / typecheck | 30 passed / `tsc --noEmit` OK |
@@ -76,7 +76,7 @@
 
 | Check | Result |
 |---|---|
-| Hub UX (history Back/Forward, Continue Playing, slow/error catalog, responsive) | `HUB_UX_PASS` → `docs/test-evidence/PH-UX-HUB/hub-ux-sprint31-20261026.txt` |
+| Hub UX (history Back/Forward, Continue Playing, slow/error catalog, responsive) | `HUB_UX_PASS` → `.runtime/test-evidence/ or private archive; see docs/qa-summary.md — PH-UX-HUB/hub-ux-sprint31-20261026.txt` |
 | Persistent offline journey (Orbit + Genesis) | `HUB_OFFLINE_JOURNEY_PASS` → `hub-offline-journey-20261026.*` |
 | Offline PWA (OFF-001…005, PlayerShell Quick save) | `OFFLINE_PWA_PASS` |
 | Player UX reliability regression | `PLAYER_UX_PASS` |
@@ -89,7 +89,7 @@
 | Check | Result |
 |---|---|
 | Preference unit tests | 50 Vitest passed (prefs/display/shortcuts/slots) |
-| Player personalization E2E | `PLAYER_PERSONALIZATION_PASS` → `docs/test-evidence/PH-UX-PERSONALIZE/` |
+| Player personalization E2E | `PLAYER_PERSONALIZATION_PASS` → `.runtime/test-evidence/ or private archive; see docs/qa-summary.md — PH-UX-PERSONALIZE/` |
 | Player UX reliability regression | `PLAYER_UX_PASS` (Orbit/Genesis/MSX/mobile) |
 | Typecheck | `tsc --noEmit` OK |
 | Architecture | Prefs keyed by release id; Fit/Original shell CSS; integer scaling disabled honestly; no emulator remount on display change |
@@ -123,7 +123,7 @@
 | Shortcut safety | F5 rejected + migrated to F8; Ctrl/Alt/Meta blocked; repeat/composing ignored; editable targets skipped; shell-key forwards real modifiers |
 | Live allowlist sync | `setShellShortcutCodes` on prefs change without remount |
 | Controller-first launcher | `LauncherGamepadNav` D-pad/stick + Start/A confirm + Select/B back; neutral gate; GameMenu keeps Start/Select; status chip |
-| Console journeys | `CONSOLE_JOURNEY_PASS` A–F → `docs/test-evidence/PH-UX-CONSOLE/` (**simulated** pad) |
+| Console journeys | `CONSOLE_JOURNEY_PASS` A–F → `.runtime/test-evidence/ or private archive; see docs/qa-summary.md — PH-UX-CONSOLE/` (**simulated** pad) |
 | Player personalization / UX / Hub / Offline / Downloads | All PASS (Sprint 5 regression) |
 | Vitest / typecheck | 65 passed / `tsc --noEmit` OK |
 | Perf (player-ux) | heldKey presses=1 releases=1; menuOpenPadEvents=0 |
@@ -147,7 +147,7 @@
 | Firefox launcher | Playwright Firefox 142.0.1 PASS (system Firefox 158 blocked by concurrent instance) |
 | Regressions | Console / Personalization / Player UX / Hub / Offline PWA / Downloads / Genesis / MSX / Orbit PASS; Vitest 66; tsc OK |
 | Physical gamepad / iOS / Android re-cert | **BLOCKED_EXTERNAL** — checklist `docs/physical-device-acceptance-checklist-sprint6.md` |
-| Report | `docs/test-evidence/PH-UX-STABILITY/sprint6-final-report.md` |
+| Report | `.runtime/test-evidence/ or private archive; see docs/qa-summary.md — PH-UX-STABILITY/sprint6-final-report.md` |
 
 ### Sprint 6 next concrete task
 

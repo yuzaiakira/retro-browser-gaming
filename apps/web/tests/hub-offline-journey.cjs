@@ -3,15 +3,14 @@
  * Playwright offline simulation only — not physical-device certification.
  */
 const { chromium } = require('@playwright/test');
+const { evidenceDir: resolveEvidenceDir } = require('./evidence-dir');
 const { mkdtempSync, mkdirSync, writeFileSync, rmSync } = require('node:fs');
 const { join } = require('node:path');
 const { tmpdir } = require('node:os');
 
 const baseUrl = process.env.RETRO_TEST_BASE_URL || 'http://launcher.localhost:13000';
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
-const evidenceDir =
-  process.env.EVIDENCE_DIR ||
-  join(__dirname, '../../../docs/test-evidence/PH-UX-HUB');
+const evidenceDir = resolveEvidenceDir('PH-UX-HUB');
 mkdirSync(join(evidenceDir, 'screenshots'), { recursive: true });
 
 async function ensureInstalled(page, slug, title) {

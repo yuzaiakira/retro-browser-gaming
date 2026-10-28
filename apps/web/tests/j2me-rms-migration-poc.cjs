@@ -5,6 +5,7 @@
  * Usage: CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/j2me-rms-migration-poc.cjs
  */
 const { chromium } = require('@playwright/test');
+const { evidenceDir: resolveEvidenceDir } = require('./evidence-dir');
 const { createServer } = require('node:http');
 const { readFile, mkdir, mkdtemp, rm } = require('node:fs/promises');
 const { extname, join, normalize } = require('node:path');
@@ -12,7 +13,7 @@ const { tmpdir } = require('node:os');
 
 const root = join(__dirname, '..', 'public');
 const fixturesRoot = join(__dirname, '..', '..', '..', '.fixtures');
-const evidenceDir = join(__dirname, '..', '..', '..', 'docs', 'test-evidence', 'PH-06');
+const evidenceDir = resolveEvidenceDir('PH-06');
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
 
 const SUITES = [

@@ -1,9 +1,9 @@
 # Physical device acceptance runbook
 
-**Status (2026-10-22):** IN-002-P / IN-002-D and IOS-001 remain **BLOCKED_EXTERNAL** on this workstation. Android Chrome PH-08 (including AUD-001) already **PASSED** — see `docs/test-evidence/PH-08/`.
+**Status (2026-10-22):** IN-002-P / IN-002-D and IOS-001 remain **BLOCKED_EXTERNAL** on this workstation. Android Chrome PH-08 (including AUD-001) already **PASSED** — see `docs/qa/` and `docs/qa-summary.md`.
 
-Canonical deferred note: `docs/test-evidence/PH-08/deferred-physical-acceptance.md`.  
-Checklist table: `docs/test-evidence/PH-08/physical-acceptance-checklist.md`.
+Canonical deferred note: `docs/qa/deferred-physical-acceptance.md`.  
+Checklist table: `docs/qa/physical-acceptance-checklist.md`.
 
 ---
 
@@ -35,7 +35,7 @@ Do **not** mark IN-002-P/D PASSED from simulated Gamepad API alone.
 2. Open `http://launcher.localhost:13000/games/mit-genesis-breakout` (or staging HTTPS equivalent).
 3. Install if needed → Play.
 4. Exercise D-pad / left stick and face buttons; confirm in-game movement and actions.
-5. Record: OS, browser version, controller model, connection method, dated screenshots under `docs/test-evidence/PH-08/`.
+5. Record: OS, browser version, controller model, connection method, dated screenshots under `docs/qa/`.
 
 **Expected:** Buttons map; character/menu responds; no phantom presses when idle.
 
@@ -83,7 +83,7 @@ Do **not** mark IN-002-P/D PASSED from simulated Gamepad API alone.
 5. Exercise touch controls; rotate orientation; try fullscreen (document limitations).
 6. Background Safari → resume; confirm save persistence where supported.
 7. Attempt PSP only if COI/SAB available; otherwise record unsupported honestly.
-8. Capture screenshots + written notes under `docs/test-evidence/PH-08/ios-*`.
+8. Capture screenshots + written notes under `docs/qa/`ios-*`.
 
 **Expected:** Catalog usable; install/offline behavior matches capability messages; no false Ready Offline.
 
@@ -99,10 +99,10 @@ Do **not** mark IN-002-P/D PASSED from simulated Gamepad API alone.
 
 ## Workstation check (2026-10-22)
 
-```text
+``text
 /dev/input/js* — absent
 lsusb — no dedicated gamepad HID (REDRAGON/Compx receivers present; not accepted as gamepad evidence)
 iOS device — unavailable
-```
+``
 
 Classification unchanged: **BLOCKED_EXTERNAL**.

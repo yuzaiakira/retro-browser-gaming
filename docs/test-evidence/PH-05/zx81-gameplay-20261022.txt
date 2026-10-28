@@ -1,4 +1,0 @@
-CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
-CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
-Error: ZX81 framebuffer unchanged after directional/A input (delta=0 menuDelta=0 lit=545595 beforeHash=3906094445 movedHash=3906094445 bootHash=3906094445)
-    at run (/home/akira/Projects/git-contribute/retro-browser-gaming/apps/web/tests/libretro-family-smoke.cjs:599:13)

@@ -3,6 +3,7 @@
  * Proves boot, GG-sized framebuffer, input, save/load, offline after load, segaGG scheme.
  */
 const { chromium } = require('@playwright/test');
+const { evidenceDir: resolveEvidenceDir } = require('./evidence-dir');
 const { createServer } = require('node:http');
 const { readFile, mkdir } = require('node:fs/promises');
 const { extname, join, normalize } = require('node:path');
@@ -12,7 +13,7 @@ const root = join(__dirname, '..', 'public');
 const fixtureName = process.env.GG_FIXTURE || 'mit-gg-waternet.gg';
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
 const fixture = join(__dirname, '..', '..', '..', '.fixtures', fixtureName);
-const evidenceDir = join(__dirname, '..', '..', '..', 'docs', 'test-evidence', 'PH-05');
+const evidenceDir = resolveEvidenceDir('PH-05');
 const types = {
   '.html': 'text/html',
   '.js': 'text/javascript',

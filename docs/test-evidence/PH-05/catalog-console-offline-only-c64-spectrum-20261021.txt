@@ -1,6 +1,0 @@
-{
-  "c64Install": true,
-  "spectrumInstall": true,
-  "c64Offline": true,
-  "spectrumOffline": true
-}

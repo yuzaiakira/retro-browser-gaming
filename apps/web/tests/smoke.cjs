@@ -1,4 +1,5 @@
 const { chromium } = require('@playwright/test');
+const { evidenceDir: resolveEvidenceDir } = require('./evidence-dir');
 const baseUrl = process.env.RETRO_TEST_BASE_URL || 'http://127.0.0.1:3000';
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
 
@@ -10,7 +11,8 @@ async function run() {
   page.on('console', (message) => { if (message.type() === 'error') console.error(`CONSOLE ${message.text()}`); });
   await page.goto(`${baseUrl}/`);
   await page.getByRole('heading', { name: 'Orbit Catch' }).waitFor();
-  await page.screenshot({ path: '../../docs/test-evidence/PH-02/screenshots/catalog.png', fullPage: true });
+  const evidenceDir = resolveEvidenceDir('PH-02');
+  await page.screenshot({ path: require('path').join(evidenceDir, 'screenshots', 'catalog.png'), fullPage: true });
   const mobile = await browser.newContext({ viewport: { width: 360, height: 740 }, isMobile: true, hasTouch: true });
   const mobilePage = await mobile.newPage();
   await mobilePage.goto(`${baseUrl}/`);
@@ -18,7 +20,7 @@ async function run() {
   if (!await mobilePage.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)) throw new Error('Mobile layout has horizontal overflow');
   await mobilePage.keyboard.press('Tab');
   if (!await mobilePage.evaluate(() => document.activeElement instanceof HTMLAnchorElement || document.activeElement instanceof HTMLButtonElement)) throw new Error('Keyboard focus did not reach an interactive control');
-  await mobilePage.screenshot({ path: '../../docs/test-evidence/PH-02/screenshots/catalog-mobile.png', fullPage: true });
+  await mobilePage.screenshot({ path: require('path').join(evidenceDir, 'screenshots', 'catalog-mobile.png'), fullPage: true });
   await mobile.close();
   console.log('RESPONSIVE_KEYBOARD_PASS');
   await page.goto(`${baseUrl}/games/orbit-catch`);
@@ -27,7 +29,7 @@ async function run() {
   console.log('INSTALLED');
   await page.getByRole('link', { name: '▶ Play game' }).click();
   await page.getByRole('button', { name: 'Save state', exact: true }).waitFor({ timeout: 30000 });
-  await page.screenshot({ path: '../../docs/test-evidence/PH-02/screenshots/native-game.png', fullPage: true });
+  await page.screenshot({ path: require('path').join(evidenceDir, 'screenshots', 'native-game.png'), fullPage: true });
   await page.getByRole('button', { name: 'Save state', exact: true }).click();
   await page.getByText('State saved on this device', { exact: true }).waitFor();
   console.log('NATIVE_SAVE_PASS');

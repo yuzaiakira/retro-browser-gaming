@@ -1,5 +1,0 @@
-{
-  "disabled": true,
-  "panel": "Compatibility · unsupported\nThis browser lacks Origin Private File System (OPFS). Installs need `navigator.storage.getDirectory`.\n\nCore: native-html · 1.1.0\n\nDevice-specific compatibility has not been verified.\n\nDownload: 4.4 KiB · 1 verified file · No BIOS asset required\n\n"
-}
-WEBKIT_OPFS_MESSAGE_PASS

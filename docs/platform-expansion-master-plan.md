@@ -36,10 +36,10 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 
 | Commit / date | Platforms | Evidence |
 | --- | --- | --- |
-| `81bd0e5` 2026-10-21 | Atari 5200 + Virtual Boy | `docs/test-evidence/PH-05/a5200-vb-expansion-20261021.md` |
-| 25f8d5d 2026-10-21 | N64 experimental boot | `docs/test-evidence/PH-05/n64-boot-20261021.txt` |
-| `c0103ab` 2026-10-21 | Commodore 64 (`vice_x64sc`) | `docs/test-evidence/PH-05/c64-spectrum-expansion-20261021.md` |
-| `1e99633` 2026-10-21 | ZX Spectrum (`fuse`) | `docs/test-evidence/PH-05/c64-spectrum-expansion-20261021.md` |
+| `81bd0e5` 2026-10-21 | Atari 5200 + Virtual Boy | `private QA archive (see docs/qa-summary.md)` |
+| 25f8d5d 2026-10-21 | N64 experimental boot | `private QA archive (see docs/qa-summary.md)` |
+| `c0103ab` 2026-10-21 | Commodore 64 (`vice_x64sc`) | `private QA archive (see docs/qa-summary.md)` |
+| `1e99633` 2026-10-21 | ZX Spectrum (`fuse`) | `private QA archive (see docs/qa-summary.md)` |
 | `c9e0f09` 2026-10-21 | N64 input still unproven; Vectrex/Intellivision blocked | `PH-05/n64-input-unproven-20261021.md`, `PH-05/vectrex-intellivision-blocker-20261021.md` |
 |  2026-10-22 | Amiga VERIFIED; MSX/Atari ST BLOCKED_CORE | `PH-05/amiga-expansion-20261022.md`, `PH-05/msx-atarist-blocker-20261022.md` |
 |  2026-10-22 | ZX81 core+fixture EXPERIMENTAL (LOAD "" blocker) | `PH-05/zx81-blocker-20261022.md` |

@@ -13,4 +13,4 @@ Use for `apps/web/src/workers/download.worker.ts`, Range code, OPFS/IDB schemas,
 - 1 GiB proof needs a real browser worker transfer with generated deterministic bytes, observed peak memory, completed hash, and evidence that committed chunks were not fetched again. A range probe is not evidence.
 - Treat OPFS/storage API absence honestly as unsupported; do not silently downgrade to whole-file browser memory.
 
-Record exact command, fixture generation, browser version, assertions and limits in `docs/test-evidence/PH-03/` and reconcile the matrix.
+Record exact command, fixture generation, browser version, assertions and limits under Git-ignored `.runtime/test-evidence/` (see `docs/qa-summary.md`) and reconcile the matrix.

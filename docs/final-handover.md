@@ -45,7 +45,7 @@ Android IN-003-P / IN-004-P / IN-005-P / UX-FS / UX-OR: **PASSED** on USB device
 
 ## Release-candidate commands
 
-```bash
+``bash
 ./scripts/compose.sh up -d
 ./scripts/compose.sh exec -T api python manage.py seed_demo --safe-assets-only --with-console-fixtures
 cd apps/web && npm test && npm run typecheck
@@ -53,6 +53,6 @@ RETRO_TEST_BASE_URL=http://127.0.0.1:13000 CHROMIUM_EXECUTABLE=/usr/bin/chromium
 RETRO_TEST_BASE_URL=http://127.0.0.1:13000 CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/acceptance-gates.cjs
 docker run --rm --network host -v "$PWD/apps/web:/work" -w /work \
   -e RETRO_TEST_BASE_URL=http://127.0.0.1:13000 retro-webkit-test node tests/browser-matrix-smoke.cjs
-```
+``
 
 Tag a complete P0 release only after deferred physical rows are genuinely PASSED with dated evidence (or an explicit PDR change). RC checkpoint: `docs/RELEASE_CANDIDATE.md`.

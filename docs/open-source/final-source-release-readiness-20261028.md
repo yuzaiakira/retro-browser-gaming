@@ -50,9 +50,9 @@
 
 ## Private directory
 
-```text
+``text
 .private-runtime/{cores,bios,config,manifests,agent/LOCAL_SETUP.md}
-```
+``
 
 Gitignored + dockerignored. Survives pulls. Portable backup/restore unchanged.
 

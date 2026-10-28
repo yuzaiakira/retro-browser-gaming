@@ -4,14 +4,14 @@
 
 ## Local Compose configuration
 
-```bash
+``bash
 cp .env.example .env
 python3 scripts/init-env.py
 ./scripts/compose.sh up --build -d
 ./scripts/compose.sh ps
 ./scripts/compose.sh exec -T api python manage.py verify_storage
 ./scripts/compose.sh exec -T api python manage.py test tests -v 2
-```
+``
 
 `scripts/compose.sh` resolves an injected host proxy at launch and maps it into Docker build networking. When the platform proxy terminates TLS, its CA is mounted only with a BuildKit secret during package installation. No proxy address, credential, or certificate is baked into an image. SeaweedFS is pinned by its image digest and persists under the Compose object-data volume. The complete native stack was run successfully on 2026-10-19; see `test-evidence/PH-01/compose-20261019.md`.
 
@@ -66,17 +66,17 @@ Do not expose Django development assets, the object-store API, or an unauthentic
 
 Regenerate integrity digests after editing runtime public assets:
 
-```bash
+``bash
 python3 scripts/generate-j2me-runtime-manifest.py
-```
+``
 
 ### Local HTTPS (developer)
 
-```bash
+``bash
 bash scripts/generate-dev-https-certs.sh
 ./scripts/compose.sh up -d
 node scripts/dev-https-edge-proxy.mjs   # https://launcher.localhost:13443 → edge :13000
 CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/j2me-local-https-smoke.cjs
-```
+``
 
 Evidence label: **LOCAL_HTTPS_VERIFIED** only. Production/staging with real certificates remains **NOT_VERIFIED**. Ensure `LAUNCHER_FRAME_ANCESTORS` lists the HTTPS launcher origin used by the TLS terminator.

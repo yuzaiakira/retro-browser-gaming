@@ -1,4 +1,0 @@
-SUPERSEDED by docs/test-evidence/PH-05/ps1-psp-hang-fix-20261021.md
-
-Earlier note (NOT_REVERIFIED / hung): stock PS1 waited unbounded on ready after query-string 404s.
-Current status: PASS — harness strips query strings; bounded READY/OVERALL timeouts; PS1 + PSP standalone and catalog offline completed 2026-10-21.

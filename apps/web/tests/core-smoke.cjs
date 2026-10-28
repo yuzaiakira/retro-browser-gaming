@@ -1,4 +1,5 @@
 const { chromium } = require('@playwright/test');
+const { evidenceDir: resolveEvidenceDir } = require('./evidence-dir');
 const { createServer } = require('node:http');
 const { mkdir, readFile } = require('node:fs/promises');
 const { extname, join, normalize } = require('node:path');
@@ -8,7 +9,7 @@ const root = join(__dirname, '..', 'public');
 const fixtureName = process.env.GENESIS_FIXTURE || 'mit-genesis-breakout.bin';
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
 const fixture = join(__dirname, '..', '..', '..', '.fixtures', fixtureName);
-const evidenceDir = join(__dirname, '..', '..', '..', 'docs', 'test-evidence', 'PH-05');
+const evidenceDir = resolveEvidenceDir('PH-05');
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.data': 'application/octet-stream', '.json': 'application/json', '.bin': 'application/octet-stream' };
 const outer = `<!doctype html><title>Genesis real-core smoke</title><style>body{margin:0;background:#111}iframe{width:960px;height:640px;border:0}</style><iframe id="game" src="/runtime/frame.html"></iframe><script>
 window.result = new Promise((resolve, reject) => {

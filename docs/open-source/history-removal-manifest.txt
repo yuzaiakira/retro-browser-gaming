@@ -61,3 +61,6 @@ apps/web/public/cores/ejs-4.2.3/cores/virtualjaguar_js-wasm.data
 apps/web/public/cores/ejs-4.2.3/system/bluemsx-system.data
 apps/web/public/cores/jsdos-8.3.8/wdosbox.wasm
 apps/web/public/cores/jsdos-8.3.8/wlibzip.wasm
+
+# Generated QA evidence / browser profiles (public history hygiene 2026-10-28)
+docs/test-evidence/

@@ -8,6 +8,7 @@
  *     node apps/web/tests/catalog-j2me-offline.cjs
  */
 const { chromium } = require('@playwright/test');
+const { evidenceDir: resolveEvidenceDir } = require('./evidence-dir');
 const { mkdtempSync, rmSync, mkdirSync, writeFileSync } = require('node:fs');
 const { join } = require('node:path');
 const { tmpdir } = require('node:os');
@@ -16,7 +17,7 @@ const { PNG } = require('pngjs');
 
 const baseUrl = process.env.RETRO_TEST_BASE_URL || 'http://127.0.0.1:3000';
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
-const evidenceDir = join(__dirname, '..', '..', '..', 'docs', 'test-evidence', 'PH-06');
+const evidenceDir = resolveEvidenceDir('PH-06');
 const repoRoot = join(__dirname, '..', '..', '..');
 const only = (process.env.CATALOG_J2ME_ONLY || '')
   .split(',')

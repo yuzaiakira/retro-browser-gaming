@@ -10,13 +10,12 @@
  * Simulated Gamepad only — physical NOT_VERIFIED.
  */
 const { chromium } = require('playwright');
+const { evidenceDir: resolveEvidenceDir } = require('./evidence-dir');
 const { mkdirSync, writeFileSync } = require('fs');
 const { join } = require('path');
 
 const baseUrl = process.env.RETRO_TEST_BASE_URL || 'http://launcher.localhost:13000';
-const evidenceDir =
-  process.env.EVIDENCE_DIR ||
-  join(__dirname, '../../../docs/test-evidence/PH-UX-STABILITY');
+const evidenceDir = resolveEvidenceDir('PH-UX-STABILITY');
 mkdirSync(join(evidenceDir, 'screenshots'), { recursive: true });
 
 const mode = (process.env.SOAK_MODE || 'smoke').toLowerCase();

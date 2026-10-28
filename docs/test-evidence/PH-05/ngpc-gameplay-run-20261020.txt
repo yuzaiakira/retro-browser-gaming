@@ -1,2 +1,0 @@
-CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
-NGPC_GAMEPLAY_PASS {"capabilities":{"saveState":true,"audio":true,"analog":false,"seekableMedia":false,"onDemandMedia":false},"stateBytes":31768,"lit":432505,"beforeHash":3249946736,"movedHash":3249946736,"restoredHash":3249946736,"inputChangedFrame":true,"menuChangedFrame":true,"controlScheme":"ngp","core":"mednafen_ngp","fixture":"gpl-ngpc-test.ngp","platform":"ngpc"}

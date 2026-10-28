@@ -3,6 +3,7 @@
  * Usage: CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/j2me-security-smoke.cjs
  */
 const { chromium } = require('@playwright/test');
+const { evidenceDir: resolveEvidenceDir } = require('./evidence-dir');
 const { createServer } = require('node:http');
 const { readFile, writeFile, mkdir, mkdtemp, rm } = require('node:fs/promises');
 const { join, normalize, extname } = require('node:path');
@@ -11,7 +12,7 @@ const { deflateRawSync } = require('node:zlib');
 
 const root = join(__dirname, '..', 'public');
 const goodJar = join(__dirname, '..', '..', '..', '.fixtures', 'mit-j2me-dot.jar');
-const evidenceDir = join(__dirname, '..', '..', '..', 'docs', 'test-evidence', 'PH-06');
+const evidenceDir = resolveEvidenceDir('PH-06');
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
 
 const types = {

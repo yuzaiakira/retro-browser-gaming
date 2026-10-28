@@ -4,12 +4,13 @@
  * Does not log unrelated open tabs or personal browsing data.
  */
 const { chromium } = require('@playwright/test');
+const { evidenceDir: resolveEvidenceDir } = require('./evidence-dir');
 const { mkdirSync, writeFileSync } = require('node:fs');
 const { join } = require('node:path');
 
 const cdpUrl = process.env.ANDROID_CDP_URL || 'http://127.0.0.1:9222';
 const baseUrl = process.env.RETRO_TEST_BASE_URL || 'http://127.0.0.1:13000';
-const evidenceDir = join(__dirname, '..', '..', '..', 'docs', 'test-evidence', 'PH-08');
+const evidenceDir = resolveEvidenceDir('PH-08');
 
 async function connectRewindPage(browser) {
   // Only reuse tabs already on the Rewind base URL — never inspect unrelated pages.

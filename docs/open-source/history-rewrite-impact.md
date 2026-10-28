@@ -21,7 +21,7 @@
 
 ## Dry-run procedure (isolated clone only)
 
-```bash
+``bash
 # From a SAFE backup location — not the owner's primary worktree
 BACKUP=/path/to/retro-browser-gaming.git-bundle-or-mirror
 WORKDIR=/tmp/rbg-filter-dryrun-$$
@@ -34,7 +34,7 @@ git filter-repo --invert-paths --paths-from-file \
 # Verify no path remains:
 git rev-list --objects --all | grep -E '\\.(data|wasm)$' | grep 'apps/web/public/cores' || echo CLEAN
 # Tip must still build SOURCE_ONLY
-```
+``
 
 Record old→new tip SHA mapping in this file after the dry-run executes.
 

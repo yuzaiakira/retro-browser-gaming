@@ -1,1 +1,0 @@
-J2ME_RMS_IDB_PASS {"pass1":{"id":1,"stores":["scores"]},"pass2":{"ids":[1],"bytes":[7,8,9]},"durable":true}

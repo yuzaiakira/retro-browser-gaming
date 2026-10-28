@@ -15,7 +15,7 @@ Applied by `scripts/build-bluemsx-clean.sh` / `scripts/rebuild-bluemsx-emscripte
 
 1. **Frontend rxml API merge** (`frontend-rxml/rxml.c` + `rxml.h`)
    - Both `rxml_load_document_owned_opts` and path-based `rxml_load_document`.
-   - Evidence: `docs/test-evidence/PH-05/msx-bluemsx-rxml-build-20261022.md`.
+   - Evidence: `docs/emulator-builds/bluemsx-rxml-build.md`.
 
 2. **Gate bluemsx private rxml** (`0002-bluemsx-gate-private-rxml-static-linking.patch`)
    - Skip core `rxml.c` when `STATIC_LINKING=1`.
@@ -23,7 +23,7 @@ Applied by `scripts/build-bluemsx-clean.sh` / `scripts/rebuild-bluemsx-emscripte
 3. **Board.saveState WASM arity** (`0003-board-saveState-zero-arity-wasm.patch`)
    - Call `boardInfo.saveState()` with zero args (implementations are zero-arg).
    - Passing `stateFile` caused `call_indirect` **function signature mismatch** inside serialize.
-   - Evidence: `docs/test-evidence/PH-05/msx-savestate-abi-20261022.md`.
+   - Evidence: `docs/emulator-builds/bluemsx-savestate-abi.md`.
 
 4. **Restore `libretro-font.i`**
 

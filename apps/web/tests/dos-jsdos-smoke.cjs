@@ -3,6 +3,7 @@
  * Usage: CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/dos-jsdos-smoke.cjs
  */
 const { chromium } = require('@playwright/test');
+const { evidenceDir: resolveEvidenceDir } = require('./evidence-dir');
 const { createServer } = require('node:http');
 const { readFile, mkdir } = require('node:fs/promises');
 const { extname, join, normalize } = require('node:path');
@@ -11,7 +12,7 @@ const { PNG } = require('pngjs');
 const root = join(__dirname, '..', 'public');
 const fixtureName = 'mit-dos-floppybird.zip';
 const fixture = join(__dirname, '..', '..', '..', '.fixtures', fixtureName);
-const evidenceDir = join(__dirname, '..', '..', '..', 'docs', 'test-evidence', 'PH-05');
+const evidenceDir = resolveEvidenceDir('PH-05');
 const session = 'dos-jsdos-1';
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
 

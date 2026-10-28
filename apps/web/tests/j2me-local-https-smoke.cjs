@@ -11,6 +11,7 @@
  * Usage: CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/j2me-local-https-smoke.cjs
  */
 const { chromium } = require('@playwright/test');
+const { evidenceDir: resolveEvidenceDir } = require('./evidence-dir');
 const { spawn } = require('node:child_process');
 const { mkdir, writeFile, mkdtemp, rm } = require('node:fs/promises');
 const { join } = require('node:path');
@@ -19,7 +20,7 @@ const { existsSync } = require('node:fs');
 const { execFileSync } = require('node:child_process');
 
 const root = join(__dirname, '..', '..', '..');
-const evidenceDir = join(root, 'docs', 'test-evidence', 'PH-06');
+const evidenceDir = resolveEvidenceDir('PH-06');
 const certDir = join(root, 'infra', 'dev-certs');
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
 const httpsPort = Number(process.env.HTTPS_LISTEN || 13443);

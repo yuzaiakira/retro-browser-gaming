@@ -40,3 +40,7 @@ RetroBrowserGaming-Corresponding-Source-Offer-*/
 apps/web/public/cores/**/*.data
 apps/web/public/cores/**/*.wasm
 apps/web/.playwright-browsers/
+
+# Generated QA evidence (never commit). Use RBG_TEST_EVIDENCE_DIR to override.
+docs/test-evidence/
+.runtime/test-evidence/

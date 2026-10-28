@@ -1,5 +1,0 @@
-CATALOG_INSTALL_START genesis-pong
-CATALOG_INSTALL_PASS genesis-pong
-CATALOG_OFFLINE_START genesis-pong
-CATALOG_OFFLINE_PASS genesis-pong
-CATALOG_CONSOLE_OFFLINE_PASS {"genesis-pongInstall":true,"genesis-pongOffline":true}

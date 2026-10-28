@@ -1,6 +1,0 @@
-Resolved 27 packages in 6ms
-Uninstalled 4 packages in 21ms
- - fasteners==0.20
- - pgserver==0.1.4
- - platformdirs==4.13.4
- - psutil==7.2.2

@@ -1,3 +1,0 @@
-CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
-CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
-GBA_GAMEPLAY_PASS {"capabilities":{"saveState":true,"audio":true,"analog":false,"seekableMedia":true,"onDemandMedia":false},"stateBytes":430168,"lit":595552,"beforeHash":4073870962,"movedHash":2235932227,"restoredHash":2235932227,"inputChangedFrame":true,"menuChangedFrame":true,"controlScheme":"gba","core":"mgba","fixture":"mit-gba-nonogram.gba","platform":"gba"}

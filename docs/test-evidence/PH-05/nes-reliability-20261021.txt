@@ -1,1 +1,0 @@
-Unknown PLATFORM=nes; expected snes|gb|gbc|gba|a2600|pce|sg1000|wswan|a7800|lynx|ngp|ngpc

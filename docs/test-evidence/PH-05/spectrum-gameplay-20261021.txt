@@ -1,2 +1,0 @@
-CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
-SPECTRUM_GAMEPLAY_PASS {"capabilities":{"saveState":true,"audio":true,"analog":false,"seekableMedia":false,"onDemandMedia":false},"stateBytes":49448,"lit":202309,"beforeHash":4017877014,"movedHash":233821980,"restoredHash":281149402,"inputChangedFrame":true,"menuChangedFrame":true,"controlScheme":"fuse","core":"fuse","fixture":"mit-zx-desolate.tap","platform":"spectrum"}
