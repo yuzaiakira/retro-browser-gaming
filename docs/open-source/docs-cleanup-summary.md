@@ -53,8 +53,8 @@ Policy pointer: `docs/test-evidence.md`. Summary QA: `docs/qa-summary.md`.
 | Item | Value |
 |---|---|
 | Private original HEAD | Record with `git rev-parse HEAD` on the private clone (not rewritten) |
-| Sanitized candidate HEAD | Sibling `retro-browser-gaming-public-candidate-20261028-docs-clean/CANDIDATE_HEAD.txt` |
-| Candidate tree | disposable sibling `…-public-candidate-20261028-docs-clean/tree` |
+| Sanitized candidate HEAD | Option B1 builder output `CANDIDATE_HEAD.txt` (disposable candidate, not published) |
+| Candidate tree | disposable Option B1 candidate worktree (local only) |
 | Public history cleanliness | **PASS** — 60/60 manifest paths absent; no Chromium profiles; no core binaries |
 | Vitest | 66 passed |
 | Genesis smoke | `GENESIS_GAMEPLAY_PASS` |
