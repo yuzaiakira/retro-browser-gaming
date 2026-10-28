@@ -8,6 +8,19 @@ Browser-based retro launcher built from `docs/PDR.md`. It provides a Django/DRF 
 
 Requires Python 3.12+, Node 24+, and Chromium for browser tests.
 
+**One-command setup (recommended):**
+
+```bash
+# Public / source clone — no private emulator binaries
+./scripts/setup.sh --source-only
+
+# Authorized full runtime — after restoring .private-runtime or a portable backup
+export RBG_ALLOW_LOCAL_FULL=1
+./scripts/setup.sh --local-full --private-backup /path/to/RetroBrowserGaming-Asset-Backup
+```
+
+Flags: `--check`, `--dry-run`, `--no-start`. See `docs/open-source/local-private-assets.md`.
+
 If Chromium is installed by the operating system rather than Playwright, pass its
 path when running the browser checks:
 
@@ -15,6 +28,8 @@ path when running the browser checks:
 CHROMIUM_EXECUTABLE=/usr/bin/chromium ./scripts/browser-smoke.sh
 CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/core-smoke.cjs
 ```
+
+Manual dependency install (if not using `setup.sh`):
 
 ```bash
 python3 -m venv .venv
@@ -86,17 +101,36 @@ No commercial ROM or proprietary BIOS is included. Do not publish console catalo
 Authorized operators restore binaries offline (no automatic proprietary download):
 
 ```bash
+export RBG_ALLOW_LOCAL_FULL=1
+./scripts/setup.sh --local-full --private-backup /path/to/RetroBrowserGaming-Asset-Backup
+# equivalent lower-level steps:
 python3 scripts/private-asset-backup.py import \
   --backup /path/to/RetroBrowserGaming-Asset-Backup
-python3 scripts/provision-private-cores.py
+python3 scripts/provision-private-cores.py --mode LOCAL_FULL
 python3 scripts/verify-core-lock.py --mode LOCAL_FULL
+```
+
+Optional owner-supplied firmware only (never auto-downloaded):
+
+```bash
+python3 scripts/install-private-bios.py --list
+python3 scripts/install-private-bios.py --slot <id> --from /path/to/authorized.bin \
+  --i-confirm-authorized-firmware
 ```
 
 Details: `docs/open-source/private-asset-backup.md`, `docs/open-source/local-private-assets.md`.
 
+## Source-only vs hosted deployment
+
+| Mode | What you get |
+|---|---|
+| **Public SOURCE clone** | App source, loaders, legal fixtures; Orbit HTML5 playable; WASM cores missing until lawfully provisioned |
+| **LOCAL_FULL** | Same + authorized private `.data`/`.wasm` under `.private-runtime/` (gitignored) |
+| **Public hosted Alpha** | Separate deploy + product-approved catalog + corresponding-source duties when serving GPL binaries |
+
 ## Open-source publication
 
-History cleanup and GitHub publication require explicit owner approval. See `docs/open-source/github-publication-plan.md` and `docs/open-source/public-repository-readiness.md`.
+History cleanup and GitHub publication require explicit owner approval. See `docs/open-source/github-publication-plan.md`, `docs/open-source/public-repository-readiness.md`, and `docs/open-source/final-source-release-readiness-20261028.md`.
 
 ## Documentation
 
