@@ -77,8 +77,8 @@ Isolated disposable clone only. Owner working repository **not** rewritten. **No
 | --- | --- |
 | Tool | `git-filter-repo` `--invert-paths --paths-from-file history-removal-manifest.txt` |
 | Commits parsed | 125 |
-| Tip before (private) | `97420c1994071a28e1870f7c23c67e3b40f1c6fd` |
-| Tip after (candidate only) | `1dfb4955797ec47603f1dc6b35de1ce121a84278` |
+| Tip before (private) | `4e2f7c07832339f3ce527e4fcd86cf8dc280179d` |
+| Tip after (candidate only) | `ae00c6711080da7c041d25c3acfbd6db17cec3e0` |
 | Binary paths remaining in history | **none** (`HISTORY_PATHS_CLEAN`) |
 | SOURCE_ONLY lock | PASS |
 | `check-public-source-safety.py --expect-history-clean` | PASS |
