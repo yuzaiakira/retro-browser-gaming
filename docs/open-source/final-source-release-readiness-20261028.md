@@ -7,8 +7,8 @@
 | Item | Value | Status |
 |---|---|---|
 | Original private HEAD (pre-milestone work start) | `1f4ddbeba62971c43162889c17c98308662833b6` | PASS (inspected) |
-| Private tip after this milestone | `97420c1994071a28e1870f7c23c67e3b40f1c6fd` | recorded in EXECUTION_STATE |
-| Sanitized candidate HEAD | `1dfb4955797ec47603f1dc6b35de1ce121a84278` (map: private `97420c1` → candidate `1dfb495`) | PASS when HISTORY_PATHS_CLEAN |
+| Private tip after this milestone | `4e2f7c07832339f3ce527e4fcd86cf8dc280179d` | PASS |
+| Sanitized candidate HEAD | `ae00c6711080da7c041d25c3acfbd6db17cec3e0` (map: private `4e2f7c0` → candidate `ae00c67`) | PASS (`HISTORY_PATHS_CLEAN`) |
 | History preservation | Meaningful commits retained (filter-repo, not squash) | PASS on candidate |
 | Original repo rewritten? | **No** | PASS |
 | Published remotely? | **No** | PASS |
