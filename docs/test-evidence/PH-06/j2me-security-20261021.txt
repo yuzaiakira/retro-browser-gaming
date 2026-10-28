@@ -1,1 +1,0 @@
-J2ME_SECURITY_PASS {"allowlistedBoot":true,"unknownDenied":"JAR_NOT_ALLOWLISTED","bypassIgnored":"JAR_NOT_ALLOWLISTED","traversalDenied":"JAR_PATH_TRAVERSAL","bombDenied":"JAR_ENTRY_TOO_LARGE","mismatchDenied":"JAR_LOCAL_SIZE_MISMATCH","dupDenied":"JAR_DUPLICATE_ENTRY"}

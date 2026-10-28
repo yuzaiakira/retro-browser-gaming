@@ -1,5 +1,0 @@
-CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
-
-DIAG 2026-10-20: dosbox_pure loads under COI/SAB but "Failed to start game"
-OpenGL vs OpenGLES HW context + wasm memory access out of bounds.
-webgl2Enabled=disabled does not clear the failure. See dos-dosbox-pure-spike-20261020.md.

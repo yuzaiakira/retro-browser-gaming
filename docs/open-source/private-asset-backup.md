@@ -9,17 +9,17 @@ This tool copies authorized local files. It does **not** grant redistribution ri
 
 ## Layout
 
-```text
+``text
 RetroBrowserGaming-Asset-Backup/
 ├── backup-manifest.json
 ├── README.txt
 ├── cores/                 # same relative paths as .private-runtime/cores/
 └── additional-private/    # optional allowlisted company-private files
-```
+``
 
 ## Commands
 
-```bash
+``bash
 # Export (destination must not exist; keep outside the Git repo)
 python3 scripts/private-asset-backup.py export \
   --output /path/to/RetroBrowserGaming-Asset-Backup
@@ -44,7 +44,7 @@ RBG_PRIVATE_ASSET_DIR=/srv/retro-browser-gaming/private-assets \
 
 python3 scripts/provision-private-cores.py
 python3 scripts/verify-core-lock.py --mode LOCAL_FULL
-```
+``
 
 ## Safety
 
@@ -62,7 +62,7 @@ python3 scripts/verify-core-lock.py --mode LOCAL_FULL
 
 Company-private files **not** in the 59-core inventory can be included only via an explicit JSON allowlist:
 
-```json
+``json
 {
   "files": [
     {
@@ -73,21 +73,21 @@ Company-private files **not** in the 59-core inventory can be included only via 
     }
   ]
 }
-```
+``
 
-```bash
+``bash
 python3 scripts/private-asset-backup.py export \
   --output /path/to/Backup \
   --additional-allowlist /path/to/allowlist.json
-```
+``
 
 Paths are relative to the private asset root. Do not auto-discover home directories. Files marked `never_auto` must not be published to browser-serving URLs without separate authorization.
 
 ## Tests
 
-```bash
+``bash
 python3 scripts/test_private_asset_backup.py -v
-```
+``
 
 ## Recommended second copy
 
@@ -97,9 +97,9 @@ Do not rely solely on the Git clone or a single disk.
 
 Re-verify after copying:
 
-```bash
+``bash
 python3 scripts/private-asset-backup.py verify --backup /path/to/copy
-```
+``
 
 ## Recover after total loss of the source checkout
 
@@ -107,13 +107,13 @@ python3 scripts/private-asset-backup.py verify --backup /path/to/copy
 2. Copy a verified `RetroBrowserGaming-Asset-Backup` directory from offline media.
 3. Import into a new private root:
 
-```bash
+``bash
 python3 scripts/private-asset-backup.py verify --backup /media/Backup
 python3 scripts/private-asset-backup.py import --backup /media/Backup
 # or: --destination /srv/retro-browser-gaming/private-assets
 python3 scripts/provision-private-cores.py
 python3 scripts/verify-core-lock.py --mode LOCAL_FULL
-```
+``
 
 4. Start Compose / local servers as usual. Do **not** download proprietary BIOS.
 

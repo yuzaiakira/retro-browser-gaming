@@ -1,2 +1,0 @@
-CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
-NDS_GAMEPLAY_PASS {"capabilities":{"saveState":true,"audio":true,"analog":false,"seekableMedia":false,"onDemandMedia":false},"stateBytes":12582936,"lit":133005,"beforeHash":1037273747,"movedHash":563768809,"restoredHash":563768809,"inputChangedFrame":true,"menuChangedFrame":true,"controlScheme":"nds","core":"desmume","fixture":"mit-nds-dinods.nds","platform":"nds"}

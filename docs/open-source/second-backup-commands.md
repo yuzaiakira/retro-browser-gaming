@@ -13,7 +13,7 @@ Immutable migration backup (do not modify):
 
 Replace `/PATH/ON/OTHER/DRIVE` with a real mount that is **not** the same disk as the primary project (example shape only):
 
-```bash
+``bash
 cd /home/akira/Projects/git-contribute/retro-browser-gaming
 
 # Destination must not already exist
@@ -25,7 +25,7 @@ python3 scripts/private-asset-backup.py verify --backup "$DEST"
 # Optional: compare to primary portable backup
 python3 scripts/private-asset-backup.py verify \
   --backup /home/akira/Projects/git-contribute/RetroBrowserGaming-Asset-Backup-20261026
-```
+``
 
 Do not invent a drive letter or overwrite an existing directory.  
 Do not commit backup contents to Git.

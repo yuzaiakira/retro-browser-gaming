@@ -1,4 +1,0 @@
-CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
-CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
-NES_GAMEPLAY_PASS {"capabilities":{"saveState":true,"audio":true,"analog":false,"seekableMedia":true,"onDemandMedia":false},"stateBytes":13752,"lit":534705,"beforeHash":3679263030,"movedHash":147755024,"restoredHash":1166897814,"inputChangedFrame":true,"controlScheme":"nes","fixture":"mit-nes-falling.nes"}
-FALLING_OK

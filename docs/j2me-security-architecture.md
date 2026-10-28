@@ -64,7 +64,7 @@ Retaining old launcher snapshots alone does **not** guarantee they contain the n
 
 If host `:3000` is busy, use gitignored `compose.override.yaml` to publish **edge** (not web) on `13000`:
 
-```yaml
+``yaml
 services:
   api:
     ports: !override
@@ -74,7 +74,7 @@ services:
   edge:
     ports: !override
       - "127.0.0.1:13000:80"
-```
+``
 
 Open `http://launcher.localhost:13000/` (not raw `127.0.0.1`) so the dedicated hostname origin is used.
 

@@ -23,12 +23,12 @@
 
 ## Anonymous HTTP evidence (`PUBLIC_BROWSER`)
 
-```
+``
 PRIVATE_CORE_SYNC_OK mode=PUBLIC_BROWSER copied=55 blocked_skipped=4
 genesis_plus_gx-wasm.data -> 200
 bluemsx-wasm.data -> 200
 81_eo-wasm.data -> 404
 virtualjaguar_js-wasm.data -> 404
-```
+``
 
 See `anonymous-core-access-20261026.txt`, `public-browser-sync-20261026.txt`.

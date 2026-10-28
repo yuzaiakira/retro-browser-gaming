@@ -1,1 +1,0 @@
-J2ME_MULTI_PASS {"paddle":{"midletId":"Retro Browser Gaming/MIT J2ME Paddle/1.0.0","lit":201291,"hasHiStore":true,"jarSha256":"51c0c9d9f9ae89520a9bcb9c74207f8d0eb7541a907c9996237993780998a5a8"},"notes":{"midletId":"Retro Browser Gaming/MIT J2ME Notes/1.0.0","note":"hello-rms","jarSha256":"cbefc73227873438c5558768417e16037717f5008705f1272c2733430ef87370"}}

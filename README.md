@@ -95,6 +95,10 @@ History cleanup and GitHub publication require explicit owner approval. See:
 
 ## Documentation map
 
+Generated test screenshots/logs live under Git-ignored `.runtime/test-evidence/` — see `docs/qa-summary.md`.
+
+## Documentation map
+
 | Doc | Purpose |
 |---|---|
 | `docs/PDR.md` | Product authority |

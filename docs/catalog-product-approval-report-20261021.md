@@ -2,7 +2,7 @@
 
 **Audience:** product owners / release managers
 **Technical approval ≠ product marketing authorization.**
-**Status of this packet:** all **42** engineering titles remain `product_approval_status=pending` (re-checked 2026-10-22: `docs/test-evidence/PH-11/external-gates-availability-20261022.txt`). **0** product-approved. **Do not** approve EXPERIMENTAL rows (Jaguar, ZX81) without new playability evidence.
+**Status of this packet:** all **42** engineering titles remain `product_approval_status=pending` (re-checked 2026-10-22: `private QA archive (see docs/qa-summary.md)`). **0** product-approved. **Do not** approve EXPERIMENTAL rows (Jaguar, ZX81) without new playability evidence.
 
 **Owner shortlist (proposed public v1 / hold / reject):** `docs/product-release-shortlist-20261022.md` — recommendations only; no automated approvals.
 
@@ -47,7 +47,7 @@ Proportionate default: keep 900s TTL; prefer gateway/proxy in environments that 
 - Non-debug hosts that set engineering visibility must also set `CATALOG_ALLOW_ENGINEERING_IN_PRODUCTION=true` or `manage.py check --deploy` fails with `catalog.E001`.
 - Seeds and migrations never set product approval; applying `0005` leaves existing titles pending.
 
-Evidence: `docs/test-evidence/PH-05/catalog-approval-ops-*20261021*`, prior `catalog-governance-*20261021*`.
+Evidence: `private QA archive (see docs/qa-summary.md)`, prior `catalog-governance-*20261021*`.
 
 ## Inventory summary
 
@@ -77,7 +77,7 @@ Separate blockers (32X, Sega CD, ColecoVision, commercial J2ME) are **not** in t
 
 ## Per-title review packet
 
-All rows: **Product approval = pending**. Screenshots under `docs/test-evidence/PH-05/screenshots/` unless noted (J2ME under `PH-06/`).
+All rows: **Product approval = pending**. Screenshots under `private QA archive (see docs/qa-summary.md)` unless noted (J2ME under `PH-06/`).
 
 | Slug | Platform | Class | License / provenance | Gameplay evidence | Offline evidence | Known limits | Screenshots |
 | --- | --- | --- | --- | --- | --- | --- | --- |

@@ -1,6 +1,0 @@
-
-total 42
-published 42
-pending 42
-approved 0
-rejected 0

@@ -1,3 +1,0 @@
-CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
-CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
-GBC_GAMEPLAY_PASS {"capabilities":{"saveState":true,"audio":true,"analog":false,"seekableMedia":true,"onDemandMedia":false},"stateBytes":84208,"lit":53740,"beforeHash":3117545819,"movedHash":437924049,"restoredHash":1781000626,"inputChangedFrame":true,"menuChangedFrame":true,"controlScheme":"gb","core":"gambatte","fixture":"mit-gbc-littlegreenblob.gbc","platform":"gbc"}

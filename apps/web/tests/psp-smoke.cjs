@@ -10,6 +10,7 @@
  *   PSP_OVERALL_MS (default 420000)
  */
 const { chromium } = require('@playwright/test');
+const { evidenceDir: resolveEvidenceDir } = require('./evidence-dir');
 const { createServer } = require('node:http');
 const { mkdir, readFile } = require('node:fs/promises');
 const { extname, join, normalize } = require('node:path');
@@ -17,7 +18,7 @@ const { PNG } = require('pngjs');
 
 const root = join(__dirname, '..', 'public');
 const fixtures = join(__dirname, '..', '..', '..', '.fixtures');
-const evidenceDir = join(__dirname, '..', '..', '..', 'docs', 'test-evidence', 'PH-05');
+const evidenceDir = resolveEvidenceDir('PH-05');
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
 const READY_MS = Number(process.env.PSP_READY_MS || 180000);
 const OVERALL_MS = Number(process.env.PSP_OVERALL_MS || 420000);

@@ -1,2 +1,0 @@
-ANDROID_OFFLINE_COLD_PASS
-ANDROID_OFFLINE_DONE {"genuineOffline":true,"hostUnreachable":true,"installationCount":4,"libraryCount":4}

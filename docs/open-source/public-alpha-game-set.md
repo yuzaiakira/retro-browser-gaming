@@ -33,9 +33,9 @@ Prioritize titles with strongest prior gameplay evidence and simple UX:
 
 ## Production-like catalog policy
 
-```bash
+``bash
 CATALOG_ALLOW_ENGINEERING=false
 # manage.py check --deploy must keep catalog.E001 clean
-```
+``
 
 Only a human with `catalog.approve_game_product` may approve rows in Admin.

@@ -10,7 +10,7 @@
 
 ## Layout
 
-```text
+``text
 retro-browser-gaming/
 ├── apps/web/public/cores/     # Tracked: JS/loaders/reports/localization + README
 │   └── **/*.data|*.wasm       # NOT tracked; provisioned working copies
@@ -24,7 +24,7 @@ retro-browser-gaming/
     ├── verify-core-lock.py          # SOURCE_ONLY | LOCAL_FULL | PRODUCTION_FULL
     ├── check-no-private-cores-tracked.py
     └── web-entrypoint.sh            # Container sync then Next
-```
+``
 
 Portable offline backup format and restore steps: `docs/open-source/private-asset-backup.md`.
 

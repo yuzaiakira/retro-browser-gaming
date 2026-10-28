@@ -2,7 +2,7 @@
 
 **Status (2026-10-22):** **BLOCKED_EXTERNAL** — no authorized staging DNS/TLS credentials on this workstation.
 
-Local dual-host HTTPS with a developer CA is **LOCAL_HTTPS_VERIFIED** only (`docs/test-evidence/PH-06/j2me-local-https-20261021.json`). That is **not** `PRODUCTION_STAGING_VERIFIED`.
+Local dual-host HTTPS with a developer CA is **LOCAL_HTTPS_VERIFIED** only (`private QA archive (see docs/qa-summary.md)`). That is **not** `PRODUCTION_STAGING_VERIFIED`.
 
 Related: `docs/deployment.md`, `docs/j2me-security-architecture.md`.
 
@@ -53,16 +53,16 @@ Do not change DNS, secrets, or external infrastructure without explicit authoriz
 
 ### 4. Functional smoke (staging)
 
-```bash
+``bash
 # Replace with staging URLs after cutover authorization
 # 1) Catalog browse (product-approved titles only when engineering off)
 # 2) Install engineering title only if CATALOG_ALLOW_ENGINEERING_IN_PRODUCTION explicitly acknowledged
 # 3) Offline cold-start
 # 4) Genesis + PSP (COI) + one J2ME dedicated-origin title
 # 5) SW install / update waiting worker does not disrupt save (OFF-005 class)
-```
+``
 
-Capture HAR or notes + screenshots under `docs/test-evidence/PH-11/staging-*` with date and SHA.
+Capture HAR or notes + screenshots under `private QA archive (see docs/qa-summary.md)` with date and SHA.
 
 ### 5. J2ME dedicated origin
 
@@ -83,12 +83,12 @@ Capture HAR or notes + screenshots under `docs/test-evidence/PH-11/staging-*` wi
 
 ## Local HTTPS (developer only)
 
-```bash
+``bash
 bash scripts/generate-dev-https-certs.sh
 ./scripts/compose.sh up -d
 node scripts/dev-https-edge-proxy.mjs   # https://launcher.localhost:13443
 CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/j2me-local-https-smoke.cjs
-```
+``
 
 Label result **LOCAL_HTTPS_VERIFIED** only.
 

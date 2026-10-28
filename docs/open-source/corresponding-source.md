@@ -36,10 +36,10 @@ Upstream CDN or GitHub links alone may be insufficient if the shipped binary dif
 
 ## Assembled offer package (offline, not in Git)
 
-```bash
+``bash
 python3 scripts/assemble-corresponding-source-offer.py \
   --output /path/outside/repo/RetroBrowserGaming-Corresponding-Source-Offer
-```
+``
 
 Includes tracked EmulatorJS/jsdos/js2me JS (skipping `.data`/`.wasm`), `LICENSES/`, BlueMSX patches, rebuild script, and PH-05 build notes. Does **not** embed private binaries.
 

@@ -7,7 +7,7 @@ export DJANGO_SECRET_KEY="local-test-only-012345678901234567890123456789"
 export DJANGO_DEBUG=true
 export DATABASE_URL="sqlite:////${project_root#/}/apps/api/.runtime/dev.sqlite3"
 export STORAGE_BACKEND=local
-mkdir -p apps/api/.runtime docs/test-evidence/PH-02/screenshots
+mkdir -p apps/api/.runtime .runtime/test-evidence/PH-02/screenshots
 .venv/bin/python apps/api/manage.py migrate --noinput
 .venv/bin/python apps/api/manage.py seed_demo --safe-assets-only
 .venv/bin/python apps/api/manage.py runserver 127.0.0.1:8000 --noreload >"${TMPDIR:-/tmp}/retro-api.log" 2>&1 &

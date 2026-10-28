@@ -21,21 +21,21 @@ Blocked from browser distribution until CS resolved: `81_eo*`, `virtualjaguar_js
 
 ## Local assemble
 
-```bash
+``bash
 python3 scripts/assemble-corresponding-source-offer.py \
   --output /path/outside/repo/RetroBrowserGaming-Corresponding-Source-Offer-<date>
 python3 scripts/check-source-offer-gate.py
 # Optional mock integrity exercise (not public verification):
 RBG_SOURCE_OFFER_MOCK_DIR=/path/to/offer python3 scripts/check-source-offer-gate.py
-```
+``
 
 ## Production gate (GPL binaries served to users)
 
-```bash
+``bash
 RBG_CORE_PROVISION_MODE=PUBLIC_BROWSER python3 scripts/provision-private-cores.py --check
 RBG_SOURCE_OFFER_PUBLIC_URL=https://…/corresponding-source/<git-sha>/ \
   python3 scripts/check-source-offer-gate.py --require-public-delivery
-```
+``
 
 Source-only CI must **omit** `--require-public-delivery` / `RBG_SOURCE_OFFER_REQUIRE_PUBLIC`.
 

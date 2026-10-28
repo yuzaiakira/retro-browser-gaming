@@ -1,5 +1,0 @@
-CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
-Error: Atari Jaguar canvas almost black after boot (0 lit pixels)
-    at run (/home/akira/Projects/git-contribute/retro-browser-gaming/apps/web/tests/libretro-family-smoke.cjs:421:26)
-    at runNextTicks (node:internal/process/task_queues:65:5)
-    at process.processImmediate (node:internal/timers:502:9)

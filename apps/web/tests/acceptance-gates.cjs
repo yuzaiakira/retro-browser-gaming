@@ -3,12 +3,13 @@
  * Distinguishes simulated Gamepad API from physical controllers.
  */
 const { chromium } = require('@playwright/test');
+const { evidenceDir: resolveEvidenceDir } = require('./evidence-dir');
 const { mkdirSync, writeFileSync } = require('node:fs');
 const { join } = require('node:path');
 
 const baseUrl = process.env.RETRO_TEST_BASE_URL || 'http://127.0.0.1:3000';
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
-const evidenceDir = join(__dirname, '..', '..', '..', 'docs', 'test-evidence', 'PH-11');
+const evidenceDir = resolveEvidenceDir('PH-11');
 
 async function waitPlayerReady(page) {
   await page.getByRole('button', { name: 'Menu', exact: true }).waitFor({ timeout: 90000 });

@@ -1,3 +1,0 @@
-CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
-CONSOLE Failed to load resource: net::ERR_INTERNET_DISCONNECTED
-GBA_GAMEPLAY_PASS {"capabilities":{"saveState":true,"audio":true,"analog":false,"seekableMedia":true,"onDemandMedia":false},"stateBytes":430168,"lit":614400,"beforeHash":1577554138,"movedHash":3645102400,"restoredHash":3504148394,"inputChangedFrame":true,"controlScheme":"gba","core":"mgba","fixture":"mit-gba-dino.gba","platform":"gba"}

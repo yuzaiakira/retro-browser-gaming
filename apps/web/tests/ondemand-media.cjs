@@ -4,6 +4,7 @@
  * at mount time. Separately boots legal PSP Dot through the same BlobFS path.
  */
 const { chromium } = require('@playwright/test');
+const { evidenceDir: resolveEvidenceDir } = require('./evidence-dir');
 const { createServer } = require('node:http');
 const { readFile } = require('node:fs/promises');
 const { extname, join, normalize } = require('node:path');
@@ -13,6 +14,7 @@ const { readFileSync } = require('node:fs');
 const root = join(__dirname, '..', 'public');
 const fixtures = join(__dirname, '..', '..', '..', '.fixtures');
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
+const evidenceDir = resolveEvidenceDir('PH-05');
 const LARGE_SIZES = [512 * 1024 * 1024, 1024 * 1024 * 1024];
 const types = {
   '.html': 'text/html',
@@ -330,7 +332,7 @@ async function run() {
     if (!(readerReads > 0 || seekable.bytesRead > 0)) {
       throw new Error(`expected on-demand reads during gameplay: ${JSON.stringify(seekable)}`);
     }
-    const shot = join(__dirname, '..', '..', '..', 'docs', 'test-evidence', 'PH-05', 'screenshots', 'psp-ondemand-gameplay.png');
+    const shot = join(evidenceDir, 'screenshots', 'psp-ondemand-gameplay.png');
     await page.screenshot({ path: shot, fullPage: true });
     results.psp = {
       capabilities: ready.capabilities,

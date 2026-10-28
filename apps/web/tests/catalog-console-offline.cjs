@@ -3,13 +3,14 @@
  * then fresh-process offline cold-start with save/load.
  */
 const { chromium } = require('@playwright/test');
+const { evidenceDir: resolveEvidenceDir } = require('./evidence-dir');
 const { mkdtempSync, rmSync, mkdirSync, writeFileSync } = require('node:fs');
 const { join } = require('node:path');
 const { tmpdir } = require('node:os');
 
 const baseUrl = process.env.RETRO_TEST_BASE_URL || 'http://127.0.0.1:3000';
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
-const evidenceDir = join(__dirname, '..', '..', '..', 'docs', 'test-evidence', 'PH-05');
+const evidenceDir = resolveEvidenceDir('PH-05');
 const only = (process.env.CATALOG_OFFLINE_ONLY || '')
   .split(',')
   .map((s) => s.trim())

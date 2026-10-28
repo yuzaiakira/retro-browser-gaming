@@ -2,7 +2,7 @@
 
 ## Commands
 
-```bash
+``bash
 python3 scripts/test_private_asset_backup.py -v
 # Ran 8 tests … OK
 
@@ -24,7 +24,7 @@ RBG_PRIVATE_ASSET_DIR=/tmp/rbg-offline-restore-20261026/private-runtime \
   python3 scripts/provision-private-cores.py
 python3 scripts/verify-core-lock.py --mode LOCAL_FULL
 # CORE_LOCK_OK mode=LOCAL_FULL checked=373
-```
+``
 
 ## Negative checks
 

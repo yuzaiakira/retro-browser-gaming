@@ -1,3 +1,0 @@
-CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
-CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
-AMIGA_GAMEPLAY_PASS {"capabilities":{"saveState":true,"audio":true,"analog":false,"seekableMedia":false,"onDemandMedia":false},"stateBytes":1104272,"lit":194292,"beforeHash":2402433567,"movedHash":3053198879,"restoredHash":3053198879,"inputChangedFrame":true,"menuChangedFrame":true,"controlScheme":"amiga","core":"puae","fixture":"mit-amiga-dot.adf","platform":"amiga"}

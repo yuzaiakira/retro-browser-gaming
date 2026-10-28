@@ -308,7 +308,7 @@ PS2/Play! Web، Dreamcast/Flycast WASM، Nintendo 3DS/Azahar Web، GameCube/Wii 
 
 **نمونه پاسخ Manifest (نمایشی، نه URL واقعی):**
 
-```json
+``json
 {
   "manifestVersion": 1,
   "releaseId": "release-uuid",
@@ -326,15 +326,15 @@ PS2/Play! Web، Dreamcast/Flycast WASM، Nintendo 3DS/Azahar Web، GameCube/Wii 
   "offlineRequirements": ["app-shell", "emulator-core", "rom"],
   "requiredCapabilities": ["wasm"]
 }
-```
+``
 
 در خروجی واقعی `sha256` باید 64 رقم Hex واقعی باشد؛ مقادیر بالا فقط Contract هستند. URL ممکن است پس از بازگشایی Browser منقضی شده باشد؛ Client در Resume باید **Manifest تازه** بگیرد و نسخه/Checksum را با نسخه قبلی تطبیق دهد. در Demo می‌توان Asset عمومی S3 با CORS صحیح داشت؛ Secret Access Key هرگز وارد Browser نشود. در فاز Auth مدل را برای Signed URL آماده نگه دار.
 
 **Error shape:**
 
-```json
+``json
 {"error":{"code":"ASSET_NOT_PUBLISHED","message":"This game is unavailable.","requestId":"...","details":{}}}
-```
+``
 
 **Error cases:** `404` item missing، `409` incompatible asset version، `422` invalid request، `503` storage config/unavailable. هیچ URL داخلی یا اطلاعات AWS Secret در error leak نشود.
 
@@ -373,7 +373,7 @@ Transitionهای خطا: `downloading/verify/install → recoverable-error | fat
 
 Monorepo پیشنهادی؛ اگر Repository موجود convention معقولی دارد، بدون تخریب از آن تبعیت کن.
 
-```text
+``text
 retro-browser-gaming/
 ├── apps/
 │   ├── web/                        # Next.js App Router, TS strict
@@ -411,7 +411,7 @@ retro-browser-gaming/
 ├── .env.example
 ├── README.md
 └── LICENSES/
-```
+``
 
 ### 10.1 Browser modules و SOLID
 
@@ -426,7 +426,7 @@ retro-browser-gaming/
 
 ### 10.2 Core Interface پیشنهادی
 
-```ts
+``ts
 export interface EmulatorAdapter {
   readonly id: string;
   readonly version: string;
@@ -446,7 +446,7 @@ export interface SaveStateCapable {
   exportState(slot?: number): Promise<Uint8Array>;
   importState(data: Uint8Array, slot?: number): Promise<void>;
 }
-```
+``
 
 واقعیت API EmulatorJS/PPSSPP را از مستندات نسخه انتخاب‌شده بررسی کن؛ اگر عملیات مستقیماً expose نشده باشد، Adapter باید با Interface قابل تست رفتار `unsupported` بدهد، نه Optional Chain صوری که هیچ کاری نمی‌کند. از Undocumented Core API فقط بعد از Spike و تثبیت نسخه + Test استفاده کن.
 
@@ -661,7 +661,7 @@ export interface SaveStateCapable {
 
 ### 14.3 حداقل شواهد هر Gate
 
-`docs/test-evidence/PH-xx/`: `test-run.txt`، `environment.md`، `screenshots/` یا `video/` (در صورت مرتبط)، `failures.md`، `status.json`. شناسه Git Commit و نسخه dependencies و Browser در Evidence ذکر شود. برای تست دستی، زمان اجرا، محیط و نتیجه `PASS/FAIL/NOT_VERIFIED` نوشته شود.
+`.runtime/test-evidence/ or private archive; see docs/qa-summary.md — PH-xx/`: `test-run.txt`، `environment.md`، `screenshots/` یا `video/` (در صورت مرتبط)، `failures.md`، `status.json`. شناسه Git Commit و نسخه dependencies و Browser در Evidence ذکر شود. برای تست دستی، زمان اجرا، محیط و نتیجه `PASS/FAIL/NOT_VERIFIED` نوشته شود.
 
 ---
 
@@ -683,7 +683,7 @@ export interface SaveStateCapable {
 
 **پیشنهاد دستورات در README** (نام دقیق می‌تواند براساس tooling انتخاب‌شده تغییر کند اما معادل لازم است):
 
-```bash
+``bash
 cp .env.example .env
 # Populate non-production local placeholders; no real secret committed.
 docker compose up --build -d
@@ -691,13 +691,13 @@ docker compose exec api python manage.py migrate
 docker compose exec api python manage.py seed_demo --safe-assets-only
 # Health API and Frontend smoke
 # Backend tests, Frontend lint/types/unit, Playwright integration/E2E
-```
+``
 
 در `package.json` و tooling Backend اسکریپت‌های واضح لازم است: `lint`, `typecheck`, `test`, `test:e2e`, `test:offline`, `test:download`, `test:core`, `build`. Jobهای CI: backend-test, frontend-quality, browser-e2e, license/dependency audit, optional heavy perf nightly. S3 dev data و tests باید deterministic باشند. تست‌های Game Core نیازمند fixture قانونی‌اند و وضعیت آن‌ها در CI صریح باشد.
 
 **Configuration ENV examples:**
 
-```dotenv
+``dotenv
 DJANGO_SECRET_KEY=replace-for-local-dev
 DJANGO_DEBUG=true
 DATABASE_URL=postgresql://retro:retro@db:5432/retro
@@ -709,7 +709,7 @@ S3_REGION=us-east-1
 PUBLIC_API_BASE_URL=http://localhost:8000
 NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
 NEXT_PUBLIC_APP_URL=http://localhost:3000
-```
+``
 
 این مقادیر **نمونه هستند**. به علت تفاوت آدرس‌دهی Client Browser و Container، دو URL خصوصی داخل Docker و Public browser-facing در کد و Docs از هم جدا باشند. متغیرهای Browser با `NEXT_PUBLIC_` هرگز شامل Secret نشوند. Production profile باید HTTPS termination، asset CORS/CORP، و headers لازم را فراهم کند.
 
@@ -779,7 +779,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 ## 21. قالب گزارش اجباری هر فاز
 
-```markdown
+``markdown
 # Phase PH-XX — <title>
 Date / commit / branch / environment:
 
@@ -802,7 +802,7 @@ PASS / FAIL / BLOCKED_EXTERNAL
 
 ## Next phase plan
 - ...
-```
+``
 
 `docs/final-handover.md` باید خلاصه تمامی فازها، لینک‌های شواهد در Repository، دقیقاً چه چیزهایی کار می‌کنند/نمی‌کنند، Tested Browsers/Devices، Asset Provenance و گام‌های نصب Production را داشته باشد.
 

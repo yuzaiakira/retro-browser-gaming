@@ -1,4 +1,0 @@
-{
-  "dosInstall": true,
-  "dosOffline": true
-}

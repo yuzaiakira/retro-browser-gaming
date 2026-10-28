@@ -1,3 +1,0 @@
-PRIVATE_CORE_SYNC_FAILED: files[0]: invalid sha256 for x.wasm
-
-exit:1

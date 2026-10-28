@@ -1,6 +1,6 @@
 # Architecture
 
-```mermaid
+``mermaid
 flowchart TD
   Browser["Next.js PWA"] --> API["Django / DRF"]
   API --> DB["PostgreSQL"]
@@ -8,7 +8,7 @@ flowchart TD
   Browser --> OPFS["OPFS game files"]
   Browser --> IDB["IndexedDB journal, saves, settings"]
   Browser --> Runtime["isolated HTML5 or EmulatorJS frame"]
-```
+``
 
 Django owns catalog entities, immutable core/release/asset identities, distribution evidence, publication policy and signed manifests. The importer accepts only explicit local bundle files, verifies hashes before object-store upload, and never fetches arbitrary URLs. Public API routes are read-only; Admin is authenticated and reuses the same validators.
 

@@ -4,12 +4,13 @@
  * Usage: CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/j2me-rms-rollback-safety.cjs
  */
 const { chromium } = require('@playwright/test');
+const { evidenceDir: resolveEvidenceDir } = require('./evidence-dir');
 const { createServer } = require('node:http');
 const { readFile, mkdir, writeFile } = require('node:fs/promises');
 const { extname, join, normalize } = require('node:path');
 
 const root = join(__dirname, '..', 'public');
-const evidenceDir = join(__dirname, '..', '..', '..', 'docs', 'test-evidence', 'PH-06');
+const evidenceDir = resolveEvidenceDir('PH-06');
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
 const DOT = 'Retro Browser Gaming/MIT J2ME Dot/1.0.0';
 

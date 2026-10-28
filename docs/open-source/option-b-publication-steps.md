@@ -21,7 +21,7 @@ Tip: `eb35bf71f530047a6b7a1aa7a16c34b264d99d25` ← private `7f81b7f7b4f6215daee
 1. On GitHub: create a **new empty public** repository. Do **not** change visibility of `yuzaiakira/retro-browser-gaming`.
 2. In the isolated candidate tree only:
 
-```bash
+``bash
 cd /home/akira/Projects/git-contribute/retro-browser-gaming-public-candidate-20261028-final/tree
 # or a newer tree from ./scripts/build-sanitized-candidate.sh after LICENSE
 git remote add public git@github.com:<org-or-user>/<new-public-repo>.git
@@ -29,7 +29,7 @@ git push -u public main
 # Optional annotated tag after review:
 # git tag -a public-source-v0.1.0 -m "Sanitized public source candidate"
 # git push public public-source-v0.1.0
-```
+``
 
 3. Enable GitHub Actions; confirm SOURCE_ONLY jobs green.
 4. Point README “clone” docs at the **public** URL; keep private remotes private.

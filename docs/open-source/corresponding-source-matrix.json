@@ -58,11 +58,11 @@
       "local_modifications": "eo_loadp + joypad device init (see PH-05)",
       "patches_or_scripts": [],
       "evidence": [
-        "docs/test-evidence/PH-05/zx81-eo-loadp-build-20261022.md"
+        "docs/emulator-builds/zx81-eo-loadp-build.md"
       ],
       "corresponding_source_status": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
       "source_offer_class": "incomplete_patches_missing_in_repo",
-      "upstream": "https://github.com/libretro/81-libretro (independently versioned 81_eo EmulatorJS build with eo_loadp; evidence PH-05/zx81-eo-loadp-build-20261022.md)",
+      "upstream": "https://github.com/libretro/81-libretro (independently versioned 81_eo EmulatorJS build with eo_loadp; evidence docs/emulator-builds/zx81-eo-loadp-build.md)",
       "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
       "missing_material": "Complete modified preferred-form source / patch series not present under scripts/patches/; only PH-05 notes (and optional zx81 snippet). Upstream URL insufficient for local modifications."
     },
@@ -77,11 +77,11 @@
       "local_modifications": "eo_loadp + joypad device init (see PH-05)",
       "patches_or_scripts": [],
       "evidence": [
-        "docs/test-evidence/PH-05/zx81-eo-loadp-build-20261022.md"
+        "docs/emulator-builds/zx81-eo-loadp-build.md"
       ],
       "corresponding_source_status": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
       "source_offer_class": "incomplete_patches_missing_in_repo",
-      "upstream": "https://github.com/libretro/81-libretro (independently versioned 81_eo EmulatorJS build with eo_loadp; evidence PH-05/zx81-eo-loadp-build-20261022.md)",
+      "upstream": "https://github.com/libretro/81-libretro (independently versioned 81_eo EmulatorJS build with eo_loadp; evidence docs/emulator-builds/zx81-eo-loadp-build.md)",
       "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
       "missing_material": "Complete modified preferred-form source / patch series not present under scripts/patches/; only PH-05 notes (and optional zx81 snippet). Upstream URL insufficient for local modifications."
     },
@@ -161,12 +161,12 @@
         "scripts/rebuild-bluemsx-emscripten.sh"
       ],
       "evidence": [
-        "docs/test-evidence/PH-05/msx-bluemsx-rxml-build-20261022.md",
-        "docs/test-evidence/PH-05/msx-expansion-20261022.md"
+        "docs/emulator-builds/bluemsx-rxml-build.md",
+        "docs/emulator-builds/bluemsx-msx-expansion.md"
       ],
       "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
       "source_offer_class": "patches_and_rebuild_script_in_repo",
-      "upstream": "https://github.com/EmulatorJS/blueMSX-libretro (e3086eb; independently built; Board.saveState WASM arity fix; board.saveState zero-arity WASM fix; PH-05/msx-savestate-abi-20261022.md)",
+      "upstream": "https://github.com/EmulatorJS/blueMSX-libretro (e3086eb; independently built; Board.saveState WASM arity fix; board.saveState zero-arity WASM fix; docs/emulator-builds/bluemsx-savestate-abi.md)",
       "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE"
     },
     {
@@ -185,12 +185,12 @@
         "scripts/rebuild-bluemsx-emscripten.sh"
       ],
       "evidence": [
-        "docs/test-evidence/PH-05/msx-bluemsx-rxml-build-20261022.md",
-        "docs/test-evidence/PH-05/msx-expansion-20261022.md"
+        "docs/emulator-builds/bluemsx-rxml-build.md",
+        "docs/emulator-builds/bluemsx-msx-expansion.md"
       ],
       "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
       "source_offer_class": "patches_and_rebuild_script_in_repo",
-      "upstream": "https://github.com/EmulatorJS/blueMSX-libretro (e3086eb; independently built; Board.saveState WASM arity fix; board.saveState zero-arity WASM fix; PH-05/msx-savestate-abi-20261022.md)",
+      "upstream": "https://github.com/EmulatorJS/blueMSX-libretro (e3086eb; independently built; Board.saveState WASM arity fix; board.saveState zero-arity WASM fix; docs/emulator-builds/bluemsx-savestate-abi.md)",
       "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE"
     },
     {
@@ -849,11 +849,11 @@
       "local_modifications": "independently versioned EmulatorJS-compatible rebuild",
       "patches_or_scripts": [],
       "evidence": [
-        "docs/test-evidence/PH-05/jaguar-vj-js-build-20261022.md"
+        "docs/emulator-builds/jaguar-virtualjaguar-js-build.md"
       ],
       "corresponding_source_status": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
       "source_offer_class": "rebuild_notes_only",
-      "upstream": "https://github.com/libretro/virtualjaguar-libretro (independently versioned virtualjaguar_js EmulatorJS build; evidence PH-05/jaguar-vj-js-build-20261022.md)",
+      "upstream": "https://github.com/libretro/virtualjaguar-libretro (independently versioned virtualjaguar_js EmulatorJS build; evidence docs/emulator-builds/jaguar-virtualjaguar-js-build.md)",
       "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
       "missing_material": "Complete modified preferred-form source / patch series not present under scripts/patches/; only PH-05 notes (and optional zx81 snippet). Upstream URL insufficient for local modifications."
     },
@@ -868,11 +868,11 @@
       "local_modifications": "independently versioned EmulatorJS-compatible rebuild",
       "patches_or_scripts": [],
       "evidence": [
-        "docs/test-evidence/PH-05/jaguar-vj-js-build-20261022.md"
+        "docs/emulator-builds/jaguar-virtualjaguar-js-build.md"
       ],
       "corresponding_source_status": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
       "source_offer_class": "rebuild_notes_only",
-      "upstream": "https://github.com/libretro/virtualjaguar-libretro (independently versioned virtualjaguar_js EmulatorJS build; evidence PH-05/jaguar-vj-js-build-20261022.md)",
+      "upstream": "https://github.com/libretro/virtualjaguar-libretro (independently versioned virtualjaguar_js EmulatorJS build; evidence docs/emulator-builds/jaguar-virtualjaguar-js-build.md)",
       "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
       "missing_material": "Complete modified preferred-form source / patch series not present under scripts/patches/; only PH-05 notes (and optional zx81 snippet). Upstream URL insufficient for local modifications."
     },
@@ -892,8 +892,8 @@
         "scripts/rebuild-bluemsx-emscripten.sh"
       ],
       "evidence": [
-        "docs/test-evidence/PH-05/msx-bluemsx-rxml-build-20261022.md",
-        "docs/test-evidence/PH-05/msx-expansion-20261022.md"
+        "docs/emulator-builds/bluemsx-rxml-build.md",
+        "docs/emulator-builds/bluemsx-msx-expansion.md"
       ],
       "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
       "source_offer_class": "patches_and_rebuild_script_in_repo",

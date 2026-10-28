@@ -1,3 +1,0 @@
-CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
-CONSOLE Failed to load resource: the server responded with a status of 404 (Not Found)
-GENESIS_GAMEPLAY_PASS {"fixture":"mit-genesis-pong.bin","capabilities":{"saveState":true,"audio":true,"analog":false,"seekableMedia":true,"onDemandMedia":false},"stateBytes":1036312,"lit":37301,"before":308.5,"moved":130,"restored":308.5,"inputChangedFrame":true}
