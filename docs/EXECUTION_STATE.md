@@ -10,7 +10,7 @@
 **Sprint 4.1 Personalization reliability:** sparse layered prefs + migration, iframe-focus shell-key bridge, real no-remount identity, honest filter copy, save-manager comfort — verified 2026-10-27.  
 **Sprint 5 Console Experience:** shortcut safety (F5 reject + modifiers + live allowlist), controller-first launcher nav (simulated), session/audio/fullscreen polish, console journeys — verified 2026-10-27.  
 **Sprint 6 Stability:** long-session soak (smoke+full), save integrity, offline/download regressions, final UX A–F, launcher gamepad rAF pause when hidden — verified 2026-10-27. Evidence `docs/test-evidence/PH-UX-STABILITY/`.  
-**Open-source prep:** source-offer gate verifies **every** `SHA256SUMS` entry; `--require-public-delivery` for prod GPL serving; LOCAL_FULL needs `RBG_ALLOW_LOCAL_FULL=1`; MIT LICENSE proposed (not enacted). Sanitized candidate `77110c5` ← private `501ed79` (re-filter after newer tip before push). **STOP** before GitHub publish.
+**Open-source SOURCE prep (2026-10-28):** `setup.sh`, private BIOS installer, public-source safety gate, dual backups (NVMe + SSD2), fresh Option B1 candidate under `retro-browser-gaming-public-candidate-20261028/`. MIT LICENSE proposed (not enacted). **STOP** before GitHub publish — see `docs/open-source/final-source-release-readiness-20261028.md`.
 
 ## Deferred physical / external (do not rediscover)
 
@@ -154,6 +154,26 @@
 1. Physical gamepad + iOS when hardware available (do not mark passed without devices)
 2. Owner gates unchanged (copyright / public push / legal / source-offer HTTPS)
 3. Stop — do not start an unrelated feature sprint from this milestone
+
+## Open-source SOURCE prep (2026-10-28)
+
+| Check | Result |
+|---|---|
+| Private HEAD at audit | `1f4ddbe` (synced with origin); milestone commits land after |
+| Git bundle backup + restore | PASS → `retro-browser-gaming-os-backup-20261028/` |
+| Second independent backups | PASS on `/mnt/SSD2/` (assets + bundle); 20261026 backups retained |
+| `scripts/setup.sh` | source-only / local-full / check / dry-run / no-start |
+| `install-private-bios.py` | Manual authorized firmware only |
+| `check-public-source-safety.py` | Tip gates + CI `--quick` |
+| Sanitized candidate (B1) | Isolated filter-repo; see candidate `CANDIDATE_HEAD.txt` |
+| Root LICENSE | **BLOCKED_HUMAN** |
+| Publication | **STOP** — no public push |
+
+### Next concrete task (owner)
+
+1. Confirm copyright holder; enact root LICENSE on private `main`
+2. Approve Option B1 push of **20261028** candidate to a **new** public repo
+3. Do not force-push or open the existing private GitHub repo
 
 ## Remaining blockers / next
 

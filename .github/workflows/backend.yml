@@ -43,6 +43,7 @@ jobs:
       # Public CI is SOURCE_ONLY: private .data/.wasm cores are not in Git.
       - run: python3 scripts/verify-core-lock.py --mode SOURCE_ONLY
       - run: python3 scripts/check-no-private-cores-tracked.py
+      - run: python3 scripts/check-public-source-safety.py --quick
       - run: python3 scripts/test_private_asset_backup.py
       - run: python3 scripts/test_browser_allowlist.py
       - run: python3 scripts/test_sync_fail_closed.py

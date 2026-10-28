@@ -17,9 +17,10 @@
 
 ## 3. Sanitized candidate SHA
 
-- [ ] Approve candidate tip **`6d46176121ce7ef4118bcf1922ba6258d209131f`** (from private `53567d2…`) **or** re-filter after root LICENSE / newer tip (confirm `CANDIDATE_HEAD.txt`)
+- [ ] Approve candidate tip recorded in `/home/akira/Projects/git-contribute/retro-browser-gaming-public-candidate-20261028/CANDIDATE_HEAD.txt` (rebuilt from private tip after 2026-10-28 SOURCE prep) **or** re-filter again after root LICENSE lands
 - [ ] Confirm `PUBLIC_BROWSER` allowlist (55 authorized / 4 NOT_CLEARED) is accepted
 - [ ] Confirm candidate was built from the intended private tip before push
+- [ ] Stale 2026-10-26 candidates must **not** be pushed
 
 ## 4. History-removal summary
 

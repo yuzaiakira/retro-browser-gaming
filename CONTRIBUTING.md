@@ -11,15 +11,18 @@ Thanks for interest in Retro Browser Gaming.
 ## Source-only setup
 
 ```bash
+./scripts/setup.sh --source-only --no-start
+# or manually:
 python3 -m venv .venv
 .venv/bin/pip install --require-hashes -r apps/api/requirements-dev.lock
 cd apps/web && npm ci && npm run build
 cd ../..
 python3 scripts/verify-core-lock.py --mode SOURCE_ONLY
 python3 scripts/check-no-private-cores-tracked.py
+python3 scripts/check-public-source-safety.py --quick
 ```
 
-WASM console gameplay needs authorized private assets. See `docs/open-source/private-asset-backup.md` and `docs/open-source/local-private-assets.md`. Do **not** commit proprietary BIOS/ROMs or private backups.
+WASM console gameplay needs authorized private assets. See `docs/open-source/private-asset-backup.md` and `docs/open-source/local-private-assets.md`. Do **not** commit proprietary BIOS/ROMs or private backups. Never auto-fetch BIOS.
 
 ## Tests
 

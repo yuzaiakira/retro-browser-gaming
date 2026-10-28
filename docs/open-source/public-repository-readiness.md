@@ -1,6 +1,8 @@
 # Public repository readiness checklist
 
-**Overall:** `READY_FOR_LEGAL_REVIEW` / software prep **PARTIAL** until owner+legal decisions land.
+**Overall:** `READY_FOR_LEGAL_REVIEW` / technical SOURCE prep largely complete 2026-10-28; publication still **BLOCKED_HUMAN**.
+
+Distinguish **PUBLIC_SOURCE_READY** (sanitized Git + docs + gates) from **PUBLIC_HOSTED_RELEASE_READY** (staging, catalog approvals, CS HTTPS offer).
 
 ## Must be true before making the GitHub repo public
 
@@ -8,13 +10,14 @@
 | --- | --- |
 | No tracked `.data`/`.wasm` under `apps/web/public/cores` | PASS (`check-no-private-cores-tracked.py`) |
 | Core lock SOURCE_ONLY works without private store | PASS |
-| Portable backup/restore for authorized operators | PASS |
-| CI does not require private binaries | PASS after workflow update (SOURCE_ONLY; HTML5 smoke only) |
+| Portable backup/restore for authorized operators | PASS (+ second copy on independent media 2026-10-28) |
+| CI does not require private binaries | PASS (SOURCE_ONLY + `check-public-source-safety.py --quick`) |
+| One-command `./scripts/setup.sh` | PASS (source-only / local-full) |
 | Third-party notices + corresponding-source docs | Present |
 | Root application LICENSE chosen by owner | **BLOCKED_HUMAN** — recommend MIT for first-party only |
-| History cleaned on public refs **or** new clean repo | **BLOCKED_HUMAN** — Options A/B |
+| History cleaned on public refs **or** new clean repo | Candidate prepared Option B1 — **BLOCKED_HUMAN** to publish |
 | Product approvals for any catalog titles beyond engineering | Separate governance |
-| No proprietary BIOS in tree or public delivery | PASS (none tracked) |
+| No proprietary BIOS in tree or public delivery | PASS (none tracked; optional installer is offline/manual) |
 
 ## What a public clone gets
 
