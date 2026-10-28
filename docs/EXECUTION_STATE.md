@@ -10,7 +10,7 @@
 **Sprint 4.1 Personalization reliability:** sparse layered prefs + migration, iframe-focus shell-key bridge, real no-remount identity, honest filter copy, save-manager comfort — verified 2026-10-27.  
 **Sprint 5 Console Experience:** shortcut safety (F5 reject + modifiers + live allowlist), controller-first launcher nav (simulated), session/audio/fullscreen polish, console journeys — verified 2026-10-27.  
 **Sprint 6 Stability:** long-session soak (smoke+full), save integrity, offline/download regressions, final UX A–F, launcher gamepad rAF pause when hidden — verified 2026-10-27. Evidence `docs/test-evidence/PH-UX-STABILITY/`.  
-**Open-source SOURCE prep (2026-10-28):** `setup.sh`, private BIOS installer, public-source safety gate, dual backups (NVMe + SSD2). Private tip `b3b56ff`; verified Option B1 candidate `01d4e67` ← private `36938c4` (re-filter from `b3b56ff` before owner push). MIT LICENSE proposed (not enacted). **STOP** before GitHub publish — `docs/open-source/final-source-release-readiness-20261028.md`.
+**Open-source SOURCE prep (2026-10-28 final):** Safe candidate builder; full history audit (59/59 clean on candidate); proposed MIT `Copyright (c) 2026 Akira Yuzai` **not enacted** (`first-party-license-scope.md`). Candidate `eb35bf7` ← private `7f81b7f` at `…/public-candidate-20261028-final/`. **STOP** before publish — `docs/open-source/FINAL-PUBLICATION-READINESS.md`.
 
 ## Deferred physical / external (do not rediscover)
 

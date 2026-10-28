@@ -7,9 +7,14 @@
 - [ ] Root application `LICENSE` committed on private `main`
 - [ ] Legal review package accepted or residual risks accepted in writing
 - [ ] Portable private-asset backup verified on ≥2 independent media
-- [ ] Fresh sanitized candidate rebuilt from the **approved** private tip
-- [ ] Candidate verification checklist re-run PASS
+- [ ] Fresh sanitized candidate rebuilt from the **approved** private tip (`./scripts/build-sanitized-candidate.sh`)
+- [ ] Candidate verification checklist re-run PASS (`HISTORY_PATHS_CLEAN`, SOURCE_ONLY, `audit-public-history.py --expect-clean`)
 - [ ] New empty GitHub repository name chosen (example: `retro-browser-gaming-public`)
+
+## Current verified candidate (re-filter after LICENSE if enacted)
+
+`/home/akira/Projects/git-contribute/retro-browser-gaming-public-candidate-20261028-final/tree`  
+Tip: `eb35bf71f530047a6b7a1aa7a16c34b264d99d25` ← private `7f81b7f7b4f6215daeef7f36d42ec320670ca14a`
 
 ## Safe steps
 
@@ -17,7 +22,8 @@
 2. In the isolated candidate tree only:
 
 ```bash
-cd /path/to/retro-browser-gaming-public-candidate-YYYYMMDD/tree
+cd /home/akira/Projects/git-contribute/retro-browser-gaming-public-candidate-20261028-final/tree
+# or a newer tree from ./scripts/build-sanitized-candidate.sh after LICENSE
 git remote add public git@github.com:<org-or-user>/<new-public-repo>.git
 git push -u public main
 # Optional annotated tag after review:

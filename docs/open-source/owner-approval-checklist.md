@@ -17,10 +17,10 @@
 
 ## 3. Sanitized candidate SHA
 
-- [ ] Approve candidate tip **`01d4e67aac81e06c880bae99a742728e38bf3749`** (from private `36938c4…`; see `…/public-candidate-20261028/CANDIDATE_HEAD.txt`) **or** re-filter again after root LICENSE lands
+- [ ] Approve candidate tip **`eb35bf71f530047a6b7a1aa7a16c34b264d99d25`** (from private `7f81b7f…`; dir `…/public-candidate-20261028-final/`) **or** re-filter from the LICENSE-enacted tip before push
 - [ ] Confirm `PUBLIC_BROWSER` allowlist (55 authorized / 4 NOT_CLEARED) is accepted
 - [ ] Confirm candidate was built from the intended private tip before push
-- [ ] Stale 2026-10-26 candidates must **not** be pushed
+- [ ] Stale candidates (`20261026*`, `01d4e67`, pre-final trees) must **not** be pushed
 
 ## 4. History-removal summary
 
