@@ -7,8 +7,8 @@
 | Item | Value | Status |
 |---|---|---|
 | Original private HEAD (pre-milestone work start) | `1f4ddbeba62971c43162889c17c98308662833b6` | PASS (inspected) |
-| Private tip after this milestone | *(see `git rev-parse HEAD` after commits)* | recorded in EXECUTION_STATE |
-| Sanitized candidate HEAD | rebuilt after private tip commits — see `CANDIDATE_HEAD.txt` under public-candidate-20261028 | PASS when HISTORY_PATHS_CLEAN |
+| Private tip after this milestone | `97420c1994071a28e1870f7c23c67e3b40f1c6fd` | recorded in EXECUTION_STATE |
+| Sanitized candidate HEAD | `1dfb4955797ec47603f1dc6b35de1ce121a84278` (map: private `97420c1` → candidate `1dfb495`) | PASS when HISTORY_PATHS_CLEAN |
 | History preservation | Meaningful commits retained (filter-repo, not squash) | PASS on candidate |
 | Original repo rewritten? | **No** | PASS |
 | Published remotely? | **No** | PASS |

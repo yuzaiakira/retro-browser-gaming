@@ -1,0 +1,8 @@
+SETUP_START mode=SOURCE_ONLY check=1 dry_run=0
++ python3 /tmp/rbg-source-only-accept-20261028/scripts/check-no-private-cores-tracked.py
+PRIVATE_CORE_TRACKED_OK
++ python3 /tmp/rbg-source-only-accept-20261028/scripts/verify-core-lock.py --mode SOURCE_ONLY
+CORE_LOCK_OK mode=SOURCE_ONLY checked=314 skipped_binaries=59 lock=373
++ python3 /tmp/rbg-source-only-accept-20261028/scripts/check-public-source-safety.py --quick
+PUBLIC_SOURCE_SAFETY_PASS quick=True expect_history_clean=False
+SETUP_CHECK_OK mode=SOURCE_ONLY

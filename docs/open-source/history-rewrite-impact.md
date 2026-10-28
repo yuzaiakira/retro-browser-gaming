@@ -68,3 +68,21 @@ The disposable dry-run tip (`36b187a`) was produced from owner tip `6b0608c`. La
 
 Publication Options A/B: `docs/open-source/github-publication-plan.md`.
 
+
+## Fresh dry-run (2026-10-28) — Option B1 candidate
+
+Isolated disposable clone only. Owner working repository **not** rewritten. **No force-push.**
+
+| Field | Value |
+| --- | --- |
+| Tool | `git-filter-repo` `--invert-paths --paths-from-file history-removal-manifest.txt` |
+| Commits parsed | 125 |
+| Tip before (private) | `97420c1994071a28e1870f7c23c67e3b40f1c6fd` |
+| Tip after (candidate only) | `1dfb4955797ec47603f1dc6b35de1ce121a84278` |
+| Binary paths remaining in history | **none** (`HISTORY_PATHS_CLEAN`) |
+| SOURCE_ONLY lock | PASS |
+| `check-public-source-safety.py --expect-history-clean` | PASS |
+| Candidate dir | `/home/akira/Projects/git-contribute/retro-browser-gaming-public-candidate-20261028/` |
+| Bundle | `retro-browser-gaming-os-backup-20261028/retro-browser-gaming-all-refs-after-setup.bundle` |
+
+Prior 2026-10-26 candidates are **stale** relative to this tip.
