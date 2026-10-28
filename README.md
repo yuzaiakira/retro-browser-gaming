@@ -1,145 +1,105 @@
 # Retro Browser Gaming
 
-Browser-based retro launcher built from `docs/PDR.md`. It provides a Django/DRF catalog and rights-checked asset manifests, a Next.js PWA, OPFS + IndexedDB installation, real HTTP Range downloads, local saves, configurable input, and a version-pinned EmulatorJS adapter.
+Browser launcher for legally redistributable retro and homebrew games: Django/DRF catalog, Next.js PWA, resumable Range downloads into OPFS/IndexedDB, local saves, keyboard/touch/gamepad input, and isolated WebAssembly emulator frames.
 
-**Delivery status: incomplete.** The legal HTML5 title is fully installed, launched, saved, and re-opened offline in Chromium. Legal Genesis, PS1 (multi-FILE CUE/BIN), and PSP (threaded PPSSPP) homebrew gameplay, input, save/load, and fresh-process offline input are verified under Chromium core-smoke. On-demand BlobFS large-media access (EMU-004: 512 MiB / 1 GiB windows without MEMFS full-file copy) is verified. Chunked media loading and the browser download fault suite including 1 GiB bounded-memory transfer are verified. Native Docker Compose with PostgreSQL, SeaweedFS S3-compatible storage, Django, and Next.js is verified. Catalog-installed console offline cold-start, OFF-004/005, and the physical device/browser matrix remain open. See `docs/final-handover.md` and `docs/acceptance-matrix.md`.
+**This repository is application source.** It is not a warranty of a certified production hosting service. Physical gamepad, iOS Safari, and staging HTTPS certification remain open where noted in `docs/acceptance-matrix.md`.
 
-## Run locally
+## What works without private emulator binaries
 
-Requires Python 3.12+, Node 24+, and Chromium for browser tests.
+- Application build and Compose stack (API, web, PostgreSQL, SeaweedFS)
+- Catalog / library / downloads UI
+- **Orbit Catch** (first-party HTML5) install, play, save, offline
+- Source-only integrity checks and CI-style gates
 
-**One-command setup (recommended):**
+WASM console cores (Genesis, MSX, PS1, …) need authorized private `.data`/`.wasm` payloads that are **not** stored in public Git.
+
+## Quick start (source-only)
+
+Requires Python 3.12+, Node 24+, Docker (for Compose).
 
 ```bash
-# Public / source clone — no private emulator binaries
 ./scripts/setup.sh --source-only
-
-# Authorized full runtime — after restoring .private-runtime or a portable backup
-export RBG_ALLOW_LOCAL_FULL=1
-./scripts/setup.sh --local-full --private-backup /path/to/RetroBrowserGaming-Asset-Backup
 ```
 
-Flags: `--check`, `--dry-run`, `--no-start`. See `docs/open-source/local-private-assets.md`.
+Flags: `--check`, `--dry-run`, `--no-start`.
 
-If Chromium is installed by the operating system rather than Playwright, pass its
-path when running the browser checks:
-
-```bash
-CHROMIUM_EXECUTABLE=/usr/bin/chromium ./scripts/browser-smoke.sh
-CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/core-smoke.cjs
-```
-
-Manual dependency install (if not using `setup.sh`):
+Manual equivalent:
 
 ```bash
 python3 -m venv .venv
 .venv/bin/pip install --require-hashes -r apps/api/requirements-dev.lock
-cd apps/web && npm ci && npx playwright install chromium && npm run build && cd ../..
-./scripts/browser-smoke.sh
-```
-
-The smoke test starts a local Django API and the production Next server, then proves catalog discovery, real range download, full SHA-256 verification, OPFS/IndexedDB persistence, service-worker installation, local HTML5 gameplay, save/load, offline library access, and three offline player reloads. Screenshots and output are written below `docs/test-evidence/PH-02/`.
-
-For development servers instead:
-
-```bash
-export DJANGO_SECRET_KEY='replace-with-a-local-secret-of-at-least-32-characters'
-export DJANGO_DEBUG=true
-export DATABASE_URL='sqlite:////absolute/path/to/apps/api/.runtime/dev.sqlite3'
-export STORAGE_BACKEND=local
-.venv/bin/python apps/api/manage.py migrate
-.venv/bin/python apps/api/manage.py seed_demo --safe-assets-only
-.venv/bin/python apps/api/manage.py runserver 127.0.0.1:8000
-# separate terminal
-cd apps/web && npm run dev
-```
-
-## Test and audit
-
-```bash
-DJANGO_SECRET_KEY='local-test-only-012345678901234567890123456789' DJANGO_DEBUG=true DATABASE_URL='sqlite:////absolute/path/to/apps/api/.runtime/test.sqlite3' STORAGE_BACKEND=local .venv/bin/python apps/api/manage.py test tests -v 2
-.venv/bin/ruff check apps/api
-cd apps/web && npm test && npm run lint && npm run typecheck && npm run build
-cd ../.. && python3 scripts/verify-core-lock.py
-cd apps/web && GENESIS_FIXTURE=mit-genesis-pong.bin node tests/core-smoke.cjs
-cd apps/web && CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/ps1-smoke.cjs
-cd apps/web && CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/psp-smoke.cjs
-cd apps/web && CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/ondemand-media.cjs
-```
-
-`core-smoke.cjs`, `ps1-smoke.cjs`, `psp-smoke.cjs`, and `ondemand-media.cjs` use tracked legal fixtures / synthetic large Files, not mocked emulators. They run the vendored Genesis Plus GX, PCSX ReARMed, and threaded PPSSPP cores in Chromium with COOP/COEP and store screenshots under `docs/test-evidence/PH-05/screenshots/`.
-
-## Docker Compose
-
-Copy `.env.example` to `.env`, replace the development-only placeholders, then run:
-
-```bash
+cd apps/web && npm ci && npm run build && cd ../..
+python3 scripts/verify-core-lock.py --mode SOURCE_ONLY
+python3 scripts/check-no-private-cores-tracked.py
 ./scripts/compose.sh up --build -d
-./scripts/compose.sh exec -T api python manage.py verify_storage
-./scripts/compose.sh exec -T api python manage.py test tests -v 2
 ```
 
-Compose contains PostgreSQL, persistent S3-compatible SeaweedFS development storage, Django, and the Next standalone web image on `http://localhost:3000`. The wrapper detects an injected host proxy for Docker build containers and supplies its trust anchor only as a BuildKit secret; it does not write proxy addresses, credentials, or certificates into images. The native stack, S3 Range probe, and Chromium HTML5 offline flow were executed on 2026-10-19. `docs/deployment.md` describes the production boundary.
+Default local URL (Compose edge): `http://launcher.localhost:13000/` (or `http://127.0.0.1:3000/` depending on setup).
 
-## Assets and licenses
+## Full local runtime (authorized private assets)
 
-The user-facing seed contains only the first-party MIT game `Orbit Catch`. Tracked homebrew fixtures (MIT/GPL/CC0/first-party) are for engineering tests; provenance is in `docs/licenses-and-assets.md` and `LICENSES/`.
-
-This repository is **not** uniformly MIT-licensed. EmulatorJS is GPL-3.0; jsdos components are GPL-2.0; js2me is MIT. See `docs/open-source/third-party-notices.md` and `docs/open-source/corresponding-source.md`.
-
-Emulator **binary** payloads (59 `.data`/`.wasm` files, ~75 MiB) are **not** stored in public Git. The core lock tracks **373** files total; use:
-
-```bash
-python3 scripts/verify-core-lock.py --mode SOURCE_ONLY   # public clone / CI
-python3 scripts/verify-core-lock.py --mode LOCAL_FULL    # after private assets
-```
-
-No commercial ROM or proprietary BIOS is included. Do not publish console catalog titles until redistribution rights and product approval are confirmed.
-
-## Private emulator assets (full runtime)
-
-Authorized operators restore binaries offline (no automatic proprietary download):
+Emulator binary payloads (~59 `.data`/`.wasm` files) live under a **gitignored** `.private-runtime/` directory (or an imported portable backup). They are never required for a public source clone.
 
 ```bash
 export RBG_ALLOW_LOCAL_FULL=1
 ./scripts/setup.sh --local-full --private-backup /path/to/RetroBrowserGaming-Asset-Backup
-# equivalent lower-level steps:
-python3 scripts/private-asset-backup.py import \
-  --backup /path/to/RetroBrowserGaming-Asset-Backup
-python3 scripts/provision-private-cores.py --mode LOCAL_FULL
-python3 scripts/verify-core-lock.py --mode LOCAL_FULL
 ```
 
-Optional owner-supplied firmware only (never auto-downloaded):
+Details: `docs/open-source/local-private-assets.md`, `docs/open-source/private-asset-backup.md`.
+
+Optional firmware must be **owner-supplied** and confirmed; this project never downloads proprietary BIOS:
 
 ```bash
 python3 scripts/install-private-bios.py --list
-python3 scripts/install-private-bios.py --slot <id> --from /path/to/authorized.bin \
-  --i-confirm-authorized-firmware
 ```
 
-Details: `docs/open-source/private-asset-backup.md`, `docs/open-source/local-private-assets.md`.
+## Why ROMs and proprietary BIOS are not included
 
-## Source-only vs hosted deployment
+Commercial ROMs and console BIOS/firmware are not redistributed here. Only first-party and labeled legal homebrew fixtures ship in Git (`docs/licenses-and-assets.md`, `LICENSES/`). Matching a file hash verifies identity, not legal ownership.
 
-| Mode | What you get |
-|---|---|
-| **Public SOURCE clone** | App source, loaders, legal fixtures; Orbit HTML5 playable; WASM cores missing until lawfully provisioned |
-| **LOCAL_FULL** | Same + authorized private `.data`/`.wasm` under `.private-runtime/` (gitignored) |
-| **Public hosted Alpha** | Separate deploy + product-approved catalog + corresponding-source duties when serving GPL binaries |
+## Licenses
+
+**No root LICENSE is enacted yet** (owner confirmation pending). Proposed first-party MIT text:
+
+- `docs/open-source/proposed-licenses/LICENSE.mit.proposed.txt`
+- Scope: `docs/open-source/first-party-license-scope.md`
+
+This tree is **not** uniformly MIT. EmulatorJS is GPL-3.0; jsdos is GPL-2.0; js2me is MIT; fixtures vary. See `docs/open-source/third-party-notices.md` and `LICENSES/`. Serving GPL WASM to users creates corresponding-source duties (`docs/open-source/corresponding-source.md`).
+
+## Tests
+
+```bash
+bash scripts/test-backend.sh
+cd apps/web && npm test && npm run lint && npm run typecheck
+python3 scripts/verify-core-lock.py --mode SOURCE_ONLY
+python3 scripts/check-public-source-safety.py --quick
+# HTML5 browser smoke (no private cores required):
+./scripts/browser-smoke.sh
+# Genesis (needs LOCAL_FULL provisioned cores):
+CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/core-smoke.cjs
+```
+
+Prefer `core-smoke.cjs` / Playwright journey suites over the legacy `apps/web/tests/smoke.cjs`.
+
+## Contributing
+
+See `CONTRIBUTING.md` and `SECURITY.md`. Do not commit `.private-runtime/`, portable backups, `.env`, proprietary BIOS/ROMs, or secrets.
 
 ## Open-source publication
 
-History cleanup and GitHub publication require explicit owner approval. See `docs/open-source/github-publication-plan.md`, `docs/open-source/public-repository-readiness.md`, and `docs/open-source/final-source-release-readiness-20261028.md`.
+History cleanup and GitHub publication require explicit owner approval. See:
 
-## Documentation
+- `docs/open-source/FINAL-PUBLICATION-READINESS.md`
+- `docs/open-source/option-b-publication-steps.md`
+- `docs/open-source/owner-approval-checklist.md`
 
-- `CONTRIBUTING.md` / `SECURITY.md` — contributor and disclosure guidance
-- `docs/architecture.md` — boundaries and data flow
-- `docs/deployment.md` — deployment configuration and current verification state
-- `docs/browser-support.md` — support and physical-device status
-- `docs/licenses-and-assets.md` — provenance and restrictions
-- `docs/acceptance-matrix.md` — every PDR acceptance ID
-- `docs/EMULATOR_SUPPORT_MATRIX.md` — evidence-based platform inventory and emulator roadmap
-- `docs/open-source/` — private assets, backup/restore, legal readiness
-- `docs/final-handover.md` — verified results, blockers, and next acceptance run
+## Documentation map
+
+| Doc | Purpose |
+|---|---|
+| `docs/PDR.md` | Product authority |
+| `docs/acceptance-matrix.md` | Acceptance IDs |
+| `docs/EMULATOR_SUPPORT_MATRIX.md` | Platform / core status |
+| `docs/architecture.md` | Boundaries |
+| `docs/deployment.md` | Deploy notes |
+| `docs/open-source/` | Licensing, private assets, publication |

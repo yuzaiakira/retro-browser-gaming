@@ -1,8 +1,6 @@
 MIT License
 
-Copyright (c) 2026 <COPYRIGHT_HOLDER_LEGAL_NAME>
-# OWNER/COUNSEL: replace <COPYRIGHT_HOLDER_LEGAL_NAME> with the confirmed legal
-# copyright holder before enacting. Do NOT infer ownership from Git author names.
+Copyright (c) 2026 Akira Yuzai
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +24,15 @@ SOFTWARE.
 IMPORTANT — SCOPE (first-party only)
 
 This license applies only to first-party Retro Browser Gaming application
-code and first-party assets clearly marked as such.
+code and first-party assets clearly marked as such. See
+docs/open-source/first-party-license-scope.md.
 
 This repository also contains third-party components under other licenses
 (including GPL-3.0 EmulatorJS and GPL-2.0 jsdos materials). Those components
 remain under their own terms. See docs/open-source/third-party-notices.md
 and the LICENSES/ directory. Choosing MIT for first-party code does NOT
 relicense third-party GPL (or other) materials.
+
+STATUS: PROPOSED — not enacted as root LICENSE until the owner confirms
+copyright ownership authority (including any company assignment) in writing.
 ---------------------------------------------------------------------------
