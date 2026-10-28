@@ -7,10 +7,10 @@
 | Item | Value | Status |
 |---|---|---|
 | Original private HEAD (pre-milestone work start) | `1f4ddbeba62971c43162889c17c98308662833b6` | PASS (inspected) |
-| Private tip after this milestone | `4e2f7c07832339f3ce527e4fcd86cf8dc280179d` | PASS |
-| Sanitized candidate HEAD | `ae00c6711080da7c041d25c3acfbd6db17cec3e0` (map: private `4e2f7c0` → candidate `ae00c67`) | PASS (`HISTORY_PATHS_CLEAN`) |
+| Private tip after this milestone | `36938c4d64e131f93902cfe552e441cde56a2ea5` | PASS |
+| Sanitized candidate HEAD | `01d4e67aac81e06c880bae99a742728e38bf3749` (map: private `36938c4` → candidate `01d4e67`) | PASS (`HISTORY_PATHS_CLEAN`) |
 | History preservation | Meaningful commits retained (filter-repo, not squash) | PASS on candidate |
-| Original repo rewritten? | **No** | PASS |
+| Original repo rewritten? | Accidental filter-repo cwd mistake briefly rewrote private `main`; **restored** from `retro-browser-gaming-all-refs-final.bundle` to `36938c4` before any push | PASS (restored) |
 | Published remotely? | **No** | PASS |
 
 ## Backups
@@ -88,8 +88,13 @@ BIOS: `scripts/install-private-bios.py` (explicit confirm; no downloads)
 4. Create a **new empty public** repo; push candidate only — never force-push private `origin`.
 5. Follow `option-b-publication-steps.md`.
 
+## Incident note (resolved)
+
+During candidate rebuild, `git-filter-repo` was once invoked with the private worktree as cwd. Private `main` briefly became rewritten history (`01d4e67`) and lost `origin`. It was **hard-reset** from `retro-browser-gaming-all-refs-final.bundle` back to `36938c4` with `origin` restored. **Nothing was pushed.** Candidate was rebuilt again in an isolated clone only.
+
 ## Explicit non-claims
 
 - Not `PUBLICATION_READY` while LICENSE/owner boxes open.
 - Not a warranty of DMCA immunity.
 - Keeping GPL binaries outside Git does **not** remove distribution obligations when those binaries are served to users.
+- Not `PUBLIC_HOSTED_RELEASE_READY`.
