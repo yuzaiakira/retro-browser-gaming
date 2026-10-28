@@ -6,7 +6,7 @@ Public-facing hygiene only. No remote publication. Private Git history was not r
 
 | Scope | Before (tracked) | After (tracked) |
 |---|---|---|
-| `docs/` files | 966 | 93 |
+| `docs/` files | 966 | 94 |
 | `docs/` bytes | ~25.77 MiB | ~0.57 MiB |
 | Reduction | | **~97.8%** by bytes |
 
@@ -38,7 +38,7 @@ Assembly re-verified: `CORRESPONDING_SOURCE_OFFER_OK`.
 
 ## Test artifact destinations
 
-Default: `.runtime/test-evidence/<suite>/` via `apps/web/tests/evidence-dir.cjs`.  
+Default: `.runtime/test-evidence/<suite>/` via `apps/web/tests/evidence-dir.js`.  
 Override: `RBG_TEST_EVIDENCE_DIR` or `EVIDENCE_DIR`.  
 CI guard: `scripts/check-docs-hygiene.py`.
 
