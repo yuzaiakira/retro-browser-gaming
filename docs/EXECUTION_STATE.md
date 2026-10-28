@@ -155,6 +155,19 @@
 2. Owner gates unchanged (copyright / public push / legal / source-offer HTTPS)
 3. Stop — do not start an unrelated feature sprint from this milestone
 
+## Public docs cleanup (2026-10-28)
+
+| Check | Result |
+|---|---|
+| Tip `docs/` | ~94 tracked files / ~0.58 MiB (was ~966 / ~25.8 MiB) |
+| Generated evidence | Untracked; archive under private runtime + offline SSD copy (no Chromium profiles) |
+| Emulator build provenance | `docs/emulator-builds/` (PH-05 notes migrated) |
+| Test evidence path | `.runtime/test-evidence/` (`RBG_TEST_EVIDENCE_DIR`) |
+| Hygiene CI | `scripts/check-docs-hygiene.py` |
+| Genesis smoke post-cleanup | `GENESIS_GAMEPLAY_PASS` |
+| Sanitized candidate | Rebuild after tip; see `docs/open-source/docs-cleanup-summary.md` |
+| Publication | **STOP** |
+
 ## Open-source SOURCE prep (2026-10-28)
 
 | Check | Result |
