@@ -52,11 +52,11 @@ Policy pointer: `docs/test-evidence.md`. Summary QA: `docs/qa-summary.md`.
 
 | Item | Value |
 |---|---|
-| Private original HEAD | `9671ef83c53fdebbde00370c236e3c0626dfd4cf` |
-| Sanitized candidate HEAD | `a7cecd20613bd967f737e94f511ceb42da808560` |
+| Private original HEAD | `1cff0546ebcb08f2cb5393f1f6d5fab8a7c6d026` |
+| Sanitized candidate HEAD | `d899b0165d73c60db403648a2d474aac5504ba1a` |
 | Candidate tree | disposable sibling `…-public-candidate-20261028-docs-clean/tree` |
 | Public history cleanliness | **PASS** — 60/60 manifest paths absent; no Chromium profiles; no core binaries |
-| Vitest | 66 passed (prior tip); re-check this session |
+| Vitest | 66 passed |
 | Genesis smoke | `GENESIS_GAMEPLAY_PASS` |
 | Corresponding-source assemble | PASS |
 | Docs hygiene | `DOCS_HYGIENE_PASS` |
