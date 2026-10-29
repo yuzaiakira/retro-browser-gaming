@@ -23,7 +23,11 @@ env = {
     "LOCAL_ASSET_ROOT": str(runtime / "assets"),
 }
 manage = [sys.executable, str(root / "apps/api/manage.py")]
-for args in (("migrate",), ("seed_demo", "--safe-assets-only"), ("check",)):
+for args in (
+    ("migrate",),
+    ("seed_demo", "--safe-assets-only", "--with-console-fixtures"),
+    ("check",),
+):
     subprocess.run([*manage, *args], env=env, check=True)
 if "--check" not in sys.argv:
     subprocess.run([*manage, "runserver", "127.0.0.1:8000", "--noreload"], env=env, check=True)

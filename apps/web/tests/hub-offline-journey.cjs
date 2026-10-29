@@ -15,7 +15,17 @@ mkdirSync(join(evidenceDir, 'screenshots'), { recursive: true });
 
 async function ensureInstalled(page, slug, title) {
   await page.goto(`${baseUrl}/games/${slug}`);
-  await page.getByRole('heading', { name: title }).waitFor({ timeout: 60000 });
+  // Distinguish missing catalog seed from slow hydration (do not inflate timeouts).
+  const titleHeading = page.getByRole('heading', { name: title, exact: true });
+  const unavailable = page.getByRole('heading', { name: /Game unavailable/i });
+  await titleHeading.or(unavailable).first().waitFor({ state: 'visible', timeout: 60000 });
+  if (await unavailable.count()) {
+    const detail = (await page.getByRole('alert').innerText().catch(() => '')).trim();
+    throw new Error(
+      `Catalog missing "${title}" (slug=${slug}). ` +
+        `Seed with --with-console-fixtures. ${detail}`,
+    );
+  }
   const play = page.getByRole('link', { name: /Play game/i });
   if (await play.count()) return;
   await page.getByRole('button', { name: /Download/i }).first().click();

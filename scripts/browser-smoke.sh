@@ -9,7 +9,7 @@ export DATABASE_URL="sqlite:////${project_root#/}/apps/api/.runtime/dev.sqlite3"
 export STORAGE_BACKEND=local
 mkdir -p apps/api/.runtime .runtime/test-evidence/PH-02/screenshots
 .venv/bin/python apps/api/manage.py migrate --noinput
-.venv/bin/python apps/api/manage.py seed_demo --safe-assets-only
+.venv/bin/python apps/api/manage.py seed_demo --safe-assets-only --with-console-fixtures
 .venv/bin/python apps/api/manage.py runserver 127.0.0.1:8000 --noreload >"${TMPDIR:-/tmp}/retro-api.log" 2>&1 &
 api_pid=$!
 (cd apps/web && npm start >"${TMPDIR:-/tmp}/retro-web.log" 2>&1) &

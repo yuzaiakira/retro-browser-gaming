@@ -25,8 +25,8 @@ with tempfile.TemporaryDirectory() as folder:
     manage = [sys.executable, str(root / "apps/api/manage.py")]
     for args in (
         ("migrate", "--noinput"),
-        ("seed_demo", "--safe-assets-only"),
-        ("seed_demo", "--safe-assets-only"),
+        ("seed_demo", "--safe-assets-only", "--with-console-fixtures"),
+        ("seed_demo", "--safe-assets-only", "--with-console-fixtures"),
     ):
         subprocess.run([*manage, *args], env=env, check=True, stdout=subprocess.DEVNULL)
     with socket.socket() as probe:

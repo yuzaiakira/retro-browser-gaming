@@ -155,6 +155,16 @@
 2. Owner gates unchanged (copyright / public push / legal / source-offer HTTPS)
 3. Stop — do not start an unrelated feature sprint from this milestone
 
+## Hub-offline release gate (2026-10-29)
+
+| Check | Result |
+|---|---|
+| Root cause | Compose/`seed_demo --safe-assets-only` omitted `--with-console-fixtures` → Genesis absent on clean stacks |
+| Fix | Seed console fixtures in compose + local seed scripts; clearer hub-offline catalog-miss error |
+| `hub-offline-journey.cjs` | `HUB_OFFLINE_JOURNEY_PASS` (Orbit + Genesis offline install/play/save-load) |
+| Genesis `core-smoke` | `GENESIS_GAMEPLAY_PASS` |
+| Publication | **STOP** |
+
 ## Public docs cleanup (2026-10-28)
 
 | Check | Result |
