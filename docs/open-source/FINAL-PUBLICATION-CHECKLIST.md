@@ -13,9 +13,9 @@ Identity SHAs below are filled after the documentation commit lands and the Opti
 | Item | Value |
 |---|---|
 | Synchronized private HEAD (pre-doc tip) | `5d494346f94b39f3ecff31da6465edb7321dc82e` (= `origin/main`) |
-| Private HEAD after this checklist commit | _(see `git rev-parse HEAD`)_ |
-| Sanitized candidate HEAD | _(see candidate `CANDIDATE_HEAD.txt`)_ |
-| Preserved commits (candidate) | ~137+ (not squashed; recount after final rebuild) |
+| Private HEAD after this checklist commit | `986ecaa1bab82986fcff0f9c39050add8856b56d` |
+| Sanitized candidate HEAD | `cb6a88b651215cbb43d38ab2b129589f615946c3` |
+| Preserved commits (candidate) | 138 (not squashed) |
 | Private history rewritten? | **No** |
 | Pushed / published? | **No** |
 
