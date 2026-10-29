@@ -3,6 +3,8 @@
 ## Verdict
 
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
+**PH-12.1 N64 (2026-10-29):** `mupen64plus_next` **VERIFIED_PLAYABLE** — hold-while-capture smoke `N64_GAMEPLAY_PASS`; save/load; >64 MiB ROM guard. Report `docs/emulator-builds/n64-mupen64plus-next-gameplay.md`. Next in 12.1: Jaguar + ZX81.
+
 **Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability — verified 2026-10-26.  
 **Hub UX (PH-UX-HUB):** Premium Gaming Hub — verified 2026-10-26.  
 **Hub UX Acceptance (Sprint 3.1):** offline persistent-profile journey, catalog Back/Forward history, Continue Playing accuracy, stable hub shots — verified 2026-10-26.  
@@ -22,8 +24,8 @@
 
 | Item | Status |
 |---|---|
-| VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX |
-| EXPERIMENTAL | ZX81 / Jaguar / N64 |
+| VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX + **N64** |
+| EXPERIMENTAL | ZX81 / Jaguar |
 | FBNeo | BLOCKED_FIXTURE |
 | Atari ST | BLOCKED_CORE — hatari absent |
 | Core lock | **373 files** |
@@ -198,13 +200,31 @@
 2. Approve Option B1 push of **20261028** candidate to a **new** public repo
 3. Do not force-push or open the existing private GitHub repo
 
+## PH-12.1 N64 pass (2026-10-29)
+
+| Check | Result |
+|---|---|
+| Root cause | USB64 fixture is live-input-only; prior smoke released before capture |
+| Smoke | `N64_GAMEPLAY_PASS` (stick `x:80` + A while held; `stateBytes=16793440`) |
+| Offline after boot | PASS |
+| ROM size guard | `frame.js` → `N64_ROM_TOO_LARGE` above 64 MiB |
+| Catalog seed | `n64` console + `mit-n64-controller-test` fixture |
+| Vitest / typecheck | 68 passed / `tsc --noEmit` OK |
+| Evidence | `.runtime/test-evidence/PH-12/n64/` + `docs/emulator-builds/n64-mupen64plus-next-gameplay.md` |
+
+### Next concrete task
+
+1. PH-12.1: Atari Jaguar black framebuffer
+2. PH-12.1: ZX81 interactive Dot
+3. Owner gates unchanged (publication STOP)
+
 ## Remaining blockers / next
 
-1. Owner: confirm copyright holder + authority; enact MIT root LICENSE only then
-2. Owner: authorize Option B public repo push of sanitized candidate
-3. Counsel: legal-review package; `NEEDS_LEGAL_REVIEW` ≠ approval
-4. Owner: publish corresponding-source offer on HTTPS; gate must fetch PASS before `OFFER_DELIVERY_VERIFIED`
-5. Product: Alpha game set approvals
-6. Resolve CS for `81_eo` / `virtualjaguar_js`
-7. QA: physical gamepad + iOS; Ops: staging HTTPS
-8. Playwright offline ≠ physical-device offline certification (document only)
+1. Owner: authorize Option B public repo push of sanitized candidate (LICENSE enacted)
+2. Counsel: legal-review package; `NEEDS_LEGAL_REVIEW` ≠ approval
+3. Owner: publish corresponding-source offer on HTTPS; gate must fetch PASS before `OFFER_DELIVERY_VERIFIED`
+4. Product: Alpha game set approvals (incl. N64 fixture if desired)
+5. Resolve CS for `81_eo` / `virtualjaguar_js`
+6. QA: physical gamepad + iOS; Ops: staging HTTPS
+7. Playwright offline ≠ physical-device offline certification (document only)
+8. Continue PH-12.1 Jaguar → ZX81

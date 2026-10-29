@@ -1,7 +1,8 @@
 # PH-12 — Multi-platform expansion (execution plan)
 
 **Date:** 2026-10-29  
-**Status:** IN PROGRESS — Phase 12.0 capability preflight landed on this branch. **No new console has been certified by this change.**  
+**Status:** IN PROGRESS — Phase 12.0 capability preflight landed. **PH-12.1 N64** certified `VERIFIED_PLAYABLE` (2026-10-29). Jaguar + ZX81 remain open in 12.1.
+
 **Scope authority:** `docs/PDR.md`, `docs/EMULATOR_SUPPORT_MATRIX.md`, `docs/acceptance-matrix.md`.
 
 ## Goal and boundaries
@@ -19,7 +20,7 @@ Already recorded as VERIFIED_PLAYABLE in the support matrix: HTML5; J2ME; SG-100
 | Phase | Systems and work | Preconditions / current outcome | Promotion rule |
 | --- | --- | --- | --- |
 | PH-12.0 | Generic capability preflight for new WASM, threads, WebGL2 cores | The old probe only required threads by PSP name. Make requirements declarative and test fail-closed. | Unit tests + full pre-existing suite |
-| PH-12.1 | Nintendo 64, Atari Jaguar, ZX81 | N64 boots but no interactive frame delta; 64-MiB RDRAM failure on one ROM. Jaguar black framebuffer. ZX81 timing/return-to-BASIC bug. | Meaningful user-input-to-frame behavior, offline, save/load, no black-frame false positives |
+| PH-12.1 | Nintendo 64, Atari Jaguar, ZX81 | **N64 done** (`N64_GAMEPLAY_PASS`, hold-input HUD + save/load; >64 MiB ROM guard). Jaguar black framebuffer. ZX81 timing/return-to-BASIC bug. | Meaningful user-input-to-frame behavior, offline, save/load, no black-frame false positives |
 | PH-12.2 | Sega CD, ColecoVision, Famicom Disk System | BIOS-dependent; evaluate lawful owner-provided firmware on a private path, CUE/BIN multi-track and immutable manifest membership. | Rights-approved fixture, BIOS validation, no firmware in public repo, real gameplay |
 | PH-12.3 | Atari ST, Vectrex, Intellivision | Missing pinned browser cores; evaluate Hatari+EmuTOS, VecX port and FreeIntv BIOS requirements separately. | Source-reproducible WASM core, valid licensed test ROM and browser evidence |
 | PH-12.4 | Arcade / FBNeo / MAME, Neo Geo AES/MVS/CD, PC Engine CD / PC-FX, 3DO | Legally distributable test sets and firmware unresolved; strict ROM set/version validation and multi-file handling. | Full audit of rights/core/firmware + verified play & saves |

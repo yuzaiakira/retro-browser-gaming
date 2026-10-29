@@ -5,7 +5,7 @@
 const { chromium } = require('@playwright/test');
 const { evidenceDir: resolveEvidenceDir } = require('./evidence-dir');
 const { createServer } = require('node:http');
-const { readFile, mkdir } = require('node:fs/promises');
+const { readFile, mkdir, writeFile } = require('node:fs/promises');
 const { extname, join, normalize } = require('node:path');
 const { PNG } = require('pngjs');
 
@@ -80,6 +80,7 @@ const PLATFORMS = {
     pass: 'N64_GAMEPLAY_PASS',
     screenshot: 'n64-gameplay.png',
     // EmulatorJS n64 scheme: A=0 B=1 Start=3; stick axes 16–19 use ±0x7fff.
+    // USB64 controller-test is a LIVE diagnostic — capture while inputs are held.
     inputProfile: 'n64-stick',
     bootWaitMs: 5000,
   },
@@ -439,12 +440,12 @@ async function run() {
     const bootHash = sampleHash(bootPng);
 
     if (cfg.inputProfile === 'n64-stick') {
-      // Start + A (n64 A is button 0), then analog stick L/R.
+      // Warm-up taps (menuDelta may stay 0 — USB64 only shows live input).
       for (const cmd of [3, 0]) {
         await page.evaluate((c) => window.input(c, 1), cmd);
         await page.waitForTimeout(250);
         await page.evaluate((c) => window.input(c, 0), cmd);
-        await page.waitForTimeout(400);
+        await page.waitForTimeout(200);
       }
     } else if (cfg.inputProfile === 'fire-move') {
       // RetroPad B (0) = fire / confirm for VICE and many computer cores.
@@ -534,20 +535,12 @@ async function run() {
     const menuDelta = frameDelta(bootPng, beforePng);
 
     if (cfg.inputProfile === 'n64-stick') {
-      for (let i = 0; i < 12; i++) {
-        await page.evaluate(() => window.input(16, 0x7fff));
-        await page.waitForTimeout(80);
-        await page.evaluate(() => window.input(16, 0));
-        await page.evaluate(() => window.input(17, 0x7fff));
-        await page.waitForTimeout(80);
-        await page.evaluate(() => window.input(17, 0));
-        await page.evaluate(() => window.input(4, 1));
-        await page.waitForTimeout(60);
-        await page.evaluate(() => window.input(4, 0));
-        await page.evaluate(() => window.input(5, 1));
-        await page.waitForTimeout(60);
-        await page.evaluate(() => window.input(5, 0));
-      }
+      // Hold stick-right + A while capturing — releasing restores the neutral HUD.
+      await page.evaluate(() => {
+        window.input(16, 0x7fff);
+        window.input(0, 1);
+      });
+      await page.waitForTimeout(600);
     } else {
       const axis =
         cfg.moveAxes === 'vertical'
@@ -578,7 +571,7 @@ async function run() {
         }
       }
     }
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(cfg.inputProfile === 'n64-stick' ? 0 : 300);
     const movedPng = PNG.sync.read(await frame.screenshot());
     const movedHash = sampleHash(movedPng);
     const movedLit = nonBlackPixels(movedPng);
@@ -611,10 +604,20 @@ async function run() {
       state = { byteLength: 0 };
     }
 
-    await page.screenshot({
-      path: join(evidenceDir, 'screenshots', cfg.screenshot),
-      fullPage: true,
-    });
+    if (cfg.inputProfile === 'n64-stick') {
+      // Keep the held-input frame as evidence (USB64 returns to neutral on release).
+      await writeFile(join(evidenceDir, 'screenshots', cfg.screenshot), PNG.sync.write(movedPng));
+      await page.evaluate(() => {
+        window.input(16, 0);
+        window.input(0, 0);
+      });
+      await page.waitForTimeout(200);
+    } else {
+      await page.screenshot({
+        path: join(evidenceDir, 'screenshots', cfg.screenshot),
+        fullPage: true,
+      });
+    }
 
     console.log(
       `${cfg.pass} ${JSON.stringify({

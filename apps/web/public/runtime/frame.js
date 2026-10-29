@@ -302,6 +302,12 @@ addEventListener('message', async (event) => {
         seekableBridge = window.RetroSeekableFS.installSeekableLoader(files, { core: d.core });
       } else {
         const total = [d.file, ...companions].reduce((sum, item) => sum + item.size, 0);
+        // mupen64plus_next WASM builds abort on ROMs larger than ~64 MiB
+        // (EmulatorJS #1173); fail closed with a clear error instead of a WASM OOM.
+        if (d.core === 'mupen64plus_next' && total > 64 * 1024 * 1024) {
+          reply({ type: 'error', error: 'N64_ROM_TOO_LARGE' });
+          return;
+        }
         if (total > 256 * 1024 * 1024) {
           reply({ type: 'error', error: 'LARGE_DISC_UNSUPPORTED' });
           return;

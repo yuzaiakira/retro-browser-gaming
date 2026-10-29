@@ -38,6 +38,7 @@ SYSTEMS = [
     ("amstrad-cpc", "Amstrad CPC", "computer"),
     ("msx", "MSX", "computer"),
     ("nds", "Nintendo DS", "handheld"),
+    ("n64", "Nintendo 64", "console"),
     ("atari-jaguar", "Atari Jaguar", "console"),
     ("j2me", "Java ME / J2ME", "handheld"),
     ("ps1", "PlayStation", "console"),
@@ -62,6 +63,7 @@ WASM_CORES = [
     ("cap32", ["dsk", "cdt", "sna", "m3u"], ["wasm", "secureContext"]),
     ("bluemsx", ["rom", "ri", "mx1", "mx2", "dsk", "cas", "m3u"], ["wasm", "secureContext"]),
     ("desmume", ["nds"], ["wasm", "webgl2", "secureContext"]),
+    ("mupen64plus_next", ["z64", "n64", "v64"], ["wasm", "webgl2", "secureContext"]),
     ("virtualjaguar", ["j64", "jag", "rom", "abs", "bin"], ["wasm", "secureContext"]),
     ("prosystem", ["a78", "bin"], ["wasm", "secureContext"]),
     ("handy", ["lnx", "lyx"], ["wasm", "secureContext"]),
@@ -101,6 +103,7 @@ CONSOLE_FIXTURE_SLUGS = {
     "amstrad-cpc",
     "msx",
     "nds",
+    "n64",
     "atari-jaguar",
     "j2me",
     "ps1",
@@ -119,7 +122,7 @@ class Command(BaseCommand):
             "--with-console-fixtures",
             action="store_true",
             help=(
-                "Publish MIT/GPL engineering console fixtures (Genesis through Atari 2600, "
+                "Publish MIT/GPL engineering console fixtures (Genesis through N64 and Atari, "
                 "PC Engine HuCard, SG-1000, PS1/PSP) into the catalog."
             ),
         )
@@ -902,6 +905,36 @@ class Command(BaseCommand):
             compatibility_note=(
                 "Verified Chromium gameplay with desmume / nds scheme; A + stylus "
                 "touch jump; dual-screen layout; save states supported. HLE BIOS only."
+            ),
+        )
+        results["n64"] = self._import_files(
+            fixtures,
+            slug="mit-n64-controller-test",
+            title="MIT N64 Controller Test",
+            description=(
+                "MIT-licensed USB64 N64 controller input test homebrew for engineering "
+                "acceptance only. Uses EmulatorJS mupen64plus_next (no proprietary N64 "
+                "BIOS redistributed). Not a commercial ROM. Titles that request atypical "
+                "64 MiB RDRAM allocations or ROMs larger than 64 MiB may fail under "
+                "browser WASM memory limits."
+            ),
+            console="n64",
+            core={"code": "mupen64plus_next", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-n64-controller-test.z64",
+            files=[("mit-n64-controller-test.z64", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/n64-controller-test-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "Ryzee119/n64_controller_test release build-202008190836 "
+                "n64_controller_test.z64 (https://github.com/Ryzee119/n64_controller_test)"
+            ),
+            genre="Utility",
+            compatibility_note=(
+                "Verified Chromium interactive gameplay with mupen64plus_next / n64 "
+                "scheme; stick + face buttons update the USB64 HUD while held; save "
+                "states supported. Oversized (>64 MiB) ROMs and Expansion-Pak titles "
+                "that force huge RDRAM WASM allocations remain unsupported."
             ),
         )
         results["jaguar"] = self._import_files(

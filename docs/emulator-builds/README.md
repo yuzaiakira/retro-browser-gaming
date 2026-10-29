@@ -10,6 +10,7 @@ These documents support corresponding-source packaging and rebuild reproducibili
 | `bluemsx-savestate-abi.md` | BlueMSX saveState WASM ABI | Patch rationale |
 | `zx81-eo-loadp-build.md` | `81_eo` | **NOT_CLEARED** — incomplete preferred-form source |
 | `jaguar-virtualjaguar-js-build.md` | `virtualjaguar_js` | **NOT_CLEARED** — incomplete preferred-form source |
+| `n64-mupen64plus-next-gameplay.md` | `mupen64plus_next` | **VERIFIED_PLAYABLE** — hold-input smoke + save/load |
 
 Do not treat these notes as a substitute for missing patch series.
 See `docs/open-source/corresponding-source.md` and `not-cleared-cores.md`.
