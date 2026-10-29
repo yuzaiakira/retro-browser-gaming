@@ -1,18 +1,23 @@
 # FINAL PUBLICATION READINESS — Retro Browser Gaming (SOURCE)
 
-**Date:** 2026-10-28  
+**Date:** 2026-10-29  
 **STOP:** Do not create/publicize a GitHub repo, force-push, tag, or upload private assets from this document alone.
+
+Supersedes the 2026-10-28 readiness snapshot for release decisions. Historical SHAs in older reports remain historical.
 
 ## Verdict summary
 
 | Gate | Status |
 |---|---|
 | Technical SOURCE preparation | **PASS** |
-| `PUBLIC_SOURCE_READY` | **BLOCKED_HUMAN** — root LICENSE not enacted; owner must confirm copyright authority + approve Option B1 push |
-| `PUBLIC_HOSTED_RELEASE_READY` | **NOT_VERIFIED** — staging HTTPS, product catalog approvals, CS HTTPS offer, physical devices |
-| `PUBLICATION_READY` | **No** |
+| Root MIT `LICENSE` enacted | **PASS** — `Copyright (c) 2026 Akira Yuzai` (first-party scope only) |
+| `PUBLIC_SOURCE_READY` | **PASS** (technical) — remote publication still requires owner push authorization |
+| `PUBLIC_HOSTED_RELEASE_READY` | **NOT_VERIFIED** — staging HTTPS, catalog approvals, CS HTTPS offer, physical devices |
+| `PUBLICATION_READY` | **No** until owner authorizes Option B1 push |
 
-Physical gamepad / iOS Safari / staging HTTPS are **BLOCKED_EXTERNAL** / open and do **not** by themselves block a SOURCE publication once owner LICENSE + push authorization land.
+Physical gamepad / iOS Safari / staging HTTPS remain open and do **not** by themselves block SOURCE publication after owner authorization.
+
+Current checklist: `docs/open-source/FINAL-PUBLICATION-CHECKLIST.md`.
 
 ---
 
@@ -20,28 +25,24 @@ Physical gamepad / iOS Safari / staging HTTPS are **BLOCKED_EXTERNAL** / open an
 
 | Item | Value | Status |
 |---|---|---|
-| Actual private HEAD (this report) | `7f81b7f7b4f6215daeef7f36d42ec320670ca14a` | PASS |
-| Sanitized candidate HEAD | `eb35bf71f530047a6b7a1aa7a16c34b264d99d25` | PASS |
-| Mapping | private `7f81b7f` → candidate `eb35bf7` | PASS |
-| Preserved commit count (candidate) | **130** | PASS (not squashed) |
-| Candidate location | `/home/akira/Projects/git-contribute/retro-browser-gaming-public-candidate-20261028-final/tree` | PASS |
-| Private repo rewritten? | No (builder asserts isolated cwd) | PASS |
-| Pushed remotely? | No | PASS |
-
-Older candidate `01d4e67` (from `36938c4`) is **stale** — do not publish it.
+| Private tip synchronized with `origin/main` | `5d494346f94b39f3ecff31da6465edb7321dc82e` (pre-checklist) | PASS |
+| Active sanitized candidate | Rebuild via `./scripts/build-sanitized-candidate.sh` stamp `20261029-final` | PASS |
+| Prior candidates (`3ea444d`, `061aba7`, `eb35bf7`, 20261028 trees) | **Stale — do not publish** | |
+| Private repo rewritten? | No | PASS |
+| Pushed publicly? | No | PASS |
 
 ---
 
-## Git history audit
+## Git history audit (candidate)
 
-| Check | Result | Status |
-|---|---|---|
-| All 59 manifest paths scanned on private tip | Present in history (expected) | PASS (expected dirty) |
-| All 59 absent after filter-repo on candidate | Clean | PASS |
-| Extra `cores/**/*.data\|wasm` beyond manifest | 0 | PASS |
-| Suspicious backup / `.env` / `.private-runtime` paths in history | 0 | PASS |
-| Tip high-confidence secret markers | 0 — no rotation flagged | PASS |
-| Evidence | `history-audit-private-tip-20261028.md`, candidate `history-audit.md` | |
+| Check | Result |
+|---|---|
+| Manifest paths (60) absent from reachable history | PASS |
+| Extra core `.data`/`.wasm` in history | 0 |
+| Chromium offline profiles / GPUCache / IndexedDB caches | Absent |
+| `.private-runtime` / `.env` / backup path names | Absent |
+| Tip secret-pattern hits | 0 — no rotation flagged |
+| Squash-to-one-commit | Not used |
 
 ---
 
@@ -49,25 +50,24 @@ Older candidate `01d4e67` (from `36938c4`) is **stale** — do not publish it.
 
 | Item | Status |
 |---|---|
-| Proposed attribution | `Copyright (c) 2026 Akira Yuzai` |
-| Proposed license | MIT (first-party only) |
-| Proposed text | `docs/open-source/proposed-licenses/LICENSE.mit.proposed.txt` |
-| Scope document | `docs/open-source/first-party-license-scope.md` |
-| Root `LICENSE` committed | **No** — **BLOCKED_HUMAN** |
-| Unresolved | Confirm personal vs company assignment; any other human contributors; written authority to enact |
+| Attribution | `Copyright (c) 2026 Akira Yuzai` |
+| License | MIT (first-party only) |
+| Root `LICENSE` / `NOTICE` | Committed |
+| Scope | `docs/open-source/first-party-license-scope.md` |
+| Third-party | EmulatorJS GPL-3.0; jsdos GPL-2.0; js2me MIT; libretro/core-specific; fixtures labeled |
 
-Git authorship / AI co-author trailers were **not** treated as ownership proof. Third-party GPL/MIT/BSD/CC0 materials are **not** relicensed.
+Third-party materials are **not** relicensed. No claim that the entire repository is MIT.
 
 ---
 
-## Third-party compliance
+## Documentation cleanup
 
 | Item | Status |
 |---|---|
-| `third-party-notices.md` | PASS |
-| `LICENSES/` inventory | PASS |
-| Corresponding-source docs | PASS (hosted delivery still needs public offer URL when serving GPL WASM) |
-| `81_eo` / `virtualjaguar_js` | NOT_CLEARED — withhold product redistribution |
+| Tracked `docs/` ~94 files / ~0.58 MiB | PASS |
+| Generated evidence → `.runtime/test-evidence/` | PASS |
+| `docs/emulator-builds/` provenance retained | PASS |
+| Hygiene CI | `DOCS_HYGIENE_PASS` |
 
 ---
 
@@ -75,61 +75,20 @@ Git authorship / AI co-author trailers were **not** treated as ownership proof. 
 
 | Check | Status |
 |---|---|
-| `.private-runtime/` gitignored + present locally | PASS |
-| `.dockerignore` excludes private runtime + cores binaries | PASS |
-| No tracked `.data`/`.wasm` under `public/cores` | PASS |
-| No tracked proprietary BIOS path names | PASS |
-| SOURCE_ONLY lock without private store | PASS |
+| `.private-runtime/` gitignored + dockerignored | PASS |
 | LOCAL_FULL requires `RBG_ALLOW_LOCAL_FULL=1` | PASS |
-| Portable backup verify (59 files) | PASS |
-| Import → provision on disposable candidate clone | PASS |
-| Provisioned binaries not Git-tracked after import | PASS (`tracked_binaries=0`) |
+| PUBLIC_BROWSER / SOURCE_ONLY omit private binaries | PASS |
+| Disposable LOCAL_FULL import + provision | PASS (59 files) |
+| Provisioned binaries not Git-tracked | PASS |
 
 ---
 
-## Backups
+## Remaining owner actions
 
-| Backup | Status |
-|---|---|
-| `retro-browser-gaming-os-backup-20261028/` (+ candidate source bundle) | PASS |
-| SSD2 second copies (prior milestone) | PASS (retained) |
-| `RetroBrowserGaming-Asset-Backup-20261026` | PASS verify |
-| SSD2 asset copy | PASS (prior) |
+1. Authorize Option B1 push of the **20261029-final** (or newer) sanitized candidate to a **new** empty public repository.
+2. Do not force-push or open the existing private GitHub repo.
+3. Publish corresponding-source offer on HTTPS when serving GPL WASM publicly.
+4. Keep private assets and backups offline.
 
----
-
-## Fresh clone / setup acceptance
-
-| Test | Status |
-|---|---|
-| Disposable candidate `./scripts/setup.sh --source-only --check` | PASS |
-| Private tree LOCAL_FULL `--check` (+ idempotent re-run) | PASS |
-| Disposable candidate import + `--local-full --no-start` + `--check` | PASS |
-| Genesis `core-smoke.cjs` | PASS |
-| Orbit gameplay (Playwright) | PASS |
-| Legacy `smoke.cjs` | Not used |
-
----
-
-## Remaining owner decisions (exact)
-
-1. **Confirm in writing** that `Copyright (c) 2026 Akira Yuzai` is authorized for first-party code in `first-party-license-scope.md` (including any company assignment answer).
-2. **Authorize enacting** root `LICENSE` from the proposed MIT text (or choose Apache-2.0 / decline).
-3. **Choose public repo name** and authorize Option B1 push of candidate `eb35bf7` (or a re-filter after LICENSE commit) to a **new** empty public repository — never force-push private `origin`.
-4. Confirm second-media backups remain offline and private.
-
-Publication steps: `option-b-publication-steps.md`. Checklist: `owner-approval-checklist.md`.
-
----
-
-## Exact publication checklist (after owner approvals)
-
-1. Enact root `LICENSE` on private `main` if approved; commit.
-2. Re-run `./scripts/build-sanitized-candidate.sh` from that tip (isolated clone only).
-3. Re-run candidate `audit-public-history.py --expect-clean` + SOURCE_ONLY checks.
-4. Create **new empty** public GitHub repository (do not open the private repo).
-5. Push only the candidate `main` to the new remote.
-6. Enable Actions; confirm SOURCE_ONLY CI green.
-7. Keep `.private-runtime` and asset backups offline forever.
-
+Publication steps: `option-b-publication-steps.md`.  
 **Do not start another feature sprint from this milestone.**

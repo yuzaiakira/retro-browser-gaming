@@ -10,7 +10,7 @@
 **Sprint 4.1 Personalization reliability:** sparse layered prefs + migration, iframe-focus shell-key bridge, real no-remount identity, honest filter copy, save-manager comfort — verified 2026-10-27.  
 **Sprint 5 Console Experience:** shortcut safety (F5 reject + modifiers + live allowlist), controller-first launcher nav (simulated), session/audio/fullscreen polish, console journeys — verified 2026-10-27.  
 **Sprint 6 Stability:** long-session soak (smoke+full), save integrity, offline/download regressions, final UX A–F, launcher gamepad rAF pause when hidden — verified 2026-10-27. Evidence `.runtime/test-evidence/ or private archive; see docs/qa-summary.md — PH-UX-STABILITY/`.  
-**Open-source SOURCE prep (2026-10-28 final):** Safe candidate builder; full history audit (59/59 clean on candidate); proposed MIT `Copyright (c) 2026 Akira Yuzai` **not enacted** (`first-party-license-scope.md`). Candidate `eb35bf7` ← private `7f81b7f` at `…/public-candidate-20261028-final/`. **STOP** before publish — `docs/open-source/FINAL-PUBLICATION-READINESS.md`.
+**Open-source SOURCE (2026-10-29):** Root MIT LICENSE enacted; docs cleanup complete; synchronized with `origin/main` at `5d49434` then checklist commits. Rebuild sanitized candidate stamp `20261029-final`. `PUBLIC_SOURCE_READY` technical PASS; publication **STOP** — `docs/open-source/FINAL-PUBLICATION-CHECKLIST.md`.
 
 ## Deferred physical / external (do not rediscover)
 
