@@ -59,10 +59,9 @@ Commercial ROMs and console BIOS/firmware are not redistributed here. Only first
 
 ## Licenses
 
-**No root LICENSE is enacted yet** (owner confirmation pending). Proposed first-party MIT text:
+The project's **first-party code and assets** for which the owner has licensing authority are released under the [MIT License](LICENSE), copyright (c) 2026 Akira Yuzai.
 
-- `docs/open-source/proposed-licenses/LICENSE.mit.proposed.txt`
-- Scope: `docs/open-source/first-party-license-scope.md`
+See [NOTICE](NOTICE) and [first-party scope](docs/open-source/first-party-license-scope.md). Third-party files retain their own licenses.
 
 This tree is **not** uniformly MIT. EmulatorJS is GPL-3.0; jsdos is GPL-2.0; js2me is MIT; fixtures vary. See `docs/open-source/third-party-notices.md` and `LICENSES/`. Serving GPL WASM to users creates corresponding-source duties (`docs/open-source/corresponding-source.md`).
 
