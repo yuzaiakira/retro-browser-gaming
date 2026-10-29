@@ -1,6 +1,8 @@
 // Adapter bridge pinned to EmulatorJS e150dc0491ae747028919fb82d6598954976ede6.
 // Internal methods are isolated here, audited against the vendored source and runtime-tested.
 let session, started = false, seekableBridge;
+/** Active EmulatorJS core id for core-specific input bridges. */
+let activeCore = '';
 const urls = [];
 /** Shell shortcuts claimed by the parent (session-scoped). Never allow-list F5. */
 let shellCodes = new Set(['Escape', 'KeyP', 'KeyF', 'F8', 'F9']);
@@ -13,12 +15,64 @@ function editableTarget(t) {
   return !!t.closest('input,select,textarea,[contenteditable="true"]');
 }
 
+/**
+ * EightyOne keybovl reads Sinclair keys via RETRO_DEVICE_KEYBOARD (port 1).
+ * EmulatorJS simulate_input only feeds JOYPAD bits; with 81 those bits never
+ * produce matrix keypresses in browser (Module._simulate_input delta=0).
+ * Map RetroPad → ZX81 cursor/fire keys through the same iframe KeyboardEvent
+ * path Playwright Digit5/8 already proved moves Dot.
+ */
+const ZX81_RETROPAD_KEYS = {
+  4: { key: '7', code: 'Digit7', keyCode: 55 }, // Up
+  5: { key: '6', code: 'Digit6', keyCode: 54 }, // Down
+  6: { key: '5', code: 'Digit5', keyCode: 53 }, // Left
+  7: { key: '8', code: 'Digit8', keyCode: 56 }, // Right
+  0: { key: 'r', code: 'KeyR', keyCode: 82 }, // B → RUN (stock 81)
+  8: { key: 'p', code: 'KeyP', keyCode: 80 }, // A → P (Dot fire)
+  1: { key: 'Shift', code: 'ShiftLeft', keyCode: 16 }, // Y
+  9: { key: 'Enter', code: 'Enter', keyCode: 13 }, // X → NEWLINE
+};
+
+function injectZx81RetropadKey(command, value) {
+  const spec = ZX81_RETROPAD_KEYS[command];
+  if (!spec) return;
+  const type = value ? 'keydown' : 'keyup';
+  const opts = {
+    key: spec.key,
+    code: spec.code,
+    keyCode: spec.keyCode,
+    which: spec.keyCode,
+    bubbles: true,
+    cancelable: true,
+  };
+  // EmulatorJS registers keydown on Module.parent (.ejs_parent / #game), not
+  // window. Dispatch there so touch/gamepad work without prior canvas click.
+  const host =
+    document.querySelector('.ejs_parent') ||
+    document.querySelector('#game') ||
+    document.body;
+  const canvas = document.querySelector('canvas');
+  try {
+    if (host && !host.hasAttribute('tabindex')) host.setAttribute('tabindex', '-1');
+    if (canvas && !canvas.hasAttribute('tabindex')) canvas.setAttribute('tabindex', '-1');
+    (canvas || host)?.focus?.({ preventScroll: true });
+  } catch {
+    /* focus best-effort */
+  }
+  const ev = () => new KeyboardEvent(type, opts);
+  host?.dispatchEvent(ev());
+  canvas?.dispatchEvent(ev());
+}
+
 // Capture before EmulatorJS so Pause/Menu/Fullscreen/QuickSave reach the shell.
 addEventListener(
   'keydown',
   (e) => {
     if (!session) return;
     if (editableTarget(e.target)) return;
+    // Programmatic ZX81 RetroPad→key inject is untrusted; must reach EmulatorJS
+    // (including KeyP for Dot fire) instead of the Pause shell binding.
+    if (!e.isTrusted) return;
     if (!(shellCodes.has(e.code) || e.key === 'Escape')) return;
     // Never claim F5 — browsers may reload; parent rejects the binding.
     if (e.code === 'F5') return;
@@ -86,6 +140,7 @@ addEventListener('message', async (event) => {
   const d = event.data;
   if (d.type === 'init' && !session) {
     session = d.session;
+    activeCore = String(d.core || '');
     const companions = d.companions || [];
     const externalFiles = {};
     for (const file of companions) {
@@ -354,6 +409,11 @@ addEventListener('message', async (event) => {
     g = e.gameManager;
   if (d.type === 'input') {
     g.simulateInput(0, d.command, d.value);
+    // 81 / 81_eo: RetroPad simulateInput does not reach keybovl; bridge via
+    // proven iframe keyboard consumption (see ZX81_RETROPAD_KEYS).
+    if (activeCore === '81' || activeCore === '81_eo') {
+      injectZx81RetropadKey(d.command, d.value);
+    }
     return;
   }
   if (d.type !== 'command') return;

@@ -128,16 +128,16 @@ const PLATFORMS = {
     scheme: '81',
     pass: 'ZX81_GAMEPLAY_PASS',
     screenshot: 'zx81-gameplay.png',
-    // 81_eo CRT autostart enters Dot getk. EmulatorJS simulateInput RetroPad is inert for
-    // keybovl; keyboard 5/8 (ZX81 cursors) is the proven interactive path.
-    inputProfile: 'zx81-keyboard-move',
+    // 81_eo CRT autostart enters Dot getk. frame.js bridges RetroPad→Digit keys
+    // (EJS simulateInput alone never reaches EightyOne keybovl in browser).
+    inputProfile: 'zx81-retropad-move',
     moveAxes: 'horizontal',
     bootWaitMs: 16000,
     moveHoldMs: 180,
     moveGapMs: 220,
     moveIterations: 20,
     holdMoveDuringCapture: true,
-    holdMoveKey: '8',
+    holdMoveButton: 7,
   },
   cpc: {
     label: 'Amstrad CPC',
@@ -514,6 +514,9 @@ async function run() {
         await page.locator('iframe').click({ position: { x: 200, y: 200 } });
       }
       await page.waitForTimeout(300);
+    } else if (cfg.inputProfile === 'zx81-retropad-move') {
+      // RetroPad via postMessage → frame.js ZX81 key bridge (touch/gamepad/arrows).
+      // No canvas focus required; mirrors InputRouter → FrameAdapter → input.
     } else if (cfg.inputProfile === 'start-move' || cfg.inputProfile === 'start-only-move') {
       const bootCmds = cfg.inputProfile === 'start-only-move' ? [3] : [3, 8];
       for (const cmd of bootCmds) {
@@ -569,6 +572,26 @@ async function run() {
       }
       if (cfg.holdMoveDuringCapture) {
         await page.keyboard.down(cfg.holdMoveKey || '8');
+        await page.waitForTimeout(Math.max(moveHold * 3, 600));
+      }
+    } else if (cfg.inputProfile === 'zx81-retropad-move') {
+      // Libretro Left(6)/Right(7) → frame.js Digit5/Digit8 → Dot move.
+      const moveHold = cfg.moveHoldMs || 180;
+      const moveGap = cfg.moveGapMs || 200;
+      const moveIters = cfg.moveIterations || 16;
+      for (let i = 0; i < moveIters; i++) {
+        await page.evaluate(() => window.input(6, 1));
+        await page.waitForTimeout(moveHold);
+        await page.evaluate(() => window.input(6, 0));
+        await page.waitForTimeout(moveGap);
+        await page.evaluate(() => window.input(7, 1));
+        await page.waitForTimeout(moveHold);
+        await page.evaluate(() => window.input(7, 0));
+        await page.waitForTimeout(moveGap);
+      }
+      if (cfg.holdMoveDuringCapture) {
+        const holdBtn = cfg.holdMoveButton ?? 7;
+        await page.evaluate((c) => window.input(c, 1), holdBtn);
         await page.waitForTimeout(Math.max(moveHold * 3, 600));
       }
     } else {
@@ -654,6 +677,9 @@ async function run() {
         });
       } else if (cfg.inputProfile === 'zx81-keyboard-move') {
         await page.keyboard.up(cfg.holdMoveKey || '8');
+      } else if (cfg.inputProfile === 'zx81-retropad-move') {
+        const holdBtn = cfg.holdMoveButton ?? 7;
+        await page.evaluate((c) => window.input(c, 0), holdBtn);
       } else if (cfg.holdMoveDuringCapture) {
         const holdBtn = cfg.holdMoveButton ?? 7;
         await page.evaluate((c) => window.input(c, 0), holdBtn);

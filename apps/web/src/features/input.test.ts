@@ -216,4 +216,24 @@ describe("InputRouter", () => {
     dom.setHidden(true);
     expect(sink.at(-1)).toEqual([commands.Left, 0]);
   });
+
+  it("maps simulated gamepad d-pad to RetroPad Left/Right for ZX81 bridge", () => {
+    // Standard mapping: button 14=Left, 15=Right → commands 6/7.
+    // frame.js bridges those to Digit5/8 for EightyOne keybovl.
+    const buttons = Array.from({ length: 16 }, () => ({
+      pressed: false,
+      touched: false,
+      value: 0,
+    }));
+    buttons[15] = { pressed: true, touched: true, value: 1 };
+    dom.setGamepads([
+      { index: 0, buttons, axes: [0, 0] } as unknown as Gamepad,
+    ]);
+    dom.tick();
+    expect(sink.some(([c, v]) => c === commands.Right && v === 1)).toBe(true);
+    buttons[15] = { pressed: false, touched: false, value: 0 };
+    buttons[14] = { pressed: true, touched: true, value: 1 };
+    dom.tick();
+    expect(sink.some(([c, v]) => c === commands.Left && v === 1)).toBe(true);
+  });
 });

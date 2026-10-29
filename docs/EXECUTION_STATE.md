@@ -5,7 +5,7 @@
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
 **PH-12.1 N64 (2026-10-29):** `mupen64plus_next` **VERIFIED_PLAYABLE** — hold-while-capture smoke `N64_GAMEPLAY_PASS`; save/load; >64 MiB ROM guard. Report `docs/emulator-builds/n64-mupen64plus-next-gameplay.md`.
 
-**PH-12.1 ZX81 (2026-10-29):** `81_eo` **VERIFIED_PLAYABLE** — CRT autostart + CDFLAG/FRAMES fix; Chromium `ZX81_GAMEPLAY_PASS` (keyboard 5/8 Dot move, save 49 KiB); stock `81` untouched. EJS RetroPad `simulateInput` still inert (documented). Evidence `.runtime/test-evidence/PH-12/zx81/`; build `docs/emulator-builds/zx81-eo-loadp-build.md`. Next in 12.1: Jaguar (still EXPERIMENTAL).
+**PH-12.1 ZX81 (2026-10-29):** `81_eo` **VERIFIED_PLAYABLE** — CRT autostart + CDFLAG/FRAMES; Chromium `ZX81_GAMEPLAY_PASS` (RetroPad Left/Right via `frame.js`→`.ejs_parent` Digit bridge + keyboard 5/8; save 49 KiB); stock `81` untouched. Root cause: EJS `simulate_input` never reaches EightyOne keybovl; bridge uses proven keyboard consumption. Physical gamepad **NOT_VERIFIED**. CS: `scripts/patches/81_eo/` + locked SHA `2ddbd03b…` — still NOT_CLEARED pending legal review. Evidence `.runtime/test-evidence/PH-12/zx81/`. **Next: PH-12.2 ColecoVision** user-provided BIOS + `gearcoleco`.
 
 **Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability — verified 2026-10-26.  
 **Hub UX (PH-UX-HUB):** Premium Gaming Hub — verified 2026-10-26.  
