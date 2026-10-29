@@ -194,7 +194,17 @@ export default function Player({ id }: { id: string }) {
       adapter.current = runtime;
       const media = await loadLaunchMedia(item.manifest, assetFile);
       const biosAsset = item.manifest.assets.find((a) => a.role === "bios");
-      const bios = biosAsset ? await assetFile(biosAsset) : undefined;
+      let bios = biosAsset ? await assetFile(biosAsset) : undefined;
+      // Optional user-provided firmware (ColecoVision / FDS / Sega CD…): never
+      // auto-downloaded; IndexedDB import only. Catalog must not ship proprietary BIOS.
+      if (!bios) {
+        const { coreRequiresUserBios, resolveUserBiosFileForCore } = await import(
+          "@/emulators/user-bios"
+        );
+        if (coreRequiresUserBios(item.manifest.core.code)) {
+          bios = await resolveUserBiosFileForCore(item.manifest.core.code);
+        }
+      }
       await runtime.load(media.entry, {
         core: item.manifest.core.code,
         name: item.manifest.entryFile,

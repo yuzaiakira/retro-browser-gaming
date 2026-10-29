@@ -5,7 +5,9 @@
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
 **PH-12.1 N64 (2026-10-29):** `mupen64plus_next` **VERIFIED_PLAYABLE** — hold-while-capture smoke `N64_GAMEPLAY_PASS`; save/load; >64 MiB ROM guard. Report `docs/emulator-builds/n64-mupen64plus-next-gameplay.md`.
 
-**PH-12.1 ZX81 (2026-10-29):** `81_eo` **VERIFIED_PLAYABLE** — CRT autostart + CDFLAG/FRAMES; Chromium `ZX81_GAMEPLAY_PASS` (RetroPad Left/Right via `frame.js`→`.ejs_parent` Digit bridge + keyboard 5/8; save 49 KiB); stock `81` untouched. Root cause: EJS `simulate_input` never reaches EightyOne keybovl; bridge uses proven keyboard consumption. Physical gamepad **NOT_VERIFIED**. CS: `scripts/patches/81_eo/` + locked SHA `2ddbd03b…` — still NOT_CLEARED pending legal review. Evidence `.runtime/test-evidence/PH-12/zx81/`. **Next: PH-12.2 ColecoVision** user-provided BIOS + `gearcoleco`.
+**PH-12.1 ZX81 (2026-10-29):** `81_eo` **VERIFIED_PLAYABLE** — CRT autostart + CDFLAG/FRAMES; Chromium `ZX81_GAMEPLAY_PASS` (RetroPad Left/Right via `frame.js`→`.ejs_parent` Digit bridge + keyboard 5/8; save 49 KiB); stock `81` untouched. Physical gamepad **NOT_VERIFIED**. CS: `scripts/patches/81_eo/` + locked SHA `2ddbd03b…` — still NOT_CLEARED pending legal review.
+
+**PH-12.2 ColecoVision (2026-10-29):** **BLOCKED_EXTERNAL** — reusable user-BIOS architecture (`user-bios.ts`, Settings importer, `install-private-bios.py`); pinned `gearcoleco` 4.2.3; MIT RetroPIPE fixture. Lawful `colecovision.rom` **not** available in this environment → no interactive gameplay claim. FDS/Sega CD slots reserved (disabled). See `docs/emulator-builds/coleco-gearcoleco-user-bios.md`.
 
 **Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability — verified 2026-10-26.  
 **Hub UX (PH-UX-HUB):** Premium Gaming Hub — verified 2026-10-26.  

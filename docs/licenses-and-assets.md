@@ -46,6 +46,7 @@ The following tracked fixtures are used by core smoke tests (`core-smoke.cjs`, `
 | `.fixtures/mit-jaguar-2048.jag` | `311e7a3480041c9ac01a2e129d8aaf5e76d9d5c8879c35fcc1f067582bef0bfe` | `toarnold/jag2048` `jag2048.jag` | MIT, `LICENSES/jag2048-MIT.txt` |
 | `.fixtures/huc-pce-scroll.pce` | `5397d79a9fdeba1c1911d331ed564700f9d3981f62f9984ae289ddb9a8dcf35d` | Built from `BlockoS/huc` `examples/scroll` | GPL-2.0, `LICENSES/HuC-GPL-2.0.txt` |
 | `.fixtures/mit-sg1000-retropipe.sg` | `5d8045c511df923409baffe6f2b2dd0df130a7df2a85058e149a1d459ff95834` | `visrealm/retropipe` release `v0.2` `retropipe_v0-2-0_sc3000.sg` | MIT, `LICENSES/retropipe-SG1000-MIT.txt` |
+| `.fixtures/mit-coleco-retropipe.rom` | `94d38da05124a356132066cd27ca3ca044a99c1630ff3b54f0d5c779110c58e4` | `visrealm/retropipe` release `v0.2` `retropipe_v0-2-0_cv.rom` | MIT, `LICENSES/retropipe-ColecoVision-MIT.txt` |
 | `.fixtures/mit-wswan-chips1.wsc` | `7a428e958ef789ed072deb3081dc9654b83af2befd2e7627c3b30c8542cd0e7b` | `asiekierka/chips1` release `v0.1` `chips1.wsc` | MIT, `LICENSES/chips1-WSWAN-MIT.txt` |
 | `.fixtures/gpl-a7800-rfk.a78` | `8ba293389dfc6885d3c5d1eb2224a68b8e2493bd48525406b533dfa2bd9ad91d` | SourceForge `rfk7800` 6.502.20050619 | GPL-2.0, `LICENSES/rfk7800-GPL-2.0.txt` |
 | `.fixtures/mit-lynx-dot.lnx` | `55565eea9522ef738520bb8e71542eb89a3ad7709f4a7c06b75bce250301ad8c` | First-party `fixtures/lynx-dot/` (cc65) | MIT, `LICENSES/lynx-dot-MIT.txt` |

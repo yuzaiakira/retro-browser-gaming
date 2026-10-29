@@ -27,6 +27,7 @@ import {
   integerScalingSupport,
   renderFilterHonesty,
 } from "./player-display";
+import { UserBiosImporter } from "./UserBiosImporter";
 
 export default function Settings({
   diagnostics = false,
@@ -144,6 +145,16 @@ export default function Settings({
                 maintainer’s published channel when available.
               </p>
             ) : null}
+          </div>
+          <div className="panel" id="user-bios">
+            <h2>User-provided BIOS</h2>
+            <p>
+              Some systems (ColecoVision first; later Famicom Disk System and
+              Sega CD) need firmware you supply yourself. Files stay in this
+              browser only — nothing is uploaded and nothing is downloaded
+              automatically. Hash checks verify identity, not legal ownership.
+            </p>
+            <UserBiosImporter />
           </div>
           <div className="panel" id="licensing-notices">
             <h2>Licensing & third-party notices</h2>

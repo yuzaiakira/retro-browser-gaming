@@ -205,6 +205,8 @@ addEventListener('message', async (event) => {
       pcsx_rearmed: 'psx',
       ppsspp: 'psp',
       dosbox_pure: 'dos',
+      // EJS getCores maps coleco → gearcoleco; pin scheme for probes/UI.
+      gearcoleco: 'coleco',
     };
     if (controlSchemeByCore[d.core]) {
       window.EJS_controlScheme = controlSchemeByCore[d.core];

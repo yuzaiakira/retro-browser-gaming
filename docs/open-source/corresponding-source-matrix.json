@@ -378,6 +378,32 @@
       "upstream": "https://cdn.emulatorjs.org/4.2.3/data/cores/ (EmulatorJS 4.2.3; pin e150dc0491ae747028919fb82d6598954976ede6)"
     },
     {
+      "path": "ejs-4.2.3/cores/gearcoleco-legacy-wasm.data",
+      "sha256": "64de8d0c89b3e56d52c9419d5eae7f7f93d04a4dac36eedf543e4180ec9d2ca0",
+      "byteSize": 891769,
+      "license": "GPL-3.0 (Gearcoleco / EmulatorJS packaging); ColecoVision BIOS not redistributed \u2014 user-provided only",
+      "source": "https://registry.npmjs.org/@emulatorjs/core-gearcoleco/-/core-gearcoleco-4.2.3.tgz (EmulatorJS 4.2.3; pin e150dc0491ae747028919fb82d6598954976ede6)",
+      "evidence": [
+        "docs/emulator-builds/coleco-gearcoleco-user-bios.md"
+      ],
+      "missing_material": null,
+      "corresponding_source_class": "upstream_pin_plus_tracked_js",
+      "notes": "Unmodified EmulatorJS gearcoleco; proprietary BIOS not included"
+    },
+    {
+      "path": "ejs-4.2.3/cores/gearcoleco-wasm.data",
+      "sha256": "164e213e4d5f2c14a0f2b55da973ed5a54ef7601cb352e64c9a73ace1a7ba606",
+      "byteSize": 891907,
+      "license": "GPL-3.0 (Gearcoleco / EmulatorJS packaging); ColecoVision BIOS not redistributed \u2014 user-provided only",
+      "source": "https://registry.npmjs.org/@emulatorjs/core-gearcoleco/-/core-gearcoleco-4.2.3.tgz (EmulatorJS 4.2.3; pin e150dc0491ae747028919fb82d6598954976ede6)",
+      "evidence": [
+        "docs/emulator-builds/coleco-gearcoleco-user-bios.md"
+      ],
+      "missing_material": null,
+      "corresponding_source_class": "upstream_pin_plus_tracked_js",
+      "notes": "Unmodified EmulatorJS gearcoleco; proprietary BIOS not included"
+    },
+    {
       "path": "ejs-4.2.3/cores/genesis_plus_gx-legacy-wasm.data",
       "sha256": "2a1edeb68d7ec882149ed3cd5d3aa95a6ac231ebabaf82cdb56175a8b62967cc",
       "byteSize": 1204803,
@@ -691,6 +717,19 @@
       "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
       "source_offer_class": "upstream_emulatorjs_pin_plus_tracked_js",
       "upstream": "https://cdn.emulatorjs.org/4.2.3/data/cores/ (EmulatorJS 4.2.3; pin e150dc0491ae747028919fb82d6598954976ede6)"
+    },
+    {
+      "path": "ejs-4.2.3/cores/reports/gearcoleco.json",
+      "sha256": "6046e0af623369cac4924f521ff74c91c2644fedf4a677f48c9074ea7028e046",
+      "byteSize": 124,
+      "license": "GPL-3.0 (Gearcoleco / EmulatorJS packaging); ColecoVision BIOS not redistributed \u2014 user-provided only",
+      "source": "https://registry.npmjs.org/@emulatorjs/core-gearcoleco/-/core-gearcoleco-4.2.3.tgz (EmulatorJS 4.2.3; pin e150dc0491ae747028919fb82d6598954976ede6)",
+      "evidence": [
+        "docs/emulator-builds/coleco-gearcoleco-user-bios.md"
+      ],
+      "missing_material": null,
+      "corresponding_source_class": "upstream_pin_plus_tracked_js",
+      "notes": "Unmodified EmulatorJS gearcoleco; proprietary BIOS not included"
     },
     {
       "path": "ejs-4.2.3/cores/smsplus-legacy-wasm.data",

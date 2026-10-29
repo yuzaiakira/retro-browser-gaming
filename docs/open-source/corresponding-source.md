@@ -65,4 +65,4 @@ Verified local example (2026-10-26):
 Also:
 
 - Product-wide publication of independently rebuilt experimental cores.
-- Any future proprietary BIOS workflow (currently none tracked; must stay out of public delivery).
+- User-provided proprietary BIOS workflow (`user-bios.ts` / `install-private-bios.py`) — files stay local; must stay out of public delivery and git.

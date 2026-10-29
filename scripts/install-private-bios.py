@@ -63,6 +63,46 @@ BIOS_CATALOG: list[dict] = [
         "max_bytes": 0,
         "open_firmware": False,
     },
+    {
+        "id": "colecovision",
+        "label": "ColecoVision BIOS (colecovision.rom) — required for gearcoleco",
+        "core": "gearcoleco",
+        "required": True,
+        "notes": (
+            "Proprietary ADAM OS-7 / ColecoVision BIOS. Supply only firmware you are "
+            "authorized to use. Exact 8192-byte image. Hash match verifies identity only. "
+            "Never publish via anonymous routes. Browser import also via Settings → user BIOS."
+        ),
+        "dest_name": "colecovision/colecovision.rom",
+        "expected_sha256": None,
+        "min_bytes": 8192,
+        "max_bytes": 8192,
+        "open_firmware": False,
+    },
+    {
+        "id": "fds-reserved",
+        "label": "Famicom Disk System disksys.rom (reserved)",
+        "core": "fceumm",
+        "required": False,
+        "notes": "Proprietary FDS BIOS. Slot reserved for PH-12.2 — not enabled for cartridge NES.",
+        "dest_name": "fds/disksys.rom",
+        "expected_sha256": None,
+        "min_bytes": 8192,
+        "max_bytes": 8192,
+        "open_firmware": False,
+    },
+    {
+        "id": "sega-cd-reserved",
+        "label": "Sega CD / Mega-CD BIOS (reserved)",
+        "core": "genesis_plus_gx",
+        "required": False,
+        "notes": "Proprietary regional CD BIOS. Slot reserved for PH-12.2 — not enabled for cartridge Genesis.",
+        "dest_name": "sega-cd/bios_CD_U.bin",
+        "expected_sha256": None,
+        "min_bytes": 128 * 1024,
+        "max_bytes": 512 * 1024,
+        "open_firmware": False,
+    },
 ]
 
 

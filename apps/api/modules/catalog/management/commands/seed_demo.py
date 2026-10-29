@@ -37,6 +37,7 @@ SYSTEMS = [
     ("zx81", "Sinclair ZX81", "computer"),
     ("amstrad-cpc", "Amstrad CPC", "computer"),
     ("msx", "MSX", "computer"),
+    ("colecovision", "ColecoVision", "console"),
     ("nds", "Nintendo DS", "handheld"),
     ("n64", "Nintendo 64", "console"),
     ("atari-jaguar", "Atari Jaguar", "console"),
@@ -62,6 +63,7 @@ WASM_CORES = [
     ("81_eo", ["p", "tzx"], ["wasm", "secureContext"]),
     ("cap32", ["dsk", "cdt", "sna", "m3u"], ["wasm", "secureContext"]),
     ("bluemsx", ["rom", "ri", "mx1", "mx2", "dsk", "cas", "m3u"], ["wasm", "secureContext"]),
+    ("gearcoleco", ["col", "cv", "rom", "bin"], ["wasm", "secureContext"]),
     ("desmume", ["nds"], ["wasm", "webgl2", "secureContext"]),
     ("mupen64plus_next", ["z64", "n64", "v64"], ["wasm", "webgl2", "secureContext"]),
     ("virtualjaguar", ["j64", "jag", "rom", "abs", "bin"], ["wasm", "secureContext"]),
@@ -102,6 +104,7 @@ CONSOLE_FIXTURE_SLUGS = {
     "zx81",
     "amstrad-cpc",
     "msx",
+    "colecovision",
     "nds",
     "n64",
     "atari-jaguar",
@@ -824,6 +827,30 @@ class Command(BaseCommand):
                 "Verified Chromium gameplay with 81_eo (eo_loadp .p inject); RetroPad "
                 "D-Pad maps to ZX81 cursor keys 5/6/7/8. Save states supported. "
                 "PRODUCT_PENDING."
+            ),
+        )
+        results["colecovision"] = self._import_files(
+            fixtures,
+            slug="mit-coleco-retropipe",
+            title="MIT ColecoVision RetroPIPE",
+            description=(
+                "MIT RetroPIPE ColecoVision homebrew for engineering acceptance only. "
+                "Uses EmulatorJS gearcoleco. Proprietary ColecoVision BIOS is NOT "
+                "redistributed — operators must import authorized colecovision.rom "
+                "via Settings / install-private-bios.py. PRODUCT_PENDING."
+            ),
+            console="colecovision",
+            core={"code": "gearcoleco", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-coleco-retropipe.rom",
+            files=[("mit-coleco-retropipe.rom", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/retropipe-ColecoVision-MIT.txt",
+            provenance="https://github.com/visrealm/retropipe/releases/tag/v0.2",
+            evidence="visrealm/retropipe v0.2 retropipe_v0-2-0_cv.rom",
+            genre="Puzzle",
+            compatibility_note=(
+                "BLOCKED_EXTERNAL pending lawful user-provided colecovision.rom BIOS. "
+                "Core + MIT ROM pinned; gameplay not marked VERIFIED_PLAYABLE without BIOS."
             ),
         )
         results["cpc"] = self._import_files(
