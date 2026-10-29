@@ -58,13 +58,15 @@
       "local_modifications": "eo_loadp + joypad device init (see PH-05)",
       "patches_or_scripts": [],
       "evidence": [
-        "docs/emulator-builds/zx81-eo-loadp-build.md"
+        "docs/emulator-builds/zx81-eo-loadp-build.md",
+        "scripts/patches/81_eo/0001-rbg-eo-loadp-crt-autostart-joypad.patch",
+        "scripts/patches/81_eo/README.md"
       ],
       "corresponding_source_status": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
       "source_offer_class": "incomplete_patches_missing_in_repo",
       "upstream": "https://github.com/libretro/81-libretro (independently versioned 81_eo EmulatorJS build with eo_loadp; evidence docs/emulator-builds/zx81-eo-loadp-build.md)",
       "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
-      "missing_material": "Complete modified preferred-form source / patch series not present under scripts/patches/; only PH-05 notes (and optional zx81 snippet). Upstream URL insufficient for local modifications."
+      "missing_material": "Technical corresponding source present (scripts/patches/81_eo/ + docs/emulator-builds/zx81-eo-loadp-build.md matching locked SHA-256). Legal review not completed \u2014 remain NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION."
     },
     {
       "path": "ejs-4.2.3/cores/81_eo-wasm.data",
@@ -77,13 +79,15 @@
       "local_modifications": "eo_loadp + joypad device init (see PH-05)",
       "patches_or_scripts": [],
       "evidence": [
-        "docs/emulator-builds/zx81-eo-loadp-build.md"
+        "docs/emulator-builds/zx81-eo-loadp-build.md",
+        "scripts/patches/81_eo/0001-rbg-eo-loadp-crt-autostart-joypad.patch",
+        "scripts/patches/81_eo/README.md"
       ],
       "corresponding_source_status": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
       "source_offer_class": "incomplete_patches_missing_in_repo",
       "upstream": "https://github.com/libretro/81-libretro (independently versioned 81_eo EmulatorJS build with eo_loadp; evidence docs/emulator-builds/zx81-eo-loadp-build.md)",
       "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
-      "missing_material": "Complete modified preferred-form source / patch series not present under scripts/patches/; only PH-05 notes (and optional zx81 snippet). Upstream URL insufficient for local modifications."
+      "missing_material": "Technical corresponding source present (scripts/patches/81_eo/ + docs/emulator-builds/zx81-eo-loadp-build.md matching locked SHA-256). Legal review not completed \u2014 remain NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION."
     },
     {
       "path": "ejs-4.2.3/cores/a5200-legacy-wasm.data",
@@ -954,7 +958,7 @@
     }
   ],
   "gaps": [
-    "81_eo and virtualjaguar_js: NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION until complete CS trees exist",
+    "81_eo: technical CS in scripts/patches/81_eo/ (legal review still required); virtualjaguar_js: NOT_CLEARED until complete CS trees exist",
     "PH-05 bluemsx historical build hashes may differ from current lock; shipped truth is core-package-lock + private manifest"
   ],
   "user_facing_offer": [

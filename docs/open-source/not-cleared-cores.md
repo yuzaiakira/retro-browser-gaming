@@ -6,7 +6,7 @@ These private-store binaries remain available for **authorized local/dev**
 
 | Path | Missing material | Disposition |
 | --- | --- | --- |
-| `ejs-4.2.3/cores/81_eo-wasm.data` | Full modified source tree / patch series not in `scripts/patches/`; only PH-05 notes + optional C snippet under `fixtures/zx81-81-eo-loadp/` | Keep private; do not browser-distribute |
+| `ejs-4.2.3/cores/81_eo-wasm.data` | Technical CS present (`scripts/patches/81_eo/` + `docs/emulator-builds/zx81-eo-loadp-build.md`); **legal review not completed** for public redistribution of the modified GPL binary | Keep private / LOCAL_FULL until counsel clears |
 | `ejs-4.2.3/cores/81_eo-legacy-wasm.data` | Same | Same |
 | `ejs-4.2.3/cores/virtualjaguar_js-wasm.data` | Independently rebuilt; only PH-05 rebuild notes; no patch directory | Keep private; EXPERIMENTAL |
 | `ejs-4.2.3/cores/virtualjaguar_js-legacy-wasm.data` | Same | Same |

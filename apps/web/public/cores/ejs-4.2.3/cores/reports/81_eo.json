@@ -1,5 +1,5 @@
 {
   "core": "81_eo",
-  "note": "eo_loadp + CRT autostart + CDFLAG/FRAMES + auto-joypad\u2192cursors + JOYPAD force",
+  "note": "eo_loadp CRT + CDFLAG/FRAMES + JOYPAD_MASK keybovl + auto-joypad + JOYPAD force",
   "upstream": "EmulatorJS/81-libretro@86decf3ee61ea5803972948e80197bee8474796b"
 }

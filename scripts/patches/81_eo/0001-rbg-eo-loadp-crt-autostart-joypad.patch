@@ -30,6 +30,49 @@ index e4f5d5c..5cfb3b5 100644
  }
  
  typedef struct
+diff --git a/src/keybovl.c b/src/keybovl.c
+index 860f029..e039a95 100644
+--- a/src/keybovl.c
++++ b/src/keybovl.c
+@@ -1,5 +1,9 @@
+ #include <keybovl.h>
+ 
++#ifndef RETRO_DEVICE_ID_JOYPAD_MASK
++#define RETRO_DEVICE_ID_JOYPAD_MASK 256
++#endif
++
+ static keybovl_t*     ovl = NULL; // the current overlay
+ static keybovl_key_t* key;        // the selected key
+ static int            visible;    // true if the overlay is visible
+@@ -234,7 +238,8 @@ static void update( retro_input_state_t input_cb, unsigned* devices, int ms )
+       continue;
+     }
+     
+-    if ( input_cb( p, devices[ p ], 0, RETRO_DEVICE_ID_JOYPAD_SELECT ) )
++    /* RBG: SELECT via MASK - EmulatorJS ignores per-id simulate_input when binds.valid is false. */
++    if ( ( input_cb( p, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_MASK ) >> RETRO_DEVICE_ID_JOYPAD_SELECT ) & 1 )
+     {
+       if ( !select )
+       {
+@@ -257,6 +262,9 @@ static void update( retro_input_state_t input_cb, unsigned* devices, int ms )
+       continue;
+     }
+     
++    /* RBG: JOYPAD_MASK sees EmulatorJS simulate_input even when binds[id].valid is false. */
++    int16_t joy_mask = input_cb( p, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_MASK );
++
+     for ( i = 0; i < 16; i++ ) // where's RETRO_DEVICE_ID_JOYPAD_LAST? :P
+     {
+       if ( i == RETRO_DEVICE_ID_JOYPAD_SELECT )
+@@ -264,7 +272,7 @@ static void update( retro_input_state_t input_cb, unsigned* devices, int ms )
+         continue;
+       }
+       
+-      int16_t  is_down = input_cb( p, devices[ p ], 0, i );
++      int16_t  is_down = ( joy_mask >> i ) & 1;
+       uint32_t bit = 1 << i;
+       
+       if ( !visible )
 diff --git a/src/libretro.cpp b/src/libretro.cpp
 index d4df247..a92c7a5 100644
 --- a/src/libretro.cpp

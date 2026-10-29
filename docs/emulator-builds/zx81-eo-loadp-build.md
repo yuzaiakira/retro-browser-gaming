@@ -12,7 +12,9 @@ Independently versioned EmulatorJS-compatible EightyOne WASM that:
 3. Autostarts z88dk CRT at `$4092` after clearing CDFLAG bit6 and skipping the
    `altint_on` FRAMES spin (`$40EB`), so SLOW/NMI display + `main`/`getk` run.
 4. Forces `RETRO_DEVICE_JOYPAD` each frame; maps joypad `auto` like cursor defaults.
-5. Does **not** overwrite pinned `81-wasm.data` from EmulatorJS 4.2.3.
+5. Uses `RETRO_DEVICE_ID_JOYPAD_MASK` in keybovl (binds.valid gating still leaves
+   EmulatorJS `simulate_input` inert for Dot; player bridge is in `frame.js`).
+6. Does **not** overwrite pinned `81-wasm.data` from EmulatorJS 4.2.3.
 
 ## Upstream
 
@@ -29,21 +31,35 @@ Independently versioned EmulatorJS-compatible EightyOne WASM that:
 
 | File | SHA-256 | Bytes |
 | --- | --- | --- |
-| `apps/web/public/cores/ejs-4.2.3/cores/81_eo-wasm.data` | `ae43580d89f1b69f0b04cf2788efb475b51bd4a2c47bc4ab15b1ba25963604de` | 741474 |
-| `apps/web/public/cores/ejs-4.2.3/cores/81_eo-legacy-wasm.data` | `75d445ac4dbf930e3a0c5bd0546ce8f6e530171d9fefab1ea18c34687a492789` | 741692 |
-| `apps/web/public/cores/ejs-4.2.3/cores/reports/81_eo.json` | `e7e283928c8a36154c66c23415a9fc779c8c90441a3d19713889ed1ea1f16760` | 199 |
+| `apps/web/public/cores/ejs-4.2.3/cores/81_eo-wasm.data` | `2ddbd03bd88379742a8ba484a92d70c5211d5a8b8a8f60afdb1e86bb5fdd38a7` | 741451 |
+| `apps/web/public/cores/ejs-4.2.3/cores/81_eo-legacy-wasm.data` | `bef292a4f16515304a661e8305ed1f2ba87037889c3b232f771003f22e401e56` | 741683 |
+| `apps/web/public/cores/ejs-4.2.3/cores/reports/81_eo.json` | `9436baf54465e71fe129f118acdd25549e0595ec83d02fbf3ceadea2af90589b` | 196 |
+
+## Rebuild (corresponding source)
+
+```bash
+# 1. Clone EmulatorJS/81-libretro @ 86decf3ee61ea5803972948e80197bee8474796b
+# 2. Apply scripts/patches/81_eo/0001-rbg-eo-loadp-crt-autostart-joypad.patch
+# 3. From EmulatorJS/build with emscripten/emsdk:3.1.74:
+#      ./build.sh -c=81
+# 4. Rename outputs to 81_eo-wasm.data / 81_eo-legacy-wasm.data
+# 5. Install under apps/web/public/cores/ejs-4.2.3/cores/ and refresh
+#      docs/core-package-lock.json (sha256 + byteSize must match table above)
+```
+
+Preferred-form patch + upstream pin are in-repo. **No legal publication approval is claimed** — counsel must still clear redistribution of the modified GPL binary (`docs/open-source/not-cleared-cores.md`).
 
 ## Gameplay status — VERIFIED_PLAYABLE (2026-10-29)
 
 | Gate | Result |
 | --- | --- |
-| Chromium smoke | `ZX81_GAMEPLAY_PASS` — MIT Dot, keyboard 5/8 move, hold-`8` capture |
+| Chromium smoke | `ZX81_GAMEPLAY_PASS` — MIT Dot; RetroPad Left/Right via `frame.js` bridge; keyboard 5/8 retained |
 | Save/load | `stateBytes=49216`, restore observed |
 | Native xy harness | `x: 15→31→0` with lit framebuffer + NMI (`native-dotmove.txt`) |
 | Stock `81` package | Unchanged |
-| EJS RetroPad `simulateInput` | **Known gap** — inert for keybovl; keyboard path proven (player maps digits) |
+| EJS `simulateInput` alone | Still inert for keybovl; **corrected** by core-specific RetroPad→Digit key inject on `.ejs_parent` |
 
-Evidence: `.runtime/test-evidence/PH-12/zx81/` (+ smoke screenshot also under `PH-05/screenshots/zx81-gameplay.png`).
+Evidence: `.runtime/test-evidence/PH-12/zx81/` (+ `zx81-retropad-move.png`).
 
 ## Fixture
 

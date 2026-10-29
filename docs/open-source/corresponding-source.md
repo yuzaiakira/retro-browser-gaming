@@ -57,7 +57,7 @@ Verified local example (2026-10-26):
 
 | Binary class | Gap |
 | --- | --- |
-| `81_eo` | Build notes exist; **patch files not checked into** `scripts/patches/` — do not treat upstream URL alone as sufficient for the modified binary |
+| `81_eo` | Patch series + build notes in `scripts/patches/81_eo/` and `docs/emulator-builds/zx81-eo-loadp-build.md` (locked SHA-256). Still **NEEDS_LEGAL_REVIEW** before public browser redistribution — do not treat technical CS completeness as counsel approval |
 | `virtualjaguar_js` | Rebuild notes only; **EXPERIMENTAL** — withhold product redistribution until source package complete |
 | Stock EJS CDN cores | Prefer lock hashes as shipped truth; counsel confirm unmodified packaging vs upstream |
 | Combined work | iframe isolation used; counsel confirm distribution model vs GPL |
