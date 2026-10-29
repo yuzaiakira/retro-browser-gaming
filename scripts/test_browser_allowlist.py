@@ -27,7 +27,7 @@ class BrowserAllowlistTests(unittest.TestCase):
             (ROOT / "docs" / "open-source" / "browser-distributable-allowlist.json").read_text()
         )
         files = data["files"]
-        self.assertEqual(len(files), 59)
+        self.assertEqual(len(files), 62)  # +3 gearcoleco (wasm/legacy/report)
         blocked = [
             f
             for f in files
@@ -44,12 +44,14 @@ class BrowserAllowlistTests(unittest.TestCase):
         self.assertNotIn("ejs-4.2.3/cores/virtualjaguar_js-wasm.data", selected)
         self.assertIn("ejs-4.2.3/cores/genesis_plus_gx-wasm.data", selected)
         self.assertIn("ejs-4.2.3/cores/bluemsx-wasm.data", selected)
-        self.assertEqual(len(selected), 55)
+        self.assertIn("ejs-4.2.3/cores/gearcoleco-wasm.data", selected)
+        self.assertEqual(len(selected), 58)
 
     def test_local_full_includes_blocked(self) -> None:
         selected = {e["path"] for e in prov.selected_entries("LOCAL_FULL")}
-        self.assertEqual(len(selected), 59)
+        self.assertEqual(len(selected), 62)
         self.assertIn("ejs-4.2.3/cores/81_eo-wasm.data", selected)
+        self.assertIn("ejs-4.2.3/cores/gearcoleco-wasm.data", selected)
 
     def test_purge_removes_blocked_public_copies(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
