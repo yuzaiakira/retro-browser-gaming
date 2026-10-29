@@ -212,11 +212,14 @@
 | Vitest / typecheck | 68 passed / `tsc --noEmit` OK |
 | Evidence | `.runtime/test-evidence/PH-12/n64/` + `docs/emulator-builds/n64-mupen64plus-next-gameplay.md` |
 
+### Jaguar re-check (same day)
+
+Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` with MIT jag2048; raw `.bin` still ~6824 lit without proven input delta. Remains **EXPERIMENTAL** — `docs/emulator-builds/jaguar-ph12-recheck-20261029.md`.
+
 ### Next concrete task
 
-1. PH-12.1: Atari Jaguar black framebuffer
-2. PH-12.1: ZX81 interactive Dot
-3. Owner gates unchanged (publication STOP)
+1. PH-12.1: ZX81 interactive Dot (or alternate legal Jaguar Alpine/`.j64` fixture if one clears rights)
+2. Owner gates unchanged (publication STOP)
 
 ## Remaining blockers / next
 
