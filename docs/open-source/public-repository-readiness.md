@@ -14,7 +14,7 @@ Distinguish **PUBLIC_SOURCE_READY** (sanitized Git + docs + gates) from **PUBLIC
 | CI does not require private binaries | PASS (SOURCE_ONLY + `check-public-source-safety.py --quick`) |
 | One-command `./scripts/setup.sh` | PASS (source-only / local-full) |
 | Third-party notices + corresponding-source docs | Present |
-| Root application LICENSE chosen by owner | **BLOCKED_HUMAN** — recommend MIT for first-party only |
+| Root application LICENSE chosen by owner | **PASS** — first-party MIT `LICENSE` and scoped `NOTICE` committed 2026-10-29 |
 | History cleaned on public refs **or** new clean repo | Candidate prepared Option B1 — **BLOCKED_HUMAN** to publish |
 | Product approvals for any catalog titles beyond engineering | Separate governance |
 | No proprietary BIOS in tree or public delivery | PASS (none tracked; optional installer is offline/manual) |
@@ -31,8 +31,8 @@ Distinguish **PUBLIC_SOURCE_READY** (sanitized Git + docs + gates) from **PUBLIC
 - Guaranteed gameplay for WASM cores until assets are provisioned lawfully.
 - A warranty of DMCA/takedown immunity.
 
-## Suggested root LICENSE text (owner must approve)
+## Enacted root LICENSE
 
-Use a short MIT license for **first-party** code, plus a pointer:
+The owner authorized first-party MIT licensing. Root `LICENSE` and `NOTICE` are committed; third-party licenses remain separate:
 
 > This repository also includes third-party components under GPL-3.0, GPL-2.0, MIT, CC0, and other terms. See `docs/open-source/third-party-notices.md` and `LICENSES/`.
