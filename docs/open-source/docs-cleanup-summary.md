@@ -64,4 +64,4 @@ Policy pointer: `docs/test-evidence.md`. Summary QA: `docs/qa-summary.md`.
 
 ## Remaining blockers
 
-Root LICENSE still **BLOCKED_HUMAN**. Physical gamepad / iOS / staging HTTPS unchanged. Publication still requires owner authorization. **STOP** before publish.
+Root MIT LICENSE is **enacted** (see `FINAL-PUBLICATION-CHECKLIST.md`). Physical gamepad / iOS / staging HTTPS and live corresponding-source delivery remain open for hosted release. Publication of the sanitized candidate still requires owner authorization. **STOP** before publish.
