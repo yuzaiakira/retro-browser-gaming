@@ -12,14 +12,17 @@ Identity SHAs below are filled after the documentation commit lands and the Opti
 
 | Item | Value |
 |---|---|
-| Synchronized private HEAD (pre-doc tip) | `5d494346f94b39f3ecff31da6465edb7321dc82e` (= `origin/main`) |
-| Private HEAD after this checklist commit | `986ecaa1bab82986fcff0f9c39050add8856b56d` |
-| Sanitized candidate HEAD | `cb6a88b651215cbb43d38ab2b129589f615946c3` |
-| Preserved commits (candidate) | 138 (not squashed) |
+| Synchronized private HEAD (pre-doc tip) | `5d494346f94b39f3ecff31da6465edb7321dc82e` (= `origin/main` at sync) |
+| Private HEAD (release-candidate tip) | Record with `git rev-parse HEAD` on private `main` after checklist commits |
+| Sanitized candidate HEAD | `CANDIDATE_HEAD.txt` from stamp `20261029-final` after `./scripts/build-sanitized-candidate.sh` |
+| Preserved commits (candidate) | Record with candidate `commit-count.txt` (not squashed) |
 | Private history rewritten? | **No** |
 | Pushed / published? | **No** |
 
 Stale candidates (`3ea444d…`, `061aba7…`, `eb35bf7…`, `20261028-*`) must **not** be published.
+
+Session verification recorded separately in the engineer final report (exact SHAs at STOP).
+
 
 ## PUBLIC_SOURCE_READY gates
 
