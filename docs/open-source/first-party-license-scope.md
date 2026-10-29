@@ -1,15 +1,15 @@
-# First-party MIT license scope (proposed — not enacted)
+# First-party MIT license scope (owner-authorized)
 
-**Status:** `BLOCKED_HUMAN` — root `LICENSE` not committed.  
-**Proposed attribution:** `Copyright (c) 2026 Akira Yuzai`  
-**Proposed first-party license:** MIT  
+**Status:** `MIT_ENACTED_FIRST_PARTY` — owner authorized MIT; root `LICENSE` and `NOTICE` committed 2026-10-29.  
+**Attribution:** `Copyright (c) 2026 Akira Yuzai`  
+**First-party license:** MIT  
 **Evidence basis:** project intent + proposed texts — **not** proof of legal ownership of every byte.
 
 Git author names (`Akira` / `Akira Yuzai`) and Cursor `Co-authored-by` trailers are **not** treated as copyright assignment.
 
 ## Intended MIT coverage (first-party application)
 
-These trees are **intended** to be covered by a root MIT LICENSE for first-party code once the owner confirms authority:
+These trees are covered by the root MIT LICENSE **only where the owner has licensing authority**:
 
 | Area | Paths (illustrative) | Notes |
 |---|---|---|
@@ -34,21 +34,18 @@ These trees are **intended** to be covered by a root MIT LICENSE for first-party
 | GPL/CC0/MIT homebrew fixtures from upstream authors | As labeled | `fixtures/`, `.fixtures/`, `LICENSES/*` |
 | npm / PyPI dependencies | Various | Lockfiles |
 
-## Uncertain / needs human confirmation before enactment
+## Remaining rights-review items (do not assume third-party ownership)
 
 1. Whether **all** first-party code is owned solely by Akira Yuzai personally, or also by a company / employer / contractor assignment.
 2. Whether any non-owner human contributors require separate permission (beyond AI tooling trailers).
 3. Whether any file under `apps/web/src` or `apps/api` embeds substantial third-party code without a `LICENSES/` pointer (spot-check: none found requiring immediate reclassification; counsel may still review).
 4. Authority to publish under MIT for the application while continuing to redistribute GPL emulator materials only when lawfully provisioned.
 
-## Enactment rule
+## License enactment
 
-Do **not** place a blanket statement that “this entire repository is MIT.”
+The owner authorized MIT licensing of the first-party project code under the
+name Akira Yuzai on 2026-10-29. Root `LICENSE` and `NOTICE` are now committed.
 
-When the owner confirms items 1–3 in writing:
-
-1. Copy `docs/open-source/proposed-licenses/LICENSE.mit.proposed.txt` → root `LICENSE` with the confirmed copyright line.
-2. Keep `docs/open-source/third-party-notices.md` and `LICENSES/` intact.
-3. Point README at both root LICENSE (first-party) and third-party notices.
-
-Until then: proposed artifacts only; status remains **BLOCKED_HUMAN**.
+The root MIT license **does not** apply to third-party materials under separate
+licenses. The owner's authorization is not an independent legal audit of
+employment contracts, contributor agreements, or upstream code provenance.
