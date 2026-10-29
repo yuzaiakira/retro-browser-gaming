@@ -58,13 +58,22 @@ export function probe(device: Device, release: Release, bytes = 0) {
   if (!device.locks) {
     reasons.push('This browser lacks the Web Locks API required for safe downloads.');
   }
-  if (release.recommended_core.runtime_type === 'wasm' && !device.wasm) {
+  // Every newly onboarded core must be gated by its declared requirements,
+  // not by a hard-coded console name. Keep the legacy PSP safety rule until
+  // every published PSP release carries an explicit "threads" requirement.
+  const core = release.recommended_core;
+  const required = new Set(core.min_capabilities);
+  if ((core.runtime_type === 'wasm' || required.has('wasm')) && !device.wasm) {
     reasons.push('WebAssembly is unavailable.');
   }
-  if (release.recommended_core.code === 'ppsspp' && !device.threads) {
-    reasons.push('PSP needs SharedArrayBuffer and cross-origin isolation.');
+  if ((required.has('threads') || core.code === 'ppsspp') && !device.threads) {
+    reasons.push(
+      core.code === 'ppsspp'
+        ? 'PSP needs SharedArrayBuffer and cross-origin isolation.'
+        : 'This emulator needs SharedArrayBuffer and cross-origin isolation.',
+    );
   }
-  if (release.recommended_core.min_capabilities.includes('webgl2') && !device.webgl2) {
+  if (required.has('webgl2') && !device.webgl2) {
     reasons.push('WebGL2 is required.');
   }
   if (
