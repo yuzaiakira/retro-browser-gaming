@@ -128,12 +128,16 @@ const PLATFORMS = {
     scheme: '81',
     pass: 'ZX81_GAMEPLAY_PASS',
     screenshot: 'zx81-gameplay.png',
-    // 81_eo eo_loadp injects .p then leaves BASIC K cursor — RUN (R+Enter) then move.
-    inputProfile: 'zx81-run-move',
+    // 81_eo CRT autostart enters Dot getk. EmulatorJS simulateInput RetroPad is inert for
+    // keybovl; keyboard 5/8 (ZX81 cursors) is the proven interactive path.
+    inputProfile: 'zx81-keyboard-move',
     moveAxes: 'horizontal',
-    bootWaitMs: 6000,
-    moveHoldMs: 150,
-    moveIterations: 24,
+    bootWaitMs: 16000,
+    moveHoldMs: 180,
+    moveGapMs: 220,
+    moveIterations: 20,
+    holdMoveDuringCapture: true,
+    holdMoveKey: '8',
   },
   cpc: {
     label: 'Amstrad CPC',
@@ -491,17 +495,25 @@ async function run() {
     } else if (cfg.inputProfile === 'move-only') {
       // No boot keys — used when the frame/core auto-starts the program.
     } else if (cfg.inputProfile === 'zx81-run-move' || cfg.inputProfile === 'zx81-load-move') {
-      // 81_eo maps B→R (RUN) and X→NEWLINE via keybovl; page.keyboard does not reach the core.
+      // Legacy joypad RUN path (kept for stock-81 experiments).
       const tap = async (btn, hold = 500, gap = 450) => {
         await page.evaluate((c) => window.input(c, 1), btn);
         await page.waitForTimeout(hold);
         await page.evaluate((c) => window.input(c, 0), btn);
         await page.waitForTimeout(gap);
       };
-      // RetroPad: B=0, Y=1, Select=2, Start=3, D-pad 4-7, A=8, X=9
       await tap(0); // R / RUN
       await tap(9); // NEWLINE
       await page.waitForTimeout(3000);
+    } else if (cfg.inputProfile === 'zx81-keyboard-move') {
+      // Focus the emulator canvas so RA keyboard feed reaches 81 keybovl/getk.
+      const box = await frame.boundingBox();
+      if (box) {
+        await page.mouse.click(box.x + box.width * 0.5, box.y + box.height * 0.5);
+      } else {
+        await page.locator('iframe').click({ position: { x: 200, y: 200 } });
+      }
+      await page.waitForTimeout(300);
     } else if (cfg.inputProfile === 'start-move' || cfg.inputProfile === 'start-only-move') {
       const bootCmds = cfg.inputProfile === 'start-only-move' ? [3] : [3, 8];
       for (const cmd of bootCmds) {
@@ -541,6 +553,24 @@ async function run() {
         window.input(0, 1);
       });
       await page.waitForTimeout(600);
+    } else if (cfg.inputProfile === 'zx81-keyboard-move') {
+      const moveHold = cfg.moveHoldMs || 180;
+      const moveGap = cfg.moveGapMs || 200;
+      const moveIters = cfg.moveIterations || 16;
+      for (let i = 0; i < moveIters; i++) {
+        await page.keyboard.down('5');
+        await page.waitForTimeout(moveHold);
+        await page.keyboard.up('5');
+        await page.waitForTimeout(moveGap);
+        await page.keyboard.down('8');
+        await page.waitForTimeout(moveHold);
+        await page.keyboard.up('8');
+        await page.waitForTimeout(moveGap);
+      }
+      if (cfg.holdMoveDuringCapture) {
+        await page.keyboard.down(cfg.holdMoveKey || '8');
+        await page.waitForTimeout(Math.max(moveHold * 3, 600));
+      }
     } else {
       const axis =
         cfg.moveAxes === 'vertical'
@@ -549,14 +579,17 @@ async function run() {
             ? [6, 7]
             : [6, 7];
       const moveHold = cfg.moveHoldMs || 60;
+      const moveGap = cfg.moveGapMs || 0;
       const moveIters = cfg.moveIterations || 12;
       for (let i = 0; i < moveIters; i++) {
         await page.evaluate((c) => window.input(c, 1), axis[0]);
         await page.waitForTimeout(moveHold);
         await page.evaluate((c) => window.input(c, 0), axis[0]);
+        if (moveGap) await page.waitForTimeout(moveGap);
         await page.evaluate((c) => window.input(c, 1), axis[1]);
         await page.waitForTimeout(moveHold);
         await page.evaluate((c) => window.input(c, 0), axis[1]);
+        if (moveGap) await page.waitForTimeout(moveGap);
         if (
           cfg.inputProfile !== 'start-move' &&
           cfg.inputProfile !== 'start-only-move' &&
@@ -570,8 +603,15 @@ async function run() {
           await page.evaluate(() => window.input(8, 0));
         }
       }
+      if (cfg.holdMoveDuringCapture) {
+        const holdBtn = cfg.holdMoveButton ?? axis[1];
+        await page.evaluate((c) => window.input(c, 1), holdBtn);
+        await page.waitForTimeout(Math.max(moveHold * 2, 400));
+      }
     }
-    await page.waitForTimeout(cfg.inputProfile === 'n64-stick' ? 0 : 300);
+    await page.waitForTimeout(
+      cfg.inputProfile === 'n64-stick' || cfg.holdMoveDuringCapture ? 0 : 300,
+    );
     const movedPng = PNG.sync.read(await frame.screenshot());
     const movedHash = sampleHash(movedPng);
     const movedLit = nonBlackPixels(movedPng);
@@ -604,13 +644,20 @@ async function run() {
       state = { byteLength: 0 };
     }
 
-    if (cfg.inputProfile === 'n64-stick') {
-      // Keep the held-input frame as evidence (USB64 returns to neutral on release).
+    if (cfg.inputProfile === 'n64-stick' || cfg.holdMoveDuringCapture) {
+      // Keep the held-input frame as evidence (live HUD / edge-triggered sprites).
       await writeFile(join(evidenceDir, 'screenshots', cfg.screenshot), PNG.sync.write(movedPng));
-      await page.evaluate(() => {
-        window.input(16, 0);
-        window.input(0, 0);
-      });
+      if (cfg.inputProfile === 'n64-stick') {
+        await page.evaluate(() => {
+          window.input(16, 0);
+          window.input(0, 0);
+        });
+      } else if (cfg.inputProfile === 'zx81-keyboard-move') {
+        await page.keyboard.up(cfg.holdMoveKey || '8');
+      } else if (cfg.holdMoveDuringCapture) {
+        const holdBtn = cfg.holdMoveButton ?? 7;
+        await page.evaluate((c) => window.input(c, 0), holdBtn);
+      }
       await page.waitForTimeout(200);
     } else {
       await page.screenshot({

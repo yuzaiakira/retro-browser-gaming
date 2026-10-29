@@ -1,0 +1,97 @@
+diff --git a/src/eo.c b/src/eo.c
+index e4f5d5c..5cfb3b5 100644
+--- a/src/eo.c
++++ b/src/eo.c
+@@ -346,6 +346,27 @@ void eo_loadp( const void* data, size_t size )
+   z80.iy.w = 0x4000;
+   z80.i = 0x1e;
+   z80.r = 0xca;
++
++  /* RBG PH-12.1: z88dk +zx81 CRT autostart for .p homebrew (e.g. MIT Dot).
++   * Enter CRT at $4092. Clear CDFLAG bit6 and skip altint_on FRAMES spin ($40EB)
++   * so ROM SLOW/NMI can complete under EightyOne instead of deadlocking/BASIC.
++   */
++  if ( memory[ 0x4092 ] == 0xfd && memory[ 0x4093 ] == 0x21 )
++  {
++    memory[ 0x403B ] &= (uint8_t)~0x40;
++    if ( memory[ 0x40eb ] == 0x28 && memory[ 0x40ec ] == 0x07 )
++      memory[ 0x40eb ] = 0x18; /* jr z -> jr always */
++    z80.ix.w = 0x0281;
++    z80.iy.w = 0x4000;
++    z80.i = 0x1e;
++    z80.iff1 = 0;
++    z80.iff2 = 0;
++    z80.sp.w = 0x7ffc;
++    memory[ z80.sp.w + 0 ] = 0x76;
++    memory[ z80.sp.w + 1 ] = 0x06;
++    z80.pc.w = 0x4092;
++  }
++  (void)size;
+ }
+ 
+ typedef struct
+diff --git a/src/libretro.cpp b/src/libretro.cpp
+index d4df247..a92c7a5 100644
+--- a/src/libretro.cpp
++++ b/src/libretro.cpp
+@@ -246,17 +246,18 @@ static int update_variables()
+     const int keys[] = { 0, 0, VK_RETURN, VK_SHIFT, VK_SPACE, VK_DECIMAL };
+     const char* value;
+     
++    /* RBG: option 0 (auto) was joymap 0 / dead — treat auto like default cursors. */
+     int option = coreopt( env_cb, core_vars, state.sha1, "81_joypad_up", &value );
+-    zx81ovl.joymap[ RETRO_DEVICE_ID_JOYPAD_UP ] = option < 0 || option == 1 ? '7' : option < 6 ? keys[ option ] : toupper( *value );
++    zx81ovl.joymap[ RETRO_DEVICE_ID_JOYPAD_UP ] = option < 0 || option <= 1 ? '7' : option < 6 ? keys[ option ] : toupper( *value );
+     
+     option = coreopt( env_cb, core_vars, state.sha1, "81_joypad_down", &value );
+-    zx81ovl.joymap[ RETRO_DEVICE_ID_JOYPAD_DOWN ] = option < 0 || option == 1 ? '6' : option < 6 ? keys[ option ] : toupper( *value );
++    zx81ovl.joymap[ RETRO_DEVICE_ID_JOYPAD_DOWN ] = option < 0 || option <= 1 ? '6' : option < 6 ? keys[ option ] : toupper( *value );
+     
+     option = coreopt( env_cb, core_vars, state.sha1, "81_joypad_left", &value );
+-    zx81ovl.joymap[ RETRO_DEVICE_ID_JOYPAD_LEFT ] = option < 0 || option == 1 ? '5' : option < 6 ? keys[ option ] : toupper( *value );
++    zx81ovl.joymap[ RETRO_DEVICE_ID_JOYPAD_LEFT ] = option < 0 || option <= 1 ? '5' : option < 6 ? keys[ option ] : toupper( *value );
+     
+     option = coreopt( env_cb, core_vars, state.sha1, "81_joypad_right", &value );
+-    zx81ovl.joymap[ RETRO_DEVICE_ID_JOYPAD_RIGHT ] = option < 0 || option == 1 ? '8' : option < 6 ? keys[ option ] : toupper( *value );
++    zx81ovl.joymap[ RETRO_DEVICE_ID_JOYPAD_RIGHT ] = option < 0 || option <= 1 ? '8' : option < 6 ? keys[ option ] : toupper( *value );
+     
+     option = coreopt( env_cb, core_vars, state.sha1, "81_joypad_a", &value );
+     zx81ovl.joymap[ RETRO_DEVICE_ID_JOYPAD_A ] = option < 0 || option == 1 ? '0' : option < 6 ? keys[ option ] : toupper( *value );
+@@ -500,6 +501,9 @@ void retro_run( void )
+   }
+   
+   input_poll_cb();
++  /* RBG: keybovl ignores joypad unless port device is JOYPAD (EmulatorJS may leave NONE). */
++  if (state.devices[0] != RETRO_DEVICE_JOYPAD)
++    state.devices[0] = RETRO_DEVICE_JOYPAD;
+ 
+   int border_size = coreopt(env_cb, core_vars, state.sha1, "81_border_size", NULL);
+   border_size += border_size < 0;
+@@ -549,11 +553,22 @@ void retro_reset( void )
+   {
+     load_snap( "zx81_16k.z81" );
+     
+-    zx81.TZXin = 1;
+-    TZXFile.LoadFile( state.data, state.size, false );
+-    TZXFile.Start();
+-    
+-    //eo_loadp( state.data, state.size );
++    /* RBG: .p homebrew — prefer eo_loadp direct inject (FlashLoad LOAD "" is fragile in browsers).
++       Tape formats (TZX/T81) keep the FlashLoad path. */
++    const uint8_t* bytes = (const uint8_t*)state.data;
++    bool looks_tzx = state.size >= 8 && memcmp(bytes, "ZXTape!", 7) == 0;
++    bool looks_t81 = state.size >= 4 && memcmp(bytes, "EO81", 4) == 0;
++    if ( looks_tzx || looks_t81 )
++    {
++      zx81.TZXin = 1;
++      TZXFile.LoadFile( state.data, state.size, false );
++      TZXFile.Start();
++    }
++    else
++    {
++      zx81.TZXin = 0;
++      eo_loadp( state.data, state.size );
++    }
+   }
+ }
+ 

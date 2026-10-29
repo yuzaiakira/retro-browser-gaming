@@ -1,7 +1,5 @@
 {
   "core": "81_eo",
-  "buildStart": "2026-10-22T11:39:20+00:00",
-  "buildEnd": "2026-10-22T11:40:07+00:00",
-  "options": {},
-  "note": "eo_loadp + z88dk CRT autostart + JOYPAD force"
+  "note": "eo_loadp + CRT autostart + CDFLAG/FRAMES + auto-joypad\u2192cursors + JOYPAD force",
+  "upstream": "EmulatorJS/81-libretro@86decf3ee61ea5803972948e80197bee8474796b"
 }

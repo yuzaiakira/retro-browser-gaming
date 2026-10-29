@@ -178,19 +178,20 @@ addEventListener('message', async (event) => {
     if (d.core === '81' || d.core === '81_eo') {
       // 81_eo: independently versioned WASM calls eo_loadp for .p (tape path for .tzx).
       // Stock 81 still needs LOAD ""; keep face-button LOAD map for that path.
-      // 81-libretro treats joypad "auto" as joymap 0 (dead) — pin explicit keys.
-      // Use "default" (not digit strings) for D-Pad — matches upstream cursor map.
+      // 81-libretro treats joypad "auto" as joymap 0 (dead). Prefer digit keys over
+      // "default" so EmulatorJS option indices cannot collapse to the auto/dead slot.
       window.EJS_defaultOptions['81_fast_load'] = 'enabled';
       window.EJS_defaultOptions['81_chroma_81'] = 'disabled';
-      window.EJS_defaultOptions['81_joypad_up'] = 'default';
-      window.EJS_defaultOptions['81_joypad_down'] = 'default';
-      window.EJS_defaultOptions['81_joypad_left'] = 'default';
-      window.EJS_defaultOptions['81_joypad_right'] = 'default';
+      window.EJS_defaultOptions['81_joypad_up'] = '7';
+      window.EJS_defaultOptions['81_joypad_down'] = '6';
+      window.EJS_defaultOptions['81_joypad_left'] = '5';
+      window.EJS_defaultOptions['81_joypad_right'] = '8';
       // B → R (RUN keyword at K cursor after eo_loadp); X → NEWLINE; A → P (Dot).
       window.EJS_defaultOptions['81_joypad_b'] = 'r';
       window.EJS_defaultOptions['81_joypad_a'] = 'p';
       window.EJS_defaultOptions['81_joypad_y'] = 'shift';
       window.EJS_defaultOptions['81_joypad_x'] = 'new line';
+      window.EJS_defaultOptions['81_key_hold_time'] = '50';
     }
     if (d.core === 'cap32') {
       // Cap32 autostarts DSK/CDT/M3U; CPC firmware is embedded in the core package.

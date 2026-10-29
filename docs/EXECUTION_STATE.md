@@ -3,7 +3,9 @@
 ## Verdict
 
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
-**PH-12.1 N64 (2026-10-29):** `mupen64plus_next` **VERIFIED_PLAYABLE** — hold-while-capture smoke `N64_GAMEPLAY_PASS`; save/load; >64 MiB ROM guard. Report `docs/emulator-builds/n64-mupen64plus-next-gameplay.md`. Next in 12.1: Jaguar + ZX81.
+**PH-12.1 N64 (2026-10-29):** `mupen64plus_next` **VERIFIED_PLAYABLE** — hold-while-capture smoke `N64_GAMEPLAY_PASS`; save/load; >64 MiB ROM guard. Report `docs/emulator-builds/n64-mupen64plus-next-gameplay.md`.
+
+**PH-12.1 ZX81 (2026-10-29):** `81_eo` **VERIFIED_PLAYABLE** — CRT autostart + CDFLAG/FRAMES fix; Chromium `ZX81_GAMEPLAY_PASS` (keyboard 5/8 Dot move, save 49 KiB); stock `81` untouched. EJS RetroPad `simulateInput` still inert (documented). Evidence `.runtime/test-evidence/PH-12/zx81/`; build `docs/emulator-builds/zx81-eo-loadp-build.md`. Next in 12.1: Jaguar (still EXPERIMENTAL).
 
 **Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability — verified 2026-10-26.  
 **Hub UX (PH-UX-HUB):** Premium Gaming Hub — verified 2026-10-26.  
@@ -24,8 +26,8 @@
 
 | Item | Status |
 |---|---|
-| VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX + **N64** |
-| EXPERIMENTAL | ZX81 / Jaguar |
+| VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX + **N64** + **ZX81** |
+| EXPERIMENTAL | Jaguar |
 | FBNeo | BLOCKED_FIXTURE |
 | Atari ST | BLOCKED_CORE — hatari absent |
 | Core lock | **373 files** |
@@ -216,18 +218,31 @@
 
 Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` with MIT jag2048; raw `.bin` still ~6824 lit without proven input delta. Remains **EXPERIMENTAL** — `docs/emulator-builds/jaguar-ph12-recheck-20261029.md`.
 
+## PH-12.1 ZX81 pass (2026-10-29)
+
+| Check | Result |
+|---|---|
+| Root cause | Fixture CDFLAG/`altint_on` FRAMES wait blocked CRT→main; EJS RetroPad `simulateInput` does not feed keybovl |
+| Fix | `81_eo` `eo_loadp` CRT `$4092` + CDFLAG/FRAMES patch; smoke uses keyboard 5/8 |
+| Smoke | `ZX81_GAMEPLAY_PASS` (`stateBytes=49216`, input/menu frame deltas) |
+| Native | Dot `_x` 15→31→0 with lit FB (`native-dotmove.txt`) |
+| Stock `81` | Unchanged |
+| Vitest / typecheck | runtime-errors OK / `tsc --noEmit` OK |
+| Evidence | `.runtime/test-evidence/PH-12/zx81/` + `docs/emulator-builds/zx81-eo-loadp-build.md` |
+
 ### Next concrete task
 
-1. PH-12.1: ZX81 interactive Dot (or alternate legal Jaguar Alpine/`.j64` fixture if one clears rights)
-2. Owner gates unchanged (publication STOP)
+1. PH-12.1: Jaguar — only with a rights-clear Alpine/`.j64` path or honest EXPERIMENTAL closeout
+2. Optional: wire EJS RetroPad→81 keybovl if a frontend input path is found
+3. Owner gates unchanged (publication STOP)
 
 ## Remaining blockers / next
 
 1. Owner: authorize Option B public repo push of sanitized candidate (LICENSE enacted)
 2. Counsel: legal-review package; `NEEDS_LEGAL_REVIEW` ≠ approval
 3. Owner: publish corresponding-source offer on HTTPS; gate must fetch PASS before `OFFER_DELIVERY_VERIFIED`
-4. Product: Alpha game set approvals (incl. N64 fixture if desired)
-5. Resolve CS for `81_eo` / `virtualjaguar_js`
+4. Product: Alpha game set approvals (incl. N64/ZX81 fixtures if desired)
+5. Resolve CS for `virtualjaguar_js` (`81_eo` patch + rebuild notes now packaged)
 6. QA: physical gamepad + iOS; Ops: staging HTTPS
 7. Playwright offline ≠ physical-device offline certification (document only)
-8. Continue PH-12.1 Jaguar → ZX81
+8. Continue PH-12.1 Jaguar (only remaining 12.1 EXPERIMENTAL)
