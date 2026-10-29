@@ -1,0 +1,21 @@
+Retro Browser Gaming — Third-party license notice
+
+Copyright (c) 2026 Akira Yuzai
+
+The root MIT LICENSE applies only to first-party application source and assets
+for which the project owner has the authority to grant MIT rights. It does
+not relicense third-party software, fixtures, or emulator runtime components.
+
+Third-party components retain their original copyright and license terms.
+Examples include EmulatorJS (GPL-3.0), jsdos (GPL-2.0), js2me (MIT),
+libretro emulator cores (core-specific licenses), and third-party homebrew
+fixtures (as individually labeled).
+
+For details see:
+- docs/open-source/first-party-license-scope.md
+- docs/open-source/third-party-notices.md
+- docs/open-source/corresponding-source.md
+- LICENSES/
+
+Proprietary BIOS, commercial ROMs, and privately held emulator binaries
+are not made redistributable by this first-party MIT license.
