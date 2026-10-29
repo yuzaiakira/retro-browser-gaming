@@ -1,7 +1,7 @@
 # PH-12.1 — Nintendo 64 (`mupen64plus_next`) gameplay
 
-**Date:** 2026-10-29  
-**Branch:** `feat/platform-expansion-phase-1`  
+**Date:** 2026-10-29
+**Branch:** `feat/platform-expansion-phase-1`
 **Status:** VERIFIED_PLAYABLE (Chromium engineering acceptance)
 
 ## Core
