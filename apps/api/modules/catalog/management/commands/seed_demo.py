@@ -17,6 +17,7 @@ SYSTEMS = [
     ("sega-gg", "Sega Game Gear", "handheld"),
     ("sega-sg1000", "Sega SG-1000", "console"),
     ("nes", "NES / Famicom", "console"),
+    ("fds", "Famicom Disk System", "console"),
     ("snes", "Super Nintendo", "console"),
     ("gb", "Game Boy", "handheld"),
     ("gbc", "Game Boy Color", "handheld"),
@@ -50,7 +51,7 @@ SYSTEMS = [
 WASM_CORES = [
     ("genesis_plus_gx", ["md", "bin", "gg"], ["wasm", "secureContext"]),
     ("smsplus", ["sms", "sg"], ["wasm", "secureContext"]),
-    ("fceumm", ["nes"], ["wasm", "secureContext"]),
+    ("fceumm", ["nes", "fds"], ["wasm", "secureContext"]),
     ("snes9x", ["sfc", "smc"], ["wasm", "secureContext"]),
     ("gambatte", ["gb", "gbc"], ["wasm", "secureContext"]),
     ("mgba", ["gba"], ["wasm", "secureContext"]),
@@ -85,6 +86,7 @@ CONSOLE_FIXTURE_SLUGS = {
     "sega-ms",
     "sega-gg",
     "nes",
+    "fds",
     "snes",
     "gb",
     "gbc",
@@ -470,6 +472,32 @@ class Command(BaseCommand):
             compatibility_note=(
                 "Verified Chromium gameplay with fceumm / nes controls; save states "
                 "supported."
+            ),
+        )
+        results["fds"] = self._import_files(
+            fixtures,
+            slug="mit-fds-move-demo",
+            title="MIT FDS Move Demo",
+            description=(
+                "First-party MIT Famicom Disk System sprite fixture for engineering "
+                "acceptance. Left/Right move X; A toggles Y. Requires user-imported "
+                "OpenDiskSysROM (LGPL-3.0) — never ships Nintendo BIOS."
+            ),
+            console="fds",
+            core={"code": "fceumm", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="fds-rbg-move-demo.fds",
+            files=[("fds-rbg-move-demo.fds", "disk", "application/octet-stream")],
+            license_ref="MIT; .fixtures/fds-rbg-move-demo.README.md",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "scripts/build-fds-rbg-move-demo.py; sha256 c8b5b2b3…; "
+                "OpenDiskSysROM LGPL user-BIOS (docs/emulator-builds/fds-open-bios-feasibility.md)"
+            ),
+            genre="Homebrew",
+            compatibility_note=(
+                "Engineering-only. Import OpenDiskSysROM as disksys.rom in Settings before play. "
+                "Product approval remains pending."
             ),
         )
         results["snes"] = self._import_files(

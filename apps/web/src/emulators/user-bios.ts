@@ -26,6 +26,17 @@ export type UserBiosSlot = {
    * cartridge/HLE cores that share the same EmulatorJS core id.
    */
   enabled: boolean;
+  /**
+   * When set, BIOS is required only for these content extensions (e.g. FDS `.fds`).
+   * Empty/undefined = required for every launch of the listed cores (ColecoVision).
+   * Prevents FCEUmm NES cartridge games from demanding disksys.rom.
+   */
+  entryExtensions?: string[];
+};
+
+export type UserBiosResolveOptions = {
+  /** Launch entry filename (e.g. game.fds / game.nes). */
+  entryFile?: string;
 };
 
 export const USER_BIOS_SLOTS: UserBiosSlot[] = [
@@ -57,9 +68,10 @@ export const USER_BIOS_SLOTS: UserBiosSlot[] = [
     acceptedSha256: [
       "6ce74ea4e9407c8d1175a58b7af08f073fa6b9f9b54e4f4954828ae1b6872ba6",
     ],
-    enabled: false,
+    enabled: true,
+    entryExtensions: ["fds"],
     notes:
-      "Famicom Disk System BIOS slot. Catalog remains disabled. OpenDiskSysROM (LGPL-3.0) verified mountable under FCEUmm; Nintendo disksys.rom must never be redistributed.",
+      "Famicom Disk System BIOS slot (OpenDiskSysROM LGPL-3.0). Required only for .fds launches — NES .nes cartridges never need this. Nintendo disksys.rom must never be redistributed.",
   },
   {
     id: "sega-cd",
@@ -107,12 +119,37 @@ export function slotById(id: string): UserBiosSlot | undefined {
   return USER_BIOS_SLOTS.find((s) => s.id === id);
 }
 
-export function slotsForCore(core: string): UserBiosSlot[] {
-  return USER_BIOS_SLOTS.filter((s) => s.enabled && s.cores.includes(core));
+function entryExtension(entryFile?: string): string | undefined {
+  if (!entryFile) return undefined;
+  const base = entryFile.split(/[/\\]/).pop() || entryFile;
+  const dot = base.lastIndexOf(".");
+  if (dot < 0) return undefined;
+  return base.slice(dot + 1).toLowerCase();
 }
 
-export function coreRequiresUserBios(core: string): boolean {
-  return slotsForCore(core).length > 0;
+function slotMatchesEntry(slot: UserBiosSlot, entryFile?: string): boolean {
+  const exts = slot.entryExtensions;
+  if (!exts || exts.length === 0) return true;
+  const ext = entryExtension(entryFile);
+  if (!ext) return false;
+  return exts.some((e) => e.toLowerCase() === ext);
+}
+
+export function slotsForCore(
+  core: string,
+  options?: UserBiosResolveOptions,
+): UserBiosSlot[] {
+  return USER_BIOS_SLOTS.filter(
+    (s) =>
+      s.enabled && s.cores.includes(core) && slotMatchesEntry(s, options?.entryFile),
+  );
+}
+
+export function coreRequiresUserBios(
+  core: string,
+  options?: UserBiosResolveOptions,
+): boolean {
+  return slotsForCore(core, options).length > 0;
 }
 
 async function sha256Hex(bytes: ArrayBuffer): Promise<string> {
@@ -282,10 +319,13 @@ export async function listUserBios(): Promise<StoredUserBios[]> {
  * Resolve BIOS File for FrameAdapter, or throw MISSING_USER_BIOS.
  * Does not download firmware.
  */
-export async function resolveUserBiosFileForCore(core: string): Promise<File | undefined> {
-  const slots = slotsForCore(core);
+export async function resolveUserBiosFileForCore(
+  core: string,
+  options?: UserBiosResolveOptions,
+): Promise<File | undefined> {
+  const slots = slotsForCore(core, options);
   if (!slots.length) return undefined;
-  // Single primary slot per core for now (coleco / fds / sega-cd).
+  // Single primary slot per matching core+entry (coleco / fds / sega-cd).
   const slot = slots[0];
   const stored = await getUserBios(slot.id);
   if (!stored) {

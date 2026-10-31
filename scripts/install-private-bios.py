@@ -80,16 +80,22 @@ BIOS_CATALOG: list[dict] = [
         "open_firmware": False,
     },
     {
-        "id": "fds-reserved",
-        "label": "Famicom Disk System disksys.rom (reserved)",
+        "id": "fds-opendisksys",
+        "label": "Famicom Disk System OpenDiskSysROM (LGPL-3.0)",
         "core": "fceumm",
         "required": False,
-        "notes": "Proprietary FDS BIOS. Slot reserved for PH-12.2 — not enabled for cartridge NES.",
+        "notes": (
+            "OpenDiskSysROM LGPL-3.0 (RetrolariumLab b3cbc00d…). Required only for .fds "
+            "launches — never for NES .nes. Do not install Nintendo disksys.rom. "
+            "Corresponding source: docs/emulator-builds/fds-open-bios-feasibility.md"
+        ),
         "dest_name": "fds/disksys.rom",
-        "expected_sha256": None,
+        "expected_sha256": (
+            "6ce74ea4e9407c8d1175a58b7af08f073fa6b9f9b54e4f4954828ae1b6872ba6"
+        ),
         "min_bytes": 8192,
         "max_bytes": 8192,
-        "open_firmware": False,
+        "open_firmware": True,
     },
     {
         "id": "sega-cd-reserved",

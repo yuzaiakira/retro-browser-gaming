@@ -26,6 +26,14 @@ describe("user-bios validation", () => {
     expect(coreRequiresUserBios("81_eo")).toBe(false);
   });
 
+  it("requires FDS BIOS only for .fds launches, never for NES .nes", () => {
+    expect(coreRequiresUserBios("fceumm", { entryFile: "demo.fds" })).toBe(true);
+    expect(slotsForCore("fceumm", { entryFile: "demo.fds" })[0]?.id).toBe("fds");
+    expect(coreRequiresUserBios("fceumm", { entryFile: "cart.nes" })).toBe(false);
+    expect(slotsForCore("fceumm", { entryFile: "cart.nes" })).toEqual([]);
+    expect(coreRequiresUserBios("fceumm")).toBe(false);
+  });
+
   it("rejects wrong size for colecovision", async () => {
     const file = new File([new Uint8Array(100)], "colecovision.rom");
     const result = await validateUserBiosFile("colecovision", file, {

@@ -201,8 +201,9 @@ export default function Player({ id }: { id: string }) {
         const { coreRequiresUserBios, resolveUserBiosFileForCore } = await import(
           "@/emulators/user-bios"
         );
-        if (coreRequiresUserBios(item.manifest.core.code)) {
-          bios = await resolveUserBiosFileForCore(item.manifest.core.code);
+        const biosOpts = { entryFile: item.manifest.entryFile };
+        if (coreRequiresUserBios(item.manifest.core.code, biosOpts)) {
+          bios = await resolveUserBiosFileForCore(item.manifest.core.code, biosOpts);
         }
       }
       await runtime.load(media.entry, {

@@ -283,22 +283,32 @@ addEventListener('message', async (event) => {
       saveSavFiles: { visible: false },
       loadSavFiles: { visible: false },
     };
-    if (d.bios) {
+    {
       const mediaName = String(d.file?.name || d.name || '');
-      const fdsBios = d.core === 'fceumm' && /\.fds$/i.test(mediaName);
-      // FCEUmm FDS: mount disksys.rom into RetroArch system_directory.
-      // Prefer a same-realm Uint8Array — blob: URLs are revoked after first
-      // downloadFile fetch, and cross-frame File/Blob can fail toData checks.
-      if (fdsBios) {
-        const buf = new Uint8Array(await d.bios.arrayBuffer());
-        // FCEUmm resolves disksys.rom via SYSTEM DIR; when RA reports SYSTEM DIR
-        // empty it falls back to the content directory root (`/disksys.rom`).
-        externalFiles['/home/web_user/retroarch/userdata/system/disksys.rom'] = buf;
-        externalFiles['/disksys.rom'] = buf;
-      } else {
-        const biosUrl = URL.createObjectURL(d.bios);
-        window.EJS_biosUrl = biosUrl;
-        urls.push(biosUrl);
+      const needsFdsBios = d.core === 'fceumm' && /\.fds$/i.test(mediaName);
+      if (needsFdsBios && !d.bios) {
+        throw new Error(
+          'MISSING_FDS_BIOS: OpenDiskSysROM (disksys.rom) required before FDS launch',
+        );
+      }
+      if (d.bios) {
+        // FCEUmm FDS: mount disksys.rom into RetroArch system_directory.
+        // Prefer a same-realm Uint8Array — blob: URLs are revoked after first
+        // downloadFile fetch, and cross-frame File/Blob can fail toData checks.
+        if (needsFdsBios) {
+          const buf = new Uint8Array(await d.bios.arrayBuffer());
+          if (buf.byteLength !== 8192) {
+            throw new Error(`INVALID_FDS_BIOS_SIZE:${buf.byteLength}`);
+          }
+          // FCEUmm resolves disksys.rom via SYSTEM DIR; when RA reports SYSTEM DIR
+          // empty it falls back to the content directory root (`/disksys.rom`).
+          externalFiles['/home/web_user/retroarch/userdata/system/disksys.rom'] = buf;
+          externalFiles['/disksys.rom'] = buf;
+        } else {
+          const biosUrl = URL.createObjectURL(d.bios);
+          window.EJS_biosUrl = biosUrl;
+          urls.push(biosUrl);
+        }
       }
     }
     window.EJS_onGameStart = () => {
