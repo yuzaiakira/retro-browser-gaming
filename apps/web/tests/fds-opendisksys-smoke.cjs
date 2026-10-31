@@ -12,8 +12,14 @@ const { PNG } = require('pngjs');
 const { createHash } = require('node:crypto');
 
 const root = join(__dirname, '..', 'public');
-const fixtureName = 'fds-dreamful-diskmag.fds';
-const fixture = join(__dirname, '..', '..', '..', '.fixtures', fixtureName);
+// Prefer first-party MIT move-demo (deterministic sprite). Dreamful diskmag is
+// retained for BIOS-load regression only when MOVE_DEMO is absent.
+const moveDemoName = 'fds-rbg-move-demo.fds';
+const dreamfulName = 'fds-dreamful-diskmag.fds';
+const fixturesDir = join(__dirname, '..', '..', '..', '.fixtures');
+const useMoveDemo = require('node:fs').existsSync(join(fixturesDir, moveDemoName));
+const fixtureName = useMoveDemo ? moveDemoName : dreamfulName;
+const fixture = join(fixturesDir, fixtureName);
 const biosPath = join(
   __dirname,
   '..',
@@ -29,8 +35,9 @@ const session = 'fds-opendisksys-1';
 const executablePath = process.env.CHROMIUM_EXECUTABLE;
 const EXPECT_BIOS_SHA =
   '6ce74ea4e9407c8d1175a58b7af08f073fa6b9f9b54e4f4954828ae1b6872ba6';
-const EXPECT_FDS_SHA =
-  '289e9e1eb5a8ad38284d66bf6429e930d3c2cab8e36513cb9fc0943b27dbb8b4';
+const EXPECT_FDS_SHA = useMoveDemo
+  ? 'c8b5b2b3f0f8f75112b1fc78269fc991952c0165bf72f6a1514e8562583541a5'
+  : '289e9e1eb5a8ad38284d66bf6429e930d3c2cab8e36513cb9fc0943b27dbb8b4';
 
 const types = {
   '.html': 'text/html',
@@ -295,21 +302,11 @@ async function run() {
       throw new Error('RETROARCH_MENU_NOT_FDS_GAMEPLAY');
     }
 
-    // Input probe (diskmag menus — D-pad / A)
-    const before = png;
-    for (const cmd of [5, 4, 0, 8]) {
-      await page.evaluate((c) => window.input(c, 1), cmd);
-      await page.waitForTimeout(120);
-      await page.evaluate((c) => window.input(c, 0), cmd);
-      await page.waitForTimeout(200);
-    }
-    await page.waitForTimeout(800);
-    const after = PNG.sync.read(await frame.screenshot());
-    const delta = frameDelta(before, after);
-    await frame.screenshot({ path: join(shotDir, 'fds-after-input.png') });
-
+    // Deterministic A/B/A: idle control vs held directional input from the same save.
+    // Dreamful is a diskmag — prove player-controlled delta exceeds idle animation.
     let saveOk = false;
     let saveBytes = 0;
+    let baselineSave = null;
     if (result.capabilities?.saveState) {
       try {
         const saved = await page.evaluate(async () => {
@@ -318,14 +315,117 @@ async function run() {
         });
         saveBytes = saved.length;
         if (saved.length > 64) {
-          await page.evaluate((arr) => window.command('load', new Uint8Array(arr)), saved);
+          baselineSave = saved;
           saveOk = true;
         }
       } catch (e) {
         console.warn('SAVE_SOFT', String(e.message || e));
       }
     }
+    if (!baselineSave) {
+      throw new Error('FDS A/B/A requires a baseline save state');
+    }
 
+    async function restoreBaseline() {
+      await page.evaluate((arr) => window.command('load', new Uint8Array(arr)), baselineSave);
+      await page.waitForTimeout(400);
+    }
+
+    async function captureSeq(label, holdCmd, frames = 6) {
+      const shots = [];
+      for (let i = 0; i < frames; i++) {
+        if (holdCmd != null) {
+          await page.evaluate((c) => window.input(c, 1), holdCmd);
+        }
+        await page.waitForTimeout(200);
+        shots.push(PNG.sync.read(await frame.screenshot()));
+      }
+      if (holdCmd != null) {
+        await page.evaluate((c) => window.input(c, 0), holdCmd);
+      }
+      await frame.screenshot({ path: join(shotDir, `fds-aba-${label}.png`) });
+      return shots;
+    }
+
+    function seqMotion(shots) {
+      let total = 0;
+      for (let i = 1; i < shots.length; i++) total += frameDelta(shots[i - 1], shots[i]);
+      return total;
+    }
+
+    function seqVsFirst(shots) {
+      let total = 0;
+      for (let i = 1; i < shots.length; i++) total += frameDelta(shots[0], shots[i]);
+      return total;
+    }
+
+    // A: restore + no input
+    await restoreBaseline();
+    const idleShots = await captureSeq('idle-control', null);
+    const idleMotion = seqMotion(idleShots);
+    const idleVsFirst = seqVsFirst(idleShots);
+
+    // B: restore + hold Left (libretro 6)
+    await restoreBaseline();
+    const leftShots = await captureSeq('hold-left', 6);
+    const leftMotion = seqMotion(leftShots);
+    const leftVsFirst = seqVsFirst(leftShots);
+    const leftVsIdle = frameDelta(idleShots[idleShots.length - 1], leftShots[leftShots.length - 1]);
+
+    // A again: restore + hold Right (libretro 7) — opposite direction
+    await restoreBaseline();
+    const rightShots = await captureSeq('hold-right', 7);
+    const rightMotion = seqMotion(rightShots);
+    const rightVsFirst = seqVsFirst(rightShots);
+    const rightVsLeft = frameDelta(leftShots[leftShots.length - 1], rightShots[rightShots.length - 1]);
+
+    // Button A (8) reaction from baseline
+    await restoreBaseline();
+    const btnShots = await captureSeq('hold-a', 8);
+    const btnVsIdle = frameDelta(idleShots[idleShots.length - 1], btnShots[btnShots.length - 1]);
+
+    // Continue interacting after save/load
+    await restoreBaseline();
+    await page.evaluate(() => window.input(6, 1));
+    await page.waitForTimeout(300);
+    await page.evaluate(() => window.input(6, 0));
+    await page.evaluate((arr) => window.command('load', new Uint8Array(arr)), baselineSave);
+    await page.waitForTimeout(300);
+    await page.evaluate(() => window.input(7, 1));
+    await page.waitForTimeout(300);
+    await page.evaluate(() => window.input(7, 0));
+    const afterReloadInteract = PNG.sync.read(await frame.screenshot());
+    const postLoadDelta = frameDelta(idleShots[0], afterReloadInteract);
+
+    const inputExceedsIdle =
+      leftVsIdle > idleVsFirst + 80 ||
+      rightVsLeft > 80 ||
+      (leftMotion > idleMotion * 1.35 && leftVsIdle > 120);
+    const delta = Math.max(leftVsIdle, rightVsLeft, btnVsIdle);
+    await frame.screenshot({ path: join(shotDir, 'fds-after-input.png') });
+
+    const aba = {
+      idleMotion,
+      idleVsFirst,
+      leftMotion,
+      leftVsFirst,
+      leftVsIdle,
+      rightMotion,
+      rightVsFirst,
+      rightVsLeft,
+      btnVsIdle,
+      postLoadDelta,
+      inputExceedsIdle,
+      fixtureNote: useMoveDemo
+        ? 'MIT first-party move-demo: sprite X follows Left/Right; A toggles Y.'
+        : 'Dreamful is a diskmag (menu/text). A/B/A compares idle vs held D-pad.',
+    };
+    await writeFile(join(evidenceDir, 'fds', 'aba-metrics.json'), JSON.stringify(aba, null, 2));
+    console.log('FDS_ABA_METRICS', JSON.stringify(aba));
+
+    // Offline after boot (still in-session) — restore baseline first so we are not mid-fade.
+    await restoreBaseline();
+    await page.waitForTimeout(300);
     if (!process.env.SKIP_OFFLINE) {
       await page.context().setOffline(true);
       await page.waitForTimeout(400);
@@ -333,7 +433,7 @@ async function run() {
       if (nonBlackPixels(offlinePng) < 40) throw new Error('offline after restore went black');
     }
 
-    const interactive = delta > 30;
+    const interactive = Boolean(inputExceedsIdle && delta > 30);
     const summary = {
       biosSha,
       fdsSha,
@@ -343,20 +443,39 @@ async function run() {
       hash,
       inputDelta: delta,
       interactive,
+      inputExceedsIdle,
+      aba,
       saveOk,
       saveBytes,
       capabilities: result.capabilities,
       catalogFds: 'DISABLED',
       bios: 'OpenDiskSysROM LGPL-3.0',
-      fixture: 'Dreamful diskmag (noncommercial shareware)',
+      fixture: fixtureName,
+      fixtureKind: useMoveDemo ? 'first-party-mit-sprite' : 'dreamful-diskmag',
+      verifiedPlayable: false,
+      reason: interactive
+        ? useMoveDemo
+          ? 'A/B/A input exceeds idle on MIT move-demo — catalog remains disabled until full offline cold-start + NES regression gates'
+          : 'A/B/A input exceeds idle on diskmag UI — Dreamful still not a deterministic sprite fixture; catalog disabled'
+        : useMoveDemo
+          ? 'A/B/A inconclusive on move-demo — debug joypad/BIOS load'
+          : 'A/B/A could not separate input from idle animation; Dreamful unsuitable',
     };
     await writeFile(join(evidenceDir, 'fds', 'smoke-summary.json'), JSON.stringify(summary, null, 2));
 
     if (!interactive) {
-      throw new Error(`no input-driven framebuffer change (delta=${delta})`);
+      console.error('FDS_ABA_INCONCLUSIVE', JSON.stringify(aba));
+      throw new Error(
+        `FDS A/B/A inconclusive (idleVsFirst=${idleVsFirst} leftVsIdle=${leftVsIdle} rightVsLeft=${rightVsLeft})`,
+      );
     }
 
-    console.log('FDS_OPENDISKSYS_GAMEPLAY_PASS', JSON.stringify(summary));
+    console.log('FDS_OPENDISKSYS_INPUT_ABA_PASS', JSON.stringify(summary));
+    if (useMoveDemo) {
+      console.log('FDS_MOVE_DEMO_INTERACTIVE_PASS');
+    } else {
+      console.log('FDS_DREAMFUL_NOT_VERIFIED_PLAYABLE');
+    }
     await page.close();
   } finally {
     await browser.close();
