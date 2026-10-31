@@ -1,6 +1,8 @@
 /**
- * FDS + OpenDiskSysROM (LGPL) + FCEUmm browser smoke.
- * Catalog FDS remains disabled — this proves BIOS mount + disk load only.
+ * FDS + OpenDiskSysROM (LGPL) + FCEUmm browser smoke (A/B/A input proof).
+ * Engineering catalog path: mit-fds-move-demo (product approval pending).
+ * Offline Compose: tests/fds-offline-pwa.cjs → FDS_OFFLINE_PWA_PASS.
+ * NES regression: tests/nes-fceumm-regression.cjs → NES_FCEUMM_REGRESSION_PASS.
  * Usage: CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/fds-opendisksys-smoke.cjs
  */
 const { chromium } = require('@playwright/test');
@@ -448,14 +450,15 @@ async function run() {
       saveOk,
       saveBytes,
       capabilities: result.capabilities,
-      catalogFds: 'DISABLED',
+      catalogFds: useMoveDemo ? 'ENGINEERING_ONLY' : 'DISABLED',
       bios: 'OpenDiskSysROM LGPL-3.0',
       fixture: fixtureName,
       fixtureKind: useMoveDemo ? 'first-party-mit-sprite' : 'dreamful-diskmag',
-      verifiedPlayable: false,
+      verifiedPlayable: Boolean(interactive && useMoveDemo),
+      productApproval: 'pending',
       reason: interactive
         ? useMoveDemo
-          ? 'A/B/A input exceeds idle on MIT move-demo — catalog remains disabled until full offline cold-start + NES regression gates'
+          ? 'A/B/A PASS on MIT move-demo; Compose FDS_OFFLINE_PWA_PASS + NES_FCEUMM_REGRESSION_PASS enable engineering VERIFIED_PLAYABLE (product approval pending)'
           : 'A/B/A input exceeds idle on diskmag UI — Dreamful still not a deterministic sprite fixture; catalog disabled'
         : useMoveDemo
           ? 'A/B/A inconclusive on move-demo — debug joypad/BIOS load'
