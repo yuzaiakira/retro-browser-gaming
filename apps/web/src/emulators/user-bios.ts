@@ -74,6 +74,28 @@ export const USER_BIOS_SLOTS: UserBiosSlot[] = [
       "Famicom Disk System BIOS slot (OpenDiskSysROM LGPL-3.0). Required only for .fds launches — NES .nes cartridges never need this. Nintendo disksys.rom must never be redistributed.",
   },
   {
+    id: "vectrex",
+    cores: ["vecx"],
+    platform: "vectrex",
+    preferredFilename: "system.img",
+    acceptedFilenames: [
+      "system.img",
+      "vectrex.bin",
+      "bios.bin",
+      "vecx.rom",
+      "SYSTEM.IMG",
+    ],
+    minBytes: 8192,
+    maxBytes: 8192,
+    // Original GCE/MB executive ROM is proprietary. Hash list is empty on
+    // purpose — operators may pin personal dump hashes locally. Never publish
+    // firmware via anonymous routes. See docs/emulator-builds/vecx-firmware-audit.md.
+    acceptedSha256: [],
+    enabled: true,
+    notes:
+      "Vectrex executive ROM (GCE/MB proprietary). Required for vecx. Provide only firmware you are authorized to use. Patched WASM never embeds this ROM.",
+  },
+  {
     id: "sega-cd",
     cores: ["genesis_plus_gx"],
     platform: "sega-cd",

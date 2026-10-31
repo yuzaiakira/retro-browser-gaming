@@ -1,0 +1,151 @@
+diff --git a/libretro.c b/libretro.c
+index 7ab02e0..a6af807 100644
+--- a/libretro.c
++++ b/libretro.c
+@@ -3,6 +3,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <math.h>
++#include <stdbool.h>
+ 
+ #include "osint.h"
+ #include "vecx.h"
+@@ -17,8 +18,19 @@
+ 
+ retro_log_printf_t log_cb;
+ 
++/* Retro Browser Gaming: never embed GCE/MB Vectrex firmware in WASM.
++ * Operators supply an authorized 8192-byte system.img via RetroArch system dir
++ * (EmulatorJS EJS_biosUrl). Original bios/system.h is proprietary — do not
++ * redistribute those ROM bytes in public packages.
++ */
++#define RBG_EXTERNAL_VECTREX_BIOS 1
++
++#if RBG_EXTERNAL_VECTREX_BIOS
++static unsigned char bios_data[8192];
++static unsigned int bios_data_size = 8192;
++static bool rbg_bios_ready = false;
++#else
+ #define STANDARD_BIOS
+-
+ #ifdef STANDARD_BIOS
+ #include "bios/system.h"
+ #else
+@@ -28,6 +40,7 @@ retro_log_printf_t log_cb;
+ #include "bios/skip.h"
+ #endif
+ #endif
++#endif
+ 
+ static int WIDTH    = 330;
+ static int HEIGHT   = 410;
+@@ -662,6 +675,97 @@ bool retro_unserialize(const void *data, size_t size)
+ 
+ static unsigned char cart[65536];
+ 
++
++static bool rbg_try_load_bios_path(const char *path)
++{
++   FILE *fp;
++   size_t n;
++   long sz;
++
++   if (!path || !path[0])
++      return false;
++   fp = fopen(path, "rb");
++   if (!fp)
++      return false;
++   if (fseek(fp, 0, SEEK_END) != 0)
++   {
++      fclose(fp);
++      return false;
++   }
++   sz = ftell(fp);
++   if (sz != 8192)
++   {
++      fclose(fp);
++      return false;
++   }
++   rewind(fp);
++   n = fread(bios_data, 1, 8192, fp);
++   fclose(fp);
++   if (n != 8192)
++      return false;
++   bios_data_size = 8192;
++   rbg_bios_ready = true;
++   return true;
++}
++
++static bool rbg_load_vectrex_bios(void)
++{
++   const char *sysdir = NULL;
++   char path[4096];
++   const char *names[] = {
++      "system.img",
++      "vectrex.bin",
++      "bios.bin",
++      "vecx.rom",
++      NULL
++   };
++   size_t i;
++
++   rbg_bios_ready = false;
++   if (environ_cb)
++      environ_cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &sysdir);
++
++   if (sysdir && sysdir[0])
++   {
++      for (i = 0; names[i]; i++)
++      {
++         snprintf(path, sizeof(path), "%s/%s", sysdir, names[i]);
++         if (rbg_try_load_bios_path(path))
++         {
++            if (log_cb)
++               log_cb(RETRO_LOG_INFO, "[vecx] loaded user BIOS %s\n", path);
++            return true;
++         }
++         snprintf(path, sizeof(path), "%s%s%s", sysdir,
++               (sysdir[strlen(sysdir) - 1] == '/' ||
++                sysdir[strlen(sysdir) - 1] == '\\') ? "" : "/",
++               names[i]);
++         if (rbg_try_load_bios_path(path))
++         {
++            if (log_cb)
++               log_cb(RETRO_LOG_INFO, "[vecx] loaded user BIOS %s\n", path);
++            return true;
++         }
++      }
++   }
++
++   /* Also try content-adjacent / cwd for EmulatorJS mounts */
++   for (i = 0; names[i]; i++)
++   {
++      if (rbg_try_load_bios_path(names[i]))
++      {
++         if (log_cb)
++            log_cb(RETRO_LOG_INFO, "[vecx] loaded user BIOS ./%s\n", names[i]);
++         return true;
++      }
++   }
++
++   if (log_cb)
++      log_cb(RETRO_LOG_ERROR,
++            "[vecx] MISSING_VECTREX_BIOS: place authorized 8192-byte system.img in system directory\n");
++   return false;
++}
++
+ bool retro_load_game(const struct retro_game_info *info)
+ {
+    size_t cart_sz;
+@@ -733,6 +837,11 @@ bool retro_load_game(const struct retro_game_info *info)
+ 
+    memset(framebuffer, 0, sizeof(framebuffer));
+ 
++#if RBG_EXTERNAL_VECTREX_BIOS
++   if (!rbg_load_vectrex_bios())
++      return false;
++#endif
++
+    /* start with a fresh BIOS copy */
+    memcpy(rom, bios_data, bios_data_size);
+ 

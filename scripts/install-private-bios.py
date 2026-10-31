@@ -98,6 +98,22 @@ BIOS_CATALOG: list[dict] = [
         "open_firmware": True,
     },
     {
+        "id": "vectrex",
+        "label": "Vectrex executive ROM system.img (proprietary)",
+        "core": "vecx",
+        "required": True,
+        "notes": (
+            "GCE/Milton Bradley Vectrex executive ROM (8192 bytes). Required for "
+            "patched vecx WASM. Never redistribute in public packages. "
+            "See docs/emulator-builds/vecx-firmware-audit.md."
+        ),
+        "dest_name": "vectrex/system.img",
+        "expected_sha256": None,
+        "min_bytes": 8192,
+        "max_bytes": 8192,
+        "open_firmware": False,
+    },
+    {
         "id": "sega-cd-reserved",
         "label": "Sega CD / Mega-CD BIOS (reserved)",
         "core": "genesis_plus_gx",

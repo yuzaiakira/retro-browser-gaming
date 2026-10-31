@@ -26,6 +26,12 @@ describe("user-bios validation", () => {
     expect(coreRequiresUserBios("81_eo")).toBe(false);
   });
 
+  it("requires vecx user BIOS (Vectrex executive ROM)", () => {
+    expect(coreRequiresUserBios("vecx")).toBe(true);
+    expect(slotsForCore("vecx")[0]?.id).toBe("vectrex");
+    expect(slotsForCore("vecx")[0]?.preferredFilename).toBe("system.img");
+  });
+
   it("requires FDS BIOS only for .fds launches, never for NES .nes", () => {
     expect(coreRequiresUserBios("fceumm", { entryFile: "demo.fds" })).toBe(true);
     expect(slotsForCore("fceumm", { entryFile: "demo.fds" })[0]?.id).toBe("fds");
