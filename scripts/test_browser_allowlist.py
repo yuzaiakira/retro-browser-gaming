@@ -27,7 +27,7 @@ class BrowserAllowlistTests(unittest.TestCase):
             (ROOT / "docs" / "open-source" / "browser-distributable-allowlist.json").read_text()
         )
         files = data["files"]
-        self.assertEqual(len(files), 62)  # +3 gearcoleco (wasm/legacy/report)
+        self.assertEqual(len(files), 64)  # +2 hatari (wasm/data)
         blocked = [
             f
             for f in files
@@ -45,11 +45,12 @@ class BrowserAllowlistTests(unittest.TestCase):
         self.assertIn("ejs-4.2.3/cores/genesis_plus_gx-wasm.data", selected)
         self.assertIn("ejs-4.2.3/cores/bluemsx-wasm.data", selected)
         self.assertIn("ejs-4.2.3/cores/gearcoleco-wasm.data", selected)
-        self.assertEqual(len(selected), 58)
+        self.assertIn("hatari-2.6.1/hatari.wasm", selected)
+        self.assertEqual(len(selected), 60)
 
     def test_local_full_includes_blocked(self) -> None:
         selected = {e["path"] for e in prov.selected_entries("LOCAL_FULL")}
-        self.assertEqual(len(selected), 62)
+        self.assertEqual(len(selected), 64)
         self.assertIn("ejs-4.2.3/cores/81_eo-wasm.data", selected)
         self.assertIn("ejs-4.2.3/cores/gearcoleco-wasm.data", selected)
 

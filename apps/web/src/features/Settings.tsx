@@ -166,6 +166,7 @@ export default function Settings({
             <ul>
               <li>EmulatorJS loaders — GPL-3.0</li>
               <li>jsdos / emulators — GPL-2.0</li>
+              <li>Hatari + EmuTOS — GPL-2.0</li>
               <li>js2me — MIT</li>
               <li>Homebrew fixtures — MIT / GPL / CC0 as labeled in the repo</li>
             </ul>

@@ -148,6 +148,9 @@ export class FrameAdapter implements EmulatorAdapter {
       if (options.core === 'jsdos') {
         this.frame.src = '/runtime/dos-frame.html';
         this.targetOrigin = location.origin;
+      } else if (options.core === 'hatari') {
+        this.frame.src = '/runtime/hatari-frame.html';
+        this.targetOrigin = location.origin;
       } else if (options.core === 'js2me' && j2meOrigin) {
         this.frame.src = `${j2meOrigin}${J2ME_FRAME_PATH}`;
         this.targetOrigin = j2meOrigin;

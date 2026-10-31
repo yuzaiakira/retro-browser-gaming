@@ -744,6 +744,30 @@
       "public_git": false,
       "original_path": "apps/web/public/cores/jsdos-8.3.8/wlibzip.wasm",
       "private_path": ".private-runtime/cores/jsdos-8.3.8/wlibzip.wasm"
+    },
+    {
+      "path": "hatari-2.6.1/hatari.wasm",
+      "sha256": "7c0281ee11c0cff72185a126def19a8f201bba9c0c15c8e91a2ce54969323a8b",
+      "byteSize": 23980833,
+      "license": "GPL-2.0 Hatari + GPL-2.0 EmuTOS (etos256us embedded in hatari.data); LICENSES/hatari-GPL-2.0.txt; LICENSES/emutos-GPL-2.0.txt",
+      "source": "https://github.com/hatari/hatari @ 6a8e26d69fb32d61efd398dc1ad9a77122400034 (v2.6.1); EmuTOS https://github.com/emutos/emutos @ 02c2db75fc875265c1449efea014450466cf20b7; emsdk 4.0.4",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "public_git": false,
+      "original_path": "apps/web/public/cores/hatari-2.6.1/hatari.wasm",
+      "private_path": ".private-runtime/cores/hatari-2.6.1/hatari.wasm"
+    },
+    {
+      "path": "hatari-2.6.1/hatari.data",
+      "sha256": "2d6f3f94c212d1d9eb5b9ad913400d934a0fdf56924a7e2c51ff70e27b561b55",
+      "byteSize": 262144,
+      "license": "GPL-2.0 Hatari + GPL-2.0 EmuTOS (etos256us embedded in hatari.data); LICENSES/hatari-GPL-2.0.txt; LICENSES/emutos-GPL-2.0.txt",
+      "source": "https://github.com/hatari/hatari @ 6a8e26d69fb32d61efd398dc1ad9a77122400034 (v2.6.1); EmuTOS https://github.com/emutos/emutos @ 02c2db75fc875265c1449efea014450466cf20b7; emsdk 4.0.4",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "public_git": false,
+      "original_path": "apps/web/public/cores/hatari-2.6.1/hatari.data",
+      "private_path": ".private-runtime/cores/hatari-2.6.1/hatari.data"
     }
   ]
 }

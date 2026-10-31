@@ -504,6 +504,22 @@
       "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
       "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
       "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "hatari-2.6.1/hatari.wasm",
+      "sha256": "7c0281ee11c0cff72185a126def19a8f201bba9c0c15c8e91a2ce54969323a8b",
+      "byteSize": 23980833,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Self-hosted Hatari 2.6.1 WASM + EmuTOS (GPL-2.0); no proprietary Atari TOS; corresponding source pins + LICENSES",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "hatari-2.6.1/hatari.data",
+      "sha256": "2d6f3f94c212d1d9eb5b9ad913400d934a0fdf56924a7e2c51ff70e27b561b55",
+      "byteSize": 262144,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Self-hosted Hatari 2.6.1 WASM + EmuTOS (GPL-2.0); no proprietary Atari TOS; corresponding source pins + LICENSES",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
     }
   ]
 }

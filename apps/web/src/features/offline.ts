@@ -22,6 +22,8 @@ const SHELL_PATHS = [
   '/runtime/frame.css',
   '/runtime/dos-frame.html',
   '/runtime/dos-frame.js',
+  '/runtime/hatari-frame.html',
+  '/runtime/hatari-frame.js',
   '/runtime/j2me-frame.html',
   '/runtime/j2me-boot.js',
   '/runtime/j2me-frame.js',
@@ -154,9 +156,11 @@ export async function auditInstallation(installation: Installation) {
   const framePath =
     core.code === 'jsdos'
       ? '/runtime/dos-frame.html'
-      : core.code === 'js2me'
-        ? '/runtime/j2me-frame.html'
-        : '/runtime/frame.html';
+      : core.code === 'hatari'
+        ? '/runtime/hatari-frame.html'
+        : core.code === 'js2me'
+          ? '/runtime/j2me-frame.html'
+          : '/runtime/frame.html';
   const runtimePaths =
     core.code === 'js2me'
       ? [
@@ -169,7 +173,9 @@ export async function auditInstallation(installation: Installation) {
         ]
       : core.code === 'jsdos'
         ? [framePath, '/runtime/dos-frame.js']
-        : ['/runtime/seekable-fs.js', '/runtime/blob-reader.worker.js', framePath];
+        : core.code === 'hatari'
+          ? [framePath, '/runtime/hatari-frame.js']
+          : ['/runtime/seekable-fs.js', '/runtime/blob-reader.worker.js', framePath];
   if (core.runtime_type === 'wasm' || core.runtime_type === 'js' || core.code === 'js2me') {
     for (const path of runtimePaths) {
       if (!(await cache.match(path))) return false;

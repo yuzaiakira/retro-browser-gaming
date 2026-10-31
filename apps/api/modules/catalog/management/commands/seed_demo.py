@@ -34,6 +34,7 @@ SYSTEMS = [
     ("c64", "Commodore 64", "computer"),
     ("zx-spectrum", "ZX Spectrum", "computer"),
     ("amiga", "Commodore Amiga", "computer"),
+    ("atari-st", "Atari ST", "computer"),
     ("zx81", "Sinclair ZX81", "computer"),
     ("amstrad-cpc", "Amstrad CPC", "computer"),
     ("msx", "MSX", "computer"),
@@ -75,6 +76,7 @@ WASM_CORES = [
     ("pcsx_rearmed", ["cue", "chd", "bin"], ["wasm", "secureContext"]),
     ("ppsspp", ["iso", "cso", "pbp"], ["wasm", "threads", "webgl2", "secureContext"]),
     ("jsdos", ["zip"], ["wasm", "secureContext"]),
+    ("hatari", ["st", "msa", "dim", "stx"], ["wasm", "secureContext"]),
     ("js2me", ["jar"], ["secureContext"]),
 ]
 
@@ -101,6 +103,7 @@ CONSOLE_FIXTURE_SLUGS = {
     "c64",
     "zx-spectrum",
     "amiga",
+    "atari-st",
     "zx81",
     "amstrad-cpc",
     "msx",
@@ -161,6 +164,8 @@ class Command(BaseCommand):
         for code, ext, cap in WASM_CORES:
             if code == "jsdos":
                 core_version = "jsdos-8.3.8"
+            elif code == "hatari":
+                core_version = "hatari-2.6.1"
             elif code == "js2me":
                 core_version = "js2me-szymor"
             else:
@@ -779,6 +784,26 @@ class Command(BaseCommand):
                 "Verified Chromium gameplay with fuse (explicit core mapping); "
                 "QAOP/6789 keyboard; save states supported. Touch users need "
                 "physical/virtual keyboard for adventure input."
+            ),
+        )
+        results["atari-st"] = self._import_files(
+            fixtures,
+            slug="gpl-atari-st-pongwars",
+            title="GPL Atari ST Pong Wars",
+            description=(
+                "GPL-3.0 Pong Wars (Neil Rackett) bootable .ST disk for Hatari + EmuTOS. "
+                "Self-playing demo; no proprietary Atari TOS redistributed."
+            ),
+            console="atari-st",
+            core={"code": "hatari", "version": "hatari-2.6.1"},
+            revision="fixture-1",
+            entry="gpl-atari-st-pongwars.st",
+            files=[("gpl-atari-st-pongwars.st", "rom", "application/octet-stream")],
+            license_ref="GPL-3.0; LICENSES/atari-st-pongwars-GPL-3.0.txt",
+            provenance="https://github.com/neilrackett/atarist-pongwars/releases/tag/v2.0.0",
+            evidence=(
+                "PONGWARS.ST v2.0.0 sha256 2c5ca8e1…; Hatari 2.6.1 + EmuTOS etos256us "
+                "(docs/emulator-builds/hatari-emutos-atari-st.md)"
             ),
         )
         results["amiga"] = self._import_files(
