@@ -9,9 +9,9 @@
 
 **PH-12.2 ColecoVision (2026-10-29):** **BLOCKED_EXTERNAL** — reusable user-BIOS architecture (`user-bios.ts`, Settings importer, `install-private-bios.py`); pinned `gearcoleco` 4.2.3; MIT RetroPIPE fixture. Lawful `colecovision.rom` **not** available in this environment → no interactive gameplay claim. FDS/Sega CD slots reserved (disabled). See `docs/emulator-builds/coleco-gearcoleco-user-bios.md`.
 
-**PH-12.3 Atari ST (2026-10-31):** Hatari **v2.6.1** (`6a8e26d…`) Emscripten + EmuTOS `etos256us` (`02c2db7…`) — dedicated `hatari-frame`; GPL-3.0 Pong Wars; Chromium `ATARI_ST_GAMEPLAY_PASS` (animated framebuffer). Status **EXPERIMENTAL** — **save/load BLOCKED** (MemorySnapShot not in Emscripten exports). Report `docs/emulator-builds/hatari-emutos-atari-st.md`.
+**PH-12.3 Atari ST (2026-10-31):** Hatari **v2.6.1** (`6a8e26d…`) + EmuTOS `etos256us` (`02c2db7…`) + emsdk **4.0.4**; deferred UAE snapshot bridge (`rbg_hatari_snapshot_{save,restore,poll}`); RBGH v1 envelope; Chromium `ATARI_ST_GAMEPLAY_PASS` with **save/load** (`deltaRA=0`, cold restore, corrupt reject). wasm sha256 `cd5cec91…`. Status **EXPERIMENTAL** (full PWA offline-install journey not claimed). Report `docs/emulator-builds/hatari-emutos-atari-st.md`.
 
-**PH-12.2 FDS open BIOS (2026-10-31):** Feasibility only — OpenDiskSysROM LGPL-3.0 build sha256 `6ce74ea4…` (asm6f `fd03633…`); FreeDiskSysROM incomplete. Catalog FDS remains disabled. `docs/emulator-builds/fds-open-bios-feasibility.md`.
+**PH-12.2 FDS open BIOS (2026-10-31):** OpenDiskSysROM LGPL-3.0 (`6ce74ea4…`) mounts under FCEUmm as `/disksys.rom` (size-only check; Nintendo hash not required). Dreamful `.fds` loads past BIOS; input delta + ~112 KiB save evidenced; magazine UI not unambiguous. Catalog FDS **disabled**. `docs/emulator-builds/fds-open-bios-feasibility.md`.
 
 **Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability — verified 2026-10-26.  
 **Hub UX (PH-UX-HUB):** Premium Gaming Hub — verified 2026-10-26.  
@@ -35,8 +35,8 @@
 | VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX + **N64** + **ZX81** |
 | EXPERIMENTAL | Jaguar |
 | FBNeo | BLOCKED_FIXTURE |
-| Atari ST | EXPERIMENTAL — gameplay PASS; save/load BLOCKED |
-| FDS | DISABLED catalog; OpenDiskSysROM feasibility PROMISING |
+| Atari ST | EXPERIMENTAL — gameplay+save/load PASS; offline-install journey open |
+| FDS | DISABLED catalog; OpenDiskSysROM mount + partial Dreamful evidence |
 | Core lock | **379 files** |
 
 ## Player UX pass (2026-10-26)

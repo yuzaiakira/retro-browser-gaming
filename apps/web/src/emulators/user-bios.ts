@@ -52,10 +52,14 @@ export const USER_BIOS_SLOTS: UserBiosSlot[] = [
     acceptedFilenames: ["disksys.rom", "DISKSYS.ROM"],
     minBytes: 8192,
     maxBytes: 8192,
-    acceptedSha256: [],
+    // OpenDiskSysROM LGPL-3.0 (b3cbc00d… / asm6f fd03633…) is a lawful
+    // size-compatible candidate. Do not require Nintendo BIOS hashes.
+    acceptedSha256: [
+      "6ce74ea4e9407c8d1175a58b7af08f073fa6b9f9b54e4f4954828ae1b6872ba6",
+    ],
     enabled: false,
     notes:
-      "Famicom Disk System BIOS (proprietary). Slot reserved for PH-12.2; not playable until verified with a lawful import.",
+      "Famicom Disk System BIOS slot. Catalog remains disabled. OpenDiskSysROM (LGPL-3.0) verified mountable under FCEUmm; Nintendo disksys.rom must never be redistributed.",
   },
   {
     id: "sega-cd",
