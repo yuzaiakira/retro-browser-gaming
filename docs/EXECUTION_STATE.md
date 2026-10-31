@@ -9,9 +9,9 @@
 
 **PH-12.2 ColecoVision (2026-10-29):** **BLOCKED_EXTERNAL** — reusable user-BIOS architecture (`user-bios.ts`, Settings importer, `install-private-bios.py`); pinned `gearcoleco` 4.2.3; MIT RetroPIPE fixture. Lawful `colecovision.rom` **not** available in this environment → no interactive gameplay claim. FDS/Sega CD slots reserved (disabled). See `docs/emulator-builds/coleco-gearcoleco-user-bios.md`.
 
-**PH-12.3 Atari ST (2026-10-31):** Hatari **v2.6.1** (`6a8e26d…`) + EmuTOS `etos256us` (`02c2db7…`) + emsdk **4.0.4**; deferred UAE snapshot bridge (`rbg_hatari_snapshot_{save,restore,poll}`); RBGH v1 envelope; Chromium `ATARI_ST_GAMEPLAY_PASS` with **save/load** (`deltaRA=0`, cold restore, corrupt reject). wasm sha256 `cd5cec91…`. Status **EXPERIMENTAL** (full PWA offline-install journey not claimed). Report `docs/emulator-builds/hatari-emutos-atari-st.md`.
+**PH-12.3 Atari ST (2026-10-31 evening):** Hatari **v2.6.1** + EmuTOS; RBGH deferred snapshots; Compose `ATARI_ST_OFFLINE_PWA_PASS` (persistent Chromium profile, SW offline cold-start, `deltaRA=0`, partial-cache repair). **VERIFIED_PLAYABLE** (engineering). OS-level PWA install + physical Android/iOS **NOT_VERIFIED**. Product approval **pending**. Report `docs/emulator-builds/hatari-emutos-atari-st.md`; evidence `.runtime/test-evidence/PH-12/atari-st/`.
 
-**PH-12.2 FDS open BIOS (2026-10-31):** OpenDiskSysROM LGPL-3.0 (`6ce74ea4…`) mounts under FCEUmm as `/disksys.rom` (size-only check; Nintendo hash not required). Dreamful `.fds` loads past BIOS; input delta + ~112 KiB save evidenced; magazine UI not unambiguous. Catalog FDS **disabled**. `docs/emulator-builds/fds-open-bios-feasibility.md`.
+**PH-12.2 FDS open BIOS (2026-10-31 evening):** OpenDiskSysROM mount OK. Dreamful A/B/A **rejects** fixture (`inputExceedsIdle=false`). MIT `fds-rbg-move-demo` `FDS_MOVE_DEMO_INTERACTIVE_PASS`. Catalog FDS **disabled**; not VERIFIED_PLAYABLE. `docs/emulator-builds/fds-open-bios-feasibility.md`.
 
 **Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability — verified 2026-10-26.  
 **Hub UX (PH-UX-HUB):** Premium Gaming Hub — verified 2026-10-26.  
@@ -32,12 +32,12 @@
 
 | Item | Status |
 |---|---|
-| VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX + **N64** + **ZX81** |
-| EXPERIMENTAL | Jaguar |
+| VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX + **N64** + **ZX81** + **Atari ST** |
+| EXPERIMENTAL | Jaguar; FDS (move-demo interactive, catalog off) |
 | FBNeo | BLOCKED_FIXTURE |
-| Atari ST | EXPERIMENTAL — gameplay+save/load PASS; offline-install journey open |
-| FDS | DISABLED catalog; OpenDiskSysROM mount + partial Dreamful evidence |
-| Core lock | **379 files** |
+| Atari ST | VERIFIED_PLAYABLE — offline PWA SW journey PASS; OS PWA/physical NOT_VERIFIED |
+| FDS | DISABLED catalog; Dreamful rejected; MIT move-demo A/B/A PASS |
+| Core lock | **379+ files** (Hatari HTTPS provenance; GameManager FDS mount patch) |
 
 ## Player UX pass (2026-10-26)
 
@@ -239,9 +239,9 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 
 ### Next concrete task
 
-1. Atari ST: export `MemorySnapShot_Capture`/`Restore` (or equivalent) from Hatari Emscripten build; prove save/load; then re-evaluate VERIFIED_PLAYABLE
-2. FDS: wire OpenDiskSysROM via user-BIOS/LGPL provision + Dreamful (or approved homebrew) FCEUmm Chromium gameplay
-3. PH-12.1: Jaguar — only with a rights-clear Alpine/`.j64` path or honest EXPERIMENTAL closeout
+1. FDS: Compose offline cold-start for MIT move-demo + NES/FCEUmm regression; then reconsider catalog
+2. PH-12.1: Jaguar — only with a rights-clear Alpine/`.j64` path or honest EXPERIMENTAL closeout
+3. Atari ST: optional OS-level PWA install + physical-device gates (explicitly NOT_VERIFIED)
 4. Owner gates unchanged (publication STOP)
 
 ## Remaining blockers / next
@@ -249,9 +249,9 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 1. Owner: authorize Option B public repo push of sanitized candidate (LICENSE enacted)
 2. Counsel: legal-review package; `NEEDS_LEGAL_REVIEW` ≠ approval
 3. Owner: publish corresponding-source offer on HTTPS; gate must fetch PASS before `OFFER_DELIVERY_VERIFIED`
-4. Product: Alpha game set approvals (incl. N64/ZX81 fixtures if desired)
+4. Product: Alpha game set approvals (incl. Atari ST / N64/ZX81 fixtures if desired)
 5. Resolve CS for `virtualjaguar_js` (`81_eo` patch + rebuild notes now packaged); Hatari/EmuTOS CS pins recorded
 6. QA: physical gamepad + iOS; Ops: staging HTTPS
 7. Playwright offline ≠ physical-device offline certification (document only)
 8. Continue PH-12.1 Jaguar (only remaining 12.1 EXPERIMENTAL)
-9. Atari ST save/load export blocker; FDS catalog still disabled pending OpenDiskSysROM integration evidence
+9. FDS catalog still disabled pending offline cold-start + NES regression after move-demo A/B/A

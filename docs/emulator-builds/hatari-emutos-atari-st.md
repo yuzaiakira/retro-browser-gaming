@@ -71,7 +71,8 @@ Runtime packaging: `apps/web/public/cores/hatari-2.6.1/` + isolated `/runtime/ha
 | Keyboard / pointer / RetroPad bridge | Implemented; RetroPad→keys exercised in smoke |
 | Save/load A→B→restore | **PASS** — `deltaRA=0`, corrupt rejected, cold reload restore lit; raw re-save SHA soft-mismatch (cycles/audio) |
 | Offline after boot | Smoke sets offline and re-checks framebuffer |
-| Full PWA offline cold-start install journey | **Not** claimed in this Hatari smoke (separate Compose gate) |
-| Matrix checkbox VERIFIED_PLAYABLE | **No** — retain **EXPERIMENTAL** until full offline-install journey + mid-playfield control gates are separately evidenced |
+| Full PWA offline cold-start install journey | **PASS** — `apps/web/tests/atari-st-offline-pwa.cjs` against Compose (`ATARI_ST_OFFLINE_PWA_PASS`); caches hatari.js/wasm/data + frames; OPFS game; offline restore/new-save/reload/cycles; partial wasm repair |
+| OS-level PWA install / physical devices | **NOT_VERIFIED** (Playwright SW offline ≠ homescreen install ≠ Android/iOS) |
+| Matrix checkbox VERIFIED_PLAYABLE | **Yes** (engineering) — product catalog approval remains **pending** |
 
 Evidence: `.runtime/test-evidence/PH-12/atari-st/` + this document.

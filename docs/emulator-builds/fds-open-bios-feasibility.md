@@ -48,29 +48,30 @@ For `fceumm` + `.fds`, mount OpenDiskSysROM bytes as:
 
 Pass **Uint8Array** (not `blob:` URL) through `EJS_externalFiles`. EmulatorJS `downloadFile` revokes blob URLs after first fetch; seekable VFS previously skipped mounts when `constructor.name !== "Object"` — GameManager now accepts plain objects and in-memory byte arrays.
 
-## Licensed fixture
+## Licensed fixtures
 
 | Asset | License | SHA-256 |
 |-------|---------|---------|
 | Dreamful / FDS-Diskmag `diskmag.fds` v1.0 | Noncommercial shareware (README terms) | `289e9e1eb5a8ad38284d66bf6429e930d3c2cab8e36513cb9fc0943b27dbb8b4` |
+| RBG FDS Move Demo `fds-rbg-move-demo.fds` | MIT (first-party) | `c8b5b2b3f0f8f75112b1fc78269fc991952c0165bf72f6a1514e8562583541a5` |
 
-Stored as `.fixtures/fds-dreamful-diskmag.fds` (+ paired README). **Not** added to the public catalog.
+Dreamful: `.fixtures/fds-dreamful-diskmag.fds` (+ README). **Unsuitable** for interactive gameplay proof — A/B/A shows `leftVsIdle=0` (idle animation dominates).
+
+Move demo: built by `scripts/build-fds-rbg-move-demo.py` (6502 machine code + FDS packer; VECTORS@$DFF6 + BYPASS stub). Left/Right move sprite X; A toggles Y. **Not** catalogued.
 
 ## Browser evidence (2026-10-31)
 
-Smoke: `apps/web/tests/fds-opendisksys-smoke.cjs` → `.runtime/test-evidence/PH-12/fds/`.
+Smoke: `apps/web/tests/fds-opendisksys-smoke.cjs` → `.runtime/test-evidence/PH-12/fds/` (`aba-metrics.json`).
 
 | Gate | Result |
 |------|--------|
 | OpenDiskSysROM 8192 B reproducible | PASS (`6ce74ea4…`) |
 | BIOS mounted before content load | PASS (`/disksys.rom`) |
-| Content load (no “BIOS missing”) | PASS |
-| Non-black / non-Ozone framebuffer | PASS (solid magenta playfield after load; Ozone menu rejected by heuristic) |
-| Input-driven frame change | PASS (`inputDelta≈133k`) |
-| Save/load bytes | PASS (`saveBytes≈112 KiB`) |
-| Offline-after-boot | PASS (smoke) |
-| Clear diskmag UI / D-pad magazine navigation | **NOT claimed** — frames are flat color, not proven article UI |
+| Dreamful A/B/A idle vs hold Left/Right | **FAIL** (`inputExceedsIdle=false`) — fixture rejected for gameplay |
+| Move-demo A/B/A | **PASS** (`FDS_MOVE_DEMO_INTERACTIVE_PASS`; leftVsIdle/rightVsLeft ≈312) |
+| Save/load after input | PASS on move-demo path |
 | Catalog FDS | **Remain DISABLED** |
+| Full offline cold-start / NES regression | **Open** |
 | VERIFIED_PLAYABLE | **No** |
 
 ## Decision
@@ -79,8 +80,9 @@ Smoke: `apps/web/tests/fds-opendisksys-smoke.cjs` → `.runtime/test-evidence/PH
 |------|--------|
 | FreeDiskSysROM for real loads | **BLOCKED** |
 | OpenDiskSysROM + FCEUmm mount | **Works** (size-only BIOS check) |
-| Interactive Dreamful magazine UX | **Incomplete evidence** — keep EXPERIMENTAL / research |
+| Dreamful as gameplay fixture | **Rejected** (A/B/A) |
+| MIT move-demo interactive proof | **PASS** — keep EXPERIMENTAL until offline cold-start + NES smoke regression |
 | Catalog FDS | **Disabled** |
 | Proprietary Nintendo BIOS | **Never** substitute / redistribute |
 
-Next: obtain a minimal first-party/.MIT FDS homebrew with a moving sprite + D-pad proof, or extend Dreamful smoke until magazine screens are visually unambiguous; then reconsider catalog enablement.
+Next: offline cold-start for move-demo under Compose; NES/FCEUmm regression; then reconsider catalog enablement.
