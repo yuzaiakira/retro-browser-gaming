@@ -13,6 +13,8 @@
 
 **PH-12.2 FDS (2026-10-31 night):** OpenDiskSysROM LGPL mount + fail-closed BIOS gating (`entryExtensions: ["fds"]` so NES never requires disksys). MIT move-demo A/B/A `FDS_MOVE_DEMO_INTERACTIVE_PASS`; Compose `FDS_OFFLINE_PWA_PASS`; `NES_FCEUMM_REGRESSION_PASS`. Engineering catalog `mit-fds-move-demo` (product approval **pending**). **VERIFIED_PLAYABLE** (engineering). OS PWA/physical **NOT_VERIFIED**. `docs/emulator-builds/fds-open-bios-feasibility.md`; evidence `.runtime/test-evidence/PH-12/fds/`.
 
+**PH-12.3 Vectrex (2026-10-31 night):** Firmware audit **NO-GO** for embedding GCE/MB `system.img` (`320ccdcc…`, contains Mine Storm). Patched `libretro-vecx` `dccff540…` loads user BIOS only; MIT Dot fixture; registry + user-BIOS slot. **BLOCKED_EXTERNAL** — no authorized BIOS in environment → no `VECTREX_GAMEPLAY_PASS` / offline PWA. Docs: `vecx-firmware-audit.md`, `vecx-vectrex-build.md`; evidence `.runtime/test-evidence/PH-12/vectrex/`.
+
 **Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability — verified 2026-10-26.  
 **Hub UX (PH-UX-HUB):** Premium Gaming Hub — verified 2026-10-26.  
 **Hub UX Acceptance (Sprint 3.1):** offline persistent-profile journey, catalog Back/Forward history, Continue Playing accuracy, stable hub shots — verified 2026-10-26.  
@@ -34,9 +36,11 @@
 |---|---|
 | VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX + **N64** + **ZX81** + **Atari ST** + **FDS** |
 | EXPERIMENTAL | Jaguar |
+| BLOCKED_EXTERNAL | ColecoVision; **Vectrex** (awaiting authorized `system.img`) |
 | FBNeo | BLOCKED_FIXTURE |
 | Atari ST | VERIFIED_PLAYABLE — offline PWA SW journey PASS; OS PWA/physical NOT_VERIFIED |
 | FDS | VERIFIED_PLAYABLE (engineering) — `FDS_OFFLINE_PWA_PASS` + `NES_FCEUMM_REGRESSION_PASS`; product approval pending |
+| Vectrex | BLOCKED_EXTERNAL — external-BIOS vecx path + MIT Dot; no lawful BIOS → no gameplay claim |
 | Core lock | **379 files** LOCAL_FULL / 316 SOURCE_ONLY (Hatari HTTPS provenance; GameManager FDS mount patch) |
 
 ## Player UX pass (2026-10-26)
@@ -239,10 +243,11 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 
 ### Next concrete task
 
-1. PH-12.1: Jaguar — only with a rights-clear Alpine/`.j64` path or honest EXPERIMENTAL closeout
-2. Atari ST / FDS: optional OS-level PWA install + physical-device gates (explicitly NOT_VERIFIED)
-3. Product: human product-approval for engineering fixtures (Atari ST, FDS, N64, ZX81, …) — never auto-approve
-4. Owner gates unchanged (publication STOP)
+1. Vectrex: operator imports authorized `system.img` → gameplay A/B/A + Compose offline → reconsider VERIFIED_PLAYABLE
+2. PH-12.1: Jaguar — only with a rights-clear Alpine/`.j64` path or honest EXPERIMENTAL closeout
+3. Atari ST / FDS: optional OS-level PWA install + physical-device gates (explicitly NOT_VERIFIED)
+4. Product: human product-approval for engineering fixtures — never auto-approve
+5. Owner gates unchanged (publication STOP)
 
 ## PH-12.2 FDS pass (2026-10-31 night)
 
@@ -267,3 +272,4 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 6. QA: physical gamepad + iOS; Ops: staging HTTPS
 7. Playwright offline ≠ physical-device offline certification (document only)
 8. Continue PH-12.1 Jaguar (only remaining 12.1 EXPERIMENTAL)
+9. Vectrex: BLOCKED_EXTERNAL until authorized `system.img` + gameplay/offline gates
