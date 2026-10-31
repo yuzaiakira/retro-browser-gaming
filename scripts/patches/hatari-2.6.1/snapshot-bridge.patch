@@ -1,0 +1,63 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 540c97e..c98ebb5 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -12,7 +12,7 @@ set(SOURCES
+ 	vdi.c inffile.c video.c wavFormat.c xbios.c ymFormat.c lilo.c)
+ 
+ if(EMSCRIPTEN)
+-	set(SOURCES ${SOURCES} emscripten.js emscripten_shell.html)
++	set(SOURCES ${SOURCES} emscripten.js emscripten_shell.html emscripten_rbg_snapshot.c)
+ endif()
+ 
+ # Disk image code is shared with the hmsa tool, so we put it into a library:
+@@ -205,8 +205,8 @@ elseif(EMSCRIPTEN)
+ 		"-O3 \
+ -fno-exceptions \
+ -s USE_SDL=2 -s USE_ZLIB=1 -s INITIAL_MEMORY=262144000 -s ASYNCIFY -s -s ASSERTIONS=0 \
+--s EXPORTED_RUNTIME_METHODS='[\"ccall\",\"cwrap\"]' \
+--s EXPORTED_FUNCTIONS=\"['_main','_Reset_Warm','_Reset_Cold','_Statusbar_UpdateInfo','_Main_UnPauseEmulation','_Floppy_InsertDiskIntoDrive','_Floppy_SetDiskFileName','_Floppy_EjectDiskFromDrive','_Configuration_ChangeMemory','_Configuration_ChangeSystem','_Configuration_ChangeTos','_Configuration_ChangeUseHardDiskDirectories','_Configuration_ChangeFastForward','_Configuration_Apply','_IoMem_UnInit','_IoMem_Init']\" \
++-s EXPORTED_RUNTIME_METHODS='[\"ccall\",\"cwrap\",\"FS\",\"UTF8ToString\"]' \
++-s EXPORTED_FUNCTIONS=\"['_main','_Reset_Warm','_Reset_Cold','_Statusbar_UpdateInfo','_Main_UnPauseEmulation','_Floppy_InsertDiskIntoDrive','_Floppy_SetDiskFileName','_Floppy_EjectDiskFromDrive','_Configuration_ChangeMemory','_Configuration_ChangeSystem','_Configuration_ChangeTos','_Configuration_ChangeUseHardDiskDirectories','_Configuration_ChangeFastForward','_Configuration_Apply','_IoMem_UnInit','_IoMem_Init','_rbg_hatari_snapshot_save','_rbg_hatari_snapshot_restore','_rbg_hatari_snapshot_poll','_rbg_hatari_snapshot_cleanup','_rbg_hatari_snapshot_path','_rbg_hatari_snapshot_busy']\" \
+ --preload-file ${CMAKE_BINARY_DIR}/files/@/share/hatari/ \
+ --pre-js ${CMAKE_SOURCE_DIR}/src/emscripten.js \
+ --shell-file ${CMAKE_SOURCE_DIR}/src/emscripten_shell.html"
+diff --git a/src/emscripten.js b/src/emscripten.js
+index 57a5860..5cb5793 100644
+--- a/src/emscripten.js
++++ b/src/emscripten.js
+@@ -1,4 +1,4 @@
+-Module['arguments']=[
++Module['arguments']=(typeof globalThis!=='undefined'&&globalThis.HATARI_ARGV)||[
+   '--desktop','false',
+-  '-d','/share/hatari/fs/',
+-  '--machine','ste'];
++  '--machine','st',
++  '--disk-a','/tmp/game.st'];
+diff --git a/src/includes/memorySnapShot.h b/src/includes/memorySnapShot.h
+index 587a008..141bd7f 100644
+--- a/src/includes/memorySnapShot.h
++++ b/src/includes/memorySnapShot.h
+@@ -13,3 +13,4 @@ extern void MemorySnapShot_Capture_Immediate(const char *pszFileName, bool bConf
+ extern void MemorySnapShot_Capture_Do(void);
+ extern void MemorySnapShot_Restore(const char *pszFileName, bool bConfirm);
+ extern void MemorySnapShot_Restore_Do(void);
++extern bool MemorySnapShot_LastError(void);
+diff --git a/src/memorySnapShot.c b/src/memorySnapShot.c
+index 5ac4641..dcf1324 100644
+--- a/src/memorySnapShot.c
++++ b/src/memorySnapShot.c
+@@ -327,6 +327,13 @@ void MemorySnapShot_Capture_Immediate(const char *pszFileName, bool bConfirm)
+ }
+ 
+ 
++bool MemorySnapShot_LastError(void)
++{
++	return bCaptureError;
++}
++
++
++
+ 
+ /*
+  * Do the real saving (called from newcpu.c / m68k_go()

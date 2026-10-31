@@ -191,11 +191,14 @@ export class FrameAdapter implements EmulatorAdapter {
 
   private call(method: string, value?: unknown) {
     const id = ++this.count;
+    // Hatari / large WASM snapshots need headroom beyond the default 10s RPC budget.
+    const timeoutMs =
+      method === 'save' || method === 'load' ? 60000 : 10000;
     return new Promise<unknown>((resolve, reject) => {
       const timer = setTimeout(() => {
         this.pending.delete(id);
         reject(new Error(`${method} timed out`));
-      }, 10000);
+      }, timeoutMs);
       this.pending.set(id, { resolve, reject, timer });
       this.post({ type: 'command', session: this.session, id, method, value });
     });

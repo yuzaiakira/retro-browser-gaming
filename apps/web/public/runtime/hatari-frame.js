@@ -1,14 +1,30 @@
 // Isolated Hatari (Atari ST) runtime bridge — same postMessage protocol as dos-frame.js.
-// Core: self-hosted hatari-2.6.1 WASM + preloaded EmuTOS (GPL-2.0). No proprietary TOS.
+// Core: self-hosted hatari-2.6.1 WASM + preloaded EmuTOS (GPL-2.0). Snapshot bridge: RBGH v1.
 let session,
   started = false,
-  moduleReady = null;
+  disposed = false,
+  moduleReady = null,
+  snapBusy = false;
 let shellCodes = new Set(['Escape', 'KeyP', 'KeyF', 'F8', 'F9']);
+/** @type {Uint8Array|null} */
+let diskBytes = null;
+let diskName = '';
+let diskSha256 = '';
 
 const CORE_PREFIX = '/cores/hatari-2.6.1/';
 const DISK_PATH = '/tmp/game.st';
+const SNAP_PATH = '/tmp/rbg-hatari.snap';
+const SNAP_MAGIC = [0x52, 0x42, 0x47, 0x48]; // RBGH
+const SNAP_FORMAT = 1;
+const CORE_VERSION = 'hatari-2.6.1';
+const EMUTOS_REV = '02c2db75fc875265c1449efea014450466cf20b7';
+const EMUTOS_SHA256 = '2d6f3f94c212d1d9eb5b9ad913400d934a0fdf56924a7e2c51ff70e27b561b55';
+const MACHINE = 'st';
 
-const reply = (data) => parent.postMessage({ ...data, session }, location.origin);
+const reply = (data) => {
+  if (disposed || !session) return;
+  parent.postMessage({ ...data, session }, location.origin);
+};
 
 function editableTarget(t) {
   if (!t || typeof t.closest !== 'function') return false;
@@ -19,7 +35,7 @@ function editableTarget(t) {
 addEventListener(
   'keydown',
   (e) => {
-    if (!session) return;
+    if (!session || disposed) return;
     if (editableTarget(e.target)) return;
     if (!(shellCodes.has(e.code) || e.key === 'Escape')) return;
     if (e.code === 'F5') return;
@@ -51,6 +67,21 @@ function loadScript(src) {
   });
 }
 
+async function sha256Hex(bytes) {
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+function u32le(n) {
+  const b = new Uint8Array(4);
+  new DataView(b.buffer).setUint32(0, n >>> 0, true);
+  return b;
+}
+
+function readU32le(buf, off) {
+  return new DataView(buf.buffer, buf.byteOffset + off, 4).getUint32(0, true);
+}
+
 function dispatchKey(code, key, down) {
   const canvas = document.getElementById('canvas');
   if (!canvas) return;
@@ -62,7 +93,6 @@ function dispatchKey(code, key, down) {
     bubbles: true,
     cancelable: true,
   };
-  // SDL maps Arrow* / ControlLeft for default ST joystick.
   const keyCodes = {
     ArrowUp: 38,
     ArrowDown: 40,
@@ -77,26 +107,24 @@ function dispatchKey(code, key, down) {
   window.dispatchEvent(new KeyboardEvent(down ? 'keydown' : 'keyup', init));
 }
 
-/** Libretro digital pad → Hatari default keyboard joystick (Joy0). */
 function mapLibretroToKey(command, value) {
   const down = value === 1;
   switch (command) {
-    case 4: // up
+    case 4:
       dispatchKey('ArrowUp', 'ArrowUp', down);
       break;
-    case 5: // down
+    case 5:
       dispatchKey('ArrowDown', 'ArrowDown', down);
       break;
-    case 6: // left
+    case 6:
       dispatchKey('ArrowLeft', 'ArrowLeft', down);
       break;
-    case 7: // right
+    case 7:
       dispatchKey('ArrowRight', 'ArrowRight', down);
       break;
-    case 0: // B / fire
-    case 8: // A
-    case 3: // start
-      // Hatari default fire key is SDLK_RCTRL.
+    case 0:
+    case 8:
+    case 3:
       dispatchKey('ControlRight', 'Control', down);
       break;
     default:
@@ -104,9 +132,156 @@ function mapLibretroToKey(command, value) {
   }
 }
 
+function ensureFs() {
+  const FS = globalThis.FS || globalThis.Module?.FS;
+  if (!FS) throw new Error('FS_MISSING');
+  return FS;
+}
+
+function sleepMs(ms) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+/** Begin deferred UAE snapshot op, then poll while the SDL/ASYNCIFY loop runs. */
+async function awaitSnapshotOp(beginName) {
+  const M = globalThis.Module;
+  const begin = M.ccall(beginName, 'number', [], []);
+  if (begin < 0) throw new Error(`HATARI_SNAPSHOT_BEGIN_FAILED:${beginName}:${begin}`);
+  for (let i = 0; i < 400; i++) {
+    await sleepMs(25);
+    if (disposed) throw new Error('Runtime disposed');
+    const rc = M.ccall('rbg_hatari_snapshot_poll', 'number', [], []);
+    if (rc === 0) continue;
+    if (rc < 0) throw new Error(`HATARI_SNAPSHOT_POLL_FAILED:${rc}`);
+    return rc;
+  }
+  throw new Error('HATARI_SNAPSHOT_TIMEOUT');
+}
+
+async function exportSnapshotEnvelope() {
+  if (snapBusy) throw new Error('HATARI_SNAPSHOT_BUSY');
+  if (disposed) throw new Error('Runtime disposed');
+  snapBusy = true;
+  const M = globalThis.Module;
+  try {
+    const rc = await awaitSnapshotOp('rbg_hatari_snapshot_save');
+    if (rc < 64) throw new Error(`HATARI_SNAPSHOT_SAVE_FAILED:${rc}`);
+    const FS = ensureFs();
+    const raw = FS.readFile(SNAP_PATH);
+    if (!raw || raw.byteLength < 64) throw new Error('HATARI_SNAPSHOT_EMPTY');
+    const rawSha = await sha256Hex(raw);
+    const meta = {
+      format: SNAP_FORMAT,
+      core: 'hatari',
+      coreVersion: CORE_VERSION,
+      machine: MACHINE,
+      emutosRevision: EMUTOS_REV,
+      emutosSha256: EMUTOS_SHA256,
+      diskName,
+      diskSha256,
+      timestamp: new Date().toISOString(),
+      rawSha256: rawSha,
+      rawBytes: raw.byteLength,
+    };
+    const metaBytes = new TextEncoder().encode(JSON.stringify(meta));
+    const out = new Uint8Array(4 + 4 + 4 + metaBytes.length + 4 + raw.byteLength);
+    let o = 0;
+    out.set(SNAP_MAGIC, o);
+    o += 4;
+    out.set(u32le(SNAP_FORMAT), o);
+    o += 4;
+    out.set(u32le(metaBytes.length), o);
+    o += 4;
+    out.set(metaBytes, o);
+    o += metaBytes.length;
+    out.set(u32le(raw.byteLength), o);
+    o += 4;
+    out.set(raw, o);
+    M.ccall('rbg_hatari_snapshot_cleanup', null, [], []);
+    return out;
+  } finally {
+    try {
+      M?.ccall?.('rbg_hatari_snapshot_cleanup', null, [], []);
+    } catch {
+      /* ignore */
+    }
+    snapBusy = false;
+  }
+}
+
+async function importSnapshotEnvelope(value) {
+  if (snapBusy) throw new Error('HATARI_SNAPSHOT_BUSY');
+  if (disposed) throw new Error('Runtime disposed');
+  snapBusy = true;
+  const M = globalThis.Module;
+  try {
+    const bytes =
+      value instanceof Uint8Array
+        ? value
+        : value instanceof ArrayBuffer
+          ? new Uint8Array(value)
+          : new Uint8Array(value || []);
+    if (bytes.byteLength < 16) throw new Error('HATARI_SNAPSHOT_TRUNCATED');
+    for (let i = 0; i < 4; i++) {
+      if (bytes[i] !== SNAP_MAGIC[i]) throw new Error('HATARI_SNAPSHOT_BAD_MAGIC');
+    }
+    const format = readU32le(bytes, 4);
+    if (format !== SNAP_FORMAT) throw new Error(`HATARI_SNAPSHOT_FORMAT_UNSUPPORTED:${format}`);
+    const metaLen = readU32le(bytes, 8);
+    if (metaLen < 2 || 12 + metaLen + 4 > bytes.byteLength) {
+      throw new Error('HATARI_SNAPSHOT_TRUNCATED');
+    }
+    let meta;
+    try {
+      meta = JSON.parse(new TextDecoder().decode(bytes.subarray(12, 12 + metaLen)));
+    } catch {
+      throw new Error('HATARI_SNAPSHOT_BAD_META');
+    }
+    if (meta.core !== 'hatari') throw new Error('HATARI_SNAPSHOT_CORE_MISMATCH');
+    if (meta.coreVersion !== CORE_VERSION) {
+      throw new Error(`HATARI_SNAPSHOT_CORE_VERSION_MISMATCH:${meta.coreVersion}`);
+    }
+    if (meta.machine && meta.machine !== MACHINE) {
+      throw new Error(`HATARI_SNAPSHOT_MACHINE_MISMATCH:${meta.machine}`);
+    }
+    if (meta.emutosSha256 && meta.emutosSha256 !== EMUTOS_SHA256) {
+      throw new Error('HATARI_SNAPSHOT_EMUTOS_MISMATCH');
+    }
+    if (meta.diskSha256 && diskSha256 && meta.diskSha256 !== diskSha256) {
+      throw new Error('HATARI_SNAPSHOT_DISK_MISMATCH');
+    }
+    const rawOff = 12 + metaLen;
+    const rawLen = readU32le(bytes, rawOff);
+    if (rawLen < 64 || rawOff + 4 + rawLen > bytes.byteLength) {
+      throw new Error('HATARI_SNAPSHOT_TRUNCATED');
+    }
+    const raw = bytes.subarray(rawOff + 4, rawOff + 4 + rawLen);
+    const rawSha = await sha256Hex(raw);
+    if (meta.rawSha256 && meta.rawSha256 !== rawSha) {
+      throw new Error('HATARI_SNAPSHOT_INTEGRITY');
+    }
+    const FS = ensureFs();
+    FS.writeFile(SNAP_PATH, raw);
+    const rc = await awaitSnapshotOp('rbg_hatari_snapshot_restore');
+    if (rc < 0) throw new Error(`HATARI_SNAPSHOT_RESTORE_FAILED:${rc}`);
+    M.ccall('rbg_hatari_snapshot_cleanup', null, [], []);
+    return true;
+  } finally {
+    try {
+      M?.ccall?.('rbg_hatari_snapshot_cleanup', null, [], []);
+    } catch {
+      /* ignore */
+    }
+    snapBusy = false;
+  }
+}
+
 async function bootHatari(file) {
   const bytes = new Uint8Array(await file.arrayBuffer());
   if (!bytes.byteLength) throw new Error('EMPTY_DISK_IMAGE');
+  diskBytes = bytes;
+  diskName = String(file.name || 'game.st').slice(0, 120);
+  diskSha256 = await sha256Hex(bytes);
 
   const canvas = document.getElementById('canvas');
   if (!canvas) throw new Error('CANVAS_MISSING');
@@ -121,12 +296,13 @@ async function bootHatari(file) {
     '--desktop',
     'false',
     '--machine',
-    'st',
+    MACHINE,
     '--disk-a',
     DISK_PATH,
     '--fastfdc',
     'true',
-    // Port 1 = ST game port; cursor keys + RCtrl fire (Hatari defaults).
+    '--statusbar',
+    'false',
     '-j',
     '1',
   ];
@@ -156,27 +332,25 @@ async function bootHatari(file) {
   };
 
   await loadScript(CORE_PREFIX + 'hatari.js');
-  // Hatari main may start before onRuntimeInitialized in some builds; wait briefly.
-  await Promise.race([
-    moduleReady,
-    new Promise((r) => setTimeout(r, 8000)),
-  ]);
+  await Promise.race([moduleReady, new Promise((r) => setTimeout(r, 8000))]);
+  // Floppy autoboot settle — Pong Wars title usually appears within a few seconds.
+  await new Promise((r) => setTimeout(r, 5000));
 
-  // Give TOS + auto-boot a moment to paint before declaring ready.
-  await new Promise((r) => setTimeout(r, 2500));
+  if (typeof globalThis.Module?.ccall !== 'function') {
+    throw new Error('HATARI_CCALL_MISSING');
+  }
 
   started = true;
   reply({
     type: 'ready',
     capabilities: {
-      // MemorySnapShot_Capture/Restore are not exported by upstream Emscripten
-      // link flags — save/load remains a documented blocker for this runtime.
-      saveState: false,
+      saveState: true,
       audio: true,
       analog: false,
       seekableMedia: false,
       onDemandMedia: false,
       hatariRuntime: 'hatari-2.6.1+emutos',
+      hatariSnapshotFormat: SNAP_FORMAT,
       pointer: true,
       keyboard: true,
     },
@@ -188,6 +362,7 @@ addEventListener('message', async (event) => {
   const d = event.data;
   if (d.type === 'init' && !session) {
     session = d.session;
+    disposed = false;
     try {
       await bootHatari(d.file);
     } catch (error) {
@@ -223,7 +398,6 @@ addEventListener('message', async (event) => {
         }
         break;
       case 'pause':
-        // No exported pause — leave running (honest).
         break;
       case 'reset':
         try {
@@ -235,9 +409,11 @@ addEventListener('message', async (event) => {
       case 'volume':
         break;
       case 'save':
-        throw new Error('HATARI_SAVESTATE_NOT_EXPORTED');
+        value = await exportSnapshotEnvelope();
+        break;
       case 'load':
-        throw new Error('HATARI_SAVESTATE_NOT_EXPORTED');
+        value = await importSnapshotEnvelope(d.value);
+        break;
       case 'seekableStats':
         value = null;
         break;
@@ -251,5 +427,12 @@ addEventListener('message', async (event) => {
 });
 
 addEventListener('pagehide', () => {
+  disposed = true;
   started = false;
+  snapBusy = false;
+  try {
+    globalThis.Module?.ccall?.('rbg_hatari_snapshot_cleanup', null, [], []);
+  } catch {
+    /* ignore */
+  }
 });
