@@ -7,11 +7,11 @@
 
 **PH-12.1 ZX81 (2026-10-29):** `81_eo` **VERIFIED_PLAYABLE** — CRT autostart + CDFLAG/FRAMES; Chromium `ZX81_GAMEPLAY_PASS` (RetroPad Left/Right via `frame.js`→`.ejs_parent` Digit bridge + keyboard 5/8; save 49 KiB); stock `81` untouched. Physical gamepad **NOT_VERIFIED**. CS: `scripts/patches/81_eo/` + locked SHA `2ddbd03b…` — still NOT_CLEARED pending legal review.
 
-**PH-12.2 ColecoVision (2026-10-29):** **BLOCKED_EXTERNAL** — reusable user-BIOS architecture (`user-bios.ts`, Settings importer, `install-private-bios.py`); pinned `gearcoleco` 4.2.3; MIT RetroPIPE fixture. Lawful `colecovision.rom` **not** available in this environment → no interactive gameplay claim. FDS/Sega CD slots reserved (disabled). See `docs/emulator-builds/coleco-gearcoleco-user-bios.md`.
+**PH-12.2 ColecoVision (2026-10-29):** **BLOCKED_EXTERNAL** — reusable user-BIOS architecture (`user-bios.ts`, Settings importer, `install-private-bios.py`); pinned `gearcoleco` 4.2.3; MIT RetroPIPE fixture. Lawful `colecovision.rom` **not** available in this environment → no interactive gameplay claim. Sega CD slot remains reserved (disabled). See `docs/emulator-builds/coleco-gearcoleco-user-bios.md`.
 
 **PH-12.3 Atari ST (2026-10-31 evening):** Hatari **v2.6.1** + EmuTOS; RBGH deferred snapshots; Compose `ATARI_ST_OFFLINE_PWA_PASS` (persistent Chromium profile, SW offline cold-start, `deltaRA=0`, partial-cache repair). **VERIFIED_PLAYABLE** (engineering). OS-level PWA install + physical Android/iOS **NOT_VERIFIED**. Product approval **pending**. Report `docs/emulator-builds/hatari-emutos-atari-st.md`; evidence `.runtime/test-evidence/PH-12/atari-st/`.
 
-**PH-12.2 FDS open BIOS (2026-10-31 evening):** OpenDiskSysROM mount OK. Dreamful A/B/A **rejects** fixture (`inputExceedsIdle=false`). MIT `fds-rbg-move-demo` `FDS_MOVE_DEMO_INTERACTIVE_PASS`. Catalog FDS **disabled**; not VERIFIED_PLAYABLE. `docs/emulator-builds/fds-open-bios-feasibility.md`.
+**PH-12.2 FDS (2026-10-31 night):** OpenDiskSysROM LGPL mount + fail-closed BIOS gating (`entryExtensions: ["fds"]` so NES never requires disksys). MIT move-demo A/B/A `FDS_MOVE_DEMO_INTERACTIVE_PASS`; Compose `FDS_OFFLINE_PWA_PASS`; `NES_FCEUMM_REGRESSION_PASS`. Engineering catalog `mit-fds-move-demo` (product approval **pending**). **VERIFIED_PLAYABLE** (engineering). OS PWA/physical **NOT_VERIFIED**. `docs/emulator-builds/fds-open-bios-feasibility.md`; evidence `.runtime/test-evidence/PH-12/fds/`.
 
 **Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability — verified 2026-10-26.  
 **Hub UX (PH-UX-HUB):** Premium Gaming Hub — verified 2026-10-26.  
@@ -32,12 +32,12 @@
 
 | Item | Status |
 |---|---|
-| VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX + **N64** + **ZX81** + **Atari ST** |
-| EXPERIMENTAL | Jaguar; FDS (move-demo interactive, catalog off) |
+| VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX + **N64** + **ZX81** + **Atari ST** + **FDS** |
+| EXPERIMENTAL | Jaguar |
 | FBNeo | BLOCKED_FIXTURE |
 | Atari ST | VERIFIED_PLAYABLE — offline PWA SW journey PASS; OS PWA/physical NOT_VERIFIED |
-| FDS | DISABLED catalog; Dreamful rejected; MIT move-demo A/B/A PASS |
-| Core lock | **379+ files** (Hatari HTTPS provenance; GameManager FDS mount patch) |
+| FDS | VERIFIED_PLAYABLE (engineering) — `FDS_OFFLINE_PWA_PASS` + `NES_FCEUMM_REGRESSION_PASS`; product approval pending |
+| Core lock | **379 files** LOCAL_FULL / 316 SOURCE_ONLY (Hatari HTTPS provenance; GameManager FDS mount patch) |
 
 ## Player UX pass (2026-10-26)
 
@@ -239,19 +239,31 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 
 ### Next concrete task
 
-1. FDS: Compose offline cold-start for MIT move-demo + NES/FCEUmm regression; then reconsider catalog
-2. PH-12.1: Jaguar — only with a rights-clear Alpine/`.j64` path or honest EXPERIMENTAL closeout
-3. Atari ST: optional OS-level PWA install + physical-device gates (explicitly NOT_VERIFIED)
+1. PH-12.1: Jaguar — only with a rights-clear Alpine/`.j64` path or honest EXPERIMENTAL closeout
+2. Atari ST / FDS: optional OS-level PWA install + physical-device gates (explicitly NOT_VERIFIED)
+3. Product: human product-approval for engineering fixtures (Atari ST, FDS, N64, ZX81, …) — never auto-approve
 4. Owner gates unchanged (publication STOP)
+
+## PH-12.2 FDS pass (2026-10-31 night)
+
+| Check | Result |
+|---|---|
+| BIOS | OpenDiskSysROM LGPL-3.0 `6ce74ea4…` @ `/disksys.rom` + system path; fail-closed missing/invalid |
+| NES isolation | `entryExtensions: ["fds"]` — NES never requires disksys; `NES_FCEUMM_REGRESSION_PASS` |
+| Interactive A/B/A | `FDS_MOVE_DEMO_INTERACTIVE_PASS` (leftVsIdle/rightVsLeft ≈312) |
+| Compose offline | `FDS_OFFLINE_PWA_PASS` (SW offline; OS PWA/physical NOT_VERIFIED) |
+| Partial-cache repair | PASS; BIOS IDB survived |
+| Engineering catalog | `mit-fds-move-demo` seeded; `product_approval_status=pending` |
+| Quality gates | Vitest 75; tsc OK; Django 43; Atari offline PASS; N64/ZX81/NES smokes PASS; core-lock LOCAL_FULL+SOURCE_ONLY; PUBLIC_SOURCE_SAFETY_PASS |
+| Evidence | `.runtime/test-evidence/PH-12/fds/` |
 
 ## Remaining blockers / next
 
 1. Owner: authorize Option B public repo push of sanitized candidate (LICENSE enacted)
 2. Counsel: legal-review package; `NEEDS_LEGAL_REVIEW` ≠ approval
 3. Owner: publish corresponding-source offer on HTTPS; gate must fetch PASS before `OFFER_DELIVERY_VERIFIED`
-4. Product: Alpha game set approvals (incl. Atari ST / N64/ZX81 fixtures if desired)
+4. Product: Alpha game set approvals (incl. Atari ST / FDS / N64/ZX81 fixtures if desired)
 5. Resolve CS for `virtualjaguar_js` (`81_eo` patch + rebuild notes now packaged); Hatari/EmuTOS CS pins recorded
 6. QA: physical gamepad + iOS; Ops: staging HTTPS
 7. Playwright offline ≠ physical-device offline certification (document only)
 8. Continue PH-12.1 Jaguar (only remaining 12.1 EXPERIMENTAL)
-9. FDS catalog still disabled pending offline cold-start + NES regression after move-demo A/B/A
