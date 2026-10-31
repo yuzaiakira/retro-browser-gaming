@@ -12,6 +12,7 @@ Moving `.data`/`.wasm` payloads out of public Git does **not** remove GPL duties
 | EmulatorJS 4.2.3 launcher / data JS | GPL-3.0 | `apps/web/public/cores/ejs-4.2.3/**/*.js` (+ minify/src where present) | Tracked under `apps/web/public/cores/ejs-4.2.3/`; notice `LICENSES/EmulatorJS-GPL-3.0.txt`; pin `e150dc0491ae747028919fb82d6598954976ede6` |
 | EmulatorJS packaged libretro cores (`.data`) | Core-specific (often GPL-2/3) + EmulatorJS packaging | Private store → `/cores/.../*.data` | Upstream links + hashes in `docs/core-package-lock.json` and `private-core-binaries.manifest.json`; independently rebuilt cores (`81_eo`, `bluemsx`, `virtualjaguar_js`) need build recipes in PH-05 evidence |
 | jsdos / emulators 8.3.8 | GPL-2.0 | `wdosbox.wasm`, `wlibzip.wasm` + JS | JS tracked; notice `LICENSES/emulators-jsdos-GPL-2.0.txt` |
+| Hatari 2.6.1 + EmuTOS | GPL-2.0 | `hatari-2.6.1/hatari.{js,wasm,data}` (EmuTOS in `.data`) | JS tracked; pins + `LICENSES/hatari-GPL-2.0.txt` / `emutos-GPL-2.0.txt`; build notes `docs/emulator-builds/hatari-emutos-atari-st.md` |
 | js2me | MIT | JS under `cores/js2me/` | Fully tracked; `LICENSES/js2me-MIT.txt` |
 | C-BIOS system pack | BSD-style | `system/bluemsx-system.data` (private) | `LICENSES/cbios-0.23.txt` |
 

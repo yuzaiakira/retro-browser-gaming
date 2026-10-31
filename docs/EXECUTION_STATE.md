@@ -9,6 +9,10 @@
 
 **PH-12.2 ColecoVision (2026-10-29):** **BLOCKED_EXTERNAL** — reusable user-BIOS architecture (`user-bios.ts`, Settings importer, `install-private-bios.py`); pinned `gearcoleco` 4.2.3; MIT RetroPIPE fixture. Lawful `colecovision.rom` **not** available in this environment → no interactive gameplay claim. FDS/Sega CD slots reserved (disabled). See `docs/emulator-builds/coleco-gearcoleco-user-bios.md`.
 
+**PH-12.3 Atari ST (2026-10-31):** Hatari **v2.6.1** (`6a8e26d…`) Emscripten + EmuTOS `etos256us` (`02c2db7…`) — dedicated `hatari-frame`; GPL-3.0 Pong Wars; Chromium `ATARI_ST_GAMEPLAY_PASS` (animated framebuffer). Status **EXPERIMENTAL** — **save/load BLOCKED** (MemorySnapShot not in Emscripten exports). Report `docs/emulator-builds/hatari-emutos-atari-st.md`.
+
+**PH-12.2 FDS open BIOS (2026-10-31):** Feasibility only — OpenDiskSysROM LGPL-3.0 build sha256 `6ce74ea4…` (asm6f `fd03633…`); FreeDiskSysROM incomplete. Catalog FDS remains disabled. `docs/emulator-builds/fds-open-bios-feasibility.md`.
+
 **Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability — verified 2026-10-26.  
 **Hub UX (PH-UX-HUB):** Premium Gaming Hub — verified 2026-10-26.  
 **Hub UX Acceptance (Sprint 3.1):** offline persistent-profile journey, catalog Back/Forward history, Continue Playing accuracy, stable hub shots — verified 2026-10-26.  
@@ -31,8 +35,9 @@
 | VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX + **N64** + **ZX81** |
 | EXPERIMENTAL | Jaguar |
 | FBNeo | BLOCKED_FIXTURE |
-| Atari ST | BLOCKED_CORE — hatari absent |
-| Core lock | **373 files** |
+| Atari ST | EXPERIMENTAL — gameplay PASS; save/load BLOCKED |
+| FDS | DISABLED catalog; OpenDiskSysROM feasibility PROMISING |
+| Core lock | **379 files** |
 
 ## Player UX pass (2026-10-26)
 
@@ -234,9 +239,10 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 
 ### Next concrete task
 
-1. PH-12.1: Jaguar — only with a rights-clear Alpine/`.j64` path or honest EXPERIMENTAL closeout
-2. Optional: wire EJS RetroPad→81 keybovl if a frontend input path is found
-3. Owner gates unchanged (publication STOP)
+1. Atari ST: export `MemorySnapShot_Capture`/`Restore` (or equivalent) from Hatari Emscripten build; prove save/load; then re-evaluate VERIFIED_PLAYABLE
+2. FDS: wire OpenDiskSysROM via user-BIOS/LGPL provision + Dreamful (or approved homebrew) FCEUmm Chromium gameplay
+3. PH-12.1: Jaguar — only with a rights-clear Alpine/`.j64` path or honest EXPERIMENTAL closeout
+4. Owner gates unchanged (publication STOP)
 
 ## Remaining blockers / next
 
@@ -244,7 +250,8 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 2. Counsel: legal-review package; `NEEDS_LEGAL_REVIEW` ≠ approval
 3. Owner: publish corresponding-source offer on HTTPS; gate must fetch PASS before `OFFER_DELIVERY_VERIFIED`
 4. Product: Alpha game set approvals (incl. N64/ZX81 fixtures if desired)
-5. Resolve CS for `virtualjaguar_js` (`81_eo` patch + rebuild notes now packaged)
+5. Resolve CS for `virtualjaguar_js` (`81_eo` patch + rebuild notes now packaged); Hatari/EmuTOS CS pins recorded
 6. QA: physical gamepad + iOS; Ops: staging HTTPS
 7. Playwright offline ≠ physical-device offline certification (document only)
 8. Continue PH-12.1 Jaguar (only remaining 12.1 EXPERIMENTAL)
+9. Atari ST save/load export blocker; FDS catalog still disabled pending OpenDiskSysROM integration evidence

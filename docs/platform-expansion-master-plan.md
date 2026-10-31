@@ -19,7 +19,7 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 | Amstrad CPC | `cap32` (CDN present; explicit `EJS_core=cap32`) | GPLv2+ | CPC firmware embedded | MIT Brick Blaster DSK (`issalig/brick_blaster` v1.0_RC4) | **VERIFIED_PLAYABLE** |
 | Amiga | `puae` | GPLv2 | AROS Kickstart fallback (no proprietary kick ROM) | MIT Amiga Dot ADF (first-party) | **VERIFIED_PLAYABLE** |
 | MSX | `bluemsx` (independently built WASM; not stock EJS CDN) | GPLv2+ blueMSX-libretro | C-BIOS 0.23 (BSD-style) SYSTEM pack | MIT MSX Dot `.rom` (first-party z88dk) | **VERIFIED_PLAYABLE** — Auto→C-BIOS; catalog offline; save/restore fixed (`PH-05/msx-savestate-abi-20261022.md`) |
-| Atari ST | `hatari` (absent) | — | EmuTOS candidate if core existed | — | **BLOCKED_CORE** (`PH-05/msx-atarist-blocker-20261022.md`) |
+| Atari ST | Hatari 2.6.1 (self-hosted WASM) | GPL-2.0 Hatari | EmuTOS `etos256us` (GPL-2.0) | GPL-3.0 Pong Wars | **EXPERIMENTAL** — gameplay PASS; save/load BLOCKED (`docs/emulator-builds/hatari-emutos-atari-st.md`) |
 | Commodore 64 | `vice_x64sc` (EJS default for `c64`) | GPLv2 | Stock ROMs embedded in EJS package | MIT Wild Boa PRG (`tstamborski/Wild-Boa-Snake`) | **VERIFIED_PLAYABLE** |
 | Nintendo 64 | `mupen64plus_next` | GPLv2-family (EJS package) | — | MIT `Ryzee119/n64_controller_test` interactive | **VERIFIED_PLAYABLE** (hold-input HUD + save/load; >64 MiB ROM guard) |
 | ColecoVision | `gearcoleco` | present on CDN | Proprietary `colecovision.rom` | MIT RetroPIPE | BLOCKED_FIRMWARE (prior) |
