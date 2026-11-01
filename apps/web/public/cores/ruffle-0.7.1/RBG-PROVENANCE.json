@@ -1,0 +1,9 @@
+{
+  "package": "ruffle-0.7.1-web-selfhosted",
+  "version": "0.7.1",
+  "source_tag": "v0.7.1",
+  "source_commit": "89a7049965f3090e706265670df309a5128233ac",
+  "download_url": "https://github.com/ruffle-rs/ruffle/releases/download/v0.7.1/ruffle-0.7.1-web-selfhosted.zip",
+  "zip_sha256": "ef12edbee135d581a9cd523837d746da30a07a64dbf1cf472d2e472c656f4b5e",
+  "license": "MIT OR Apache-2.0"
+}
