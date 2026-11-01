@@ -44,6 +44,7 @@ SYSTEMS = [
     ("nds", "Nintendo DS", "handheld"),
     ("n64", "Nintendo 64", "console"),
     ("atari-jaguar", "Atari Jaguar", "console"),
+    ("dreamcast", "Sega Dreamcast", "console"),
     ("j2me", "Java ME / J2ME", "handheld"),
     ("ps1", "PlayStation", "console"),
     ("psp", "PlayStation Portable", "handheld"),
@@ -80,6 +81,7 @@ WASM_CORES = [
     ("ppsspp", ["iso", "cso", "pbp"], ["wasm", "threads", "webgl2", "secureContext"]),
     ("jsdos", ["zip"], ["wasm", "secureContext"]),
     ("hatari", ["st", "msa", "dim", "stx"], ["wasm", "secureContext"]),
+    ("flycast", ["elf", "cdi", "gdi", "chd", "cue", "iso"], ["wasm", "webgl2", "secureContext"]),
     ("js2me", ["jar"], ["secureContext"]),
 ]
 
@@ -116,6 +118,7 @@ CONSOLE_FIXTURE_SLUGS = {
     "nds",
     "n64",
     "atari-jaguar",
+    "dreamcast",
     "j2me",
     "ps1",
     "psp",
@@ -760,6 +763,33 @@ class Command(BaseCommand):
             compatibility_note=(
                 "Engineering: atari800 / 800XL + AltirraOS; seekable VFS for "
                 "needs_fullpath; product approval pending."
+            ),
+        )
+        results["dreamcast"] = self._import_files(
+            fixtures,
+            slug="mit-dreamcast-dot",
+            title="MIT Dreamcast Dot",
+            description=(
+                "First-party MIT Dreamcast Dot (.elf) for engineering acceptance "
+                "only. Uses Flycast WASM with reios HLE BIOS (no SEGA BIOS "
+                "redistributed). Not a commercial disc or ROM."
+            ),
+            console="dreamcast",
+            core={"code": "flycast", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-dreamcast-dot.elf",
+            files=[("mit-dreamcast-dot.elf", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/dreamcast-dot-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "scripts/build-dreamcast-dot-fixture.sh; "
+                ".fixtures/mit-dreamcast-dot.README.md; "
+                "docs/emulator-builds/dreamcast-firmware-audit.md"
+            ),
+            genre="Action",
+            compatibility_note=(
+                "Engineering: flycast / reios HLE + emulate_framebuffer for vram_s "
+                "Dot; product approval pending; SEGA BIOS never bundled."
             ),
         )
         results["vb"] = self._import_files(

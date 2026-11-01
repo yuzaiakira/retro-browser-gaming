@@ -179,13 +179,19 @@
       "path": "ejs-4.2.3/cores/flycast-legacy-wasm.data",
       "sha256": "5ef913f5692e41bd6c8ffe1e501470784bacec7c66ba7cb270d7b1474fca099e",
       "license": "GPL-2.0",
-      "reason": "Flycast WASM v1.0 Dreamcast core; no proprietary SEGA BIOS bundled"
+      "reason": "Flycast WASM v1.0 + RBG libelf JS polyfill/soft-stubs; Dreamcast engineering; no SEGA BIOS; not cleared for anonymous public CDN",
+      "byteSize": 3430469,
+      "browser_distribution": "LOCAL_ONLY",
+      "corresponding_source_class": "upstream_pin_plus_local_js_polyfill"
     },
     {
       "path": "ejs-4.2.3/cores/flycast-wasm.data",
       "sha256": "5ef913f5692e41bd6c8ffe1e501470784bacec7c66ba7cb270d7b1474fca099e",
       "license": "GPL-2.0",
-      "reason": "Flycast WASM v1.0 Dreamcast core; no proprietary SEGA BIOS bundled"
+      "reason": "Flycast WASM v1.0 + RBG libelf JS polyfill/soft-stubs; Dreamcast engineering; no SEGA BIOS; not cleared for anonymous public CDN",
+      "byteSize": 3430469,
+      "browser_distribution": "LOCAL_ONLY",
+      "corresponding_source_class": "upstream_pin_plus_local_js_polyfill"
     },
     {
       "path": "ejs-4.2.3/cores/fuse-legacy-wasm.data",
