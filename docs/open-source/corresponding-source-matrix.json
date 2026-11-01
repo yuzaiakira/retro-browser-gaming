@@ -363,7 +363,7 @@
     },
     {
       "path": "ejs-4.2.3/cores/flycast-legacy-wasm.data",
-      "sha256": "727abd80fa9854c403eb03e4c28cc1c76ab4c4fae062855bcd933ffaaa6f3d5c",
+      "sha256": "5ef913f5692e41bd6c8ffe1e501470784bacec7c66ba7cb270d7b1474fca099e",
       "byteSize": 3429271,
       "license": "GPL-2.0 (Flycast / nasomers Flycast WASM v1.0); EmulatorJS packaging GPL-3.0",
       "category": "PRIVATE_REPOSITORY_ASSET",
@@ -383,7 +383,7 @@
     },
     {
       "path": "ejs-4.2.3/cores/flycast-wasm.data",
-      "sha256": "727abd80fa9854c403eb03e4c28cc1c76ab4c4fae062855bcd933ffaaa6f3d5c",
+      "sha256": "5ef913f5692e41bd6c8ffe1e501470784bacec7c66ba7cb270d7b1474fca099e",
       "byteSize": 3429271,
       "license": "GPL-2.0 (Flycast / nasomers Flycast WASM v1.0); EmulatorJS packaging GPL-3.0",
       "category": "PRIVATE_REPOSITORY_ASSET",

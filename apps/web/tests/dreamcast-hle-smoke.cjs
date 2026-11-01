@@ -1,9 +1,8 @@
 /**
- * Dreamcast Flycast WASM — HLE boot probe (no proprietary BIOS files).
+ * Dreamcast Flycast WASM — HLE boot + interactive Dot proof (no SEGA BIOS).
  *
- * Forces reicast_hle_bios=enabled via frame defaults; loads MIT Dot ELF.
- * Marker on interactive proof: DREAMCAST_GAMEPLAY_PASS
- * Until then: logs DREAMCAST_HLE_BOOT_* diagnostics only.
+ * Forces reicast_hle_bios=enabled and reicast_emulate_framebuffer=enabled.
+ * Marker: DREAMCAST_GAMEPLAY_PASS
  *
  * Usage:
  *   CHROMIUM_EXECUTABLE=/usr/bin/chromium node tests/dreamcast-hle-smoke.cjs
@@ -34,16 +33,14 @@ const types = {
 };
 
 const outer = `<!doctype html><title>Dreamcast Flycast HLE smoke</title>
-<style>body{margin:0;background:#111;color:#eee;font:14px sans-serif}iframe{width:960px;height:720px;border:0;background:#000}</style>
+<style>html,body{margin:0;width:100%;height:100%;background:#000}iframe{width:960px;height:720px;border:0;display:block;background:#000}</style>
 <iframe id="game" src="/runtime/frame.html" allow="cross-origin-isolated"></iframe>
-<pre id="log"></pre>
 <script>
-const log = (m) => { document.getElementById('log').textContent += m + '\\n'; console.log(m); };
 window.result = new Promise((resolve, reject) => {
   addEventListener('message', event => {
     if (event.origin !== location.origin) return;
     if (event.data.type === 'ready') resolve(event.data);
-    if (event.data.type === 'error') reject(new Error(event.data.error));
+    if (event.data.type === 'error') console.log('PARENT_ERR', event.data.error);
   });
   document.querySelector('iframe').addEventListener('load', async () => {
     const response = await fetch('/fixture.elf');
@@ -59,7 +56,7 @@ window.result = new Promise((resolve, reject) => {
 });
 window.command = (method, value) => new Promise((resolve, reject) => {
   const id = crypto.randomUUID();
-  const timeout = setTimeout(() => reject(new Error(method + ' timed out')), 20000);
+  const timeout = setTimeout(() => reject(new Error(method + ' timed out')), 60000);
   const listener = event => {
     if (event.origin !== location.origin || event.data?.type !== 'reply' || event.data?.id !== id) return;
     removeEventListener('message', listener); clearTimeout(timeout);
@@ -69,20 +66,52 @@ window.command = (method, value) => new Promise((resolve, reject) => {
   document.querySelector('iframe').contentWindow.postMessage({type:'command',session:'dc-hle-1',id,method,value}, location.origin);
 });
 window.input = (command, value) => document.querySelector('iframe').contentWindow.postMessage({type:'input',session:'dc-hle-1',command,value}, location.origin);
+window.snap = () => {
+  const doc = document.querySelector('#game').contentDocument;
+  doc.querySelectorAll('.ejs_menu_bar,.ejs_settings_parent,.ejs_virtualGamepad,.ejs_context_menu').forEach((el) => {
+    el.style.display = 'none';
+  });
+  const c = doc.querySelector('canvas');
+  const t = doc.createElement('canvas');
+  t.width = c.width; t.height = c.height;
+  t.getContext('2d').drawImage(c, 0, 0);
+  return t.toDataURL('image/png');
+};
+window.frame = () => {
+  try { return document.querySelector('#game').contentWindow.EJS_emulator.gameManager.functions.getFrameNum(); }
+  catch { return -1; }
+};
 </script>`;
 
-function nonBlackPixels(png) {
-  let n = 0;
-  for (let i = 0; i < png.data.length; i += 4) {
-    if (png.data[i] + png.data[i + 1] + png.data[i + 2] > 24) n++;
-  }
-  return n;
+function fromDataUrl(url) {
+  return PNG.sync.read(Buffer.from(url.split(',')[1], 'base64'));
 }
 
 function sampleHash(png) {
-  const h = createHash('sha256');
-  h.update(Buffer.from(png.data));
-  return h.digest('hex').slice(0, 16);
+  return createHash('sha256').update(Buffer.from(png.data)).digest('hex').slice(0, 16);
+}
+
+/** Dot idle ~220,220,240; fire ~240,64,64; bg ~16,24,48. */
+function dotStats(png) {
+  let sx = 0;
+  let sy = 0;
+  let n = 0;
+  let fire = 0;
+  const w = png.width;
+  for (let i = 0, p = 0; i < png.data.length; i += 4, p++) {
+    const r = png.data[i];
+    const g = png.data[i + 1];
+    const b = png.data[i + 2];
+    const isIdle = r > 180 && g > 180 && b > 180;
+    const isFire = r > 180 && g < 120 && b < 120;
+    if (isIdle || isFire) {
+      sx += p % w;
+      sy += (p / w) | 0;
+      n++;
+      if (isFire) fire++;
+    }
+  }
+  return n ? { x: sx / n, y: sy / n, n, fire } : { x: 0, y: 0, n: 0, fire: 0 };
 }
 
 async function run() {
@@ -93,12 +122,19 @@ async function run() {
   const server = createServer((req, res) => {
     const url = new URL(req.url, 'http://127.0.0.1');
     if (url.pathname === '/') {
-      res.writeHead(200, { 'content-type': 'text/html', 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Embedder-Policy': 'require-corp' });
+      res.writeHead(200, {
+        'content-type': 'text/html',
+        'Cross-Origin-Opener-Policy': 'same-origin',
+        'Cross-Origin-Embedder-Policy': 'require-corp',
+      });
       res.end(outer);
       return;
     }
     if (url.pathname === '/fixture.elf') {
-      res.writeHead(200, { 'content-type': 'application/octet-stream', 'Cross-Origin-Resource-Policy': 'same-origin' });
+      res.writeHead(200, {
+        'content-type': 'application/octet-stream',
+        'Cross-Origin-Resource-Policy': 'same-origin',
+      });
       createReadStream(fixture).pipe(res);
       return;
     }
@@ -129,9 +165,15 @@ async function run() {
   const browser = await chromium.launch({
     executablePath,
     headless: true,
-    args: ['--no-sandbox', '--disable-dev-shm-usage', '--enable-features=SharedArrayBuffer'],
+    args: [
+      '--no-sandbox',
+      '--disable-dev-shm-usage',
+      '--enable-features=SharedArrayBuffer',
+      '--enable-unsafe-swiftshader',
+      '--ignore-gpu-blocklist',
+    ],
   });
-  const page = await browser.newPage();
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
   page.setDefaultTimeout(300000);
   const consoleLines = [];
   page.on('console', (m) => consoleLines.push(`${m.type()}: ${m.text()}`));
@@ -141,6 +183,7 @@ async function run() {
     fixtureSha256: fixtureSha,
     core: 'flycast',
     hle: 'reicast_hle_bios=enabled',
+    framebuffer: 'reicast_emulate_framebuffer=enabled',
     biosFilesPresent: false,
   };
 
@@ -154,45 +197,100 @@ async function run() {
     status.capabilities = ready?.capabilities || null;
     console.log('DREAMCAST_HLE_READY', JSON.stringify(ready?.capabilities || {}));
 
-    await page.waitForTimeout(8000);
-    const frame = page.frameLocator('#game');
-    // Capture outer iframe canvas via page screenshot of iframe element
-    const png = PNG.sync.read(await page.locator('#game').screenshot());
-    const lit = nonBlackPixels(png);
-    const hash = sampleHash(png);
-    status.lit = lit;
-    status.hash = hash;
-    await writeFile(join(shotDir, 'hle-idle.png'), PNG.sync.write(png));
+    await page.waitForTimeout(10000);
+    await page.locator('#game').click({ position: { x: 480, y: 360 } }).catch(() => {});
+    await page.waitForTimeout(1000);
 
-    if (lit < 100) {
+    const f0 = await page.evaluate(() => window.frame());
+    const idlePng = fromDataUrl(await page.evaluate(() => window.snap()));
+    const idle = dotStats(idlePng);
+    status.idle = { ...idle, hash: sampleHash(idlePng) };
+    await writeFile(join(shotDir, 'hle-idle.png'), PNG.sync.write(idlePng));
+
+    if (idle.n < 100) {
       status.boot = 'DREAMCAST_HLE_BOOT_BLACK';
-      console.log('DREAMCAST_HLE_BOOT_BLACK', JSON.stringify({ lit, hash }));
+      console.log('DREAMCAST_HLE_BOOT_BLACK', JSON.stringify(idle));
+      process.exitCode = 1;
     } else {
       status.boot = 'DREAMCAST_HLE_BOOT_VISIBLE';
-      console.log('DREAMCAST_HLE_BOOT_VISIBLE', JSON.stringify({ lit, hash }));
-      // Light A/B/A — Left vs Right
+      console.log('DREAMCAST_HLE_BOOT_VISIBLE', JSON.stringify(idle));
+
       await page.evaluate(() => window.input(6, 1));
-      await page.waitForTimeout(1500);
-      const left = PNG.sync.read(await page.locator('#game').screenshot());
+      await page.waitForTimeout(2500);
+      const leftPng = fromDataUrl(await page.evaluate(() => window.snap()));
+      const left = dotStats(leftPng);
       await page.evaluate(() => window.input(6, 0));
+
       await page.evaluate(() => window.input(7, 1));
-      await page.waitForTimeout(1500);
-      const right = PNG.sync.read(await page.locator('#game').screenshot());
+      await page.waitForTimeout(2500);
+      const rightPng = fromDataUrl(await page.evaluate(() => window.snap()));
+      const right = dotStats(rightPng);
       await page.evaluate(() => window.input(7, 0));
-      const leftLit = nonBlackPixels(left);
-      const rightHash = sampleHash(right);
-      const leftHash = sampleHash(left);
-      status.leftHash = leftHash;
-      status.rightHash = rightHash;
-      status.inputChanged = leftHash !== hash || rightHash !== hash || leftHash !== rightHash;
-      await writeFile(join(shotDir, 'hle-left.png'), PNG.sync.write(left));
-      await writeFile(join(shotDir, 'hle-right.png'), PNG.sync.write(right));
-      if (status.inputChanged && leftLit > 100) {
+
+      status.left = { ...left, hash: sampleHash(leftPng) };
+      status.right = { ...right, hash: sampleHash(rightPng) };
+      status.movedLeft = left.n > 100 && left.x < idle.x - 8;
+      status.movedRight = right.n > 100 && right.x > left.x + 8;
+      await writeFile(join(shotDir, 'hle-left.png'), PNG.sync.write(leftPng));
+      await writeFile(join(shotDir, 'hle-right.png'), PNG.sync.write(rightPng));
+
+      // A button — try RetroPad A (8) then B (0).
+      let fireOk = false;
+      for (const btn of [8, 0, 1, 9]) {
+        await page.evaluate((b) => window.input(b, 1), btn);
+        await page.waitForTimeout(600);
+        const fired = dotStats(fromDataUrl(await page.evaluate(() => window.snap())));
+        await page.evaluate((b) => window.input(b, 0), btn);
+        await page.waitForTimeout(400);
+        if (fired.fire > 20) {
+          fireOk = true;
+          status.fireButton = btn;
+          status.fire = fired;
+          break;
+        }
+      }
+      status.fireOk = fireOk;
+
+      const f1 = await page.evaluate(() => window.frame());
+      status.frames = [f0, f1];
+      status.frameDelta = f1 - f0;
+
+      // Save at left, move right, restore — position must return near left.
+      await page.evaluate(() => window.input(6, 1));
+      await page.waitForTimeout(2000);
+      await page.evaluate(() => window.input(6, 0));
+      const savePos = dotStats(fromDataUrl(await page.evaluate(() => window.snap())));
+      const state = await page.evaluate(() => window.command('save'));
+      status.saveBytes = state?.byteLength || 0;
+      await page.evaluate(() => window.input(7, 1));
+      await page.waitForTimeout(2500);
+      await page.evaluate(() => window.input(7, 0));
+      const movedPos = dotStats(fromDataUrl(await page.evaluate(() => window.snap())));
+      await page.evaluate((buf) => window.command('load', buf), state);
+      await page.waitForTimeout(1500);
+      const restored = dotStats(fromDataUrl(await page.evaluate(() => window.snap())));
+      status.saveProbe = { savePos, movedPos, restored, saveBytes: status.saveBytes };
+      status.saveRestore =
+        status.saveBytes > 1024 &&
+        Math.abs(movedPos.x - savePos.x) > 20 &&
+        Math.abs(restored.x - savePos.x) < 30;
+      if (status.saveRestore) {
+        status.saveMarker = 'DREAMCAST_SAVE_RESTORE_PASS';
+        console.log('DREAMCAST_SAVE_RESTORE_PASS', JSON.stringify(status.saveProbe));
+      } else {
+        status.saveMarker = 'DREAMCAST_SAVE_RESTORE_FAIL';
+        console.log('DREAMCAST_SAVE_RESTORE_FAIL', JSON.stringify(status.saveProbe));
+      }
+
+      const gameplay =
+        status.movedLeft && status.movedRight && status.frameDelta > 200 && idle.n > 100;
+      if (gameplay) {
         status.gameplay = 'DREAMCAST_GAMEPLAY_PASS';
         console.log('DREAMCAST_GAMEPLAY_PASS');
       } else {
         status.gameplay = 'DREAMCAST_GAMEPLAY_INCONCLUSIVE';
-        console.log('DREAMCAST_GAMEPLAY_INCONCLUSIVE', JSON.stringify({ leftHash, rightHash, idle: hash }));
+        console.log('DREAMCAST_GAMEPLAY_INCONCLUSIVE', JSON.stringify(status));
+        process.exitCode = 1;
       }
     }
   } catch (err) {
@@ -201,7 +299,7 @@ async function run() {
     console.error('DREAMCAST_HLE_BOOT_FAIL', err);
     process.exitCode = 1;
   } finally {
-    status.consoleTail = consoleLines.slice(-40);
+    status.consoleTail = consoleLines.slice(-60);
     await mkdir(join(evidenceDir, 'dreamcast'), { recursive: true });
     await writeFile(
       join(evidenceDir, 'dreamcast', 'hle-status.json'),

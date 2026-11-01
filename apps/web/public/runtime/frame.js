@@ -138,6 +138,100 @@ function seekableReady() {
   return typeof window.RetroSeekableFS?.installSeekableLoader === 'function';
 }
 
+/**
+ * Flycast / RetroArch GL init queries desktop-only getParameter enums on
+ * WebGL2 (SwiftShader/ANGLE). The resulting INVALID_ENUM is treated as fatal
+ * ("Cannot open video driver"). Swallow only that error from getParameter.
+ */
+function installFlycastWebGLShims() {
+  // Force preserveDrawingBuffer for Chromium evidence readback.
+  if (!HTMLCanvasElement.prototype.__rbgFlycastGetContextPatched) {
+    const origGetContext = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function flycastGetContext(type, attrs) {
+      if (type === 'webgl' || type === 'webgl2' || type === 'experimental-webgl') {
+        attrs = Object.assign({}, attrs || {}, { preserveDrawingBuffer: true });
+      }
+      return origGetContext.call(this, type, attrs);
+    };
+    HTMLCanvasElement.prototype.__rbgFlycastGetContextPatched = true;
+  }
+  const patch = (proto) => {
+    if (!proto || proto.__rbgFlycastGetParameterPatched) return;
+    const orig = proto.getParameter;
+    if (typeof orig !== 'function') return;
+    proto.getParameter = function flycastGetParameter(pname) {
+      // Nasomers Flycast WASM runtime note: force GLES3-looking version strings
+      // so RetroArch/Flycast do not pick desktop GLSL paths under WebGL2.
+      if (pname === 0x1f02 /* GL_VERSION */) {
+        return 'OpenGL ES 3.0 WebGL 2.0';
+      }
+      if (pname === 0x8b8c /* GL_SHADING_LANGUAGE_VERSION */) {
+        return 'OpenGL ES GLSL ES 3.00';
+      }
+      const value = orig.call(this, pname);
+      const err = this.getError();
+      if (err === this.INVALID_ENUM) {
+        return 0;
+      }
+      return value;
+    };
+    proto.__rbgFlycastGetParameterPatched = true;
+  };
+  patch(typeof WebGL2RenderingContext !== 'undefined' ? WebGL2RenderingContext.prototype : null);
+  patch(typeof WebGLRenderingContext !== 'undefined' ? WebGLRenderingContext.prototype : null);
+}
+
+/**
+ * Flycast's WebGL2 video driver aborts when Module.canvas has client size 0×0
+ * at callMain. EmulatorJS only appends the canvas after callMain succeeds, so
+ * prime a laid-out host before EJS_Runtime runs. Does not alter other cores.
+ */
+function installFlycastCanvasPrime() {
+  installFlycastWebGLShims();
+  let rawRuntime = null;
+  const wrap = function flycastEjsRuntime(moduleArg) {
+    const canvas = moduleArg && moduleArg.canvas;
+    const host =
+      (moduleArg && moduleArg.parent) ||
+      document.querySelector('#game') ||
+      document.body;
+    if (canvas && host) {
+      if (!canvas.isConnected) {
+        host.appendChild(canvas);
+      }
+      canvas.classList.add('ejs_canvas');
+      canvas.style.display = 'block';
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+      // HTML canvas defaults to 300×150 — Flycast/RA WebGL init must not
+      // see that stub size or context bring-up fails shortly after ready.
+      const hostBox = host.getBoundingClientRect();
+      const targetW = Math.max(640, Math.floor(hostBox.width) || 640);
+      const targetH = Math.max(480, Math.floor(hostBox.height) || 480);
+      canvas.width = targetW;
+      canvas.height = targetH;
+      void canvas.getBoundingClientRect();
+    }
+    // Needed for Chromium evidence screenshots / toDataURL readback.
+    moduleArg.webGLContextAttributes = Object.assign(
+      {},
+      moduleArg.webGLContextAttributes || {},
+      { preserveDrawingBuffer: true, majorVersion: 2 },
+    );
+    return rawRuntime.call(this, moduleArg);
+  };
+  Object.defineProperty(window, 'EJS_Runtime', {
+    configurable: true,
+    enumerable: true,
+    get() {
+      return rawRuntime ? wrap : undefined;
+    },
+    set(fn) {
+      rawRuntime = fn;
+    },
+  });
+}
+
 addEventListener('message', async (event) => {
   if (event.source !== parent || event.origin !== location.origin) return;
   const d = event.data;
@@ -183,7 +277,8 @@ addEventListener('message', async (event) => {
       // Dedicated Atari 8-bit computer core (not a5200 / 5200).
       atari800: 'atari2600',
       // Dreamcast Flycast WASM (not stock EJS 4.2.3 CDN).
-      flycast: 'dreamcast',
+      // EmulatorJS 4.2.3 has no dreamcast scheme; segaSaturn is the closest pad map.
+      flycast: 'segaSaturn',
       beetle_vb: 'vb',
       mupen64plus_next: 'n64',
       // EJS getCores maps c64 → vice_x64sc; pin scheme so UI/tests stay stable.
@@ -294,14 +389,29 @@ addEventListener('message', async (event) => {
     if (d.core === 'flycast') {
       // Prefer reios HLE — never auto-fetch SEGA BIOS. Upstream WASM sample
       // defaults HLE off; engineering enables it for lawful homebrew boots.
+      // Match nasomers dreamcast-core-options.json for stable WASM/WebGL2.
       window.EJS_defaultOptions = window.EJS_defaultOptions || {};
       window.EJS_defaultOptions.reicast_hle_bios = 'enabled';
       window.EJS_defaultOptions['reicast_hle_bios'] = 'enabled';
       window.EJS_defaultOptions.reicast_boot_to_bios = 'disabled';
       window.EJS_defaultOptions['reicast_boot_to_bios'] = 'disabled';
+      window.EJS_defaultOptions.reicast_threaded_rendering = 'disabled';
+      window.EJS_defaultOptions['reicast_threaded_rendering'] = 'disabled';
+      window.EJS_defaultOptions.reicast_synchronous_rendering = 'disabled';
+      window.EJS_defaultOptions['reicast_synchronous_rendering'] = 'disabled';
       window.EJS_defaultOptions.reicast_internal_resolution = '640x480';
       window.EJS_defaultOptions['reicast_internal_resolution'] = '640x480';
+      window.EJS_defaultOptions.reicast_mipmapping = 'disabled';
+      window.EJS_defaultOptions.reicast_enable_rttb = 'disabled';
+      window.EJS_defaultOptions.reicast_alpha_sorting = 'per-strip (fast, least accurate)';
+      window.EJS_defaultOptions.reicast_delay_frame_swapping = 'disabled';
+      window.EJS_defaultOptions.reicast_framerate = 'normal';
+      // Dot (and many 2D homebrew titles) write the Dreamcast framebuffer
+      // directly (vram_s). Without this, Flycast advances frames but presents black.
+      window.EJS_defaultOptions.reicast_emulate_framebuffer = 'enabled';
+      window.EJS_defaultOptions['reicast_emulate_framebuffer'] = 'enabled';
       window.EJS_threads = false;
+      installFlycastCanvasPrime();
     }
     window.EJS_Buttons = {
       settings: { visible: false },
@@ -391,7 +501,8 @@ addEventListener('message', async (event) => {
           analog:
             d.core === 'ppsspp' ||
             d.core === 'pcsx_rearmed' ||
-            d.core === 'mupen64plus_next',
+            d.core === 'mupen64plus_next' ||
+            d.core === 'flycast',
           seekableMedia: !!seekableBridge,
           onDemandMedia: !!(seekable && seekable.onDemand),
         },
