@@ -21,6 +21,8 @@
 
 **PH-12.5 Dreamcast / Flycast WASM (2026-11-01):** Pin **v1.0** `16e9c7b4…` / Flycast `2c48c01`; GPLv2; packaged `flycast-wasm.data` `5ef913f5…` (wasm `db2b87d8…` + libelf JS polyfill / zip soft-stubs; allowlist **`LOCAL_ONLY`**). MIT Dot ELF `ffafb5d5…`. Chromium **`DREAMCAST_HLE_BOOT_VISIBLE`** + **`DREAMCAST_GAMEPLAY_PASS`** + **`DREAMCAST_SAVE_RESTORE_PASS`** + Compose **`DREAMCAST_OFFLINE_PWA_PASS`** (HLE + `reicast_emulate_framebuffer`; no SEGA BIOS). **VERIFIED_PLAYABLE** (engineering). Product approval **pending**. OS PWA/physical **NOT_VERIFIED**. Docs: `flycast-wasm-dreamcast.md`, `dreamcast-firmware-audit.md`; evidence `.runtime/test-evidence/PH-12/dreamcast/`.
 
+**PH-12.6 Flash / Ruffle (2026-11-01):** Official selfhosted **0.7.1** (`v0.7.1` / `89a70499…`; zip `ef12edbe…`; MIT OR Apache-2.0). Dedicated `ruffle-frame` + CSP; `polyfills:false`; EI off; MIT Dot SWF `3f5c78f2…` (Haxe 4.3). **`FLASH_RUFFLE_GAMEPLAY_PASS`** + SharedObject **`FLASH_RUFFLE_PROGRESS_PERSISTENCE_PASS`** + Compose **`FLASH_RUFFLE_OFFLINE_PWA_PASS`**. **`saveState=false`** (no Quick Save). **VERIFIED_PLAYABLE** (engineering) under documented save semantics. Product approval **pending**. Docs: `ruffle-web-integration.md`, `flash-save-capabilities.md`, `flash-security-audit.md`; evidence `.runtime/test-evidence/PH-12/flash/`.
+
 **Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability — verified 2026-10-26.  
 **Hub UX (PH-UX-HUB):** Premium Gaming Hub — verified 2026-10-26.  
 **Hub UX Acceptance (Sprint 3.1):** offline persistent-profile journey, catalog Back/Forward history, Continue Playing accuracy, stable hub shots — verified 2026-10-26.  
@@ -40,16 +42,17 @@
 
 | Item | Status |
 |---|---|
-| VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX + **N64** + **ZX81** + **Atari ST** + **FDS** + **Atari 8-bit** + **Dreamcast** |
+| VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX + **N64** + **ZX81** + **Atari ST** + **FDS** + **Atari 8-bit** + **Dreamcast** + **Flash/Ruffle** |
 | EXPERIMENTAL | Jaguar |
 | BLOCKED_EXTERNAL | ColecoVision; **Vectrex** (awaiting authorized `system.img`) |
 | FBNeo | BLOCKED_FIXTURE |
 | Atari ST | VERIFIED_PLAYABLE — offline PWA SW journey PASS; OS PWA/physical NOT_VERIFIED |
 | Atari 8-bit | VERIFIED_PLAYABLE (engineering) — `ATARI8_GAMEPLAY_PASS` + `ATARI8_SAVE_RESTORE_PASS` + `ATARI8_OFFLINE_PWA_PASS`; product approval pending; distinct from 5200 |
 | Dreamcast | VERIFIED_PLAYABLE (engineering) — `DREAMCAST_GAMEPLAY_PASS` + `DREAMCAST_SAVE_RESTORE_PASS` + `DREAMCAST_OFFLINE_PWA_PASS`; reios HLE; no SEGA BIOS; product approval pending |
+| Flash / Ruffle | VERIFIED_PLAYABLE (engineering) — `FLASH_RUFFLE_GAMEPLAY_PASS` + SharedObject progress + `FLASH_RUFFLE_OFFLINE_PWA_PASS`; Quick Save not claimed; product approval pending |
 | FDS | VERIFIED_PLAYABLE (engineering) — `FDS_OFFLINE_PWA_PASS` + `NES_FCEUMM_REGRESSION_PASS`; product approval pending |
 | Vectrex | BLOCKED_EXTERNAL — external-BIOS vecx path + MIT Dot; no lawful BIOS → no gameplay claim |
-| Core lock | **382 files** LOCAL_FULL (atari800 wasm+legacy + report; Hatari HTTPS provenance) |
+| Core lock | **395 files** LOCAL_FULL (includes `ruffle-0.7.1/*`) |
 
 ## Player UX pass (2026-10-26)
 
@@ -253,7 +256,7 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 
 1. Vectrex: operator imports authorized `system.img` → gameplay A/B/A + Compose offline → reconsider VERIFIED_PLAYABLE
 2. PH-12.1: Jaguar — only with a rights-clear Alpine/`.j64` path or honest EXPERIMENTAL closeout
-3. Dreamcast / Atari ST / FDS / Atari 8-bit: optional OS-level PWA install + physical-device gates (explicitly NOT_VERIFIED); large CHD/GDI/CDI seekable path hardening
+3. Flash / Dreamcast / Atari ST / FDS / Atari 8-bit: optional OS-level PWA install + physical-device gates (explicitly NOT_VERIFIED); optional Flash dedicated-origin hardening
 4. Product: human product-approval for engineering fixtures — never auto-approve
 5. Owner gates unchanged (publication STOP)
 
@@ -283,6 +286,20 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 | Isolation | Does **not** inherit Atari 5200 (`a5200`) evidence |
 | Evidence | `.runtime/test-evidence/PH-12/atari8/` |
 | Regressions | Atari ST / FDS / NES / Genesis core / a5200 / N64 / ZX81 GAMEPLAY_PASS; Vitest 76; tsc OK; Django 43; core-lock 382 LOCAL_FULL; PUBLIC_SOURCE_SAFETY_PASS; SOURCE_OFFER_GATE_OK |
+
+## PH-12.6 Flash / Ruffle pass (2026-11-01)
+
+| Check | Result |
+|---|---|
+| Runtime | Ruffle 0.7.1 selfhosted; commit `89a70499…`; zip `ef12edbe…`; MIT OR Apache-2.0 |
+| Isolation | Dedicated frame; `polyfills:false`; EI off; CSP `connect-src 'self'`; SWF bytes only |
+| Fixture | MIT Dot SWF `3f5c78f2…` (Haxe 4.3.7) |
+| Interactive | `FLASH_RUFFLE_GAMEPLAY_PASS` |
+| Progress | SharedObject `FLASH_RUFFLE_PROGRESS_PERSISTENCE_PASS` — **not** Quick Save |
+| Compose offline | `FLASH_RUFFLE_OFFLINE_PWA_PASS` |
+| Baseline | Genesis `GENESIS_GAMEPLAY_PASS`; Orbit `OFFLINE_LOAD_PASS`; historical EXIT=137 preserved under `.runtime/test-evidence/PH-12/flash/baseline-genesis-exit137.json` |
+| Regressions | Genesis/Orbit/Atari8/Atari ST/FDS/NES/N64/ZX81/Dreamcast PASS; Vitest 76; tsc OK; Django 43; core-lock 395; PUBLIC_SOURCE_SAFETY_PASS; SOURCE_OFFER_GATE_OK |
+| Evidence | `.runtime/test-evidence/PH-12/flash/` |
 
 ## PH-12.5 Dreamcast pass (2026-11-01)
 
