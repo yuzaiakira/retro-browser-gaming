@@ -24,6 +24,7 @@ SYSTEMS = [
     ("gba", "Game Boy Advance", "handheld"),
     ("atari-2600", "Atari 2600", "console"),
     ("atari-5200", "Atari 5200", "console"),
+    ("atari-8bit", "Atari 8-bit", "computer"),
     ("atari-7800", "Atari 7800", "console"),
     ("lynx", "Atari Lynx", "handheld"),
     ("virtual-boy", "Virtual Boy", "handheld"),
@@ -57,6 +58,7 @@ WASM_CORES = [
     ("mgba", ["gba"], ["wasm", "secureContext"]),
     ("stella2014", ["a26", "bin"], ["wasm", "secureContext"]),
     ("a5200", ["a52", "bin"], ["wasm", "secureContext"]),
+    ("atari800", ["xex", "atr", "com", "bin", "car", "cas"], ["wasm", "secureContext"]),
     ("beetle_vb", ["vb", "vboy", "bin"], ["wasm", "secureContext"]),
     ("vice_x64sc", ["d64", "prg", "tap", "t64", "crt"], ["wasm", "secureContext"]),
     ("fuse", ["tap", "tzx", "z80", "sna"], ["wasm", "secureContext"]),
@@ -93,6 +95,7 @@ CONSOLE_FIXTURE_SLUGS = {
     "gba",
     "atari-2600",
     "atari-5200",
+    "atari-8bit",
     "atari-7800",
     "lynx",
     "virtual-boy",
@@ -730,6 +733,33 @@ class Command(BaseCommand):
             compatibility_note=(
                 "Verified Chromium gameplay with a5200 / atari5200; save states "
                 "supported. Optional official 5200 BIOS not redistributed."
+            ),
+        )
+        results["atari8"] = self._import_files(
+            fixtures,
+            slug="mit-atari8-dot",
+            title="MIT Atari 8-bit Dot",
+            description=(
+                "First-party MIT Atari 8-bit Dot (.xex) for engineering acceptance "
+                "only. Uses libretro-atari800 with bundled AltirraOS / Altirra BASIC "
+                "(open firmware). Distinct from Atari 5200. Not a commercial ROM."
+            ),
+            console="atari-8bit",
+            core={"code": "atari800", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-atari8-dot.xex",
+            files=[("mit-atari8-dot.xex", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/atari8-dot-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "scripts/build-atari8-dot-fixture.py; "
+                ".fixtures/mit-atari8-dot.README.md; "
+                "docs/emulator-builds/atari8-firmware-audit.md"
+            ),
+            genre="Action",
+            compatibility_note=(
+                "Engineering: atari800 / 800XL + AltirraOS; seekable VFS for "
+                "needs_fullpath; product approval pending."
             ),
         )
         results["vb"] = self._import_files(

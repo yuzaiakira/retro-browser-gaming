@@ -180,6 +180,8 @@ addEventListener('message', async (event) => {
       mgba: 'gba',
       stella2014: 'atari2600',
       a5200: 'atari5200',
+      // Dedicated Atari 8-bit computer core (not a5200 / 5200).
+      atari800: 'atari2600',
       beetle_vb: 'vb',
       mupen64plus_next: 'n64',
       // EJS getCores maps c64 → vice_x64sc; pin scheme so UI/tests stay stable.
@@ -274,6 +276,18 @@ addEventListener('message', async (event) => {
       window.EJS_defaultOptions.desmume_use_external_bios = 'disabled';
       window.EJS_defaultOptions['desmume_pointer_type'] = 'touch';
       window.EJS_defaultOptions.desmume_pointer_type = 'touch';
+    }
+    if (d.core === 'atari800') {
+      // Open-firmware 800XL profile only — never select proprietary Atari OS ROMs.
+      // needs_fullpath=true → seekable VFS path (preferSeekable stays true; not in blob list).
+      window.EJS_defaultOptions.atari800_system = '800XL (64K)';
+      window.EJS_defaultOptions['atari800_system'] = '800XL (64K)';
+      window.EJS_defaultOptions.atari800_os_xl = 'AltirraOS';
+      window.EJS_defaultOptions['atari800_os_xl'] = 'AltirraOS';
+      window.EJS_defaultOptions.atari800_basic_version = 'Altirra BASIC';
+      window.EJS_defaultOptions['atari800_basic_version'] = 'Altirra BASIC';
+      window.EJS_defaultOptions.atari800_internalbasic = 'disabled';
+      window.EJS_defaultOptions['atari800_internalbasic'] = 'disabled';
     }
     window.EJS_Buttons = {
       settings: { visible: false },
