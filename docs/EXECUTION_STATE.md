@@ -15,6 +15,8 @@
 
 **PH-12.3 Vectrex (2026-10-31 night):** Firmware audit **NO-GO** for embedding GCE/MB `system.img` (`320ccdcc…`, contains Mine Storm). Patched `libretro-vecx` `dccff540…` loads user BIOS only; MIT Dot fixture; registry + user-BIOS slot. **BLOCKED_EXTERNAL** — no authorized BIOS in environment → no `VECTREX_GAMEPLAY_PASS` / offline PWA. Docs: `vecx-firmware-audit.md`, `vecx-vectrex-build.md`; evidence `.runtime/test-evidence/PH-12/vectrex/`.
 
+**PH-12.3 Atari 8-bit (2026-11-01):** `atari800` (libretro-atari800 `4e7fbc73…` + memstream ABI patch; emsdk 3.1.74; EJS/build `677b1334…`) with **AltirraOS + Altirra BASIC only** (no proprietary Atari OS). Distinct from `a5200`. MIT Dot `.xex` (`bd52416d…`). Chromium A/B/A `ATARI8_GAMEPLAY_PASS`; save ~188768 B `ATARI8_SAVE_RESTORE_PASS`; Compose `ATARI8_OFFLINE_PWA_PASS`. **VERIFIED_PLAYABLE** (engineering). Product approval **pending**. OS PWA/physical **NOT_VERIFIED**. Docs: `atari8-libretro-build.md`, `atari8-firmware-audit.md`; evidence `.runtime/test-evidence/PH-12/atari8/`.
+
 **Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability — verified 2026-10-26.  
 **Hub UX (PH-UX-HUB):** Premium Gaming Hub — verified 2026-10-26.  
 **Hub UX Acceptance (Sprint 3.1):** offline persistent-profile journey, catalog Back/Forward history, Continue Playing accuracy, stable hub shots — verified 2026-10-26.  
@@ -34,14 +36,15 @@
 
 | Item | Status |
 |---|---|
-| VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX + **N64** + **ZX81** + **Atari ST** + **FDS** |
+| VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX + **N64** + **ZX81** + **Atari ST** + **FDS** + **Atari 8-bit** |
 | EXPERIMENTAL | Jaguar |
 | BLOCKED_EXTERNAL | ColecoVision; **Vectrex** (awaiting authorized `system.img`) |
 | FBNeo | BLOCKED_FIXTURE |
 | Atari ST | VERIFIED_PLAYABLE — offline PWA SW journey PASS; OS PWA/physical NOT_VERIFIED |
+| Atari 8-bit | VERIFIED_PLAYABLE (engineering) — `ATARI8_GAMEPLAY_PASS` + `ATARI8_SAVE_RESTORE_PASS` + `ATARI8_OFFLINE_PWA_PASS`; product approval pending; distinct from 5200 |
 | FDS | VERIFIED_PLAYABLE (engineering) — `FDS_OFFLINE_PWA_PASS` + `NES_FCEUMM_REGRESSION_PASS`; product approval pending |
 | Vectrex | BLOCKED_EXTERNAL — external-BIOS vecx path + MIT Dot; no lawful BIOS → no gameplay claim |
-| Core lock | **379 files** LOCAL_FULL / 316 SOURCE_ONLY (Hatari HTTPS provenance; GameManager FDS mount patch) |
+| Core lock | **382 files** LOCAL_FULL (atari800 wasm+legacy + report; Hatari HTTPS provenance) |
 
 ## Player UX pass (2026-10-26)
 
@@ -262,14 +265,29 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 | Quality gates | Vitest 75; tsc OK; Django 43; Atari offline PASS; N64/ZX81/NES smokes PASS; core-lock LOCAL_FULL+SOURCE_ONLY; PUBLIC_SOURCE_SAFETY_PASS |
 | Evidence | `.runtime/test-evidence/PH-12/fds/` |
 
+## PH-12.3 Atari 8-bit pass (2026-11-01)
+
+| Check | Result |
+|---|---|
+| Firmware | AltirraOS + Altirra BASIC (FSF all-permissive) — GO; no proprietary Atari OS bundled |
+| WASM | `atari800` pin `4e7fbc73…`; hashes `6d19d006…` / `b7b6664b…`; memstream ABI patch |
+| Interactive A/B/A | `ATARI8_GAMEPLAY_PASS` (left/right/fire vs idle; seekable VFS) |
+| Save/restore | `ATARI8_SAVE_RESTORE_PASS` (~188768 B; restore deltaVsA=0; post-restore interaction) |
+| Compose offline | `ATARI8_OFFLINE_PWA_PASS` (library cold-start, SW offline, partial-cache repair) |
+| Engineering catalog | `mit-atari8-dot` / console `atari-8bit`; `product_approval_status=pending` |
+| Isolation | Does **not** inherit Atari 5200 (`a5200`) evidence |
+| Evidence | `.runtime/test-evidence/PH-12/atari8/` |
+| Regressions | Atari ST / FDS / NES / Genesis core / a5200 / N64 / ZX81 GAMEPLAY_PASS; Vitest 76; tsc OK; Django 43; core-lock 382 LOCAL_FULL; PUBLIC_SOURCE_SAFETY_PASS; SOURCE_OFFER_GATE_OK |
+
 ## Remaining blockers / next
 
 1. Owner: authorize Option B public repo push of sanitized candidate (LICENSE enacted)
 2. Counsel: legal-review package; `NEEDS_LEGAL_REVIEW` ≠ approval
 3. Owner: publish corresponding-source offer on HTTPS; gate must fetch PASS before `OFFER_DELIVERY_VERIFIED`
-4. Product: Alpha game set approvals (incl. Atari ST / FDS / N64/ZX81 fixtures if desired)
-5. Resolve CS for `virtualjaguar_js` (`81_eo` patch + rebuild notes now packaged); Hatari/EmuTOS CS pins recorded
+4. Product: Alpha game set approvals (incl. Atari ST / FDS / Atari 8-bit / N64/ZX81 fixtures if desired)
+5. Resolve CS for `virtualjaguar_js` (`81_eo` patch + rebuild notes now packaged); Hatari/EmuTOS/atari800 CS pins recorded
 6. QA: physical gamepad + iOS; Ops: staging HTTPS
 7. Playwright offline ≠ physical-device offline certification (document only)
 8. Continue PH-12.1 Jaguar (only remaining 12.1 EXPERIMENTAL)
 9. Vectrex: BLOCKED_EXTERNAL until authorized `system.img` + gameplay/offline gates
+10. Atari 8-bit: optional `.car`/`.cas`/multi-disk + 400/800 profile smokes after real validation; OS PWA/physical NOT_VERIFIED
