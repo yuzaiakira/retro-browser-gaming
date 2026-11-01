@@ -17,6 +17,10 @@
 
 **PH-12.3 Atari 8-bit (2026-11-01):** `atari800` (libretro-atari800 `4e7fbc73…` + memstream ABI patch; emsdk 3.1.74; EJS/build `677b1334…`) with **AltirraOS + Altirra BASIC only** (no proprietary Atari OS). Distinct from `a5200`. MIT Dot `.xex` (`bd52416d…`). Chromium A/B/A `ATARI8_GAMEPLAY_PASS`; save ~188768 B `ATARI8_SAVE_RESTORE_PASS`; Compose `ATARI8_OFFLINE_PWA_PASS`. **VERIFIED_PLAYABLE** (engineering). Product approval **pending**. OS PWA/physical **NOT_VERIFIED**. Docs: `atari8-libretro-build.md`, `atari8-firmware-audit.md`; evidence `.runtime/test-evidence/PH-12/atari8/`.
 
+**Orbit catalog smoke triage (2026-11-01):** Prior `tests/smoke.cjs` timeout was **test staleness** (paginated Discover no longer shows Orbit on page 1; PlayerShell uses Quick save/load). Not a catalog API defect. Fixed smoke: `RESPONSIVE_KEYBOARD_PASS` … `OFFLINE_LOAD_PASS`. Evidence `.runtime/test-evidence/PH-12/orbit-smoke-triage/`.
+
+**PH-12.5 Dreamcast / Flycast WASM (2026-11-01 start):** Feasibility pin **v1.0** `16e9c7b4…` / upstream Flycast `2c48c01`; GPLv2; release wasm `db2b87d8…`. Sample disables HLE; proprietary BIOS never bundled. reios HLE is GPLv2 in upstream — **UNVERIFIED** on this WASM port. Status **EXPERIMENTAL**. Docs: `flycast-wasm-dreamcast.md`, `dreamcast-firmware-audit.md`.
+
 **Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability — verified 2026-10-26.  
 **Hub UX (PH-UX-HUB):** Premium Gaming Hub — verified 2026-10-26.  
 **Hub UX Acceptance (Sprint 3.1):** offline persistent-profile journey, catalog Back/Forward history, Continue Playing accuracy, stable hub shots — verified 2026-10-26.  
@@ -37,7 +41,7 @@
 | Item | Status |
 |---|---|
 | VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX + **N64** + **ZX81** + **Atari ST** + **FDS** + **Atari 8-bit** |
-| EXPERIMENTAL | Jaguar |
+| EXPERIMENTAL | Jaguar; **Dreamcast** (Flycast WASM v1.0 pinned; HLE unproven on WASM; no proprietary BIOS) |
 | BLOCKED_EXTERNAL | ColecoVision; **Vectrex** (awaiting authorized `system.img`) |
 | FBNeo | BLOCKED_FIXTURE |
 | Atari ST | VERIFIED_PLAYABLE — offline PWA SW journey PASS; OS PWA/physical NOT_VERIFIED |
