@@ -19,7 +19,7 @@
 
 **Orbit catalog smoke triage (2026-11-01):** Prior `tests/smoke.cjs` timeout was **test staleness** (paginated Discover no longer shows Orbit on page 1; PlayerShell uses Quick save/load). Not a catalog API defect. Fixed smoke: `RESPONSIVE_KEYBOARD_PASS` … `OFFLINE_LOAD_PASS`. Evidence `.runtime/test-evidence/PH-12/orbit-smoke-triage/`.
 
-**PH-12.5 Dreamcast / Flycast WASM (2026-11-01):** Pin **v1.0** `16e9c7b4…` / Flycast `2c48c01`; GPLv2; packaged `flycast-wasm.data` `5ef913f5…` (wasm `db2b87d8…` + libelf JS polyfill / zip soft-stubs). MIT Dot ELF `ffafb5d5…`. Chromium **`DREAMCAST_HLE_BOOT_VISIBLE`** + **`DREAMCAST_GAMEPLAY_PASS`** + **`DREAMCAST_SAVE_RESTORE_PASS`** (HLE + `reicast_emulate_framebuffer`; no SEGA BIOS). Compose **offline PWA pending**. Status **EXPERIMENTAL** (not VERIFIED_PLAYABLE until offline + regressions). Docs: `flycast-wasm-dreamcast.md`, `dreamcast-firmware-audit.md`; evidence `.runtime/test-evidence/PH-12/dreamcast/`.
+**PH-12.5 Dreamcast / Flycast WASM (2026-11-01):** Pin **v1.0** `16e9c7b4…` / Flycast `2c48c01`; GPLv2; packaged `flycast-wasm.data` `5ef913f5…` (wasm `db2b87d8…` + libelf JS polyfill / zip soft-stubs; allowlist **`LOCAL_ONLY`**). MIT Dot ELF `ffafb5d5…`. Chromium **`DREAMCAST_HLE_BOOT_VISIBLE`** + **`DREAMCAST_GAMEPLAY_PASS`** + **`DREAMCAST_SAVE_RESTORE_PASS`** + Compose **`DREAMCAST_OFFLINE_PWA_PASS`** (HLE + `reicast_emulate_framebuffer`; no SEGA BIOS). **VERIFIED_PLAYABLE** (engineering). Product approval **pending**. OS PWA/physical **NOT_VERIFIED**. Docs: `flycast-wasm-dreamcast.md`, `dreamcast-firmware-audit.md`; evidence `.runtime/test-evidence/PH-12/dreamcast/`.
 
 **Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability — verified 2026-10-26.  
 **Hub UX (PH-UX-HUB):** Premium Gaming Hub — verified 2026-10-26.  
@@ -40,12 +40,13 @@
 
 | Item | Status |
 |---|---|
-| VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX + **N64** + **ZX81** + **Atari ST** + **FDS** + **Atari 8-bit** |
-| EXPERIMENTAL | Jaguar; **Dreamcast** (Flycast WASM v1.0; HLE gameplay+save PASS; offline PWA pending; no proprietary BIOS) |
+| VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX + **N64** + **ZX81** + **Atari ST** + **FDS** + **Atari 8-bit** + **Dreamcast** |
+| EXPERIMENTAL | Jaguar |
 | BLOCKED_EXTERNAL | ColecoVision; **Vectrex** (awaiting authorized `system.img`) |
 | FBNeo | BLOCKED_FIXTURE |
 | Atari ST | VERIFIED_PLAYABLE — offline PWA SW journey PASS; OS PWA/physical NOT_VERIFIED |
 | Atari 8-bit | VERIFIED_PLAYABLE (engineering) — `ATARI8_GAMEPLAY_PASS` + `ATARI8_SAVE_RESTORE_PASS` + `ATARI8_OFFLINE_PWA_PASS`; product approval pending; distinct from 5200 |
+| Dreamcast | VERIFIED_PLAYABLE (engineering) — `DREAMCAST_GAMEPLAY_PASS` + `DREAMCAST_SAVE_RESTORE_PASS` + `DREAMCAST_OFFLINE_PWA_PASS`; reios HLE; no SEGA BIOS; product approval pending |
 | FDS | VERIFIED_PLAYABLE (engineering) — `FDS_OFFLINE_PWA_PASS` + `NES_FCEUMM_REGRESSION_PASS`; product approval pending |
 | Vectrex | BLOCKED_EXTERNAL — external-BIOS vecx path + MIT Dot; no lawful BIOS → no gameplay claim |
 | Core lock | **382 files** LOCAL_FULL (atari800 wasm+legacy + report; Hatari HTTPS provenance) |
@@ -250,12 +251,11 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 
 ### Next concrete task
 
-1. **Dreamcast:** Compose offline PWA journey → `DREAMCAST_OFFLINE_PWA_PASS`; then regressions → reconsider engineering VERIFIED_PLAYABLE (stay EXPERIMENTAL until then)
-2. Vectrex: operator imports authorized `system.img` → gameplay A/B/A + Compose offline → reconsider VERIFIED_PLAYABLE
-3. PH-12.1: Jaguar — only with a rights-clear Alpine/`.j64` path or honest EXPERIMENTAL closeout
-4. Atari ST / FDS / Atari 8-bit: optional OS-level PWA install + physical-device gates (explicitly NOT_VERIFIED)
-5. Product: human product-approval for engineering fixtures — never auto-approve
-6. Owner gates unchanged (publication STOP)
+1. Vectrex: operator imports authorized `system.img` → gameplay A/B/A + Compose offline → reconsider VERIFIED_PLAYABLE
+2. PH-12.1: Jaguar — only with a rights-clear Alpine/`.j64` path or honest EXPERIMENTAL closeout
+3. Dreamcast / Atari ST / FDS / Atari 8-bit: optional OS-level PWA install + physical-device gates (explicitly NOT_VERIFIED); large CHD/GDI/CDI seekable path hardening
+4. Product: human product-approval for engineering fixtures — never auto-approve
+5. Owner gates unchanged (publication STOP)
 
 ## PH-12.2 FDS pass (2026-10-31 night)
 
@@ -283,6 +283,21 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 | Isolation | Does **not** inherit Atari 5200 (`a5200`) evidence |
 | Evidence | `.runtime/test-evidence/PH-12/atari8/` |
 | Regressions | Atari ST / FDS / NES / Genesis core / a5200 / N64 / ZX81 GAMEPLAY_PASS; Vitest 76; tsc OK; Django 43; core-lock 382 LOCAL_FULL; PUBLIC_SOURCE_SAFETY_PASS; SOURCE_OFFER_GATE_OK |
+
+## PH-12.5 Dreamcast pass (2026-11-01)
+
+| Check | Result |
+|---|---|
+| BIOS/HLE | reios HLE **GO** on this WASM pack (no `dc_boot.bin` / `dc_flash.bin`); SEGA BIOS never bundled |
+| Core | Flycast WASM v1.0 `16e9c7b4…` / Flycast `2c48c01`; pack `5ef913f5…` (3430469 B); wasm `db2b87d8…` |
+| Fixture | MIT Dot ELF `ffafb5d5…` (KallistiOS) |
+| Interactive | `DREAMCAST_GAMEPLAY_PASS` (Left/Right/A; `emulate_framebuffer`) |
+| Save/restore | `DREAMCAST_SAVE_RESTORE_PASS` (~28 MiB) |
+| Compose offline | `DREAMCAST_OFFLINE_PWA_PASS` (SW cold-start; library; restore+save; no server deps) |
+| Engineering catalog | `mit-dreamcast-dot`; `product_approval_status=pending` |
+| Allowlist | `LOCAL_ONLY` (sync fields fixed so Compose LOCAL_FULL starts) |
+| Evidence | `.runtime/test-evidence/PH-12/dreamcast/` |
+| Regressions | Genesis / Atari8 / Atari ST / FDS / NES / N64 / ZX81 GAMEPLAY_PASS; Vitest 76; tsc OK; Django 43; core-lock 385 LOCAL_FULL; PUBLIC_SOURCE_SAFETY_PASS; SOURCE_OFFER_GATE_OK |
 
 ## Remaining blockers / next
 

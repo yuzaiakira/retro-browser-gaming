@@ -10,7 +10,7 @@ Date: 2026-11-01. Scope: lawful boot path for browser Dreamcast without redistri
 | Flycast **reios** HLE BIOS | **GO** as GPLv2 Flycast source (`core/reios/`) | Sample sets `reicast_hle_bios=disabled` | **PASS** — Chromium HLE + MIT Dot (`DREAMCAST_HLE_BOOT_VISIBLE`, `DREAMCAST_GAMEPLAY_PASS`) |
 | User-provided proprietary BIOS | Local-only via `user-bios.ts` slots (`dreamcast-boot` / `dreamcast-flash`, **disabled**) | Supported by upstream docs | Fallback only |
 
-**Promotion rule:** Lawful HLE boot is verified for this packaged core + homebrew ELF. Engineering **VERIFIED_PLAYABLE** still requires Compose offline PWA + regression suite. Product approval remains pending. SEGA BIOS must never be redistributed.
+**Promotion rule:** Lawful HLE boot is verified for this packaged core + homebrew ELF. Compose **`DREAMCAST_OFFLINE_PWA_PASS`** + regression suite PASS → engineering **VERIFIED_PLAYABLE**. Product approval remains pending. SEGA BIOS must never be redistributed.
 
 ### Chromium probe (2026-11-01, latest)
 
@@ -58,6 +58,7 @@ RBG engineering **overrides** HLE to `enabled` and enables `reicast_emulate_fram
 
 ## Product / public distribution
 
-- Engineering catalog may seed the legal Dot fixture after offline PWA evidence.
+- Engineering catalog seeds `mit-dreamcast-dot` (`product_approval_status=pending`).
 - Product approval remains pending.
 - Corresponding-source offer must include Flycast pin + WASM patches + note the libelf JS polyfill under GPLv2 / BSD-2-Clause libelf API.
+- Browser allowlist marks Flycast packs **`LOCAL_ONLY`** (not cleared for anonymous public CDN).

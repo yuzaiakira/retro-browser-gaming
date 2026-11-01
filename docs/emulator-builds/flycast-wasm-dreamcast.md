@@ -1,6 +1,6 @@
 # Flycast WASM — Dreamcast feasibility (PH-12.5)
 
-Date: 2026-11-01. Status: **EXPERIMENTAL** (gameplay + save PASS; Compose offline PWA pending).  
+Date: 2026-11-01. Status: **VERIFIED_PLAYABLE (engineering)** — product approval pending; OS PWA / physical devices NOT_VERIFIED.
 Core id: **`flycast`** (never overwrite existing cores).
 
 ## Pins
@@ -62,9 +62,9 @@ Command: `CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/dreamcast-hl
 | Interactive Left/Right + frames | **`DREAMCAST_GAMEPLAY_PASS`** |
 | A button (RetroPad B=`0`) | fire pixels observed |
 | Save → move → restore | **`DREAMCAST_SAVE_RESTORE_PASS`** (~28 MiB state) |
-| Compose offline PWA | **pending** |
+| Compose offline PWA | **`DREAMCAST_OFFLINE_PWA_PASS`** (SW offline; library cold-start; restore+save; no server deps) |
 
-Evidence: `.runtime/test-evidence/PH-12/dreamcast/`.
+Evidence: `.runtime/test-evidence/PH-12/dreamcast/` (`offline-pwa-journey.json`, screenshots).
 
 ## Fixture
 
@@ -74,9 +74,9 @@ Evidence: `.runtime/test-evidence/PH-12/dreamcast/`.
 | SHA-256 | `ffafb5d50a89c0c8077ec2cbfe80ff82306d7f8bec8d7e98e9eaf7c213f0608e` |
 | SDK | KallistiOS Docker rebuild via `scripts/build-dreamcast-dot-fixture.sh` |
 
-## Next engineering steps
+## Follow-ups (non-blocking for engineering VERIFIED_PLAYABLE)
 
-1. Compose offline PWA journey → `DREAMCAST_OFFLINE_PWA_PASS`.
-2. Prefer seekable/OPFS for large CHD/GDI/CDI; keep ELF for compact engineering boots.
-3. Optionally rebuild upstream with real libelf/libzip linked (remove JS polyfill/soft-stubs).
-4. Promote to engineering **VERIFIED_PLAYABLE** only after offline + regression gates.
+1. Prefer seekable/OPFS for large CHD/GDI/CDI; keep ELF for compact engineering boots.
+2. Optionally rebuild upstream with real libelf/libzip linked (remove JS polyfill/soft-stubs).
+3. Product approval + OS-level PWA / physical device gates remain open.
+4. Allowlist: `LOCAL_ONLY` until counsel clears anonymous public CDN distribution of the modified Flycast pack.
