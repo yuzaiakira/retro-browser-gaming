@@ -20,18 +20,37 @@ mkdirSync(join(evidenceDir, 'screenshots'), { recursive: true });
 const cyclesPerPlatform = Math.max(1, Number(process.env.SOAK_CYCLES || 2));
 const playSeconds = Math.max(5, Number(process.env.SOAK_PLAY_SECONDS || 12));
 
-/** Platforms to exercise when present in catalog. Arcade appended only if runnable. */
+/** Ten targeted platforms. Arcade appended only when SOAK_INCLUDE_ARCADE=1. */
+const REQUIRED_KEYS = [
+  'genesis',
+  'nes',
+  'n64',
+  'zx81',
+  'atari-st',
+  'atari8',
+  'fds',
+  'dreamcast',
+  'psp',
+  'flash',
+];
+
 const platforms = [
   { key: 'genesis', slug: 'mit-genesis-breakout', title: /MIT Genesis Breakout/i, save: true },
-  { key: 'nes', slug: 'mit-nes-table-tennis', title: /NES|Table Tennis/i, save: true },
-  { key: 'n64', slug: 'mit-n64-controller-test', title: /N64|Controller/i, save: true },
-  { key: 'zx81', slug: 'mit-zx81-dot', title: /ZX81|Dot/i, save: true },
-  { key: 'atari-st', slug: 'mit-atarist-dot', title: /Atari ST|Dot/i, save: true },
-  { key: 'atari8', slug: 'mit-atari8-dot', title: /Atari 8|Dot/i, save: true },
-  { key: 'fds', slug: 'mit-fds-move-demo', title: /FDS|Disk|move/i, save: true },
-  { key: 'dreamcast', slug: 'mit-dreamcast-dot', title: /Dreamcast|Dot/i, save: true },
-  { key: 'psp', slug: 'mit-psp-dot', title: /PSP|Dot/i, save: true },
-  { key: 'flash', slug: 'mit-flash-dot', title: /Flash|Ruffle|Dot|SWF/i, save: false },
+  { key: 'nes', slug: 'mit-nes-table-tennis', title: /MIT NES Table Tennis/i, save: true },
+  { key: 'n64', slug: 'mit-n64-controller-test', title: /MIT N64 Controller Test/i, save: true },
+  { key: 'zx81', slug: 'mit-zx81-dot', title: /MIT ZX81 Dot/i, save: true },
+  // Catalog slug is GPL Pong Wars (Hatari + EmuTOS), not a fictional mit-atarist-dot.
+  {
+    key: 'atari-st',
+    slug: 'gpl-atari-st-pongwars',
+    title: /GPL Atari ST Pong Wars/i,
+    save: true,
+  },
+  { key: 'atari8', slug: 'mit-atari8-dot', title: /MIT Atari 8-bit Dot/i, save: true },
+  { key: 'fds', slug: 'mit-fds-move-demo', title: /MIT FDS Move Demo/i, save: true },
+  { key: 'dreamcast', slug: 'mit-dreamcast-dot', title: /MIT Dreamcast Dot/i, save: true },
+  { key: 'psp', slug: 'mit-psp-dot', title: /MIT PSP Dot/i, save: true },
+  { key: 'flash', slug: 'mit-flash-dot', title: /MIT Flash Dot/i, save: false },
 ];
 
 if (process.env.SOAK_INCLUDE_ARCADE === '1') {
@@ -58,10 +77,26 @@ async function waitMenuEnabled(page) {
 
 async function ensurePlay(page, slug, title) {
   await page.goto(`${baseUrl}/games/${slug}`);
-  await page.getByRole('heading', { name: title }).waitFor({ timeout: 90000 });
-  if (!(await page.getByRole('link', { name: /Play game/i }).count())) {
-    await page.getByRole('button', { name: /Download|Retry|Resume/i }).first().click();
-    await page.getByRole('link', { name: /Play game/i }).waitFor({ timeout: 300000 });
+  const heading = page.getByRole('heading', { name: title });
+  try {
+    await heading.waitFor({ timeout: 90000 });
+  } catch (e) {
+    const body = await page.locator('h1, h2').first().textContent().catch(() => '');
+    throw new Error(`heading timeout for ${slug} (saw "${body}"): ${e.message || e}`);
+  }
+  // Prefer Play when already installed; otherwise start/resume download.
+  for (let attempt = 0; attempt < 3; attempt++) {
+    if (await page.getByRole('link', { name: /Play game/i }).count()) break;
+    const action = page.getByRole('button', { name: /Download|Retry|Resume|Install/i }).first();
+    if (await action.count()) {
+      await action.click();
+    }
+    try {
+      await page.getByRole('link', { name: /Play game/i }).waitFor({ timeout: 300000 });
+      break;
+    } catch (e) {
+      if (attempt === 2) throw e;
+    }
   }
   await page.getByRole('link', { name: /Play game/i }).click();
   await page.waitForURL(/\/play\//, { timeout: 90000 });
@@ -295,12 +330,16 @@ async function lightPlay(page) {
   evidence.memory.final = finalHeap;
   evidence.memory.baselineToFinalDelta = finalHeap.usedSize - baseline.usedSize;
 
-  // Trend: require at least 2 successful platforms and no disposal failures.
   const okCount = Object.values(evidence.platforms).filter((p) => p.status === 'ok').length;
+  const requiredOk = REQUIRED_KEYS.every(
+    (k) => evidence.platforms[k] && evidence.platforms[k].status === 'ok',
+  );
   evidence.summary = {
     okCount,
     failCount: failures,
     skippedCount: evidence.skipped.length,
+    requiredKeys: REQUIRED_KEYS,
+    requiredOk,
   };
 
   writeFileSync(join(evidenceDir, 'cross-console-soak.json'), JSON.stringify(evidence, null, 2));
@@ -310,7 +349,22 @@ async function lightPlay(page) {
     console.error('CROSS_CONSOLE_SOAK_FAIL', evidence.summary);
     process.exit(1);
   }
+  // Baseline marker (partial coverage still allowed historically).
   console.log('CROSS_CONSOLE_SOAK_PASS', JSON.stringify(evidence.summary));
+  // Full coverage marker only when all ten targeted platforms completed OK.
+  if (requiredOk) {
+    console.log('CROSS_CONSOLE_SOAK_FULL_PASS', JSON.stringify(evidence.summary));
+    writeFileSync(
+      join(evidenceDir, 'CROSS_CONSOLE_SOAK_FULL_PASS.txt'),
+      `CROSS_CONSOLE_SOAK_FULL_PASS\n${new Date().toISOString()}\n`,
+    );
+  } else {
+    console.warn(
+      'CROSS_CONSOLE_SOAK_FULL_PASS_PENDING',
+      'missing or skipped:',
+      REQUIRED_KEYS.filter((k) => !evidence.platforms[k] || evidence.platforms[k].status !== 'ok'),
+    );
+  }
   process.exit(0);
 })().catch((err) => {
   console.error('CROSS_CONSOLE_SOAK_FAIL', err);

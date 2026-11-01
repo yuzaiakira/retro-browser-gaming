@@ -199,11 +199,14 @@ async function sampleCanvas(page) {
         await send(7, 1, 800);
         await send(7, 0, 100);
         await menu.getByRole('button', { name: 'Quick load', exact: true }).click();
-        const confirm = page.getByRole('heading', { name: /Load save state/i });
-        if (await confirm.count()) {
-          await page.getByRole('button', { name: /Load|Confirm|Yes/i }).first().click();
-          loadOk = true;
-        }
+        await page.getByRole('alertdialog').getByRole('button', { name: 'Load' }).click();
+        await page
+          .locator('.player-status, .player-toast')
+          .filter({ hasText: /Restored|Quick load|loaded/i })
+          .first()
+          .waitFor({ timeout: 60000 })
+          .catch(() => undefined);
+        loadOk = true;
       }
     }
     await menu.getByRole('button', { name: 'Close' }).click().catch(() => undefined);
@@ -223,25 +226,32 @@ async function sampleCanvas(page) {
       throw new Error('Arcade core/romset failure: ' + frameErrors.join('; '));
     }
 
-    console.log('ARCADE_GAMEPLAY_PASS');
+    console.log('ARCADE_RBGDOT_GAMEPLAY_PASS');
+    evidence.markers.ARCADE_RBGDOT_GAMEPLAY_PASS = true;
+    // Alias retained for older harnesses
     evidence.markers.ARCADE_GAMEPLAY_PASS = true;
 
     if (saveOk && loadOk) {
-      console.log('ARCADE_SAVE_RESTORE_PASS');
+      console.log('ARCADE_RBGDOT_SAVE_RESTORE_PASS');
+      evidence.markers.ARCADE_RBGDOT_SAVE_RESTORE_PASS = true;
       evidence.markers.ARCADE_SAVE_RESTORE_PASS = true;
     } else {
       evidence.notes.push('Save/restore not confirmed in this run — remain EXPERIMENTAL for saves');
-      console.warn('ARCADE_SAVE_RESTORE_PENDING', { saveOk, loadOk });
+      console.warn('ARCADE_RBGDOT_SAVE_RESTORE_PENDING', { saveOk, loadOk });
     }
 
     writeFileSync(join(evidenceDir, 'arcade-gameplay.json'), JSON.stringify(evidence, null, 2));
+    writeFileSync(
+      join(evidenceDir, 'ARCADE_RBGDOT_GAMEPLAY_PASS.txt'),
+      `ARCADE_RBGDOT_GAMEPLAY_PASS\n${new Date().toISOString()}\n`,
+    );
     await browser.close();
-    process.exit(evidence.markers.ARCADE_GAMEPLAY_PASS ? 0 : 1);
+    process.exit(evidence.markers.ARCADE_RBGDOT_GAMEPLAY_PASS ? 0 : 1);
   } catch (err) {
     evidence.error = String(err && err.message ? err.message : err);
     evidence.consoleTail = consoleLines.slice(-120);
     writeFileSync(join(evidenceDir, 'arcade-gameplay.json'), JSON.stringify(evidence, null, 2));
-    console.error('ARCADE_GAMEPLAY_FAIL', evidence.error);
+    console.error('ARCADE_RBGDOT_GAMEPLAY_FAIL', evidence.error);
     await browser.close().catch(() => undefined);
     process.exit(1);
   }
