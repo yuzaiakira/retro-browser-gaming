@@ -24,7 +24,7 @@ Detect memory / resource leaks across sequential emulator launches in **one** br
 | NES | `mit-nes-table-tennis` | catalog present |
 | N64 | `mit-n64-controller-test` | catalog present |
 | ZX81 | `mit-zx81-dot` | catalog present |
-| Atari ST | `mit-atarist-dot` | catalog present |
+| Atari ST | `gpl-atari-st-pongwars` | catalog present |
 | Atari 8-bit | `mit-atari8-dot` | catalog present |
 | FDS | `mit-fds-move-demo` | catalog present |
 | Dreamcast | `mit-dreamcast-dot` | catalog present |
@@ -38,51 +38,32 @@ Missing catalog titles are **skipped** (not hard-fail). Disposal/iframe failures
 
 Historical SIGKILL/OOM evidence is preserved from  
 `.runtime/test-evidence/PH-12/flash/baseline-genesis-exit137.json`  
-into the soak evidence directory. Investigation checklist:
-
-1. Kernel OOM logs (`dmesg` / journal) when accessible  
-2. Container memory limits (`docker stats`, Compose `mem_limit`)  
-3. Browser process RSS samples in soak JSON  
-4. WASM memory growth (core-specific; not always exposed)  
-5. Child-process termination vs parallel test contention  
+into the soak evidence directory when present.
 
 ## Acceptance
 
-Emit **`CROSS_CONSOLE_SOAK_PASS`** only when:
+- **`CROSS_CONSOLE_SOAK_PASS`**: ≥2 platforms OK + zero hard disposal failures  
+- **`CROSS_CONSOLE_SOAK_FULL_PASS`**: all ten required keys OK (skipped ≠ pass)
 
-- ≥2 platforms complete OK play/exit cycles  
-- Zero hard disposal failures  
-- Evidence JSON written  
+## Status (2026-11-01 evening)
 
-## Run
-
-```bash
-# Against Compose launcher
-CHROMIUM_EXECUTABLE=/usr/bin/chromium \
-  RETRO_TEST_BASE_URL=http://launcher.localhost:13000 \
-  node apps/web/tests/cross-console-soak.cjs
-```
-
-Results: see evidence JSON + this report’s status section (updated after the first verified run).
-
-## Status
-
-**`CROSS_CONSOLE_SOAK_PASS`** (2026-11-01) — Compose launcher, `SOAK_CYCLES=1`, `SOAK_PLAY_SECONDS=8`.
+**`CROSS_CONSOLE_SOAK_PASS`** — Compose launcher, `SOAK_CYCLES=1`, `SOAK_PLAY_SECONDS=8`.
 
 | Platform | Result |
 |----------|--------|
-| Genesis | OK (disposal iframe→0) |
+| Genesis | OK |
 | NES | OK |
 | N64 | OK |
-| ZX81 | skipped (Play link timeout — catalog/download flake) |
-| Atari ST | skipped (heading mismatch / fixture title) |
+| ZX81 | **SKIPPED** — Play link timeout (download stuck / catalog flake) |
+| Atari ST | OK (slug corrected to `gpl-atari-st-pongwars`) |
 | Atari 8-bit | OK |
-| FDS | skipped (Menu enable timeout) |
+| FDS | **SKIPPED** — Menu enable timeout after play |
 | Dreamcast | OK |
 | PSP | OK |
 | Flash | OK |
-| Arcade | not included (`SOAK_INCLUDE_ARCADE` unset; runtime EXPERIMENTAL) |
+
+**`CROSS_CONSOLE_SOAK_FULL_PASS`**: **PENDING** (zx81 + fds skipped).
 
 Evidence: `.runtime/test-evidence/PH-12/soak/cross-console-soak.json`, `soak-run.txt`.  
 Historical EXIT=137: preserved when present under soak evidence.  
-RSS: `browser.process()` null in this headless run — heap-only measurements labeled honestly.
+RSS: often `browser.process()` null in headless — heap-only measurements labeled honestly.
