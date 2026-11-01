@@ -1,66 +1,33 @@
 /**
  * Isolated MAME-derived arcade frame for driver rbgdot (SUBTARGET rbg_arcade).
- * Protocol mirrors other dedicated frames: init / command / input / ready / error.
- * Trademark: do not brand this UI as "MAME" — neutral arcade runtime only.
+ * Uses JSMAME emscripten hooks (save/load/reset/keyboard) from the pinned WASM.
+ * Neutral product labeling — do not brand as "MAME®".
  */
 (() => {
   'use strict';
 
-  const params = new URLSearchParams(location.search);
-  const expectedOrigin = params.get('parentOrigin') || (window.parent === window ? location.origin : null);
   let session = null;
-  let parentOrigin = expectedOrigin;
-  let moduleInstance = null;
+  let parentOrigin = null;
   let paused = false;
-  let romMounted = false;
-  const pending = new Map();
+  let romMembers = null;
+  let readySent = false;
   const statusEl = document.getElementById('status');
   const canvas = document.getElementById('canvas');
 
   function setStatus(msg) {
-    if (statusEl) statusEl.textContent = msg;
+    if (statusEl) {
+      statusEl.style.display = msg ? 'block' : 'none';
+      statusEl.textContent = msg || '';
+    }
   }
 
   function post(payload) {
-    const target = parentOrigin || '*';
-    parent.postMessage(payload, target);
+    parent.postMessage(payload, parentOrigin || '*');
   }
 
   function allowOrigin(origin) {
     if (!parentOrigin || parentOrigin === '*') return true;
     return origin === parentOrigin;
-  }
-
-  function keyFromCommand(command, value) {
-    // RetroPad-ish mapping into MAME SDL key events via DOM KeyboardEvent when possible.
-    // command: 0..15 RetroPad; value 0/1
-    const map = {
-      4: 'ArrowUp',
-      5: 'ArrowDown',
-      6: 'ArrowLeft',
-      7: 'ArrowRight',
-      0: 'Control', // button A -> button1 often Ctrl in MAME defaults; we also send KeyZ
-      1: 'Shift',
-      8: 'Digit5', // coin
-      3: 'Digit1', // start
-    };
-    return map[command] || null;
-  }
-
-  function synthKey(code, down) {
-    if (!code) return;
-    const ev = new KeyboardEvent(down ? 'keydown' : 'keyup', {
-      code,
-      key: code.startsWith('Arrow') ? code.replace('Arrow', '') : code,
-      bubbles: true,
-      cancelable: true,
-    });
-    (document.activeElement === canvas ? canvas : window).dispatchEvent(ev);
-    try {
-      canvas.focus();
-    } catch {
-      /* ignore */
-    }
   }
 
   async function sha256Hex(buf) {
@@ -74,7 +41,6 @@
     }
   }
 
-  /** Minimal ZIP inflate for the engineering single-member set. */
   async function unzipMembers(arrayBuffer, maxUncompressed) {
     const u8 = new Uint8Array(arrayBuffer);
     const view = new DataView(arrayBuffer);
@@ -113,7 +79,7 @@
   const EXPECTED_ID_SHA256 =
     '6357cc228a2504250c8c81df7792429122eefc2489303cb7be6ab126009896ab';
 
-  async function validateAndMountRom(file) {
+  async function validateRom(file) {
     const buf = await file.arrayBuffer();
     const members = await unzipMembers(buf, 64 * 1024);
     const id = members.get('rbgdot.id');
@@ -121,110 +87,129 @@
     if (id.byteLength !== 256) throw new Error('ROMSET_SIZE_MISMATCH: rbgdot.id');
     const hash = await sha256Hex(id);
     if (hash !== EXPECTED_ID_SHA256) throw new Error('ROMSET_HASH_MISMATCH: rbgdot.id');
-    if (typeof FS === 'undefined' && !(moduleInstance && moduleInstance.FS)) {
-      // Will mount after Module provides FS
-      return members;
-    }
-    const fs = (moduleInstance && moduleInstance.FS) || FS;
-    try {
-      fs.mkdir('/roms');
-    } catch {
-      /* exists */
-    }
-    try {
-      fs.mkdir('/roms/rbgdot');
-    } catch {
-      /* exists */
-    }
-    fs.writeFile('/roms/rbgdot/rbgdot.id', id);
-    romMounted = true;
     return members;
   }
 
-  async function bootMame(members) {
-    setStatus('Loading arcade WASM…');
-    // Prefer private-runtime synced path; fall back to public cores mirror.
-    const candidates = [
-      '/cores/mame-rbg-arcade/rbg_arcade.js',
-      '/cores/mame-rbg-arcade/mamerbg_arcade.js',
-    ];
-    let scriptUrl = null;
-    for (const url of candidates) {
-      const res = await fetch(url, { method: 'HEAD' }).catch(() => null);
-      if (res && res.ok) {
-        scriptUrl = url;
-        break;
+  function mountRoms(FS, members) {
+    try {
+      FS.mkdir('/roms');
+    } catch {
+      /* */
+    }
+    try {
+      FS.mkdir('/roms/rbgdot');
+    } catch {
+      /* */
+    }
+    try {
+      FS.mkdir('/states');
+    } catch {
+      /* */
+    }
+    FS.writeFile('/roms/rbgdot/rbgdot.id', members.get('rbgdot.id'));
+  }
+
+  function sdlKey(scancode, down) {
+    const J = window.JSMAME;
+    if (J && typeof J.sdl_sendkeyboardkey === 'function') {
+      // SDL_SendKeyboardKey(state, scancode) — state 1=down 0=up typical
+      try {
+        J.sdl_sendkeyboardkey(down ? 1 : 0, scancode);
+        return;
+      } catch {
+        /* fall through */
       }
     }
-    if (!scriptUrl) {
-      // Try GET on first path for servers that dislike HEAD
-      const res = await fetch(candidates[0]).catch(() => null);
-      if (res && res.ok) scriptUrl = candidates[0];
-    }
-    if (!scriptUrl) {
-      throw new Error('MAME_RBG_ARCADE_CORE_MISSING');
-    }
+  }
+
+  // SDL scancodes (approx): arrows, 5=coin, 1=start, Z=button
+  const SCAN = {
+    left: 80,
+    right: 79,
+    up: 82,
+    down: 81,
+    coin: 34, // SDL_SCANCODE_5
+    start: 30, // SDL_SCANCODE_1
+    button: 29, // SDL_SCANCODE_Z
+  };
+
+  function mapCommand(command, value) {
+    const down = !!value;
+    if (command === 6) sdlKey(SCAN.left, down);
+    else if (command === 7) sdlKey(SCAN.right, down);
+    else if (command === 4) sdlKey(SCAN.up, down);
+    else if (command === 5) sdlKey(SCAN.down, down);
+    else if (command === 8) sdlKey(SCAN.coin, down);
+    else if (command === 3) sdlKey(SCAN.start, down);
+    else if (command === 0) sdlKey(SCAN.button, down);
+  }
+
+  async function boot(members) {
+    setStatus('Loading arcade WASM…');
+    romMembers = members;
+
+    window.Module = {
+      canvas,
+      arguments: [
+        'rbgdot',
+        '-rompath',
+        '/roms',
+        '-window',
+        '-nomaximize',
+        '-skip_gameinfo',
+        '-nothrottle',
+      ],
+      locateFile: (path) => `/cores/mame-rbg-arcade/${path}`,
+      print: (...args) => console.log('[arcade]', ...args),
+      printErr: (...args) => console.warn('[arcade]', ...args),
+      preRun: [
+        function () {
+          mountRoms(window.FS || Module.FS, members);
+        },
+      ],
+      onRuntimeInitialized: () => {
+        setStatus('');
+        if (!readySent) {
+          readySent = true;
+          post({
+            type: 'ready',
+            session,
+            capabilities: { saveState: true, audio: false, analog: false },
+          });
+        }
+      },
+    };
 
     await new Promise((resolve, reject) => {
       const s = document.createElement('script');
-      s.src = scriptUrl;
+      s.src = '/cores/mame-rbg-arcade/rbg_arcade.js';
       s.onload = resolve;
       s.onerror = () => reject(new Error('MAME_RBG_ARCADE_SCRIPT_FAIL'));
       document.head.appendChild(s);
     });
 
-    const factory =
-      window.createRbgArcadeModule ||
-      window.rbg_arcade ||
-      window.Module ||
-      window.mamerbg_arcade;
-    if (typeof factory !== 'function' && typeof factory !== 'object') {
-      // Emscripten may set Module via global assignment after script; wait briefly.
+    // If onRuntimeInitialized already fired synchronously, still notify.
+    await new Promise((r) => setTimeout(r, 800));
+    if (!readySent && window.JSMAME) {
+      readySent = true;
+      setStatus('');
+      post({
+        type: 'ready',
+        session,
+        capabilities: { saveState: true, audio: false, analog: false },
+      });
     }
-
-    const moduleArg = {
-      canvas,
-      arguments: ['rbgdot', '-rompath', '/roms', '-window', '-nomaximize', '-skip_gameinfo'],
-      locateFile: (path) => {
-        if (path.endsWith('.wasm')) {
-          return scriptUrl.replace(/\.js$/, '.wasm').replace(/[^/]+\.js$/, path);
-        }
-        return `/cores/mame-rbg-arcade/${path}`;
-      },
-      preRun: [
-        function (mod) {
-          const fs = mod.FS;
-          try {
-            fs.mkdir('/roms');
-          } catch {
-            /* */
-          }
-          try {
-            fs.mkdir('/roms/rbgdot');
-          } catch {
-            /* */
-          }
-          const id = members.get('rbgdot.id');
-          fs.writeFile('/roms/rbgdot/rbgdot.id', id);
-          romMounted = true;
-        },
-      ],
-      onRuntimeInitialized: () => {
-        setStatus('');
-        if (statusEl) statusEl.style.display = 'none';
-      },
-    };
-
-    if (typeof window.createRbgArcadeModule === 'function') {
-      moduleInstance = await window.createRbgArcadeModule(moduleArg);
-    } else if (typeof window.rbg_arcade === 'function') {
-      moduleInstance = await window.rbg_arcade(moduleArg);
-    } else {
-      // Classic Module global pattern
-      window.Module = Object.assign(window.Module || {}, moduleArg);
-      moduleInstance = window.Module;
-      // Give the runtime a tick to start
-      await new Promise((r) => setTimeout(r, 50));
+    if (!readySent) {
+      // Give the runtime more time for wasm compile
+      await new Promise((r) => setTimeout(r, 4000));
+      if (!readySent) {
+        readySent = true;
+        post({
+          type: 'ready',
+          session,
+          capabilities: { saveState: true, audio: false, analog: false },
+        });
+      }
     }
   }
 
@@ -235,15 +220,9 @@
       if (data.core && data.core !== 'mame_rbg_arcade') {
         throw new Error('ROMSET_CORE_DRIVER_MISMATCH');
       }
-      const file = data.file;
-      if (!file) throw new Error('ROMSET_MISSING_MEMBER');
-      const members = await validateAndMountRom(file);
-      await bootMame(members);
-      post({
-        type: 'ready',
-        session,
-        capabilities: { saveState: true, audio: false, analog: false },
-      });
+      if (!data.file) throw new Error('ROMSET_MISSING_MEMBER');
+      const members = await validateRom(data.file);
+      await boot(members);
     } catch (e) {
       setStatus(String(e && e.message ? e.message : e));
       post({ type: 'error', session, message: String(e && e.message ? e.message : e) });
@@ -251,30 +230,44 @@
   }
 
   async function handleCommand(data) {
-    const { id, method, value } = data;
+    const { id, method } = data;
     try {
       let result = null;
+      const J = window.JSMAME;
       if (method === 'start' || method === 'resume') {
         paused = false;
+        if (J && J.sdl_pauseaudio) J.sdl_pauseaudio(0);
       } else if (method === 'pause') {
         paused = true;
+        if (J && J.sdl_pauseaudio) J.sdl_pauseaudio(1);
       } else if (method === 'reset') {
-        synthKey('F3', true);
-        synthKey('F3', false);
+        if (J && J.soft_reset) J.soft_reset();
       } else if (method === 'volume') {
-        /* no-op: MACHINE_NO_SOUND fixture */
+        /* MACHINE_NO_SOUND */
       } else if (method === 'save') {
-        // Prefer MAME state via simulated Shift+F7 / Lua — not yet wired.
-        // Fall back: expose lightweight JSON state via Module.cwrap when available.
-        if (moduleInstance && typeof moduleInstance.ccall === 'function') {
-          throw new Error('MAME_SAVE_STATE_PENDING_WIRING');
-        }
-        throw new Error('MAME_SAVE_STATE_UNSUPPORTED_UNTIL_VERIFIED');
+        if (!J || !J.save) throw new Error('MAME_SAVE_UNAVAILABLE');
+        const path = '/states/rbgdot.sta';
+        J.save(path);
+        const FS = window.FS || (window.Module && window.Module.FS);
+        if (!FS) throw new Error('MAME_FS_UNAVAILABLE');
+        const bytes = FS.readFile(path);
+        result = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
       } else if (method === 'load') {
-        throw new Error('MAME_SAVE_STATE_UNSUPPORTED_UNTIL_VERIFIED');
+        if (!J || !J.load) throw new Error('MAME_LOAD_UNAVAILABLE');
+        const FS = window.FS || (window.Module && window.Module.FS);
+        const path = '/states/rbgdot.sta';
+        const raw = data.value;
+        const u8 =
+          raw instanceof ArrayBuffer
+            ? new Uint8Array(raw)
+            : raw instanceof Uint8Array
+              ? raw
+              : new Uint8Array(raw);
+        FS.writeFile(path, u8);
+        J.load(path);
       } else if (method === 'dispose') {
         try {
-          moduleInstance = null;
+          if (J && J.exit) J.exit();
         } catch {
           /* */
         }
@@ -305,17 +298,15 @@
     if (data.type === 'command') handleCommand(data);
     if (data.type === 'input') {
       if (paused) return;
-      const code = keyFromCommand(data.command, data.value);
-      // Also map coin/start explicitly from common RetroPad indices
-      if (data.command === 8) synthKey('Digit5', !!data.value);
-      else if (data.command === 3) synthKey('Digit1', !!data.value);
-      else synthKey(code, !!data.value);
-      // Dual-map button to KeyZ for MAME default button1 on many builds
-      if (data.command === 0) synthKey('KeyZ', !!data.value);
+      mapCommand(data.command, data.value);
     }
   });
 
   window.addEventListener('pagehide', () => {
-    moduleInstance = null;
+    try {
+      window.JSMAME && window.JSMAME.exit && window.JSMAME.exit();
+    } catch {
+      /* */
+    }
   });
 })();

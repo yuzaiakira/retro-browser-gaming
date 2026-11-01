@@ -156,7 +156,9 @@ export async function validateRomsetMembers(
         got: buf.byteLength,
       });
     }
-    const hash = await sha256Hex(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength));
+    const copy = new Uint8Array(buf.byteLength);
+    copy.set(buf);
+    const hash = await sha256Hex(copy.buffer);
     if (hash !== member.sha256) {
       return fail('ROMSET_HASH_MISMATCH', `Hash mismatch: ${member.filename}`, {
         expected: member.sha256,
@@ -246,7 +248,9 @@ async function inflateRaw(
   // DecompressionStream expects zlib/gzip wrappers; for raw deflate use ds + ignore... 
   // Prefer built-in: wrap as raw via Compression Streams if available with 'deflate-raw'.
   const ds = new DecompressionStream('deflate-raw');
-  const stream = new Blob([compressed]).stream().pipeThrough(ds);
+  const copy = new Uint8Array(compressed.byteLength);
+  copy.set(compressed);
+  const stream = new Blob([copy]).stream().pipeThrough(ds);
   const ab = await new Response(stream).arrayBuffer();
   if (ab.byteLength > cap) throw new Error('ROMSET_DECOMPRESSION_LIMIT');
   return ab;

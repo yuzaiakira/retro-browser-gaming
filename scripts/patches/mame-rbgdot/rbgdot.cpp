@@ -174,8 +174,10 @@ INPUT_PORTS_END
 
 void rbgdot_state::rbgdot(machine_config &config)
 {
-	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
-	m_screen->set_raw(6'000'000, 200, 0, SCREEN_W, 140, 0, SCREEN_H);
+	SCREEN(config, m_screen);
+	m_screen->set_size(SCREEN_W, SCREEN_H);
+	m_screen->set_visarea(0, SCREEN_W - 1, 0, SCREEN_H - 1);
+	m_screen->set_refresh_hz(60);
 	m_screen->set_screen_update(FUNC(rbgdot_state::screen_update));
 
 	SPEAKER(config, "mono").front_center();

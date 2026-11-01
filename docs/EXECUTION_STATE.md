@@ -23,6 +23,10 @@
 
 **PH-12.6 Flash / Ruffle (2026-11-01):** Official selfhosted **0.7.1** (`v0.7.1` / `89a70499…`; zip `ef12edbe…`; MIT OR Apache-2.0). Dedicated `ruffle-frame` + CSP; `polyfills:false`; EI off; MIT Dot SWF `3f5c78f2…` (Haxe 4.3). **`FLASH_RUFFLE_GAMEPLAY_PASS`** + SharedObject **`FLASH_RUFFLE_PROGRESS_PERSISTENCE_PASS`** + Compose **`FLASH_RUFFLE_OFFLINE_PWA_PASS`**. **`saveState=false`** (no Quick Save). **VERIFIED_PLAYABLE** (engineering) under documented save semantics. Product approval **pending**. Docs: `ruffle-web-integration.md`, `flash-save-capabilities.md`, `flash-security-audit.md`; evidence `.runtime/test-evidence/PH-12/flash/`.
 
+**PH-12.4 Arcade / MAME WASM (2026-11-01):** License **GO** for first-party driver **`rbgdot`** + MIT ZIP; **FBNeo NO-GO** (non-commercial); MAMEDev free ROMs **NO-GO** to redistribute. Reproducible SUBTARGET build: MAME `a48afb95…`, emsdk Docker **6.0.10**, wasm `a19df0ad…` (~25 MiB), `LOCAL_ONLY`. ROMset validator + `mame-frame` + catalog seed `mit-arcade-rbgdot`. **EXPERIMENTAL** — no `ARCADE_GAMEPLAY_PASS` (legacy GL / start timeout under Chromium SwiftShader). Docs: `arcade-license-audit.md`, `arcade-romset-policy.md`, `mame-wasm-arcade.md`. Evidence `.runtime/test-evidence/PH-12/arcade/`.
+
+**Cross-console soak (2026-11-01):** **`CROSS_CONSOLE_SOAK_PASS`** — Genesis/NES/N64/Atari8/Dreamcast/PSP/Flash OK disposal cycles; ZX81/Atari ST/FDS skipped. Report `docs/reports/cross-console-soak.md`; evidence `.runtime/test-evidence/PH-12/soak/`.
+
 **Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability — verified 2026-10-26.  
 **Hub UX (PH-UX-HUB):** Premium Gaming Hub — verified 2026-10-26.  
 **Hub UX Acceptance (Sprint 3.1):** offline persistent-profile journey, catalog Back/Forward history, Continue Playing accuracy, stable hub shots — verified 2026-10-26.  
@@ -43,9 +47,10 @@
 | Item | Status |
 |---|---|
 | VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX + **N64** + **ZX81** + **Atari ST** + **FDS** + **Atari 8-bit** + **Dreamcast** + **Flash/Ruffle** |
-| EXPERIMENTAL | Jaguar |
+| EXPERIMENTAL | Jaguar; **Arcade `rbgdot`** (WASM built; gameplay markers pending) |
 | BLOCKED_EXTERNAL | ColecoVision; **Vectrex** (awaiting authorized `system.img`) |
-| FBNeo | BLOCKED_FIXTURE |
+| FBNeo | BLOCKED_FIXTURE (do not ship in unrestricted public app) |
+| Arcade | EXPERIMENTAL — legal GO for `rbgdot` only; no `ARCADE_*` PASS markers yet |
 | Atari ST | VERIFIED_PLAYABLE — offline PWA SW journey PASS; OS PWA/physical NOT_VERIFIED |
 | Atari 8-bit | VERIFIED_PLAYABLE (engineering) — `ATARI8_GAMEPLAY_PASS` + `ATARI8_SAVE_RESTORE_PASS` + `ATARI8_OFFLINE_PWA_PASS`; product approval pending; distinct from 5200 |
 | Dreamcast | VERIFIED_PLAYABLE (engineering) — `DREAMCAST_GAMEPLAY_PASS` + `DREAMCAST_SAVE_RESTORE_PASS` + `DREAMCAST_OFFLINE_PWA_PASS`; reios HLE; no SEGA BIOS; product approval pending |

@@ -642,6 +642,24 @@
       "reason": "Official Ruffle 0.7.1 selfhosted web package (MIT OR Apache-2.0); pinned tag v0.7.1 / 89a70499\u2026; no commercial SWF",
       "corresponding_source_class": "upstream_pin_plus_tracked_js",
       "license": "MIT OR Apache-2.0"
+    },
+    {
+      "path": "mame-rbg-arcade/rbg_arcade.js",
+      "sha256": "754d5225ace046a20f107bc3360a6b3d402d155294ba0f22299e0085a5757ed9",
+      "byteSize": 283674,
+      "browser_distribution": "LOCAL_ONLY",
+      "license": "GPL-2.0-or-later",
+      "reason": "Engineering MAME SUBTARGET rbgdot; LOCAL_ONLY \u2014 not cleared for PUBLIC_BROWSER",
+      "corresponding_source_class": "PINNED_UPSTREAM_PLUS_PATCH"
+    },
+    {
+      "path": "mame-rbg-arcade/rbg_arcade.wasm",
+      "sha256": "a19df0ad92f67f196ba402ac6b6c79ae82b8fe4525382db198c60b6ac9040064",
+      "byteSize": 25218532,
+      "browser_distribution": "LOCAL_ONLY",
+      "license": "GPL-2.0-or-later",
+      "reason": "Engineering MAME SUBTARGET rbgdot; LOCAL_ONLY \u2014 not cleared for PUBLIC_BROWSER",
+      "corresponding_source_class": "PINNED_UPSTREAM_PLUS_PATCH"
     }
   ]
 }

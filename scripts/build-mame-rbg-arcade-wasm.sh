@@ -46,10 +46,12 @@ docker run --rm \
     emcc -v | head -3
     mkdir -p /tmp/em-cache/sysroot/lib/pkgconfig
     embuilder build sdl3 sdl3_ttf
+    # NOWERROR=1: Clang 24 + residfp friend tag mismatch otherwise fails -Werror
     emmake make \
       SUBTARGET=${SUBTARGET} \
       SOURCES=src/mame/rbg/rbgdot.cpp \
-      REGENIE=1 \
+      REGENIE=1 NOWERROR=1 \
+      NOWERROR=1 \
       TOOLS=0 \
       -j${JOBS}
   "

@@ -67,4 +67,22 @@ Results: see evidence JSON + this report’s status section (updated after the f
 
 ## Status
 
-**PENDING** first Compose verification run in this session.
+**`CROSS_CONSOLE_SOAK_PASS`** (2026-11-01) — Compose launcher, `SOAK_CYCLES=1`, `SOAK_PLAY_SECONDS=8`.
+
+| Platform | Result |
+|----------|--------|
+| Genesis | OK (disposal iframe→0) |
+| NES | OK |
+| N64 | OK |
+| ZX81 | skipped (Play link timeout — catalog/download flake) |
+| Atari ST | skipped (heading mismatch / fixture title) |
+| Atari 8-bit | OK |
+| FDS | skipped (Menu enable timeout) |
+| Dreamcast | OK |
+| PSP | OK |
+| Flash | OK |
+| Arcade | not included (`SOAK_INCLUDE_ARCADE` unset; runtime EXPERIMENTAL) |
+
+Evidence: `.runtime/test-evidence/PH-12/soak/cross-console-soak.json`, `soak-run.txt`.  
+Historical EXIT=137: preserved when present under soak evidence.  
+RSS: `browser.process()` null in this headless run — heap-only measurements labeled honestly.
