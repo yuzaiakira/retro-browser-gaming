@@ -45,6 +45,7 @@ SYSTEMS = [
     ("n64", "Nintendo 64", "console"),
     ("atari-jaguar", "Atari Jaguar", "console"),
     ("dreamcast", "Sega Dreamcast", "console"),
+    ("flash", "Adobe Flash", "computer"),
     ("j2me", "Java ME / J2ME", "handheld"),
     ("ps1", "PlayStation", "console"),
     ("psp", "PlayStation Portable", "handheld"),
@@ -82,6 +83,7 @@ WASM_CORES = [
     ("jsdos", ["zip"], ["wasm", "secureContext"]),
     ("hatari", ["st", "msa", "dim", "stx"], ["wasm", "secureContext"]),
     ("flycast", ["elf", "cdi", "gdi", "chd", "cue", "iso"], ["wasm", "webgl2", "secureContext"]),
+    ("ruffle", ["swf"], ["wasm", "secureContext"]),
     ("js2me", ["jar"], ["secureContext"]),
 ]
 
@@ -119,6 +121,7 @@ CONSOLE_FIXTURE_SLUGS = {
     "n64",
     "atari-jaguar",
     "dreamcast",
+    "flash",
     "j2me",
     "ps1",
     "psp",
@@ -174,6 +177,8 @@ class Command(BaseCommand):
                 core_version = "jsdos-8.3.8"
             elif code == "hatari":
                 core_version = "hatari-2.6.1"
+            elif code == "ruffle":
+                core_version = "ruffle-0.7.1"
             elif code == "js2me":
                 core_version = "js2me-szymor"
             else:
@@ -790,6 +795,33 @@ class Command(BaseCommand):
             compatibility_note=(
                 "Engineering: flycast / reios HLE + emulate_framebuffer for vram_s "
                 "Dot; product approval pending; SEGA BIOS never bundled."
+            ),
+        )
+        results["flash"] = self._import_files(
+            fixtures,
+            slug="mit-flash-dot",
+            title="MIT Flash Dot",
+            description=(
+                "First-party MIT Flash Dot (.swf) for engineering acceptance only. "
+                "Uses self-hosted Ruffle 0.7.1 (MIT OR Apache-2.0). Not a commercial "
+                "SWF. Progress uses Flash SharedObject — not libretro save states."
+            ),
+            console="flash",
+            core={"code": "ruffle", "version": "ruffle-0.7.1"},
+            revision="fixture-1",
+            entry="mit-flash-dot.swf",
+            files=[("mit-flash-dot.swf", "rom", "application/x-shockwave-flash")],
+            license_ref="MIT; LICENSES/flash-dot-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "scripts/build-flash-dot-fixture.sh; "
+                ".fixtures/mit-flash-dot.README.md; "
+                "docs/emulator-builds/ruffle-web-integration.md"
+            ),
+            genre="Action",
+            compatibility_note=(
+                "Engineering: Ruffle 0.7.1; saveState=false; SharedObject progress; "
+                "ExternalInterface disabled; product approval pending."
             ),
         )
         results["vb"] = self._import_files(
