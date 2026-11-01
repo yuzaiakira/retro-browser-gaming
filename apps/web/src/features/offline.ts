@@ -24,6 +24,9 @@ const SHELL_PATHS = [
   '/runtime/dos-frame.js',
   '/runtime/hatari-frame.html',
   '/runtime/hatari-frame.js',
+  '/runtime/ruffle-frame.html',
+  '/runtime/ruffle-boot.js',
+  '/runtime/ruffle-frame.js',
   '/runtime/j2me-frame.html',
   '/runtime/j2me-boot.js',
   '/runtime/j2me-frame.js',
@@ -108,7 +111,8 @@ export async function prepareCore(release: Release) {
     release.recommended_core.runtime_type === 'wasm' ||
     release.recommended_core.runtime_type === 'js' ||
     release.recommended_core.code === 'js2me' ||
-    release.recommended_core.code === 'jsdos';
+    release.recommended_core.code === 'jsdos' ||
+    release.recommended_core.code === 'ruffle';
   if (!needsCorePackage) return;
   const manifest = release.recommended_core.licensed_asset_manifest;
   if (!manifest.length) throw new Error('CORE_PACKAGE_UNAVAILABLE');
@@ -158,9 +162,11 @@ export async function auditInstallation(installation: Installation) {
       ? '/runtime/dos-frame.html'
       : core.code === 'hatari'
         ? '/runtime/hatari-frame.html'
-        : core.code === 'js2me'
-          ? '/runtime/j2me-frame.html'
-          : '/runtime/frame.html';
+        : core.code === 'ruffle'
+          ? '/runtime/ruffle-frame.html'
+          : core.code === 'js2me'
+            ? '/runtime/j2me-frame.html'
+            : '/runtime/frame.html';
   const runtimePaths =
     core.code === 'js2me'
       ? [
@@ -175,8 +181,15 @@ export async function auditInstallation(installation: Installation) {
         ? [framePath, '/runtime/dos-frame.js']
         : core.code === 'hatari'
           ? [framePath, '/runtime/hatari-frame.js']
-          : ['/runtime/seekable-fs.js', '/runtime/blob-reader.worker.js', framePath];
-  if (core.runtime_type === 'wasm' || core.runtime_type === 'js' || core.code === 'js2me') {
+          : core.code === 'ruffle'
+            ? [framePath, '/runtime/ruffle-boot.js', '/runtime/ruffle-frame.js']
+            : ['/runtime/seekable-fs.js', '/runtime/blob-reader.worker.js', framePath];
+  if (
+    core.runtime_type === 'wasm' ||
+    core.runtime_type === 'js' ||
+    core.code === 'js2me' ||
+    core.code === 'ruffle'
+  ) {
     for (const path of runtimePaths) {
       if (!(await cache.match(path))) return false;
     }

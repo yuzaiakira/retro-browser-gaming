@@ -151,6 +151,9 @@ export class FrameAdapter implements EmulatorAdapter {
       } else if (options.core === 'hatari') {
         this.frame.src = '/runtime/hatari-frame.html';
         this.targetOrigin = location.origin;
+      } else if (options.core === 'ruffle') {
+        this.frame.src = '/runtime/ruffle-frame.html';
+        this.targetOrigin = location.origin;
       } else if (options.core === 'js2me' && j2meOrigin) {
         this.frame.src = `${j2meOrigin}${J2ME_FRAME_PATH}`;
         this.targetOrigin = j2meOrigin;
@@ -262,10 +265,14 @@ export class FrameAdapter implements EmulatorAdapter {
     }
     this.pending.clear();
     try {
-      if (this.core === 'js2me' && this.targetOrigin && this.targetOrigin !== location.origin) {
+      if (
+        (this.core === 'js2me' && this.targetOrigin && this.targetOrigin !== location.origin) ||
+        this.core === 'ruffle' ||
+        this.core === 'flycast'
+      ) {
         this.frame.contentWindow?.postMessage(
           { type: 'command', session: this.session, id: ++this.count, method: 'dispose' },
-          this.targetOrigin,
+          this.targetOrigin || location.origin,
         );
       }
     } catch {
