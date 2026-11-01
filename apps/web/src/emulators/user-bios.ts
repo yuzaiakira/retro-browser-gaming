@@ -113,6 +113,33 @@ export const USER_BIOS_SLOTS: UserBiosSlot[] = [
     notes:
       "Sega CD / Mega-CD BIOS (proprietary, region-specific). Slot reserved for PH-12.2; not playable until verified.",
   },
+  {
+    id: "dreamcast-boot",
+    cores: ["flycast"],
+    platform: "dreamcast",
+    preferredFilename: "dc_boot.bin",
+    acceptedFilenames: ["dc_boot.bin", "DC_BOOT.BIN", "boot.bin"],
+    minBytes: 1024 * 1024,
+    maxBytes: 2 * 1024 * 1024,
+    acceptedSha256: [],
+    // Prefer reios HLE; enable only when operators must use proprietary BIOS.
+    enabled: false,
+    notes:
+      "Dreamcast dc_boot.bin (SEGA proprietary). Never redistributed. Prefer reios HLE (reicast_hle_bios=enabled). See docs/emulator-builds/dreamcast-firmware-audit.md.",
+  },
+  {
+    id: "dreamcast-flash",
+    cores: ["flycast"],
+    platform: "dreamcast",
+    preferredFilename: "dc_flash.bin",
+    acceptedFilenames: ["dc_flash.bin", "DC_FLASH.BIN", "flash.bin"],
+    minBytes: 128 * 1024,
+    maxBytes: 256 * 1024,
+    acceptedSha256: [],
+    enabled: false,
+    notes:
+      "Dreamcast dc_flash.bin (SEGA proprietary). Never redistributed. Prefer reios HLE. See docs/emulator-builds/dreamcast-firmware-audit.md.",
+  },
 ];
 
 export type UserBiosValidationOk = {

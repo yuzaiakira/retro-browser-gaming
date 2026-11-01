@@ -182,6 +182,8 @@ addEventListener('message', async (event) => {
       a5200: 'atari5200',
       // Dedicated Atari 8-bit computer core (not a5200 / 5200).
       atari800: 'atari2600',
+      // Dreamcast Flycast WASM (not stock EJS 4.2.3 CDN).
+      flycast: 'dreamcast',
       beetle_vb: 'vb',
       mupen64plus_next: 'n64',
       // EJS getCores maps c64 → vice_x64sc; pin scheme so UI/tests stay stable.
@@ -288,6 +290,18 @@ addEventListener('message', async (event) => {
       window.EJS_defaultOptions['atari800_basic_version'] = 'Altirra BASIC';
       window.EJS_defaultOptions.atari800_internalbasic = 'disabled';
       window.EJS_defaultOptions['atari800_internalbasic'] = 'disabled';
+    }
+    if (d.core === 'flycast') {
+      // Prefer reios HLE — never auto-fetch SEGA BIOS. Upstream WASM sample
+      // defaults HLE off; engineering enables it for lawful homebrew boots.
+      window.EJS_defaultOptions = window.EJS_defaultOptions || {};
+      window.EJS_defaultOptions.reicast_hle_bios = 'enabled';
+      window.EJS_defaultOptions['reicast_hle_bios'] = 'enabled';
+      window.EJS_defaultOptions.reicast_boot_to_bios = 'disabled';
+      window.EJS_defaultOptions['reicast_boot_to_bios'] = 'disabled';
+      window.EJS_defaultOptions.reicast_internal_resolution = '640x480';
+      window.EJS_defaultOptions['reicast_internal_resolution'] = '640x480';
+      window.EJS_threads = false;
     }
     window.EJS_Buttons = {
       settings: { visible: false },

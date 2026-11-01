@@ -1,0 +1,1 @@
+{"core": "flycast", "buildStart": "2026-11-01T05:10:54.058148+00:00", "options": {"flycast_wasm_rev": "16e9c7b4b7065a4bd42e7490e8aab3e9283d5415", "upstream_flycast": "2c48c01", "release": "v1.0", "firmware_default": "reios_hle_disabled_in_sample_config"}}

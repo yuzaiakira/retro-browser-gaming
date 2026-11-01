@@ -21,6 +21,17 @@ Core id candidate: **`flycast`** (never overwrite existing cores).
 | `flycast_libretro.wasm` | 10398725 | `db2b87d8d2742087a56c4eeed317da14e3549ee037e36de3d77c1e6e5291bead` |
 | `flycast_libretro.js` | 312644 | `1f2ae9afafa85c8ff577ca3961be0343c2ac394ddc79285981f0d55ad75dbd7b` |
 
+### EmulatorJS 4.2.3 packaging (this repo)
+
+7z `.data` packages (LZMA2) installed under `ejs-4.2.3/cores/` + private-runtime:
+
+| Package | Bytes | SHA-256 |
+|---------|------:|---------|
+| `flycast-wasm.data` | 3429271 | `727abd80fa9854c403eb03e4c28cc1c76ab4c4fae062855bcd933ffaaa6f3d5c` |
+| `flycast-legacy-wasm.data` | 3429271 | same (duplicate package for EJS dual fetch) |
+
+`build.json` pins `minimumEJSVersion` **4.2.3**. Chromium HLE smoke currently aborts in GameManager before ready — packaging/runtime integration still open.
+
 Reproducible rebuild: follow `build-prod.sh` against Flycast `2c48c01` + patches; requires a local EmulatorJS RetroArch emscripten object tree (`EJS_RA`).
 
 ## Browser requirements (from port + write-up)

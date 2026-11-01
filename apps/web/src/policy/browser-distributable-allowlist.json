@@ -176,6 +176,18 @@
       "corresponding_source_class": "upstream_pin_plus_tracked_js"
     },
     {
+      "path": "ejs-4.2.3/cores/flycast-legacy-wasm.data",
+      "sha256": "727abd80fa9854c403eb03e4c28cc1c76ab4c4fae062855bcd933ffaaa6f3d5c",
+      "license": "GPL-2.0",
+      "reason": "Flycast WASM v1.0 Dreamcast core; no proprietary SEGA BIOS bundled"
+    },
+    {
+      "path": "ejs-4.2.3/cores/flycast-wasm.data",
+      "sha256": "727abd80fa9854c403eb03e4c28cc1c76ab4c4fae062855bcd933ffaaa6f3d5c",
+      "license": "GPL-2.0",
+      "reason": "Flycast WASM v1.0 Dreamcast core; no proprietary SEGA BIOS bundled"
+    },
+    {
       "path": "ejs-4.2.3/cores/fuse-legacy-wasm.data",
       "sha256": "86d844184aade4e22b7306a09da8fa109d26316aa2eb3cc67a033cccca46671d",
       "byteSize": 1218410,

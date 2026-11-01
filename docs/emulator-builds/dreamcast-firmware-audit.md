@@ -12,6 +12,19 @@ Date: 2026-11-01. Scope: lawful boot path for browser Dreamcast without redistri
 
 **Promotion rule:** Without a verified lawful boot (HLE or authorized user BIOS + legal homebrew), Dreamcast stays **EXPERIMENTAL** / may become **BLOCKED_EXTERNAL** if HLE cannot boot homebrew on this WASM binary and no authorized BIOS is available in-environment.
 
+### Chromium probe (2026-11-01)
+
+Command: `CHROMIUM_EXECUTABLE=/usr/bin/chromium node apps/web/tests/dreamcast-hle-smoke.cjs`
+
+| Observation | Detail |
+|-------------|--------|
+| Fixture | `mit-dreamcast-dot.elf` SHA `ffafb5d5…` (KallistiOS, MIT) |
+| Option applied | Log shows `reicast_hle_bios enabled` (no `dc_boot.bin` / `dc_flash.bin` supplied) |
+| Result | **`DREAMCAST_HLE_BOOT_FAIL`** — EmulatorJS GameManager aborts (`RuntimeError: Aborted(undefined)`; canvas `0 x 0`) before `ready` |
+| Evidence | `.runtime/test-evidence/PH-12/dreamcast/hle-status.json` |
+
+HLE is therefore **lawful in source** but **not yet a working firmware path** on this packaged WASM + EJS 4.2.3 combination. Do not promote.
+
 ## Proprietary firmware
 
 - Filenames commonly expected: `dc_boot.bin`, `dc_flash.bin`.

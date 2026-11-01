@@ -362,6 +362,46 @@
       "upstream": "https://cdn.emulatorjs.org/4.2.3/data/cores/ (EmulatorJS 4.2.3; pin e150dc0491ae747028919fb82d6598954976ede6)"
     },
     {
+      "path": "ejs-4.2.3/cores/flycast-legacy-wasm.data",
+      "sha256": "727abd80fa9854c403eb03e4c28cc1c76ab4c4fae062855bcd933ffaaa6f3d5c",
+      "byteSize": 3429271,
+      "license": "GPL-2.0 (Flycast / nasomers Flycast WASM v1.0); EmulatorJS packaging GPL-3.0",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "independently_rebuilt",
+      "local_modifications": "EJS 4.2.3 7z packaging of upstream v1.0 release artifacts; HLE preferred in frame.js",
+      "patches_or_scripts": [
+        "docs/emulator-builds/flycast-wasm-dreamcast.md",
+        "docs/emulator-builds/dreamcast-firmware-audit.md"
+      ],
+      "evidence": [
+        "docs/emulator-builds/flycast-wasm-dreamcast.md"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_docs",
+      "upstream": "https://github.com/nasomers/flycast-wasm/tree/16e9c7b4b7065a4bd42e7490e8aab3e9283d5415 (flycast 2c48c01)"
+    },
+    {
+      "path": "ejs-4.2.3/cores/flycast-wasm.data",
+      "sha256": "727abd80fa9854c403eb03e4c28cc1c76ab4c4fae062855bcd933ffaaa6f3d5c",
+      "byteSize": 3429271,
+      "license": "GPL-2.0 (Flycast / nasomers Flycast WASM v1.0); EmulatorJS packaging GPL-3.0",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "independently_rebuilt",
+      "local_modifications": "EJS 4.2.3 7z packaging of upstream v1.0 release artifacts; HLE preferred in frame.js",
+      "patches_or_scripts": [
+        "docs/emulator-builds/flycast-wasm-dreamcast.md",
+        "docs/emulator-builds/dreamcast-firmware-audit.md"
+      ],
+      "evidence": [
+        "docs/emulator-builds/flycast-wasm-dreamcast.md"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_docs",
+      "upstream": "https://github.com/nasomers/flycast-wasm/tree/16e9c7b4b7065a4bd42e7490e8aab3e9283d5415 (flycast 2c48c01)"
+    },
+    {
       "path": "ejs-4.2.3/cores/fuse-legacy-wasm.data",
       "sha256": "86d844184aade4e22b7306a09da8fa109d26316aa2eb3cc67a033cccca46671d",
       "byteSize": 1218410,

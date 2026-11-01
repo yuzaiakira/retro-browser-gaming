@@ -19,7 +19,7 @@
 
 **Orbit catalog smoke triage (2026-11-01):** Prior `tests/smoke.cjs` timeout was **test staleness** (paginated Discover no longer shows Orbit on page 1; PlayerShell uses Quick save/load). Not a catalog API defect. Fixed smoke: `RESPONSIVE_KEYBOARD_PASS` … `OFFLINE_LOAD_PASS`. Evidence `.runtime/test-evidence/PH-12/orbit-smoke-triage/`.
 
-**PH-12.5 Dreamcast / Flycast WASM (2026-11-01 start):** Feasibility pin **v1.0** `16e9c7b4…` / upstream Flycast `2c48c01`; GPLv2; release wasm `db2b87d8…`. Sample disables HLE; proprietary BIOS never bundled. reios HLE is GPLv2 in upstream — **UNVERIFIED** on this WASM port. Status **EXPERIMENTAL**. Docs: `flycast-wasm-dreamcast.md`, `dreamcast-firmware-audit.md`.
+**PH-12.5 Dreamcast / Flycast WASM (2026-11-01):** Feasibility pin **v1.0** `16e9c7b4…` / Flycast `2c48c01`; GPLv2; packaged `flycast-wasm.data` `727abd80…`. MIT Dot ELF `ffafb5d5…` (KallistiOS Docker). `reicast_hle_bios=enabled` applied but Chromium **`DREAMCAST_HLE_BOOT_FAIL`** (GameManager abort, canvas 0×0). Proprietary BIOS never bundled; user-BIOS slots reserved disabled. Status **EXPERIMENTAL** — not VERIFIED_PLAYABLE. Docs: `flycast-wasm-dreamcast.md`, `dreamcast-firmware-audit.md`; evidence `.runtime/test-evidence/PH-12/dreamcast/`.
 
 **Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability — verified 2026-10-26.  
 **Hub UX (PH-UX-HUB):** Premium Gaming Hub — verified 2026-10-26.  
