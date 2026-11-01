@@ -120,6 +120,50 @@
       "upstream": "https://cdn.emulatorjs.org/4.2.3/data/cores/ (EmulatorJS 4.2.3; pin e150dc0491ae747028919fb82d6598954976ede6)"
     },
     {
+      "path": "ejs-4.2.3/cores/atari800-legacy-wasm.data",
+      "sha256": "b7b6664b83fee853bf6ccbd42592b928ac9094348d30510b7ed53841030d484d",
+      "byteSize": 829725,
+      "license": "GPL-2.0 (Atari800/libretro-atari800) + FSF all-permissive AltirraOS/BASIC; EmulatorJS packaging GPL-3.0; RBG memstream ABI patch",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "independently_rebuilt",
+      "local_modifications": "memstream RetroArch ABI for EmulatorJS save/load (scripts/patches/atari800/)",
+      "patches_or_scripts": [
+        "scripts/patches/atari800/0001-rbg-memstream-retroarch-abi.patch",
+        "scripts/patches/atari800/README.md",
+        "scripts/build-atari800-emscripten.sh"
+      ],
+      "evidence": [
+        "docs/emulator-builds/atari8-libretro-build.md",
+        "docs/emulator-builds/atari8-firmware-audit.md"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_patch",
+      "upstream": "https://github.com/libretro/libretro-atari800/tree/4e7fbc73765c1a9670c7506616046ad1d4ccda51 (EmulatorJS/build 677b1334; emsdk 3.1.74)"
+    },
+    {
+      "path": "ejs-4.2.3/cores/atari800-wasm.data",
+      "sha256": "6d19d00650e8cad472fd0d9654810e11ce1a04bb4d3460fa0219d8e632a7b777",
+      "byteSize": 830097,
+      "license": "GPL-2.0 (Atari800/libretro-atari800) + FSF all-permissive AltirraOS/BASIC; EmulatorJS packaging GPL-3.0; RBG memstream ABI patch",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "independently_rebuilt",
+      "local_modifications": "memstream RetroArch ABI for EmulatorJS save/load (scripts/patches/atari800/)",
+      "patches_or_scripts": [
+        "scripts/patches/atari800/0001-rbg-memstream-retroarch-abi.patch",
+        "scripts/patches/atari800/README.md",
+        "scripts/build-atari800-emscripten.sh"
+      ],
+      "evidence": [
+        "docs/emulator-builds/atari8-libretro-build.md",
+        "docs/emulator-builds/atari8-firmware-audit.md"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_patch",
+      "upstream": "https://github.com/libretro/libretro-atari800/tree/4e7fbc73765c1a9670c7506616046ad1d4ccda51 (EmulatorJS/build 677b1334; emsdk 3.1.74)"
+    },
+    {
       "path": "ejs-4.2.3/cores/beetle_vb-legacy-wasm.data",
       "sha256": "0a48fe957c002e01f7c5801765af36e5dd82410900727db5ac51459631aa888d",
       "byteSize": 857641,
@@ -942,6 +986,44 @@
       "source_offer_class": "patches_and_rebuild_script_in_repo",
       "upstream": "https://github.com/openMSX/cbios (C-BIOS 0.23 Machines) + https://github.com/EmulatorJS/blueMSX-libretro Databases; extracted from locked bluemsx-wasm.data for EmulatorJS SYSTEM mount",
       "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE"
+    },
+    {
+      "path": "hatari-2.6.1/hatari.data",
+      "sha256": "2d6f3f94c212d1d9eb5b9ad913400d934a0fdf56924a7e2c51ff70e27b561b55",
+      "byteSize": 262144,
+      "license": "GPL-2.0 Hatari + GPL-2.0 EmuTOS; RBG snapshot bridge scripts/patches/hatari-2.6.1/",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "independently_rebuilt",
+      "local_modifications": "RBG snapshot bridge (see hatari-emutos-atari-st.md)",
+      "patches_or_scripts": [
+        "scripts/patches/hatari-2.6.1/"
+      ],
+      "evidence": [
+        "docs/emulator-builds/hatari-emutos-atari-st.md"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_patch",
+      "upstream": "https://github.com/hatari/hatari/tree/6a8e26d (v2.6.1 + RBG patches; EmuTOS 02c2db7; emsdk 4.0.4)"
+    },
+    {
+      "path": "hatari-2.6.1/hatari.wasm",
+      "sha256": "cd5cec91bd5c759179c766e162629c1ae4eb6981d1490759e59f54ec19f31db4",
+      "byteSize": 23981938,
+      "license": "GPL-2.0 Hatari + GPL-2.0 EmuTOS; RBG snapshot bridge scripts/patches/hatari-2.6.1/",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "independently_rebuilt",
+      "local_modifications": "RBG snapshot bridge (see hatari-emutos-atari-st.md)",
+      "patches_or_scripts": [
+        "scripts/patches/hatari-2.6.1/"
+      ],
+      "evidence": [
+        "docs/emulator-builds/hatari-emutos-atari-st.md"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_patch",
+      "upstream": "https://github.com/hatari/hatari/tree/6a8e26d (v2.6.1 + RBG patches; EmuTOS 02c2db7; emsdk 4.0.4)"
     },
     {
       "path": "jsdos-8.3.8/wdosbox.wasm",

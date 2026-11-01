@@ -1,0 +1,1 @@
+{"core": "atari800", "buildStart": "2026-10-31T18:28:00+00:00", "buildEnd": "2026-10-31T18:31:24+00:00", "options": {"atari800_rev": "4e7fbc73765c1a9670c7506616046ad1d4ccda51", "emsdk": "3.1.74", "emulatorjs_build": "677b1334ab1721a1e31b918f211b68f4e54f67a8", "firmware": "AltirraOS+AltirraBASIC"}}

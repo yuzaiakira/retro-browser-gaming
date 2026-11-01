@@ -768,6 +768,24 @@
       "public_git": false,
       "original_path": "apps/web/public/cores/hatari-2.6.1/hatari.data",
       "private_path": ".private-runtime/cores/hatari-2.6.1/hatari.data"
+    },
+    {
+      "path": "ejs-4.2.3/cores/atari800-wasm.data",
+      "sha256": "6d19d00650e8cad472fd0d9654810e11ce1a04bb4d3460fa0219d8e632a7b777",
+      "byteSize": 830097,
+      "license": "GPL-2.0 (Atari800/libretro-atari800) + FSF all-permissive AltirraOS/BASIC; EmulatorJS packaging GPL-3.0; RBG memstream ABI patch",
+      "source": "https://github.com/libretro/libretro-atari800/tree/4e7fbc73765c1a9670c7506616046ad1d4ccda51 (EmulatorJS/build 677b1334; emsdk 3.1.74; scripts/patches/atari800/0001-rbg-memstream-retroarch-abi.patch; docs/emulator-builds/atari8-libretro-build.md)",
+      "original_path": "apps/web/public/cores/ejs-4.2.3/cores/atari800-wasm.data",
+      "private_path": ".private-runtime/cores/ejs-4.2.3/cores/atari800-wasm.data"
+    },
+    {
+      "path": "ejs-4.2.3/cores/atari800-legacy-wasm.data",
+      "sha256": "b7b6664b83fee853bf6ccbd42592b928ac9094348d30510b7ed53841030d484d",
+      "byteSize": 829725,
+      "license": "GPL-2.0 (Atari800/libretro-atari800) + FSF all-permissive AltirraOS/BASIC; EmulatorJS packaging GPL-3.0; RBG memstream ABI patch",
+      "source": "https://github.com/libretro/libretro-atari800/tree/4e7fbc73765c1a9670c7506616046ad1d4ccda51 (EmulatorJS/build 677b1334; emsdk 3.1.74; scripts/patches/atari800/0001-rbg-memstream-retroarch-abi.patch; docs/emulator-builds/atari8-libretro-build.md)",
+      "original_path": "apps/web/public/cores/ejs-4.2.3/cores/atari800-legacy-wasm.data",
+      "private_path": ".private-runtime/cores/ejs-4.2.3/cores/atari800-legacy-wasm.data"
     }
   ]
 }

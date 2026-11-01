@@ -66,6 +66,20 @@
       "corresponding_source_class": "upstream_pin_plus_tracked_js"
     },
     {
+      "path": "ejs-4.2.3/cores/atari800-legacy-wasm.data",
+      "sha256": "b7b6664b83fee853bf6ccbd42592b928ac9094348d30510b7ed53841030d484d",
+      "byteSize": 829725,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Reproducible libretro-atari800 WASM with AltirraOS open firmware; no proprietary Atari OS ROMs"
+    },
+    {
+      "path": "ejs-4.2.3/cores/atari800-wasm.data",
+      "sha256": "6d19d00650e8cad472fd0d9654810e11ce1a04bb4d3460fa0219d8e632a7b777",
+      "byteSize": 830097,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Reproducible libretro-atari800 WASM with AltirraOS open firmware; no proprietary Atari OS ROMs"
+    },
+    {
       "path": "ejs-4.2.3/cores/beetle_vb-legacy-wasm.data",
       "sha256": "0a48fe957c002e01f7c5801765af36e5dd82410900727db5ac51459631aa888d",
       "byteSize": 857641,
@@ -490,6 +504,22 @@
       "corresponding_source_class": "patches_in_repo"
     },
     {
+      "path": "hatari-2.6.1/hatari.data",
+      "sha256": "2d6f3f94c212d1d9eb5b9ad913400d934a0fdf56924a7e2c51ff70e27b561b55",
+      "byteSize": 262144,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Hatari+EmuTOS GPL-2.0 with RBG snapshot bridge",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "hatari-2.6.1/hatari.wasm",
+      "sha256": "cd5cec91bd5c759179c766e162629c1ae4eb6981d1490759e59f54ec19f31db4",
+      "byteSize": 23981938,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Hatari+EmuTOS GPL-2.0 with RBG snapshot bridge",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
       "path": "jsdos-8.3.8/wdosbox.wasm",
       "sha256": "6c3e68a2669cbde5a2b9c920e64248b15c23b38c0b6080814aff0542676b6e98",
       "byteSize": 1458714,
@@ -503,22 +533,6 @@
       "byteSize": 113081,
       "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
       "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
-      "corresponding_source_class": "upstream_pin_plus_tracked_js"
-    },
-    {
-      "path": "hatari-2.6.1/hatari.wasm",
-      "sha256": "cd5cec91bd5c759179c766e162629c1ae4eb6981d1490759e59f54ec19f31db4",
-      "byteSize": 23981938,
-      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
-      "reason": "Hatari+EmuTOS GPL-2.0 with RBG snapshot bridge",
-      "corresponding_source_class": "upstream_pin_plus_tracked_js"
-    },
-    {
-      "path": "hatari-2.6.1/hatari.data",
-      "sha256": "2d6f3f94c212d1d9eb5b9ad913400d934a0fdf56924a7e2c51ff70e27b561b55",
-      "byteSize": 262144,
-      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
-      "reason": "Hatari+EmuTOS GPL-2.0 with RBG snapshot bridge",
       "corresponding_source_class": "upstream_pin_plus_tracked_js"
     }
   ]
