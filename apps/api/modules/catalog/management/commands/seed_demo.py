@@ -45,6 +45,7 @@ SYSTEMS = [
     ("n64", "Nintendo 64", "console"),
     ("atari-jaguar", "Atari Jaguar", "console"),
     ("dreamcast", "Sega Dreamcast", "console"),
+    ("arcade", "Arcade", "arcade"),
     ("flash", "Adobe Flash", "computer"),
     ("j2me", "Java ME / J2ME", "handheld"),
     ("ps1", "PlayStation", "console"),
@@ -84,6 +85,7 @@ WASM_CORES = [
     ("hatari", ["st", "msa", "dim", "stx"], ["wasm", "secureContext"]),
     ("flycast", ["elf", "cdi", "gdi", "chd", "cue", "iso"], ["wasm", "webgl2", "secureContext"]),
     ("ruffle", ["swf"], ["wasm", "secureContext"]),
+    ("mame_rbg_arcade", ["zip"], ["wasm", "secureContext"]),
     ("js2me", ["jar"], ["secureContext"]),
 ]
 
@@ -121,6 +123,7 @@ CONSOLE_FIXTURE_SLUGS = {
     "n64",
     "atari-jaguar",
     "dreamcast",
+    "arcade",
     "flash",
     "j2me",
     "ps1",
@@ -179,6 +182,8 @@ class Command(BaseCommand):
                 core_version = "hatari-2.6.1"
             elif code == "ruffle":
                 core_version = "ruffle-0.7.1"
+            elif code == "mame_rbg_arcade":
+                core_version = "mame-rbgdot-dev"
             elif code == "js2me":
                 core_version = "js2me-szymor"
             else:
@@ -822,6 +827,34 @@ class Command(BaseCommand):
             compatibility_note=(
                 "Engineering: Ruffle 0.7.1; saveState=false; SharedObject progress; "
                 "ExternalInterface disabled; product approval pending."
+            ),
+        )
+        results["arcade"] = self._import_files(
+            fixtures,
+            slug="mit-arcade-rbgdot",
+            title="MIT Arcade RBG Dot",
+            description=(
+                "First-party MIT Arcade ROMset (rbgdot.id ZIP) for engineering "
+                "acceptance only. Uses a narrowly scoped GPL MAME-derived WASM "
+                "SUBTARGET (driver rbgdot). Not a commercial arcade ROM. FBNeo is "
+                "not used. Product publication approval pending."
+            ),
+            console="arcade",
+            core={"code": "mame_rbg_arcade", "version": "mame-rbgdot-dev"},
+            revision="fixture-1",
+            entry="mit-arcade-rbgdot.zip",
+            files=[("mit-arcade-rbgdot.zip", "rom", "application/zip")],
+            license_ref="MIT; LICENSES/arcade-rbgdot-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                ".fixtures/mit-arcade-rbgdot.README.md; "
+                "docs/emulator-builds/arcade-license-audit.md; "
+                "docs/emulator-builds/arcade-romset-policy.md"
+            ),
+            genre="Action",
+            compatibility_note=(
+                "Engineering: mame_rbg_arcade / rbgdot only; ROMset validation "
+                "required; product approval pending; MAME trademark not claimed."
             ),
         )
         results["vb"] = self._import_files(

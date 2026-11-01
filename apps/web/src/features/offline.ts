@@ -27,6 +27,8 @@ const SHELL_PATHS = [
   '/runtime/ruffle-frame.html',
   '/runtime/ruffle-boot.js',
   '/runtime/ruffle-frame.js',
+  '/runtime/mame-frame.html',
+  '/runtime/mame-frame.js',
   '/runtime/j2me-frame.html',
   '/runtime/j2me-boot.js',
   '/runtime/j2me-frame.js',
@@ -164,7 +166,9 @@ export async function auditInstallation(installation: Installation) {
         ? '/runtime/hatari-frame.html'
         : core.code === 'ruffle'
           ? '/runtime/ruffle-frame.html'
-          : core.code === 'js2me'
+          : core.code === 'mame_rbg_arcade'
+            ? '/runtime/mame-frame.html'
+            : core.code === 'js2me'
             ? '/runtime/j2me-frame.html'
             : '/runtime/frame.html';
   const runtimePaths =
@@ -183,12 +187,15 @@ export async function auditInstallation(installation: Installation) {
           ? [framePath, '/runtime/hatari-frame.js']
           : core.code === 'ruffle'
             ? [framePath, '/runtime/ruffle-boot.js', '/runtime/ruffle-frame.js']
-            : ['/runtime/seekable-fs.js', '/runtime/blob-reader.worker.js', framePath];
+            : core.code === 'mame_rbg_arcade'
+              ? [framePath, '/runtime/mame-frame.js']
+              : ['/runtime/seekable-fs.js', '/runtime/blob-reader.worker.js', framePath];
   if (
     core.runtime_type === 'wasm' ||
     core.runtime_type === 'js' ||
     core.code === 'js2me' ||
-    core.code === 'ruffle'
+    core.code === 'ruffle' ||
+    core.code === 'mame_rbg_arcade'
   ) {
     for (const path of runtimePaths) {
       if (!(await cache.match(path))) return false;
