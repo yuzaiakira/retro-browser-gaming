@@ -39,22 +39,31 @@ docker run --rm \
   -e EM_CACHE=/tmp/em-cache \
   -w /src/mame \
   "$IMAGE" \
-  bash -lc "
+  bash -lc '
     set -euo pipefail
     source /emsdk/emsdk_env.sh
+    # emsdk_env may reset EM_CACHE; force the host-mounted cache after sourcing.
+    export EM_CACHE=/tmp/em-cache
     git config --global --add safe.directory /src/mame
     emcc -v | head -3
+    echo EM_CACHE=$EM_CACHE
     mkdir -p /tmp/em-cache/sysroot/lib/pkgconfig
-    embuilder build sdl3 sdl3_ttf
+    if [ -f /tmp/em-cache/sysroot/lib/pkgconfig/sdl3.pc ]; then
+      echo SDL3_port_cache_present_skipping_embuilder
+    else
+      embuilder build sdl3 sdl3_ttf
+    fi
     # NOWERROR=1: Clang 24 + residfp friend tag mismatch otherwise fails -Werror
+    # NO_OPENGL=1: exclude drawogl / fixed-function GL (glShadeModel aborts under WebGL).
+    # Runtime must pass -video soft (SDL3 software renderer → canvas).
     emmake make \
-      SUBTARGET=${SUBTARGET} \
+      SUBTARGET='"${SUBTARGET}"' \
       SOURCES=src/mame/rbg/rbgdot.cpp \
       REGENIE=1 NOWERROR=1 \
-      NOWERROR=1 \
+      NO_OPENGL=1 \
       TOOLS=0 \
-      -j${JOBS}
-  "
+      -j'"${JOBS}"'
+  '
 
 # Collect artifacts (MAME writes to cwd)
 shopt -s nullglob
@@ -99,6 +108,8 @@ meta = {
     "subtarget": "$SUBTARGET",
     "driver": "rbgdot",
     "sources": "src/mame/rbg/rbgdot.cpp",
+    "build_flags": {"NO_OPENGL": "1", "NOWERROR": "1", "TOOLS": "0"},
+    "runtime_video": "soft",
     "artifacts": rows,
 }
 Path("$ROOT/.runtime/test-evidence/PH-12/arcade/mame-wasm-build.json").write_text(json.dumps(meta, indent=2) + "\n")

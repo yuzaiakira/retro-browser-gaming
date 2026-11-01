@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
-"""Replace Emscripten abort stubs for unused fixed-function GL with no-ops.
+"""DEPRECATED diagnostic helper — do not use for production Arcade builds.
 
-MAME's SDL3 path references legacy GL entry points that WebGL does not provide.
-Unpatched glue aborts at runtime (e.g. glShadeModel). This does NOT claim a
-working video path — verify gameplay separately after applying.
+Historical: replaced Emscripten abort stubs for unused fixed-function GL with
+no-ops after glShadeModel aborts. Production path is NO_OPENGL=1 + -video soft
+(see scripts/build-mame-rbg-arcade-wasm.sh). No-op stubs are unsafe and do not
+implement a working video path.
 """
 from __future__ import annotations
 
 import argparse
 import hashlib
 import re
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,9 +32,21 @@ def patch(path: Path) -> int:
 
 
 def main() -> int:
+    print(
+        "WARNING: deprecated — prefer NO_OPENGL=1 rebuild; stubs are not a gameplay fix",
+        file=sys.stderr,
+    )
     ap = argparse.ArgumentParser()
     ap.add_argument("js", nargs="?", type=Path, default=DEFAULT)
+    ap.add_argument(
+        "--force",
+        action="store_true",
+        help="Apply stubs anyway (diagnostic only)",
+    )
     args = ap.parse_args()
+    if not args.force:
+        print("Refusing without --force. Rebuild with NO_OPENGL=1 instead.", file=sys.stderr)
+        return 2
     if not args.js.is_file():
         raise SystemExit(f"missing {args.js}")
     patch(args.js)

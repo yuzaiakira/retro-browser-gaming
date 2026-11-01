@@ -114,7 +114,9 @@ export async function prepareCore(release: Release) {
     release.recommended_core.runtime_type === 'js' ||
     release.recommended_core.code === 'js2me' ||
     release.recommended_core.code === 'jsdos' ||
-    release.recommended_core.code === 'ruffle';
+    release.recommended_core.code === 'ruffle' ||
+    release.recommended_core.code === 'mame_rbg_arcade' ||
+    release.recommended_core.code === 'hatari';
   if (!needsCorePackage) return;
   const manifest = release.recommended_core.licensed_asset_manifest;
   if (!manifest.length) throw new Error('CORE_PACKAGE_UNAVAILABLE');

@@ -1,7 +1,6 @@
 /**
  * Isolated MAME-derived arcade frame for driver rbgdot (SUBTARGET rbg_arcade).
- * Uses JSMAME emscripten hooks (save/load/reset/keyboard) from the pinned WASM.
- * Neutral product labeling — do not brand as "MAME®".
+ * Software video path only (-video soft). Do not brand as "MAME®".
  */
 (() => {
   'use strict';
@@ -11,8 +10,17 @@
   let paused = false;
   let romMembers = null;
   let readySent = false;
+  let saveInFlight = false;
+  let loadInFlight = false;
   const statusEl = document.getElementById('status');
   const canvas = document.getElementById('canvas');
+  const diag = {
+    wasmInstantiated: false,
+    runtimeInitialized: false,
+    machineRunning: false,
+    video: 'soft',
+    consoleTail: [],
+  };
 
   function setStatus(msg) {
     if (statusEl) {
@@ -28,6 +36,13 @@
   function allowOrigin(origin) {
     if (!parentOrigin || parentOrigin === '*') return true;
     return origin === parentOrigin;
+  }
+
+  function logDiag(...args) {
+    const line = args.map(String).join(' ');
+    diag.consoleTail.push(line);
+    if (diag.consoleTail.length > 80) diag.consoleTail.shift();
+    console.log('[arcade]', ...args);
   }
 
   async function sha256Hex(buf) {
@@ -109,28 +124,31 @@
     FS.writeFile('/roms/rbgdot/rbgdot.id', members.get('rbgdot.id'));
   }
 
+  function getFS() {
+    return window.FS || (window.Module && window.Module.FS);
+  }
+
   function sdlKey(scancode, down) {
     const J = window.JSMAME;
     if (J && typeof J.sdl_sendkeyboardkey === 'function') {
-      // SDL_SendKeyboardKey(state, scancode) — state 1=down 0=up typical
       try {
         J.sdl_sendkeyboardkey(down ? 1 : 0, scancode);
         return;
-      } catch {
-        /* fall through */
+      } catch (e) {
+        logDiag('sdl_sendkeyboardkey fail', e);
       }
     }
   }
 
-  // SDL scancodes (approx): arrows, 5=coin, 1=start, Z=button
+  // SDL scancodes: arrows, 5=coin, 1=start, Z=button
   const SCAN = {
     left: 80,
     right: 79,
     up: 82,
     down: 81,
-    coin: 34, // SDL_SCANCODE_5
-    start: 30, // SDL_SCANCODE_1
-    button: 29, // SDL_SCANCODE_Z
+    coin: 34,
+    start: 30,
+    button: 29,
   };
 
   function mapCommand(command, value) {
@@ -144,6 +162,68 @@
     else if (command === 0) sdlKey(SCAN.button, down);
   }
 
+  function machinePtr() {
+    const J = window.JSMAME || window.JSMESS;
+    if (!J || typeof J.get_machine !== 'function') return 0;
+    try {
+      return J.get_machine() || 0;
+    } catch {
+      return 0;
+    }
+  }
+
+  function isMachineRunning() {
+    const J = window.JSMAME || window.JSMESS;
+    if (J && J.running) return true;
+    return machinePtr() !== 0;
+  }
+
+  function sendReady() {
+    if (readySent) return;
+    readySent = true;
+    diag.machineRunning = true;
+    setStatus('');
+    post({
+      type: 'ready',
+      session,
+      capabilities: { saveState: true, audio: false, analog: false },
+      diag: {
+        video: diag.video,
+        wasmInstantiated: diag.wasmInstantiated,
+        runtimeInitialized: diag.runtimeInitialized,
+        machineRunning: diag.machineRunning,
+      },
+    });
+  }
+
+  async function waitForMachine(timeoutMs) {
+    const start = performance.now();
+    while (performance.now() - start < timeoutMs) {
+      if (isMachineRunning()) {
+        sendReady();
+        return true;
+      }
+      await new Promise((r) => setTimeout(r, 50));
+    }
+    return false;
+  }
+
+  async function waitForStateFile(path, timeoutMs) {
+    const FS = getFS();
+    if (!FS) throw new Error('MAME_FS_UNAVAILABLE');
+    const start = performance.now();
+    while (performance.now() - start < timeoutMs) {
+      try {
+        const st = FS.stat(path);
+        if (st && st.size > 0) return FS.readFile(path);
+      } catch {
+        /* not yet */
+      }
+      await new Promise((r) => setTimeout(r, 40));
+    }
+    throw new Error('MAME_SAVE_TIMEOUT');
+  }
+
   async function boot(members) {
     setStatus('Loading arcade WASM…');
     romMembers = members;
@@ -154,29 +234,38 @@
         'rbgdot',
         '-rompath',
         '/roms',
+        '-video',
+        'soft',
+        '-sound',
+        'none',
         '-window',
         '-nomaximize',
         '-skip_gameinfo',
         '-nothrottle',
+        '-verbose',
       ],
       locateFile: (path) => `/cores/mame-rbg-arcade/${path}`,
-      print: (...args) => console.log('[arcade]', ...args),
-      printErr: (...args) => console.warn('[arcade]', ...args),
+      print: (...args) => logDiag(...args),
+      printErr: (...args) => {
+        logDiag('ERR', ...args);
+        console.warn('[arcade]', ...args);
+      },
       preRun: [
         function () {
           mountRoms(window.FS || Module.FS, members);
+          logDiag('roms mounted under /roms/rbgdot');
         },
       ],
       onRuntimeInitialized: () => {
-        setStatus('');
-        if (!readySent) {
-          readySent = true;
-          post({
-            type: 'ready',
-            session,
-            capabilities: { saveState: true, audio: false, analog: false },
-          });
-        }
+        diag.runtimeInitialized = true;
+        diag.wasmInstantiated = true;
+        logDiag('onRuntimeInitialized (WASM up; machine not yet running)');
+        setStatus('Starting arcade driver…');
+      },
+      onAbort: (reason) => {
+        logDiag('ABORT', reason);
+        setStatus(String(reason));
+        post({ type: 'error', session, message: `MAME_ABORT: ${reason}` });
       },
     };
 
@@ -187,30 +276,20 @@
       s.onerror = () => reject(new Error('MAME_RBG_ARCADE_SCRIPT_FAIL'));
       document.head.appendChild(s);
     });
+    diag.wasmInstantiated = true;
+    logDiag('glue script loaded; waiting for running_machine');
 
-    // If onRuntimeInitialized already fired synchronously, still notify.
-    await new Promise((r) => setTimeout(r, 800));
-    if (!readySent && window.JSMAME) {
-      readySent = true;
-      setStatus('');
-      post({
-        type: 'ready',
-        session,
-        capabilities: { saveState: true, audio: false, analog: false },
-      });
+    // Ready only after emscripten_set_running_machine (JSMESS.running / get_machine).
+    const ok = await waitForMachine(120000);
+    if (!ok) {
+      const msg =
+        'MAME_MACHINE_START_TIMEOUT — WASM may be up but rbgdot/video soft did not reach main loop';
+      logDiag(msg, JSON.stringify(diag.consoleTail.slice(-20)));
+      setStatus(msg);
+      post({ type: 'error', session, error: msg, message: msg, diag });
+      throw new Error(msg);
     }
-    if (!readySent) {
-      // Give the runtime more time for wasm compile
-      await new Promise((r) => setTimeout(r, 4000));
-      if (!readySent) {
-        readySent = true;
-        post({
-          type: 'ready',
-          session,
-          capabilities: { saveState: true, audio: false, analog: false },
-        });
-      }
-    }
+    logDiag('machine running; soft video path active');
   }
 
   async function handleInit(data, origin) {
@@ -225,7 +304,12 @@
       await boot(members);
     } catch (e) {
       setStatus(String(e && e.message ? e.message : e));
-      post({ type: 'error', session, message: String(e && e.message ? e.message : e) });
+      post({
+        type: 'error',
+        session,
+        error: String(e && e.message ? e.message : e),
+        message: String(e && e.message ? e.message : e),
+      });
     }
   }
 
@@ -245,26 +329,50 @@
       } else if (method === 'volume') {
         /* MACHINE_NO_SOUND */
       } else if (method === 'save') {
+        if (saveInFlight || loadInFlight) throw new Error('MAME_SAVE_BUSY');
         if (!J || !J.save) throw new Error('MAME_SAVE_UNAVAILABLE');
-        const path = '/states/rbgdot.sta';
-        J.save(path);
-        const FS = window.FS || (window.Module && window.Module.FS);
-        if (!FS) throw new Error('MAME_FS_UNAVAILABLE');
-        const bytes = FS.readFile(path);
-        result = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
+        if (!isMachineRunning()) throw new Error('MAME_NOT_RUNNING');
+        saveInFlight = true;
+        try {
+          const path = '/states/rbgdot.sta';
+          const FS = getFS();
+          try {
+            FS.unlink(path);
+          } catch {
+            /* */
+          }
+          J.save(path);
+          const bytes = await waitForStateFile(path, 15000);
+          result = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
+        } finally {
+          saveInFlight = false;
+        }
       } else if (method === 'load') {
+        if (saveInFlight || loadInFlight) throw new Error('MAME_LOAD_BUSY');
         if (!J || !J.load) throw new Error('MAME_LOAD_UNAVAILABLE');
-        const FS = window.FS || (window.Module && window.Module.FS);
-        const path = '/states/rbgdot.sta';
-        const raw = data.value;
-        const u8 =
-          raw instanceof ArrayBuffer
-            ? new Uint8Array(raw)
-            : raw instanceof Uint8Array
-              ? raw
-              : new Uint8Array(raw);
-        FS.writeFile(path, u8);
-        J.load(path);
+        if (!isMachineRunning()) throw new Error('MAME_NOT_RUNNING');
+        loadInFlight = true;
+        try {
+          const FS = getFS();
+          const path = '/states/rbgdot.sta';
+          const raw = data.value;
+          if (!raw || (raw.byteLength !== undefined && raw.byteLength < 16)) {
+            throw new Error('MAME_STATE_TRUNCATED');
+          }
+          const u8 =
+            raw instanceof ArrayBuffer
+              ? new Uint8Array(raw)
+              : raw instanceof Uint8Array
+                ? raw
+                : new Uint8Array(raw);
+          if (u8.byteLength < 16) throw new Error('MAME_STATE_TRUNCATED');
+          FS.writeFile(path, u8);
+          J.load(path);
+          // Allow scheduled load to apply on next main-loop ticks
+          await new Promise((r) => setTimeout(r, 200));
+        } finally {
+          loadInFlight = false;
+        }
       } else if (method === 'dispose') {
         try {
           if (J && J.exit) J.exit();
@@ -273,14 +381,23 @@
         }
       } else if (method === 'seekableStats') {
         result = null;
+      } else if (method === 'diag') {
+        result = {
+          ...diag,
+          machinePtr: machinePtr(),
+          running: isMachineRunning(),
+          canvas: {
+            width: canvas ? canvas.width : 0,
+            height: canvas ? canvas.height : 0,
+          },
+        };
       }
-      post({ type: 'result', session, id, ok: true, result });
+      post({ type: 'reply', session, id, value: result });
     } catch (e) {
       post({
-        type: 'result',
+        type: 'reply',
         session,
         id,
-        ok: false,
         error: String(e && e.message ? e.message : e),
       });
     }
