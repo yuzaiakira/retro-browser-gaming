@@ -78,6 +78,7 @@ Recorded in EXECUTION_STATE after suite run. Intent: Vitest, tsc, Django, Dreamc
 
 | Hash | Subject |
 |------|---------|
+| `5cddeaa` | docs(ph-12): correct Dreamcast large-media commit hash table |
 | `7cfdb4c` | docs(ph-12): fill Dreamcast large-media commit hash table |
 | `6f8e93c` | docs(ph-12): record Dreamcast large-media hardening evidence |
 | `f5f334e` | test(web): add Dreamcast GDI/CDI gameplay and GDI offline PWA proofs |
