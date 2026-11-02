@@ -126,7 +126,9 @@ volumes:
   api-static:
 
 secrets:
-  # The wrapper points this at the injected CA when a TLS-inspecting proxy is
-  # present. The secret is mounted only during dependency-install layers.
+  # Optional TLS-inspecting proxy CA. Must be a regular file — BuildKit refuses
+  # character devices such as /dev/null unless --allow=fs.read=/dev/null is set.
+  # Default is an empty placeholder; Dockerfiles treat empty/missing as no-op
+  # (secret mount required=false). Never bake credentials into image layers.
   proxy_ca:
-    file: ${CODEX_PROXY_CERT:-/dev/null}
+    file: ${CODEX_PROXY_CERT:-./infra/docker/empty-proxy-ca.pem}
