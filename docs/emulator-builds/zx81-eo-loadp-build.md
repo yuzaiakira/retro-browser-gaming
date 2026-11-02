@@ -31,9 +31,15 @@ Independently versioned EmulatorJS-compatible EightyOne WASM that:
 
 | File | SHA-256 | Bytes |
 | --- | --- | --- |
-| `apps/web/public/cores/ejs-4.2.3/cores/81_eo-wasm.data` | `2ddbd03bd88379742a8ba484a92d70c5211d5a8b8a8f60afdb1e86bb5fdd38a7` | 741451 |
-| `apps/web/public/cores/ejs-4.2.3/cores/81_eo-legacy-wasm.data` | `bef292a4f16515304a661e8305ed1f2ba87037889c3b232f771003f22e401e56` | 741683 |
-| `apps/web/public/cores/ejs-4.2.3/cores/reports/81_eo.json` | `9436baf54465e71fe129f118acdd25549e0595ec83d02fbf3ceadea2af90589b` | 196 |
+| `apps/web/public/cores/ejs-4.2.3/cores/81_eo-wasm.data` | `09c7afa97a99240a99ab9f5b074f8ff967a357cfd63e647126525b2bbe8fae81` | 740844 |
+| `apps/web/public/cores/ejs-4.2.3/cores/81_eo-legacy-wasm.data` | `0ac838d27655b98aab10d1f6a152f158b030d04656bb7ba35c08eeb9539c76f7` | 740257 |
+| `apps/web/public/cores/ejs-4.2.3/cores/reports/81_eo.json` | `04c8b1f9f95b9478b70ec45888f677c835f1dc93d1c13b5675c9f7dcd25f8c69` | 227 |
+
+> 2026-11-02: private-store copy of prior lock `2ddbd03b…` was lost (stale
+> `ce6f24ba…` from 2026-10-22 remained). Rebuilt via
+> `scripts/build-81-eo-emscripten.sh` from the same patch/pins; Emscripten
+> output is host-nondeterministic so digests differ. Gameplay must be
+> re-proven after any rebuild.
 
 ## Rebuild (corresponding source)
 

@@ -35,19 +35,19 @@
     },
     {
       "path": "ejs-4.2.3/cores/81_eo-legacy-wasm.data",
-      "sha256": "a5a3eb292163426ce0836edb452d89eed377031994c6e72fc226981a63902664",
-      "byteSize": 744425,
+      "sha256": "0ac838d27655b98aab10d1f6a152f158b030d04656bb7ba35c08eeb9539c76f7",
+      "byteSize": 740257,
       "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
-      "reason": "Independently modified; patch sources not checked into scripts/patches/ \u2014 NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
-      "corresponding_source_class": "incomplete"
+      "reason": "Independently modified GPL binary; CS patches in scripts/patches/81_eo/ but legal review not completed \u2014 NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+      "corresponding_source_class": "in_repo_patches_pending_legal"
     },
     {
       "path": "ejs-4.2.3/cores/81_eo-wasm.data",
-      "sha256": "ce6f24ba97915c0de17cc3a764cdb0c60a34e0e172b3c670e3c6d71f3b5ee046",
-      "byteSize": 744308,
+      "sha256": "09c7afa97a99240a99ab9f5b074f8ff967a357cfd63e647126525b2bbe8fae81",
+      "byteSize": 740844,
       "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
-      "reason": "Independently modified; patch sources not checked into scripts/patches/ \u2014 NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
-      "corresponding_source_class": "incomplete"
+      "reason": "Independently modified GPL binary; CS patches in scripts/patches/81_eo/ but legal review not completed \u2014 NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+      "corresponding_source_class": "in_repo_patches_pending_legal"
     },
     {
       "path": "ejs-4.2.3/cores/a5200-legacy-wasm.data",
@@ -410,6 +410,14 @@
       "corresponding_source_class": "upstream_pin_plus_tracked_js"
     },
     {
+      "path": "ejs-4.2.3/cores/reports/81_eo.json",
+      "sha256": "04c8b1f9f95b9478b70ec45888f677c835f1dc93d1c13b5675c9f7dcd25f8c69",
+      "byteSize": 227,
+      "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+      "reason": "Report metadata for independently modified 81_eo; keep with LOCAL_FULL until legal clearance",
+      "corresponding_source_class": "in_repo_patches_pending_legal"
+    },
+    {
       "path": "ejs-4.2.3/cores/reports/gearcoleco.json",
       "sha256": "6046e0af623369cac4924f521ff74c91c2644fedf4a677f48c9074ea7028e046",
       "byteSize": 124,
@@ -554,6 +562,24 @@
       "corresponding_source_class": "upstream_pin_plus_tracked_js"
     },
     {
+      "path": "mame-rbg-arcade/rbg_arcade.js",
+      "sha256": "a3325ef75767cbdb9aafc47734cf0ddcaafa88b82b2236c9ddf94bdd8a59e56c",
+      "byteSize": 280938,
+      "browser_distribution": "LOCAL_ONLY",
+      "license": "GPL-2.0-or-later",
+      "reason": "Engineering MAME SUBTARGET rbgdot; LOCAL_ONLY \u2014 not cleared for PUBLIC_BROWSER",
+      "corresponding_source_class": "PINNED_UPSTREAM_PLUS_PATCH"
+    },
+    {
+      "path": "mame-rbg-arcade/rbg_arcade.wasm",
+      "sha256": "1d211f7486cf0f4578492fa40cebd43ea7ff4bbc22ef6098dd65fa5be9093742",
+      "byteSize": 25165326,
+      "browser_distribution": "LOCAL_ONLY",
+      "license": "GPL-2.0-or-later",
+      "reason": "Engineering MAME SUBTARGET rbgdot; LOCAL_ONLY \u2014 not cleared for PUBLIC_BROWSER",
+      "corresponding_source_class": "PINNED_UPSTREAM_PLUS_PATCH"
+    },
+    {
       "path": "ruffle-0.7.1/172de42e6619eac8f371.wasm",
       "sha256": "1ed33b9b71a6b01b9aafafed660be343ffeb2d246c5d79e6425a32bf93e38207",
       "byteSize": 14302754,
@@ -642,24 +668,6 @@
       "reason": "Official Ruffle 0.7.1 selfhosted web package (MIT OR Apache-2.0); pinned tag v0.7.1 / 89a70499\u2026; no commercial SWF",
       "corresponding_source_class": "upstream_pin_plus_tracked_js",
       "license": "MIT OR Apache-2.0"
-    },
-    {
-      "path": "mame-rbg-arcade/rbg_arcade.js",
-      "sha256": "a3325ef75767cbdb9aafc47734cf0ddcaafa88b82b2236c9ddf94bdd8a59e56c",
-      "byteSize": 280938,
-      "browser_distribution": "LOCAL_ONLY",
-      "license": "GPL-2.0-or-later",
-      "reason": "Engineering MAME SUBTARGET rbgdot; LOCAL_ONLY \u2014 not cleared for PUBLIC_BROWSER",
-      "corresponding_source_class": "PINNED_UPSTREAM_PLUS_PATCH"
-    },
-    {
-      "path": "mame-rbg-arcade/rbg_arcade.wasm",
-      "sha256": "1d211f7486cf0f4578492fa40cebd43ea7ff4bbc22ef6098dd65fa5be9093742",
-      "byteSize": 25165326,
-      "browser_distribution": "LOCAL_ONLY",
-      "license": "GPL-2.0-or-later",
-      "reason": "Engineering MAME SUBTARGET rbgdot; LOCAL_ONLY \u2014 not cleared for PUBLIC_BROWSER",
-      "corresponding_source_class": "PINNED_UPSTREAM_PLUS_PATCH"
     }
   ]
 }

@@ -1,5 +1,7 @@
 {
   "core": "81_eo",
-  "note": "eo_loadp CRT + CDFLAG/FRAMES + JOYPAD_MASK keybovl + auto-joypad + JOYPAD force",
-  "upstream": "EmulatorJS/81-libretro@86decf3ee61ea5803972948e80197bee8474796b"
+  "buildStart": "2026-11-02T05:43:24+00:00",
+  "buildEnd": "2026-11-02T05:44:06+00:00",
+  "options": {},
+  "note": "eo_loadp CRT + CDFLAG/FRAMES + JOYPAD_MASK; scripts/patches/81_eo/; rebuilt 2026-11-02"
 }
