@@ -97,6 +97,7 @@ Adapter: `flycast-m3u-file-swap` (capability-based; not native libretro M3U cont
 | `4583da3` | feat(web): Flycast M3U playlist adapter and CHD entry prefer |
 | `6939b0f` | test(dreamcast): CHD gameplay/save and interactive disc-swap smokes |
 | `8d722e0` | docs(ph-12): record Dreamcast CHD and disc-swap evidence |
+| `64d7501` | docs(ph-12): fill Dreamcast CHD disc-swap commit hash table |
 
 Each message checked — **no** `Co-authored-by: Cursor` trailer.
 
