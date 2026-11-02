@@ -220,6 +220,19 @@ export class FrameAdapter implements EmulatorAdapter {
     } | null>;
   }
 
+  /** Capability-based disc control (Flycast/libretro get_disk_count / set_current_disk). */
+  async diskCount() {
+    return this.call('diskCount') as Promise<number>;
+  }
+
+  async diskIndex() {
+    return this.call('diskIndex') as Promise<number>;
+  }
+
+  async setDiskIndex(index: number) {
+    return this.call('setDiskIndex', index) as Promise<{ index: number; count: number }>;
+  }
+
   async importRmsMigration(payload: unknown) {
     if (this.core !== 'js2me') throw new Error('RMS migration is J2ME-only');
     return this.call('importRmsMigration', payload);

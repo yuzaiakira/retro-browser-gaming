@@ -24,12 +24,14 @@
   const READ_TIMEOUT_MS = 60000;
   // Cores that must never MEMFS-copy disc media even when under the threshold.
   const ON_DEMAND_CORES = new Set(['ppsspp', 'pcsx_rearmed', 'flycast']);
+  // Prefer playlist/cue sheets before single-disc images so multi-disc M3U
+  // mounts keep disk-control aware of every companion image.
   const ENTRY_EXTS = [
+    '.m3u',
     '.cue',
     '.gdi',
     '.cdi',
     '.chd',
-    '.m3u',
     '.pbp',
     '.iso',
     '.cso',
@@ -374,14 +376,31 @@
     return id;
   }
 
-  function preferOnDemand(core, file) {
+  // Tiny text sidecars must stay in MEMFS: RetroArch's M3U/CUE/GDI parsers
+  // fread the whole sheet synchronously, and BlobFS windows can abort that path
+  // ("failed to read m3u file"). Large binary media still use on-demand BlobFS.
+  const MEMFS_SIDE_EXTS = new Set(['.m3u', '.cue', '.gdi', '.ccd', '.toc', '.lst']);
+
+  function isMemfsSidecar(pathOrName) {
+    const name = String(pathOrName || '').toLowerCase();
+    const dot = name.lastIndexOf('.');
+    if (dot < 0) return false;
+    return MEMFS_SIDE_EXTS.has(name.slice(dot));
+  }
+
+  function preferOnDemand(core, file, path, forceMemfsMedia) {
     if (typeof SharedArrayBuffer === 'undefined') return false;
+    // Playlist/cue sheets stay in MEMFS (filestream_gets).
+    if (isMemfsSidecar(path || file?.name)) return false;
+    // Multi-disc adapter overwrites the boot path via FS.writeFile — requires MEMFS.
+    if (forceMemfsMedia) return false;
     if (ON_DEMAND_CORES.has(core)) return true;
     return (file?.size || 0) >= ON_DEMAND_THRESHOLD;
   }
 
   function installSeekableLoader(filesByPath, options = {}) {
     const core = options.core || '';
+    const forceMemfsOpt = !!options.forceMemfs;
     const stats = {
       bytesRead: 0,
       bytesWritten: 0,
@@ -393,6 +412,8 @@
       seeks: 0,
       mode: 'pending',
       onDemand: false,
+      onDemandSkippedForM3u: false,
+      forceMemfs: forceMemfsOpt,
       wasmHeapBefore: 0,
       wasmHeapAfterMount: 0,
       modes: [],
@@ -436,7 +457,16 @@
           const activeCore = this.getCore() || core;
 
           const entries = Object.entries(filesByPath);
-          const anyOnDemand = entries.some(([, file]) => preferOnDemand(activeCore, file));
+          const hasM3u = entries.some(([path]) => path.toLowerCase().endsWith('.m3u'));
+          const totalBytes = entries.reduce((sum, [, file]) => sum + (file?.size || 0), 0);
+          // forceMemfs: disc-swap adapter. hasM3u+small: legacy M3U content path.
+          const forceMemfsMedia =
+            forceMemfsOpt ||
+            (hasM3u && totalBytes > 0 && totalBytes <= 32 * 1024 * 1024);
+          stats.onDemandSkippedForM3u = forceMemfsMedia;
+          const anyOnDemand = entries.some(([path, file]) =>
+            preferOnDemand(activeCore, file, path, forceMemfsMedia),
+          );
           if (anyOnDemand) {
             reader = createBlobReader();
             if (!reader) throw new Error('BLOB_READER_UNAVAILABLE');
@@ -446,12 +476,20 @@
 
           for (const [path, file] of entries) {
             const absolute = path.startsWith('/') ? path : `/${path}`;
-            if (preferOnDemand(activeCore, file) && reader) {
+            if (preferOnDemand(activeCore, file, absolute, forceMemfsMedia) && reader) {
               const id = createBlobBackedFile(FS, absolute, file, reader, stats);
               registeredIds.push(id);
               stats.mounts += 1;
               stats.modes.push('blobfs-ondemand');
               stats.mode = 'blobfs-ondemand';
+            } else if (isMemfsSidecar(absolute)) {
+              // Exact UTF-8 write — RetroArch filestream_open/gets expects a normal MEMFS node.
+              const text = await file.text();
+              FS.writeFile(absolute, text);
+              stats.bytesWritten += text.length;
+              stats.mounts += 1;
+              stats.modes.push('memfs-sidecar-utf8');
+              if (stats.mode === 'pending') stats.mode = 'memfs-sidecar-utf8';
             } else {
               const result = await writeFileChunked(FS, absolute, file);
               stats.bytesWritten += result.bytesWritten;

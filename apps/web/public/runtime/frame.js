@@ -6,8 +6,32 @@ let activeCore = '';
 const urls = [];
 /** Shell shortcuts claimed by the parent (session-scoped). Never allow-list F5. */
 let shellCodes = new Set(['Escape', 'KeyP', 'KeyF', 'F8', 'F9']);
+/**
+ * Flycast WASM aborts when the content path is an .m3u (read_m3u → insertGdrom).
+ * Capability-based playlist adapter: boot disc 1, keep companion bytes, swap by
+ * overwriting the boot path + soft-reset so the guest reloads real disc media.
+ */
+let discPlaylist = null;
 const reply = (data) => parent.postMessage({ ...data, session }, location.origin);
 addEventListener('error', (e) => reply({ type: 'error', error: e.message }));
+
+/** Flat M3U names; optional single leading `/` (VFS absolute) stripped. */
+function parseM3uDiscNames(text) {
+  const names = [];
+  for (const line of String(text || '').split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    if (trimmed.includes('\\') || trimmed.includes('..') || trimmed.indexOf('/') > 0) {
+      throw new Error('UNSAFE_M3U_ENTRY');
+    }
+    const flat = trimmed.startsWith('/') ? trimmed.slice(1) : trimmed;
+    if (!/^[A-Za-z0-9][A-Za-z0-9_.-]{0,99}$/.test(flat)) throw new Error('UNSAFE_M3U_ENTRY');
+    if (names.includes(flat)) throw new Error('DUPLICATE_M3U_ENTRY');
+    names.push(flat);
+  }
+  if (!names.length) throw new Error('M3U_EMPTY');
+  return names;
+}
 
 function editableTarget(t) {
   if (!t || typeof t.closest !== 'function') return false;
@@ -98,6 +122,7 @@ function revoke() {
   urls.length = 0;
   seekableBridge?.dispose();
   seekableBridge = undefined;
+  discPlaylist = null;
 }
 
 function preferSeekable(file, companions, core) {
@@ -243,6 +268,41 @@ addEventListener('message', async (event) => {
     for (const file of companions) {
       if (!/^[A-Za-z0-9][A-Za-z0-9_.-]{0,99}$/.test(file.name) || file.name.includes('..') || externalFiles['/' + file.name]) {
         reply({ type: 'error', error: 'UNSAFE_COMPANION_FILE' });
+        return;
+      }
+    }
+
+    // Flycast: translate M3U → boot first disc (core aborts on .m3u content path).
+    let bootFile = d.file;
+    let bootCompanions = companions;
+    discPlaylist = null;
+    if (activeCore === 'flycast' && /\.m3u$/i.test(String(d.file?.name || ''))) {
+      try {
+        const names = parseM3uDiscNames(await d.file.text());
+        const buffers = new Map();
+        for (const name of names) {
+          const file = companions.find((item) => item.name === name);
+          if (!file) {
+            reply({ type: 'error', error: 'M3U_DISC_MISSING:' + name });
+            return;
+          }
+          if (file.size > 32 * 1024 * 1024) {
+            reply({ type: 'error', error: 'M3U_DISC_TOO_LARGE' });
+            return;
+          }
+          buffers.set(name, new Uint8Array(await file.arrayBuffer()));
+        }
+        bootFile = companions.find((item) => item.name === names[0]);
+        bootCompanions = companions;
+        discPlaylist = {
+          names,
+          buffers,
+          index: 0,
+          bootName: names[0],
+          adapter: 'flycast-m3u-file-swap',
+        };
+      } catch (error) {
+        reply({ type: 'error', error: String(error?.message || error) });
         return;
       }
     }
@@ -518,14 +578,18 @@ addEventListener('message', async (event) => {
         externalFiles['/home/web_user/retroarch/userdata/system/'] =
           '/cores/ejs-4.2.3/system/bluemsx-system.data';
       }
-      if (preferSeekable(d.file, companions, d.core) && seekableReady()) {
-        const files = { ['/' + d.file.name]: d.file };
-        for (const file of companions) files['/' + file.name] = file;
-        window.EJS_gameUrl = d.file.name;
+      if (preferSeekable(bootFile, bootCompanions, d.core) && seekableReady()) {
+        const files = { ['/' + bootFile.name]: bootFile };
+        for (const file of bootCompanions) files['/' + file.name] = file;
+        window.EJS_gameUrl = bootFile.name;
         window.EJS_externalFiles = { ...externalFiles };
-        seekableBridge = window.RetroSeekableFS.installSeekableLoader(files, { core: d.core });
+        seekableBridge = window.RetroSeekableFS.installSeekableLoader(files, {
+          core: d.core,
+          // Playlist adapter rewrites the boot path with FS.writeFile (MEMFS only).
+          forceMemfs: !!discPlaylist,
+        });
       } else {
-        const total = [d.file, ...companions].reduce((sum, item) => sum + item.size, 0);
+        const total = [bootFile, ...bootCompanions].reduce((sum, item) => sum + item.size, 0);
         // mupen64plus_next WASM builds abort on ROMs larger than ~64 MiB
         // (EmulatorJS #1173); fail closed with a clear error instead of a WASM OOM.
         if (d.core === 'mupen64plus_next' && total > 64 * 1024 * 1024) {
@@ -536,9 +600,9 @@ addEventListener('message', async (event) => {
           reply({ type: 'error', error: 'LARGE_DISC_UNSUPPORTED' });
           return;
         }
-        const url = URL.createObjectURL(d.file);
+        const url = URL.createObjectURL(bootFile);
         urls.push(url);
-        for (const file of companions) {
+        for (const file of bootCompanions) {
           const companionUrl = URL.createObjectURL(file);
           urls.push(companionUrl);
           externalFiles['/' + file.name] = companionUrl;
@@ -552,9 +616,9 @@ addEventListener('message', async (event) => {
       document.body.append(script);
     };
 
-    if (preferSeekable(d.file, companions, d.core)) {
+    if (preferSeekable(bootFile, bootCompanions, d.core)) {
       const seekable = document.createElement('script');
-      seekable.src = '/runtime/seekable-fs.js';
+      seekable.src = '/runtime/seekable-fs.js?v=m3u-swap-2';
       seekable.onload = boot;
       seekable.onerror = () => reply({ type: 'error', error: 'SEEKABLE_LOADER_FAILED' });
       document.head.append(seekable);
@@ -585,6 +649,92 @@ addEventListener('message', async (event) => {
     return;
   }
   if (d.type !== 'command') return;
+
+  /** Cold-remount selected playlist disc (Flycast cannot M3U-boot; soft-reset keeps old ELF). */
+  async function remountPlaylistDisc(index) {
+    if (!discPlaylist) throw new Error('DISC_PLAYLIST_MISSING');
+    if (index < 0 || index >= discPlaylist.names.length) throw new Error('DISK_INDEX_OUT_OF_RANGE');
+    const target = discPlaylist.names[index];
+    const bytes = discPlaylist.buffers.get(target);
+    if (!bytes) throw new Error('DISK_BYTES_MISSING');
+    if (!window.RetroSeekableFS?.installSeekableLoader) throw new Error('SEEKABLE_UNAVAILABLE');
+    if (typeof window.EmulatorJS !== 'function') throw new Error('EMULATORJS_MISSING');
+
+    started = false;
+    try {
+      window.EJS_emulator?.callExit?.();
+    } catch {
+      /* ignore */
+    }
+    try {
+      window.EJS_emulator?.gameManager?.Module?.abort?.();
+    } catch {
+      /* ignore expected abort */
+    }
+    seekableBridge?.dispose();
+    seekableBridge = undefined;
+    const host = document.querySelector('#game');
+    if (host) host.innerHTML = '';
+    window.EJS_emulator = undefined;
+
+    const bootFile = new File([bytes], target);
+    const companionFiles = discPlaylist.names.map(
+      (name) => new File([discPlaylist.buffers.get(name)], name),
+    );
+    const files = { ['/' + bootFile.name]: bootFile };
+    for (const file of companionFiles) files['/' + file.name] = file;
+
+    window.EJS_gameUrl = bootFile.name;
+    window.EJS_gameName = bootFile.name;
+    window.EJS_core = 'flycast';
+    discPlaylist.bootName = target;
+    discPlaylist.index = index;
+
+    const remounted = new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error('DISC_REMOUNT_TIMEOUT')), 180000);
+      const onStart = () => {
+        clearTimeout(timer);
+        started = true;
+        resolve(true);
+      };
+      window.EJS_onGameStart = onStart;
+    });
+
+    seekableBridge = window.RetroSeekableFS.installSeekableLoader(files, {
+      core: 'flycast',
+      forceMemfs: true,
+    });
+
+    const config = {
+      gameUrl: window.EJS_gameUrl,
+      dataPath: window.EJS_pathtodata,
+      system: 'flycast',
+      gameName: window.EJS_gameName,
+      color: window.EJS_color,
+      volume: window.EJS_volume,
+      startOnLoad: true,
+      backgroundColor: window.EJS_backgroundColor,
+      controlScheme: window.EJS_controlScheme,
+      threads: false,
+      defaultOptions: window.EJS_defaultOptions,
+      disableDatabases: true,
+      disableLocalStorage: true,
+      externalFiles: window.EJS_externalFiles || {},
+    };
+    window.EJS_emulator = new window.EmulatorJS(window.EJS_player || '#game', config);
+    if (typeof window.EJS_onGameStart === 'function') {
+      window.EJS_emulator.on('start', window.EJS_onGameStart);
+    }
+    await remounted;
+    return {
+      index: discPlaylist.index,
+      count: discPlaylist.names.length,
+      adapter: discPlaylist.adapter,
+      active: target,
+      remounted: true,
+    };
+  }
+
   try {
     let value = null;
     switch (d.method) {
@@ -610,6 +760,40 @@ addEventListener('message', async (event) => {
       case 'seekableStats':
         value = seekableBridge ? seekableBridge.stats() : null;
         break;
+      case 'diskCount':
+        if (discPlaylist) {
+          value = discPlaylist.names.length;
+        } else {
+          value = typeof g.getDiskCount === 'function' ? g.getDiskCount() : 0;
+        }
+        break;
+      case 'diskIndex':
+        if (discPlaylist) {
+          value = discPlaylist.index;
+        } else {
+          value = typeof g.getCurrentDisk === 'function' ? g.getCurrentDisk() : 0;
+        }
+        break;
+      case 'setDiskIndex': {
+        const index = Number(d.value);
+        if (!Number.isInteger(index) || index < 0) throw new Error('DISK_INDEX_INVALID');
+        if (discPlaylist) {
+          // Full cold remount of the selected CHD — soft-reset keeps the old ELF in RAM.
+          value = await remountPlaylistDisc(index);
+          break;
+        }
+        if (typeof g.setCurrentDisk !== 'function') {
+          throw new Error('DISK_CONTROL_UNSUPPORTED');
+        }
+        const count = typeof g.getDiskCount === 'function' ? g.getDiskCount() : 0;
+        if (count > 0 && index >= count) throw new Error('DISK_INDEX_OUT_OF_RANGE');
+        g.setCurrentDisk(index);
+        value = {
+          index: typeof g.getCurrentDisk === 'function' ? g.getCurrentDisk() : index,
+          count,
+        };
+        break;
+      }
       default:
         throw new Error('UNSUPPORTED_OPERATION');
     }

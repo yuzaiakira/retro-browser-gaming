@@ -120,7 +120,12 @@ describe('M3U multi-disc playlists', () => {
       'disc1.cdi',
       'disc2.gdi',
     ]);
+    expect(m3uCompanionNames('/disc1.chd\n/disc2.chd\n')).toEqual([
+      'disc1.chd',
+      'disc2.chd',
+    ]);
     expect(() => m3uCompanionNames('../secret.cdi')).toThrow('UNSAFE_M3U_ENTRY');
+    expect(() => m3uCompanionNames('/subdir/disc.cdi')).toThrow('UNSAFE_M3U_ENTRY');
     expect(() => m3uCompanionNames('a.cdi\na.cdi')).toThrow('DUPLICATE_M3U_ENTRY');
   });
 });

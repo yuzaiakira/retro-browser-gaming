@@ -1,1 +1,1 @@
-{"core": "flycast", "buildStart": "2026-11-01T06:01:09.480717+00:00", "options": {"defaultWebGL2": true, "flycast_wasm_rev": "16e9c7b4b7065a4bd42e7490e8aab3e9283d5415", "upstream_flycast": "2c48c01", "release": "v1.0", "local": "libelf-js-1.0.2"}}
+{"core": "flycast", "buildStart": "2026-11-02T15:30:00.000000+00:00", "options": {"defaultWebGL2": true, "flycast_wasm_rev": "16e9c7b4b7065a4bd42e7490e8aab3e9283d5415", "upstream_flycast": "2c48c01", "release": "v1.0", "local": "libelf-js-1.0.3-m3u"}}

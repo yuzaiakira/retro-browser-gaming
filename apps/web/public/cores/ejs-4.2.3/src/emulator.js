@@ -824,8 +824,8 @@ class EmulatorJS {
                             isoFile = fileName;
                         }
                         if (["cue", "ccd", "toc", "m3u"].includes(ext)) {
-                            if (this.getCore(true) === "psx") {
-                                //always prefer m3u files for psx cores
+                            if (this.getCore(true) === "psx" || ext === "m3u") {
+                                // Prefer m3u when present (PSX + multi-disc CHD/GDI playlists).
                                 if (selectedCueExt !== "m3u") {
                                     if (cueFile === null || ext === "m3u") {
                                         cueFile = fileName;
@@ -848,7 +848,11 @@ class EmulatorJS {
                     } else {
                         this.fileName = fileNames[0];
                     }
-                    if (isoFile !== null && (supportsExt("iso") || supportsExt("cso") || supportsExt("chd") || supportsExt("elf"))) {
+                    // RBG: when an m3u playlist is present and the core supports it, prefer
+                    // it over iso/chd/elf so EmulatorJS disk-control sees every disc.
+                    if (selectedCueExt === "m3u" && cueFile !== null && supportsExt("m3u")) {
+                        this.fileName = cueFile;
+                    } else if (isoFile !== null && (supportsExt("iso") || supportsExt("cso") || supportsExt("chd") || supportsExt("elf"))) {
                         this.fileName = isoFile;
                     } else if (supportsExt("cue") || supportsExt("ccd") || supportsExt("toc") || supportsExt("m3u")) {
                         if (cueFile !== null) {

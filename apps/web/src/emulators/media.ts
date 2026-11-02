@@ -163,7 +163,14 @@ export function gdiCompanionNames(gdi: string): string[] {
   return parseGdiManifest(gdi).map((track) => track.filename);
 }
 
-/** M3U disc playlists — flat filenames only; comments and blanks ignored. */
+/**
+ * M3U disc playlists — flat filenames only; comments and blanks ignored.
+ *
+ * Flycast resolves relative M3U entries as `g_roms_dir + name`. EmulatorJS
+ * passes content as `/file.m3u`, so g_roms_dir becomes `//` and relative
+ * companions miss the MEMFS mount. Prefer a single leading `/` (VFS-absolute
+ * flat name); strip it for OPFS/catalog companion lookup.
+ */
 export function m3uCompanionNames(m3u: string): string[] {
   const names: string[] = [];
   for (const line of m3u.split(/\r?\n/)) {
@@ -171,7 +178,13 @@ export function m3uCompanionNames(m3u: string): string[] {
     if (!trimmed || trimmed.startsWith('#')) continue;
     const match = trimmed.match(m3uLine);
     if (!match) throw new Error('UNSAFE_M3U_ENTRY');
-    const name = assertSafeFlatName(match[1], 'UNSAFE_M3U_ENTRY');
+    // Allow "/disc.chd" (EmulatorJS/Flycast VFS form); reject other path forms.
+    const raw = match[1].trim();
+    if (raw.includes('\\') || raw.includes('..') || raw.indexOf('/') > 0) {
+      throw new Error('UNSAFE_M3U_ENTRY');
+    }
+    const flat = raw.startsWith('/') ? raw.slice(1) : raw;
+    const name = assertSafeFlatName(flat, 'UNSAFE_M3U_ENTRY');
     if (names.includes(name)) throw new Error('DUPLICATE_M3U_ENTRY');
     names.push(name);
   }
