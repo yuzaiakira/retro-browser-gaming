@@ -78,10 +78,11 @@ Recorded in EXECUTION_STATE after suite run. Intent: Vitest, tsc, Django, Dreamc
 
 | Hash | Subject |
 |------|---------|
-| `e294044` | feat(web): harden BlobFS disc reads and Dreamcast GDI/M3U parsers |
-| `46ee41d` | feat(fixtures): add legal truncated Dreamcast GDI disc set |
-| `417e6c5` | feat(api): seed Dreamcast GDI catalog release for flycast |
-| *(tests/docs commits follow)* | |
+|  | docs(ph-12): record Dreamcast large-media hardening evidence |
+|  | test(web): add Dreamcast GDI/CDI gameplay and GDI offline PWA proofs |
+|  | feat(api): seed Dreamcast GDI catalog release for flycast |
+|  | feat(fixtures): add legal truncated Dreamcast GDI disc set |
+|  | feat(web): harden BlobFS disc reads and Dreamcast GDI/M3U parsers |
 
 Each new commit message was checked with `git log -1 --format=%B` — **no** `Co-authored-by: Cursor <cursoragent@cursor.com>` trailer. Author remains the configured human identity (`Akira <yuzai.akira@gmail.com>`).
 
