@@ -76,7 +76,8 @@ Evidence: `.runtime/test-evidence/PH-12/dreamcast/` (`offline-pwa-journey.json`,
 
 ## Follow-ups (non-blocking for engineering VERIFIED_PLAYABLE)
 
-1. Prefer seekable/OPFS for large CHD/GDI/CDI; keep ELF for compact engineering boots.
-2. Optionally rebuild upstream with real libelf/libzip linked (remove JS polyfill/soft-stubs).
+1. ~~Prefer seekable/OPFS for large CHD/GDI/CDI~~ — GDI/CDI on-demand BlobFS verified 2026-11-02 (`flycast-media-formats.md`). **CHD still blocked** by `chdstream_*` soft-stubs.
+2. Optionally rebuild upstream with real libelf/libzip/**libchdr** linked (remove JS polyfill/soft-stubs).
 3. Product approval + OS-level PWA / physical device gates remain open.
 4. Allowlist: `LOCAL_ONLY` until counsel clears anonymous public CDN distribution of the modified Flycast pack.
+5. Multi-disc M3U path validation exists; interactive disc-swap still NOT_VERIFIED.

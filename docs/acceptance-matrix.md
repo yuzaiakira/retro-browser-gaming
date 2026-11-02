@@ -8,12 +8,12 @@
 | API-004 | PASSED | Native PostgreSQL, authenticated S3 Range, Django/Next healthy in Compose |
 | CAT-001 | PASSED (HTML5 + consoles) | Catalog install HTML5 + Genesis/PS1/PSP; Firefox install/offline; Orbit re-PASS 2026-10-22 after CSP/origin fix |
 | CAT-002 | PASSED | Empty/error/offline UX (`PH-11/acceptance-gates-20261022.txt`) |
-| DL-001–DL-012 | PASSED | Prior fault suite + Compose evidence (`PH-03/download-faults-20261020.md`) |
-| DL-013 | PASSED (scoped) | 1 GiB Range + page JS heap bound; RSS unavailable via Playwright (`download-faults-rss-20261020.txt`) |
+| DL-001–DL-012 | PASSED | Prior fault suite + Compose evidence (`PH-03/download-faults-20261020.md`); re-PASS 2026-11-02 on `launcher.localhost:13000` during Dreamcast large-media hardening |
+| DL-013 | PASSED (scoped) | 1 GiB Range + page JS heap bound; RSS unavailable via Playwright (`download-faults-rss-20261020.txt`); re-PASS 2026-11-02 (`DOWNLOAD_1GIB_BOUNDED_MEMORY_PASS`) |
 | OFF-001–OFF-003 | PASSED (HTML5) | Persistent-profile cold-start (`PH-02/offline-pwa-20261020.md`); Orbit player path re-validated 2026-10-22 |
 | OFF-004 | PASSED (wasm core) | Deleted Genesis wasm.data offline; OPFS retained (`PH-02/offline-pwa-off004-core-20261020.md`) |
 | OFF-005 | PASSED | Waiting SW does not disrupt Save state |
-| EMU-001–EMU-004 | PASSED (scoped) | Gameplay + BlobFS + catalog offline; regression 2026-10-22 (`PH-11/emulator-regression-20261022.txt`); Android AUD-001 |
+| EMU-001–EMU-004 | PASSED (scoped) | Gameplay + BlobFS + catalog offline; regression 2026-10-22 (`PH-11/emulator-regression-20261022.txt`); Android AUD-001; Dreamcast large-media 2026-11-02: GDI/CDI on-demand + GDI offline (`docs/reports/dreamcast-large-media-hardening.md`; CHD still blocked) |
 | EMU-005, EMU-006 | PASSED | Lifecycle + unsupported core (`PH-11/acceptance-gates-20261022.txt`) |
 | CMP-001, CMP-002 | PASSED (unit) | `compatibility.test.ts` |
 | IN-001 | PASSED (Chromium) | Keyboard → InputRouter (`PH-11`) |

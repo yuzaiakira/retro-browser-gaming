@@ -21,6 +21,8 @@
 
 **PH-12.5 Dreamcast / Flycast WASM (2026-11-01):** Pin **v1.0** `16e9c7b4…` / Flycast `2c48c01`; GPLv2; packaged `flycast-wasm.data` `5ef913f5…` (wasm `db2b87d8…` + libelf JS polyfill / zip soft-stubs; allowlist **`LOCAL_ONLY`**). MIT Dot ELF `ffafb5d5…`. Chromium **`DREAMCAST_HLE_BOOT_VISIBLE`** + **`DREAMCAST_GAMEPLAY_PASS`** + **`DREAMCAST_SAVE_RESTORE_PASS`** + Compose **`DREAMCAST_OFFLINE_PWA_PASS`** (HLE + `reicast_emulate_framebuffer`; no SEGA BIOS). **VERIFIED_PLAYABLE** (engineering). Product approval **pending**. OS PWA/physical **NOT_VERIFIED**. Docs: `flycast-wasm-dreamcast.md`, `dreamcast-firmware-audit.md`; evidence `.runtime/test-evidence/PH-12/dreamcast/`.
 
+**PH-12.5 Dreamcast large-media (2026-11-02):** Flycast forced onto BlobFS on-demand; 64-bit-safe SAB reader + diagnostics; GDI/M3U parsers. Truncated mkdcdisc GDI: **`DREAMCAST_GDI_GAMEPLAY_PASS`** + **`DREAMCAST_GDI_SAVE_RESTORE_PASS`** + Compose **`DREAMCAST_GDI_OFFLINE_PWA_PASS`** (catalog `mit-dreamcast-dot-gdi`). mkdcdisc CDI (~706 MiB): **`DREAMCAST_CDI_GAMEPLAY_PASS`** (wasm heap 256 MiB; MEMFS `bytesWritten=0`; peak staging ~2 KiB). **CHD not claimed** — `chdstream_*` soft-stubs. Multi-disc swap **NOT_VERIFIED**. Download faults re-PASS incl. 100 MiB restart + 1 GiB bounded heap. Docs: `flycast-media-formats.md`, `docs/reports/dreamcast-large-media-hardening.md`; evidence `.runtime/test-evidence/PH-12/dreamcast-large-media/`.
+
 **PH-12.6 Flash / Ruffle (2026-11-01):** Official selfhosted **0.7.1** (`v0.7.1` / `89a70499…`; zip `ef12edbe…`; MIT OR Apache-2.0). Dedicated `ruffle-frame` + CSP; `polyfills:false`; EI off; MIT Dot SWF `3f5c78f2…` (Haxe 4.3). **`FLASH_RUFFLE_GAMEPLAY_PASS`** + SharedObject **`FLASH_RUFFLE_PROGRESS_PERSISTENCE_PASS`** + Compose **`FLASH_RUFFLE_OFFLINE_PWA_PASS`**. **`saveState=false`** (no Quick Save). **VERIFIED_PLAYABLE** (engineering) under documented save semantics. Product approval **pending**. Docs: `ruffle-web-integration.md`, `flash-save-capabilities.md`, `flash-security-audit.md`; evidence `.runtime/test-evidence/PH-12/flash/`.
 
 **PH-12.4 Arcade / MAME WASM (2026-11-01 evening):** License **GO** for **`rbgdot`** only; FBNeo/MAMEDev free ROMs **NO-GO**. Root cause: `drawogl.cpp` → `glShadeModel` under WebGL. Fix: `NO_OPENGL=1` + `-video soft` (stale `drawogl.o` must be rebuilt). wasm `1d211f74…` / js `a3325ef7…` (`LOCAL_ONLY`). Chromium **`ARCADE_RBGDOT_GAMEPLAY_PASS`** + **`ARCADE_RBGDOT_SAVE_RESTORE_PASS`** + Compose **`ARCADE_RBGDOT_OFFLINE_PWA_PASS`** (SW offline; post-repair offline re-boot soft). Frame RPC uses `reply` protocol. **VERIFIED_PLAYABLE** (engineering). Product approval **pending**. OS PWA/physical **NOT_VERIFIED**. Other MAME drivers unverified. Docs: `mame-wasm-arcade.md`; evidence `.runtime/test-evidence/PH-12/arcade/`.
@@ -54,7 +56,7 @@
 | Arcade | VERIFIED_PLAYABLE (engineering) — `rbgdot` only; `ARCADE_RBGDOT_GAMEPLAY_PASS` + save + offline PWA; product pending; other drivers unverified |
 | Atari ST | VERIFIED_PLAYABLE — offline PWA SW journey PASS; OS PWA/physical NOT_VERIFIED |
 | Atari 8-bit | VERIFIED_PLAYABLE (engineering) — `ATARI8_GAMEPLAY_PASS` + `ATARI8_SAVE_RESTORE_PASS` + `ATARI8_OFFLINE_PWA_PASS`; product approval pending; distinct from 5200 |
-| Dreamcast | VERIFIED_PLAYABLE (engineering) — `DREAMCAST_GAMEPLAY_PASS` + `DREAMCAST_SAVE_RESTORE_PASS` + `DREAMCAST_OFFLINE_PWA_PASS`; reios HLE; no SEGA BIOS; product approval pending |
+| Dreamcast | VERIFIED_PLAYABLE (engineering) — ELF + GDI large-media (`DREAMCAST_GDI_*`) + CDI on-demand gameplay; CHD blocked (soft-stubs); reios HLE; no SEGA BIOS; product approval pending |
 | Flash / Ruffle | VERIFIED_PLAYABLE (engineering) — `FLASH_RUFFLE_GAMEPLAY_PASS` + SharedObject progress + `FLASH_RUFFLE_OFFLINE_PWA_PASS`; Quick Save not claimed; product approval pending |
 | FDS | VERIFIED_PLAYABLE (engineering) — `FDS_OFFLINE_PWA_PASS` + `NES_FCEUMM_REGRESSION_PASS`; product approval pending |
 | Vectrex | BLOCKED_EXTERNAL — external-BIOS vecx path + MIT Dot; no lawful BIOS → no gameplay claim |
@@ -323,6 +325,26 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 | Evidence | `.runtime/test-evidence/PH-12/dreamcast/` |
 | Regressions | Genesis / Atari8 / Atari ST / FDS / NES / N64 / ZX81 GAMEPLAY_PASS; Vitest 76; tsc OK; Django 43; core-lock 385 LOCAL_FULL; PUBLIC_SOURCE_SAFETY_PASS; SOURCE_OFFER_GATE_OK |
 
+## PH-12.5 Dreamcast large-media pass (2026-11-02)
+
+| Check | Result |
+|---|---|
+| BlobFS | flycast in `ON_DEMAND_CORES`; 64-bit offsets; diagnostics (reads/seeks/latency/outstanding) |
+| GDI gameplay/save | `DREAMCAST_GDI_GAMEPLAY_PASS` + `DREAMCAST_GDI_SAVE_RESTORE_PASS` (~36 MiB) |
+| GDI offline | Compose `DREAMCAST_GDI_OFFLINE_PWA_PASS` (`mit-dreamcast-dot-gdi`) |
+| CDI gameplay | `DREAMCAST_CDI_GAMEPLAY_PASS` (740076137 B; heapBoundOk; peakStaging 2335) |
+| CHD | **BLOCKED** — soft-stub `chdstream_*`; no gameplay marker |
+| Downloads | All `DOWNLOAD_*_PASS` incl. 100 MiB restart + 1 GiB bounded memory |
+| ELF baseline | `DREAMCAST_GAMEPLAY_PASS` + `DREAMCAST_OFFLINE_PWA_PASS` re-PASS |
+| Regressions | Vitest 85; tsc OK; Django 43; Genesis/NES/Atari8/Atari ST/FDS/Flash/Arcade/PSP/PS1/SNES PASS; arcade first attempt flaky page-close then retry PASS |
+| Evidence | `.runtime/test-evidence/PH-12/dreamcast-large-media/` |
+
+### Next concrete task
+
+1. Optional: rebuild Flycast WASM with real libchdr → CHD gameplay gate (core-lock change)
+2. Optional: interactive multi-disc swap evidence before claiming M3U verified
+3. Owner gates unchanged (publication STOP); product approval for Dreamcast fixtures
+
 ## Remaining blockers / next
 
 1. Owner: authorize Option B public repo push of sanitized candidate (LICENSE enacted)
@@ -335,3 +357,4 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 8. Continue PH-12.1 Jaguar (only remaining 12.1 EXPERIMENTAL)
 9. Vectrex: BLOCKED_EXTERNAL until authorized `system.img` + gameplay/offline gates
 10. Atari 8-bit: optional `.car`/`.cas`/multi-disk + 400/800 profile smokes after real validation; OS PWA/physical NOT_VERIFIED
+11. Dreamcast CHD / multi-disc swap remain open (see large-media report)
