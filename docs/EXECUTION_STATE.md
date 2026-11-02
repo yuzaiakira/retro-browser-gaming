@@ -338,12 +338,15 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 | ELF baseline | `DREAMCAST_GAMEPLAY_PASS` + `DREAMCAST_OFFLINE_PWA_PASS` re-PASS |
 | Regressions | Vitest 85; tsc OK; Django 43; Genesis/NES/Atari8/Atari ST/FDS/Flash/Arcade/PSP/PS1/SNES PASS; arcade first attempt flaky page-close then retry PASS |
 | Evidence | `.runtime/test-evidence/PH-12/dreamcast-large-media/` |
+| Commits (unpushed) | `e294044` … `e7d1c3f` on `feat/platform-expansion-phase-1` — no Cursor co-author trailers |
+| Full 10-platform soak | Not re-run this pass; representative Genesis/NES/Atari8/Atari ST/FDS/Flash/Arcade/PSP/PS1/SNES + Dreamcast ELF/GDI/CDI PASS |
 
 ### Next concrete task
 
 1. Optional: rebuild Flycast WASM with real libchdr → CHD gameplay gate (core-lock change)
 2. Optional: interactive multi-disc swap evidence before claiming M3U verified
-3. Owner gates unchanged (publication STOP); product approval for Dreamcast fixtures
+3. Optional: re-run `cross-console-soak.cjs` on clean images after merge readiness
+4. Owner gates unchanged (publication STOP); product approval for Dreamcast fixtures
 
 ## Remaining blockers / next
 
