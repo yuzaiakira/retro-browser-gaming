@@ -835,6 +835,64 @@ class Command(BaseCommand):
                 "emulator/ODE; product approval pending; SEGA BIOS never bundled."
             ),
         )
+        results["dreamcast-chd"] = self._import_files(
+            fixtures,
+            slug="mit-dreamcast-dot-chd",
+            title="MIT Dreamcast Dot CHD",
+            description=(
+                "First-party MIT Dreamcast Dot as CHDv5 (chdman createcd from "
+                "truncated mkdcdisc GDI). Engineering CHD acceptance only — not "
+                "a commercial GD-ROM. reios HLE; no SEGA BIOS."
+            ),
+            console="dreamcast",
+            core={"code": "flycast", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-dreamcast-dot.chd",
+            files=[("mit-dreamcast-dot.chd", "disk", "application/octet-stream")],
+            license_ref="MIT; LICENSES/dreamcast-dot-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "scripts/build-dreamcast-chd-and-multidisc.sh; "
+                ".fixtures/mit-dreamcast-dot.chd.sha256; "
+                "docs/emulator-builds/flycast-media-formats.md"
+            ),
+            genre="Action",
+            compatibility_note=(
+                "Engineering: flycast CHDDisc/libchdr + BlobFS on-demand; "
+                "product approval pending; SEGA BIOS never bundled."
+            ),
+        )
+        results["dreamcast-multidisc"] = self._import_files(
+            fixtures,
+            slug="mit-dreamcast-dot-multidisc",
+            title="MIT Dreamcast Dot Multi-Disc",
+            description=(
+                "First-party two-disc M3U: disc1 cool-grey Dot CHD + disc2 "
+                "green-idle Dot CHD (DOT_VARIANT=2). Engineering disc-swap "
+                "acceptance only — not commercial media. reios HLE; no SEGA BIOS."
+            ),
+            console="dreamcast",
+            core={"code": "flycast", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-dreamcast-dot-multidisc.m3u",
+            files=[
+                ("mit-dreamcast-dot-multidisc.m3u", "disk", "text/plain"),
+                ("mit-dreamcast-dot.chd", "disk", "application/octet-stream"),
+                ("mit-dreamcast-dot-disc2.chd", "disk", "application/octet-stream"),
+            ],
+            license_ref="MIT; LICENSES/dreamcast-dot-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "scripts/build-dreamcast-chd-and-multidisc.sh; "
+                "fixtures/dreamcast-dot/build-disc2.sh; "
+                "docs/reports/dreamcast-chd-disc-swap.md"
+            ),
+            genre="Action",
+            compatibility_note=(
+                "Engineering: flycast M3U disk-control swap; distinguishable "
+                "idle colors; product approval pending; SEGA BIOS never bundled."
+            ),
+        )
         results["flash"] = self._import_files(
             fixtures,
             slug="mit-flash-dot",
