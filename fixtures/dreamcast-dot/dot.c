@@ -56,7 +56,13 @@ int main(int argc, char **argv) {
   int y = START_Y;
   int fire = 0;
   uint16_t bg = rgb565(16, 24, 48);
+  /* DOT_VARIANT=2 (disc 2 / multi-disc fixture): green-tinted idle for
+   * machine-verifiable disc identity after swap. Default remains cool grey. */
+#if defined(DOT_VARIANT) && (DOT_VARIANT == 2)
+  uint16_t idle = rgb565(64, 220, 96);
+#else
   uint16_t idle = rgb565(220, 220, 240);
+#endif
   uint16_t fired = rgb565(240, 64, 64);
 
   cont_btn_callback(0, CONT_START, (cont_btn_callback_t)arch_exit);

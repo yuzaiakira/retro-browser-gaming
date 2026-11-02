@@ -51,6 +51,7 @@ docs/test-evidence/
 .fixtures/dreamcast-dot.cdi
 .fixtures/mit-dreamcast-dot.cdi
 .fixtures/mit-dreamcast-dot-gdi/
+.fixtures/mit-dreamcast-dot-disc2-gdi/
 .fixtures/dreamcast-gdi/
 .fixtures/*.mds
 .fixtures/*.mdf
