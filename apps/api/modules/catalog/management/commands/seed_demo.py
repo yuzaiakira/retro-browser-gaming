@@ -83,7 +83,8 @@ WASM_CORES = [
     ("ppsspp", ["iso", "cso", "pbp"], ["wasm", "threads", "webgl2", "secureContext"]),
     ("jsdos", ["zip"], ["wasm", "secureContext"]),
     ("hatari", ["st", "msa", "dim", "stx"], ["wasm", "secureContext"]),
-    ("flycast", ["elf", "cdi", "gdi", "chd", "cue", "iso"], ["wasm", "webgl2", "secureContext"]),
+    # bin/raw: GDI companion tracks (mkdcdisc / Redump-style multi-file discs).
+    ("flycast", ["elf", "cdi", "gdi", "chd", "cue", "iso", "bin", "raw"], ["wasm", "webgl2", "secureContext"]),
     ("ruffle", ["swf"], ["wasm", "secureContext"]),
     ("mame_rbg_arcade", ["zip"], ["wasm", "secureContext"]),
     ("js2me", ["jar"], ["secureContext"]),
@@ -800,6 +801,38 @@ class Command(BaseCommand):
             compatibility_note=(
                 "Engineering: flycast / reios HLE + emulate_framebuffer for vram_s "
                 "Dot; product approval pending; SEGA BIOS never bundled."
+            ),
+        )
+        results["dreamcast-gdi"] = self._import_files(
+            fixtures,
+            slug="mit-dreamcast-dot-gdi",
+            title="MIT Dreamcast Dot GDI",
+            description=(
+                "First-party MIT Dreamcast Dot as a truncated multi-track GDI "
+                "(mkdcdisc --gdi-truncate). Engineering large-media acceptance "
+                "only — not a commercial GD-ROM. reios HLE; no SEGA BIOS."
+            ),
+            console="dreamcast",
+            core={"code": "flycast", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-dreamcast-dot.gdi",
+            files=[
+                ("mit-dreamcast-dot.gdi", "disk", "text/plain"),
+                ("mit-dreamcast-dot-track01.bin", "disk", "application/octet-stream"),
+                ("mit-dreamcast-dot-track02.raw", "disk", "application/octet-stream"),
+                ("mit-dreamcast-dot-track03.bin", "disk", "application/octet-stream"),
+            ],
+            license_ref="MIT; LICENSES/dreamcast-dot-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "scripts/build-dreamcast-disc-fixtures.sh; "
+                ".fixtures/mit-dreamcast-dot.README.md; "
+                "docs/emulator-builds/flycast-media-formats.md"
+            ),
+            genre="Action",
+            compatibility_note=(
+                "Engineering: flycast BlobFS on-demand GDI; truncated image for "
+                "emulator/ODE; product approval pending; SEGA BIOS never bundled."
             ),
         )
         results["flash"] = self._import_files(
