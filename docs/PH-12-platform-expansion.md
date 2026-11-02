@@ -1,7 +1,7 @@
 # PH-12 — Multi-platform expansion (execution plan)
 
-**Date:** 2026-10-29  
-**Status:** IN PROGRESS — Phase 12.0 capability preflight landed. **PH-12.1 N64 + ZX81** certified `VERIFIED_PLAYABLE` (2026-10-29). Jaguar remains EXPERIMENTAL in 12.1.
+**Date:** 2026-10-29 (soak close-out 2026-11-02)  
+**Status:** IN PROGRESS — Phase 12.0 capability preflight landed. **PH-12.1 N64 + ZX81** certified `VERIFIED_PLAYABLE` (2026-10-29). Jaguar remains EXPERIMENTAL in 12.1. **Cross-console soak `CROSS_CONSOLE_SOAK_FULL_PASS`** (10/10, 2026-11-02).
 
 **Scope authority:** `docs/PDR.md`, `docs/EMULATOR_SUPPORT_MATRIX.md`, `docs/acceptance-matrix.md`.
 
@@ -20,8 +20,8 @@ Already recorded as VERIFIED_PLAYABLE in the support matrix: HTML5; J2ME; SG-100
 | Phase | Systems and work | Preconditions / current outcome | Promotion rule |
 | --- | --- | --- | --- |
 | PH-12.0 | Generic capability preflight for new WASM, threads, WebGL2 cores | The old probe only required threads by PSP name. Make requirements declarative and test fail-closed. | Unit tests + full pre-existing suite |
-| PH-12.1 | Nintendo 64, Atari Jaguar, ZX81 | **N64 + ZX81 done**. Jaguar black framebuffer (`EXPERIMENTAL`). ZX81: RetroPad+keyboard Dot move, save/load (`ZX81_GAMEPLAY_PASS`); physical gamepad NOT_VERIFIED. | Meaningful user-input-to-frame behavior, offline, save/load, no black-frame false positives |
-| PH-12.2 | Sega CD, ColecoVision, Famicom Disk System | **ColecoVision** BLOCKED_EXTERNAL. **FDS VERIFIED_PLAYABLE** (engineering): OpenDiskSysROM; MIT move-demo A/B/A; Compose `FDS_OFFLINE_PWA_PASS`; `NES_FCEUMM_REGRESSION_PASS`; product approval pending. Sega CD reserved. | Rights-approved fixture, BIOS validation, no firmware in public repo, real gameplay |
+| PH-12.1 | Nintendo 64, Atari Jaguar, ZX81 | **N64 + ZX81 done**. Jaguar black framebuffer (`EXPERIMENTAL`). ZX81: RetroPad+keyboard Dot move, save/load (`ZX81_GAMEPLAY_PASS`); locked `81_eo` wasm `09c7afa9…` (2026-11-02 rebuild); physical gamepad NOT_VERIFIED. Included in **`CROSS_CONSOLE_SOAK_FULL_PASS`**. | Meaningful user-input-to-frame behavior, offline, save/load, no black-frame false positives |
+| PH-12.2 | Sega CD, ColecoVision, Famicom Disk System | **ColecoVision** BLOCKED_EXTERNAL. **FDS VERIFIED_PLAYABLE** (engineering): OpenDiskSysROM; MIT move-demo A/B/A; Compose `FDS_OFFLINE_PWA_PASS`; `NES_FCEUMM_REGRESSION_PASS`; product approval pending. Soak harness seeds OpenDiskSysROM. Sega CD reserved. | Rights-approved fixture, BIOS validation, no firmware in public repo, real gameplay |
 | PH-12.3 | Atari ST, Vectrex, Intellivision, Atari 8-bit | **Atari ST VERIFIED_PLAYABLE** (engineering). **Atari 8-bit VERIFIED_PLAYABLE** (engineering): `atari800` + AltirraOS; MIT Dot; `ATARI8_GAMEPLAY_PASS` / `ATARI8_SAVE_RESTORE_PASS` / `ATARI8_OFFLINE_PWA_PASS`. **Vectrex BLOCKED_EXTERNAL**: patched vecx (no embedded GCE BIOS); MIT Dot; user-BIOS slot; awaiting authorized `system.img` + gameplay. Intellivision open. | Source-reproducible WASM core, valid licensed test ROM and browser evidence |
 | PH-12.4 | Arcade / FBNeo / MAME, Neo Geo AES/MVS/CD, PC Engine CD / PC-FX, 3DO | **Arcade (rbgdot):** `NO_OPENGL=1` + `-video soft`; **VERIFIED_PLAYABLE** (engineering) with `ARCADE_RBGDOT_GAMEPLAY_PASS` / save / Compose offline PWA. Product approval pending. FBNeo **NO-GO** public. Other MAME drivers unverified. Neo Geo / PCE CD / 3DO still open. | Full audit of rights/core/firmware + verified play & saves |
 | PH-12.5 | Dreamcast, Sega Saturn, PS2 | **Dreamcast VERIFIED_PLAYABLE (engineering)**: Flycast WASM v1.0 (`16e9c7b4…`, Flycast `2c48c01`, GPLv2); reios HLE + MIT Dot **`DREAMCAST_GAMEPLAY_PASS`** / **`DREAMCAST_SAVE_RESTORE_PASS`** / Compose **`DREAMCAST_OFFLINE_PWA_PASS`**; product approval pending; OS PWA/physical NOT_VERIFIED; no SEGA BIOS redistributed. Saturn/PS2 still research. | Independent experimental adapters + sustained playable game, frame input, performance, offline, memory, audio and legal evidence |

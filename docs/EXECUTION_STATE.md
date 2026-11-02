@@ -5,7 +5,7 @@
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
 **PH-12.1 N64 (2026-10-29):** `mupen64plus_next` **VERIFIED_PLAYABLE** — hold-while-capture smoke `N64_GAMEPLAY_PASS`; save/load; >64 MiB ROM guard. Report `docs/emulator-builds/n64-mupen64plus-next-gameplay.md`.
 
-**PH-12.1 ZX81 (2026-10-29):** `81_eo` **VERIFIED_PLAYABLE** — CRT autostart + CDFLAG/FRAMES; Chromium `ZX81_GAMEPLAY_PASS` (RetroPad Left/Right via `frame.js`→`.ejs_parent` Digit bridge + keyboard 5/8; save 49 KiB); stock `81` untouched. Physical gamepad **NOT_VERIFIED**. CS: `scripts/patches/81_eo/` + locked SHA `2ddbd03b…` — still NOT_CLEARED pending legal review.
+**PH-12.1 ZX81 (2026-10-29; soak integrity refresh 2026-11-02):** `81_eo` **VERIFIED_PLAYABLE** — CRT autostart + CDFLAG/FRAMES; Chromium `ZX81_GAMEPLAY_PASS` (RetroPad Left/Right via `frame.js`→`.ejs_parent` Digit bridge + keyboard 5/8; save 49 KiB); stock `81` untouched. Physical gamepad **NOT_VERIFIED**. CS: `scripts/patches/81_eo/` + locked wasm SHA `09c7afa9…` / report `04c8b1f9…` (rebuild after private-store loss; EJS `minimumEJSVersion` 4.2.2) — still NOT_CLEARED pending legal review.
 
 **PH-12.2 ColecoVision (2026-10-29):** **BLOCKED_EXTERNAL** — reusable user-BIOS architecture (`user-bios.ts`, Settings importer, `install-private-bios.py`); pinned `gearcoleco` 4.2.3; MIT RetroPIPE fixture. Lawful `colecovision.rom` **not** available in this environment → no interactive gameplay claim. Sega CD slot remains reserved (disabled). See `docs/emulator-builds/coleco-gearcoleco-user-bios.md`.
 
@@ -25,7 +25,7 @@
 
 **PH-12.4 Arcade / MAME WASM (2026-11-01 evening):** License **GO** for **`rbgdot`** only; FBNeo/MAMEDev free ROMs **NO-GO**. Root cause: `drawogl.cpp` → `glShadeModel` under WebGL. Fix: `NO_OPENGL=1` + `-video soft` (stale `drawogl.o` must be rebuilt). wasm `1d211f74…` / js `a3325ef7…` (`LOCAL_ONLY`). Chromium **`ARCADE_RBGDOT_GAMEPLAY_PASS`** + **`ARCADE_RBGDOT_SAVE_RESTORE_PASS`** + Compose **`ARCADE_RBGDOT_OFFLINE_PWA_PASS`** (SW offline; post-repair offline re-boot soft). Frame RPC uses `reply` protocol. **VERIFIED_PLAYABLE** (engineering). Product approval **pending**. OS PWA/physical **NOT_VERIFIED**. Other MAME drivers unverified. Docs: `mame-wasm-arcade.md`; evidence `.runtime/test-evidence/PH-12/arcade/`.
 
-**Cross-console soak (2026-11-01 evening):** **`CROSS_CONSOLE_SOAK_PASS`** (8/10) — Genesis/NES/N64/Atari ST (`gpl-atari-st-pongwars`)/Atari8/Dreamcast/PSP/Flash OK; ZX81 + FDS **SKIPPED**. **`CROSS_CONSOLE_SOAK_FULL_PASS` PENDING**. Report `docs/reports/cross-console-soak.md`; evidence `.runtime/test-evidence/PH-12/soak/`.
+**Cross-console soak (2026-11-02):** **`CROSS_CONSOLE_SOAK_FULL_PASS`** and **`CROSS_CONSOLE_SOAK_CLEAN_BUILD_PASS`** (10/10, `SOAK_CYCLES=2`) on freshly built Compose images. ZX81: lock/provision + report allowlist (`09c7afa9…`). FDS: harness OpenDiskSysROM IDB seed. BuildKit: `/dev/null` secret placeholder replaced with empty regular file → **`COMPOSE_CLEAN_REBUILD_PASS`**. CSP: path-scoped middleware policy; runtime **no** `unsafe-inline`; shell `wasm-unsafe-eval` for hash-wasm, **no** `unsafe-eval` → **`RUNTIME_CSP_SECURITY_PASS`**. Arcade rbgdot gameplay/save/offline PASS on clean image. Reports: `docs/reports/cross-console-soak.md`, `compose-rebuild-verification.md`, `runtime-csp-audit.md`. Product approval **PENDING**; OS PWA/physical **NOT_VERIFIED**; other MAME drivers **NOT_VERIFIED**; FBNeo **NO-GO**.
 
 **Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability — verified 2026-10-26.  
 **Hub UX (PH-UX-HUB):** Premium Gaming Hub — verified 2026-10-26.  
@@ -58,7 +58,8 @@
 | Flash / Ruffle | VERIFIED_PLAYABLE (engineering) — `FLASH_RUFFLE_GAMEPLAY_PASS` + SharedObject progress + `FLASH_RUFFLE_OFFLINE_PWA_PASS`; Quick Save not claimed; product approval pending |
 | FDS | VERIFIED_PLAYABLE (engineering) — `FDS_OFFLINE_PWA_PASS` + `NES_FCEUMM_REGRESSION_PASS`; product approval pending |
 | Vectrex | BLOCKED_EXTERNAL — external-BIOS vecx path + MIT Dot; no lawful BIOS → no gameplay claim |
-| Core lock | **395 files** LOCAL_FULL (includes `ruffle-0.7.1/*`) |
+| Core lock | **397 files** LOCAL_FULL (includes `ruffle-0.7.1/*` + `81_eo` report) |
+| Cross-console soak | **`CROSS_CONSOLE_SOAK_FULL_PASS`** (10/10, 2026-11-02) |
 
 ## Player UX pass (2026-10-26)
 
