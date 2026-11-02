@@ -44,3 +44,18 @@ apps/web/.playwright-browsers/
 # Generated QA evidence (never commit). Use RBG_TEST_EVIDENCE_DIR to override.
 docs/test-evidence/
 .runtime/test-evidence/
+
+# Large generated Dreamcast disc images (rebuild via scripts/build-dreamcast-disc-fixtures.sh).
+# Keep multi-hundred-MiB CDI out of Git; truncated GDI tracks may be committed when small.
+.fixtures/*.cdi
+.fixtures/dreamcast-dot.cdi
+.fixtures/mit-dreamcast-dot.cdi
+.fixtures/mit-dreamcast-dot-gdi/
+.fixtures/dreamcast-gdi/
+.fixtures/*.mds
+.fixtures/*.mdf
+.fixtures/*.nrg
+.fixtures/disc-build/
+.fixtures/*.cdi.sha256
+.fixtures/mit-dreamcast-dot.cdi.sha256
+.fixtures/dreamcast-dot.cdi.sha256
