@@ -35,8 +35,8 @@ Date: 2026-11-02. Branch: `feat/platform-expansion-phase-1`.
 | `DREAMCAST_GDI_SAVE_RESTORE_PASS` | PASS — ~36 MiB state |
 | `DREAMCAST_GDI_OFFLINE_PWA_PASS` | PASS — Compose SW offline |
 | `DREAMCAST_CDI_GAMEPLAY_PASS` | PASS — 740 076 137 B CDI; wasm heap 256 MiB; peak staging 2335 B |
-| `DREAMCAST_CHD_GAMEPLAY_PASS` | **not emitted** — soft-stub blocker |
-| Multi-disc swap | **NOT_VERIFIED** |
+| `DREAMCAST_CHD_GAMEPLAY_PASS` | Superseded 2026-11-02 evening — see `dreamcast-chd-disc-swap.md` (**PASS**) |
+| Multi-disc swap | Superseded — `DREAMCAST_DISC_SWAP_INTERACTIVE_PASS` (playlist adapter) |
 
 ## 4. Large-file download / recovery
 
@@ -67,12 +67,11 @@ Recorded in EXECUTION_STATE after suite run. Intent: Vitest, tsc, Django, Dreamc
 
 ## 10. Remaining blockers
 
-1. **CHD:** requires Flycast rebuild with real `chdstream`/libchdr (core lock change).
-2. **Multi-disc swap:** M3U parse only; no interactive disk-control evidence.
-3. **CDI breadth:** one mkdcdisc variant only.
-4. **Truncated GDI:** emulator/ODE only; not a full GD-ROM image.
-5. Product approval / OS PWA / physical devices still open.
-6. Large CDI must stay gitignored; rebuild via `scripts/build-dreamcast-disc-fixtures.sh`.
+1. **CHD / multi-disc:** Chromium engineering proofs closed — see `dreamcast-chd-disc-swap.md`. Compose CHD offline + clean soak still open (Docker).
+2. **CDI breadth:** one mkdcdisc variant only.
+3. **Truncated GDI:** emulator/ODE only; not a full GD-ROM image.
+4. Product approval / OS PWA / physical devices still open.
+5. Large CDI must stay gitignored; rebuild via `scripts/build-dreamcast-disc-fixtures.sh`.
 
 ## 11–12. Commits / authorship
 

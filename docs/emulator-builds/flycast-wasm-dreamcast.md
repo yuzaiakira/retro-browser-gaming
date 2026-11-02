@@ -76,8 +76,9 @@ Evidence: `.runtime/test-evidence/PH-12/dreamcast/` (`offline-pwa-journey.json`,
 
 ## Follow-ups (non-blocking for engineering VERIFIED_PLAYABLE)
 
-1. ~~Prefer seekable/OPFS for large CHD/GDI/CDI~~ — GDI/CDI on-demand BlobFS verified 2026-11-02 (`flycast-media-formats.md`). **CHD still blocked** by `chdstream_*` soft-stubs.
-2. Optionally rebuild upstream with real libelf/libzip/**libchdr** linked (remove JS polyfill/soft-stubs).
+1. ~~Prefer seekable/OPFS for large CHD/GDI/CDI~~ — GDI/CDI/CHD on-demand BlobFS verified 2026-11-02 (`flycast-media-formats.md`, `docs/reports/dreamcast-chd-disc-swap.md`).
+2. Optionally rebuild upstream with real libelf/libzip linked (remove JS polyfill/soft-stubs). libchdr already linked for CHDDisc.
 3. Product approval + OS-level PWA / physical device gates remain open.
 4. Allowlist: `LOCAL_ONLY` until counsel clears anonymous public CDN distribution of the modified Flycast pack.
-5. Multi-disc M3U path validation exists; interactive disc-swap still NOT_VERIFIED.
+5. ~~Interactive multi-disc swap~~ — `DREAMCAST_DISC_SWAP_INTERACTIVE_PASS` via frame M3U playlist adapter; native `.m3u` content-path boot still aborts.
+6. Compose `DREAMCAST_CHD_OFFLINE_PWA` + clean-build soak when Docker is available.

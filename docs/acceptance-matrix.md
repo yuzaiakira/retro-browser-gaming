@@ -13,7 +13,7 @@
 | OFF-001–OFF-003 | PASSED (HTML5) | Persistent-profile cold-start (`PH-02/offline-pwa-20261020.md`); Orbit player path re-validated 2026-10-22 |
 | OFF-004 | PASSED (wasm core) | Deleted Genesis wasm.data offline; OPFS retained (`PH-02/offline-pwa-off004-core-20261020.md`) |
 | OFF-005 | PASSED | Waiting SW does not disrupt Save state |
-| EMU-001–EMU-004 | PASSED (scoped) | Gameplay + BlobFS + catalog offline; regression 2026-10-22 (`PH-11/emulator-regression-20261022.txt`); Android AUD-001; Dreamcast large-media 2026-11-02: GDI/CDI on-demand + GDI offline (`docs/reports/dreamcast-large-media-hardening.md`; CHD still blocked) |
+| EMU-001–EMU-004 | PASSED (scoped) | Gameplay + BlobFS + catalog offline; regression 2026-10-22 (`PH-11/emulator-regression-20261022.txt`); Android AUD-001; Dreamcast large-media GDI/CDI + CHD gameplay/save + interactive disc-swap 2026-11-02 (`docs/reports/dreamcast-chd-disc-swap.md`); Compose CHD offline + clean soak **NOT_VERIFIED** (Docker unavailable) |
 | EMU-005, EMU-006 | PASSED | Lifecycle + unsupported core (`PH-11/acceptance-gates-20261022.txt`) |
 | CMP-001, CMP-002 | PASSED (unit) | `compatibility.test.ts` |
 | IN-001 | PASSED (Chromium) | Keyboard → InputRouter (`PH-11`) |
