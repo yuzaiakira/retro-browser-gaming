@@ -84,7 +84,8 @@ WASM_CORES = [
     ("jsdos", ["zip"], ["wasm", "secureContext"]),
     ("hatari", ["st", "msa", "dim", "stx"], ["wasm", "secureContext"]),
     # bin/raw: GDI companion tracks (mkdcdisc / Redump-style multi-file discs).
-    ("flycast", ["elf", "cdi", "gdi", "chd", "cue", "iso", "bin", "raw"], ["wasm", "webgl2", "secureContext"]),
+    # m3u: multi-disc playlists (frame playlist adapter; CHD/GDI/CDI companions).
+    ("flycast", ["elf", "cdi", "gdi", "chd", "cue", "iso", "bin", "raw", "m3u"], ["wasm", "webgl2", "secureContext"]),
     ("ruffle", ["swf"], ["wasm", "secureContext"]),
     ("mame_rbg_arcade", ["zip"], ["wasm", "secureContext"]),
     ("js2me", ["jar"], ["secureContext"]),
