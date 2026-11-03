@@ -213,9 +213,19 @@ async function run() {
     if (!seekable?.onDemand) {
       throw new Error(`expected on-demand BlobFS for flycast GDI: ${JSON.stringify(seekable)}`);
     }
-    if (seekable.bytesWritten !== 0) {
-      throw new Error(`on-demand mount wrote into MEMFS: ${seekable.bytesWritten}`);
+    const modes = Array.isArray(seekable.modes) ? seekable.modes : [];
+    // .gdi sheet is an intentional MEMFS UTF-8 sidecar; tracks must stay BlobFS.
+    const sidecarOnly =
+      modes.includes('memfs-sidecar-utf8') &&
+      modes.includes('blobfs-ondemand') &&
+      Number(seekable.bytesWritten || 0) > 0 &&
+      Number(seekable.bytesWritten || 0) < 65536;
+    if (seekable.bytesWritten !== 0 && !sidecarOnly) {
+      throw new Error(
+        `on-demand mount wrote unexpected MEMFS bytes: ${seekable.bytesWritten} modes=${JSON.stringify(modes)}`,
+      );
     }
+    status.memfsSidecarBytes = seekable.bytesWritten || 0;
 
     const f0 = await page.evaluate(() => window.frame());
     const idlePng = fromDataUrl(await page.evaluate(() => window.snap()));
