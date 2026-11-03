@@ -49,27 +49,28 @@ into the soak evidence directory when present.
 - **`CROSS_CONSOLE_SOAK_PASS`**: ≥2 platforms OK + zero hard disposal failures  
 - **`CROSS_CONSOLE_SOAK_FULL_PASS`**: all ten required keys OK (**skipped ≠ pass**)
 
-## Status (2026-11-02)
+## Status (2026-11-03 CHD clean-build re-run)
 
-**`CROSS_CONSOLE_SOAK_FULL_PASS`** (historical, may include prior hot-deployed web chunks) and  
-**`CROSS_CONSOLE_SOAK_CLEAN_BUILD_PASS`** — same 10/10 matrix on **freshly built** Compose `api`/`web` images after BuildKit secret fix + path-scoped CSP (no host `.next` bind).  
-`SOAK_CYCLES=2`, `SOAK_PLAY_SECONDS=10`, OpenDiskSysROM seeded (`6ce74ea4…`).
+**`CROSS_CONSOLE_SOAK_FULL_PASS`** and **`CROSS_CONSOLE_SOAK_CLEAN_BUILD_PASS`** — **new** 10/10 run on freshly rebuilt Compose `api`/`web` after CHD allowlist/lock sync + Flycast `m3u` seed fix.  
+`SOAK_CYCLES=2`, OpenDiskSysROM seeded (`6ce74ea4…`). Log: `clean-build-soak-chd-phase.log`.
 
-| Platform | Result | Notes (first cycle) |
+Parent-page JS heap baseline→final: ~4.15 MiB → ~5.62 MiB (Δ ~1.46 MiB). Process RSS **unavailable**. WASM/GPU/audio inside iframes **not** claimed as a comprehensive leak audit.
+
+| Platform | Result | Notes |
 |----------|--------|---------------------|
-| Genesis | OK | CATALOG ~259 ms; DOWNLOAD ~1312 ms; Menu ~616 ms; iframeAfter=0 |
-| NES | OK | CATALOG ~120 ms; DOWNLOAD ~807 ms; Menu ~551 ms; iframeAfter=0 |
-| N64 | OK | CATALOG ~118 ms; DOWNLOAD ~1310 ms; Menu ~837 ms; iframeAfter=0 |
-| ZX81 | OK | Integrity restored for rebuilt `81_eo` (`09c7afa9…` / report `04c8b1f9…`); Menu ~471 ms |
-| Atari ST | OK | Menu ~5202 ms (Hatari cold); iframeAfter=0 |
-| Atari 8-bit | OK | Menu ~471 ms; iframeAfter=0 |
-| FDS | OK | Harness seeds OpenDiskSysROM into `rbg-user-bios`; Menu ~536 ms |
-| Dreamcast | OK | Menu ~852 ms; iframeAfter=0 |
-| PSP | OK | Menu ~1202 ms; iframeAfter=0 |
-| Flash | OK | Menu ~484 ms; save N/A (`saveState=false`); iframeAfter=0 |
+| Genesis | OK | 2 cycles; iframeAfter=0 |
+| NES | OK | 2 cycles; iframeAfter=0 |
+| N64 | OK | 2 cycles; iframeAfter=0 |
+| ZX81 | OK | 2 cycles; iframeAfter=0 |
+| Atari ST | OK | 2 cycles; iframeAfter=0 |
+| Atari 8-bit | OK | 2 cycles; iframeAfter=0 |
+| FDS | OK | OpenDiskSysROM harness seed; 2 cycles; iframeAfter=0 |
+| Dreamcast | OK | ELF slug; 2 cycles; iframeAfter=0 |
+| PSP | OK | 2 cycles; iframeAfter=0 |
+| Flash | OK | save N/A (`saveState=false`); 2 cycles; iframeAfter=0 |
 
-Evidence: `.runtime/test-evidence/PH-12/soak/cross-console-soak.json`, `cross-console-soak-clean-build.json`, `CROSS_CONSOLE_SOAK_FULL_PASS.txt`, `CROSS_CONSOLE_SOAK_CLEAN_BUILD_PASS.txt`, `COMPOSE_CLEAN_REBUILD_PASS.txt`, `lifecycle/*.json`, `clean-build-soak2.log`.  
-Related: `docs/reports/compose-rebuild-verification.md`, `docs/reports/runtime-csp-audit.md`.
+Evidence: `.runtime/test-evidence/PH-12/soak/cross-console-soak.json`, `cross-console-soak-clean-build.json`, `CROSS_CONSOLE_SOAK_FULL_PASS.txt`, `CROSS_CONSOLE_SOAK_CLEAN_BUILD_PASS.txt`, `COMPOSE_CHD_CLEAN_BUILD_PASS.txt`, `lifecycle/*.json`, `clean-build-soak-chd-phase.log`.  
+Related: `docs/reports/compose-rebuild-verification.md`, `docs/reports/dreamcast-chd-disc-swap.md`, `docs/reports/runtime-csp-audit.md`.
 
 ### ZX81 soak failure root cause (resolved)
 

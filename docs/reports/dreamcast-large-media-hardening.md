@@ -31,7 +31,7 @@ Date: 2026-11-02. Branch: `feat/platform-expansion-phase-1`.
 
 | Marker | Result |
 |--------|--------|
-| `DREAMCAST_GDI_GAMEPLAY_PASS` | PASS — onDemand, bytesWritten=0, seeks/reads >0 |
+| `DREAMCAST_GDI_GAMEPLAY_PASS` | PASS — onDemand BlobFS tracks; intentional `.gdi` MEMFS sidecar UTF-8 (`memfs-sidecar-utf8`, ~137 B) allowed; seeks/reads >0 |
 | `DREAMCAST_GDI_SAVE_RESTORE_PASS` | PASS — ~36 MiB state |
 | `DREAMCAST_GDI_OFFLINE_PWA_PASS` | PASS — Compose SW offline |
 | `DREAMCAST_CDI_GAMEPLAY_PASS` | PASS — 740 076 137 B CDI; wasm heap 256 MiB; peak staging 2335 B |
@@ -67,7 +67,7 @@ Recorded in EXECUTION_STATE after suite run. Intent: Vitest, tsc, Django, Dreamc
 
 ## 10. Remaining blockers
 
-1. **CHD / multi-disc:** Chromium engineering proofs closed — see `dreamcast-chd-disc-swap.md`. Compose CHD offline + clean soak still open (Docker).
+1. **CHD / multi-disc:** Chromium + Compose offline + clean soak closed 2026-11-03 — see `dreamcast-chd-disc-swap.md` (`DREAMCAST_CHD_OFFLINE_PWA_PASS`, `CROSS_CONSOLE_SOAK_CLEAN_BUILD_PASS`).
 2. **CDI breadth:** one mkdcdisc variant only.
 3. **Truncated GDI:** emulator/ODE only; not a full GD-ROM image.
 4. Product approval / OS PWA / physical devices still open.

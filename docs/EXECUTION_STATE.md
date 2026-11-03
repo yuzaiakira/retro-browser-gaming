@@ -23,7 +23,7 @@
 
 **PH-12.5 Dreamcast large-media (2026-11-02):** Flycast forced onto BlobFS on-demand; 64-bit-safe SAB reader + diagnostics; GDI/M3U parsers. Truncated mkdcdisc GDI: **`DREAMCAST_GDI_GAMEPLAY_PASS`** + **`DREAMCAST_GDI_SAVE_RESTORE_PASS`** + Compose **`DREAMCAST_GDI_OFFLINE_PWA_PASS`** (catalog `mit-dreamcast-dot-gdi`). mkdcdisc CDI (~706 MiB): **`DREAMCAST_CDI_GAMEPLAY_PASS`** (wasm heap 256 MiB; MEMFS `bytesWritten=0`; peak staging ~2 KiB). Download faults re-PASS incl. 100 MiB restart + 1 GiB bounded heap. Docs: `flycast-media-formats.md`, `docs/reports/dreamcast-large-media-hardening.md`; evidence `.runtime/test-evidence/PH-12/dreamcast-large-media/`.
 
-**PH-12.5 Dreamcast CHD + disc-swap (2026-11-02 evening):** Prior “CHD blocked by `chdstream_*` stubs” was **incorrect** — Flycast uses **CHDDisc → libchdr** (already linked). No wasm rebuild. Pack metadata `1.0.3-rbg-libelf-js-m3u` / `.data` `c5f0c6ca…`. Chromium **`DREAMCAST_CHD_GAMEPLAY_PASS`** + **`DREAMCAST_CHD_BOUNDED_MEMORY_PASS`** + **`DREAMCAST_CHD_SAVE_RESTORE_PASS`**. Interactive M3U **`DREAMCAST_DISC_SWAP_INTERACTIVE_PASS`** via frame playlist adapter (cold remount; native `.m3u` content path still aborts). Compose **`DREAMCAST_CHD_OFFLINE_PWA`** + clean-build 10-platform soak **NOT_VERIFIED** (Docker socket missing). Report `docs/reports/dreamcast-chd-disc-swap.md`; evidence `.runtime/test-evidence/PH-12/dreamcast-chd|disc-swap/`.
+**PH-12.5 Dreamcast CHD + disc-swap (Compose closeout 2026-11-03):** Prior “CHD blocked by `chdstream_*` stubs” was **incorrect** — Flycast uses **CHDDisc → libchdr**. Pack `c5f0c6ca…` / `1.0.3-rbg-libelf-js-m3u`. Chromium CHD gameplay/memory/save + interactive disc-swap PASS. Docker “missing socket” was **agent sandbox isolation** (host `docker.service` was already active). Clean Compose rebuild **`COMPOSE_CHD_CLEAN_BUILD_PASS`**; Compose **`DREAMCAST_CHD_OFFLINE_PWA_PASS`** + **`DREAMCAST_CHD_CLEAN_BUILD_PASS`**; clean-build soak **`CROSS_CONSOLE_SOAK_CLEAN_BUILD_PASS`** (10/10, `SOAK_CYCLES=2`). Allowlist/lock synced for Flycast pack + `emulator.js`; seed Flycast extensions include `m3u`. Report `docs/reports/dreamcast-chd-disc-swap.md`; evidence `.runtime/test-evidence/PH-12/dreamcast-chd|soak/`.
 
 **PH-12.6 Flash / Ruffle (2026-11-01):** Official selfhosted **0.7.1** (`v0.7.1` / `89a70499…`; zip `ef12edbe…`; MIT OR Apache-2.0). Dedicated `ruffle-frame` + CSP; `polyfills:false`; EI off; MIT Dot SWF `3f5c78f2…` (Haxe 4.3). **`FLASH_RUFFLE_GAMEPLAY_PASS`** + SharedObject **`FLASH_RUFFLE_PROGRESS_PERSISTENCE_PASS`** + Compose **`FLASH_RUFFLE_OFFLINE_PWA_PASS`**. **`saveState=false`** (no Quick Save). **VERIFIED_PLAYABLE** (engineering) under documented save semantics. Product approval **pending**. Docs: `ruffle-web-integration.md`, `flash-save-capabilities.md`, `flash-security-audit.md`; evidence `.runtime/test-evidence/PH-12/flash/`.
 
@@ -58,12 +58,12 @@
 | Arcade | VERIFIED_PLAYABLE (engineering) — `rbgdot` only; `ARCADE_RBGDOT_GAMEPLAY_PASS` + save + offline PWA; product pending; other drivers unverified |
 | Atari ST | VERIFIED_PLAYABLE — offline PWA SW journey PASS; OS PWA/physical NOT_VERIFIED |
 | Atari 8-bit | VERIFIED_PLAYABLE (engineering) — `ATARI8_GAMEPLAY_PASS` + `ATARI8_SAVE_RESTORE_PASS` + `ATARI8_OFFLINE_PWA_PASS`; product approval pending; distinct from 5200 |
-| Dreamcast | VERIFIED_PLAYABLE (engineering) — ELF + GDI (`DREAMCAST_GDI_*`) + CDI + CHD gameplay/save + interactive disc-swap; Compose CHD offline + soak NOT_VERIFIED (Docker); reios HLE; no SEGA BIOS; product approval pending |
+| Dreamcast | VERIFIED_PLAYABLE (engineering) — ELF + GDI + CDI + CHD gameplay/save/offline + interactive disc-swap; Compose `DREAMCAST_CHD_OFFLINE_PWA_PASS` + clean soak PASS; reios HLE; no SEGA BIOS; product approval pending; OS PWA/physical NOT_VERIFIED |
 | Flash / Ruffle | VERIFIED_PLAYABLE (engineering) — `FLASH_RUFFLE_GAMEPLAY_PASS` + SharedObject progress + `FLASH_RUFFLE_OFFLINE_PWA_PASS`; Quick Save not claimed; product approval pending |
 | FDS | VERIFIED_PLAYABLE (engineering) — `FDS_OFFLINE_PWA_PASS` + `NES_FCEUMM_REGRESSION_PASS`; product approval pending |
 | Vectrex | BLOCKED_EXTERNAL — external-BIOS vecx path + MIT Dot; no lawful BIOS → no gameplay claim |
 | Core lock | **397 files** LOCAL_FULL (includes `ruffle-0.7.1/*` + `81_eo` report) |
-| Cross-console soak | **`CROSS_CONSOLE_SOAK_FULL_PASS`** (10/10, 2026-11-02) |
+| Cross-console soak | **`CROSS_CONSOLE_SOAK_FULL_PASS`** + **`CROSS_CONSOLE_SOAK_CLEAN_BUILD_PASS`** (10/10, 2026-11-03 CHD clean images) |
 
 ## Player UX pass (2026-10-26)
 
@@ -343,25 +343,25 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 | Commits (unpushed) | `e294044` … `e7d1c3f` on `feat/platform-expansion-phase-1` — no Cursor co-author trailers |
 | Full 10-platform soak | Not re-run this pass; representative Genesis/NES/Atari8/Atari ST/FDS/Flash/Arcade/PSP/PS1/SNES + Dreamcast ELF/GDI/CDI PASS |
 
-## PH-12.5 Dreamcast CHD + disc-swap (2026-11-02 evening)
+## PH-12.5 Dreamcast CHD Compose closeout (2026-11-03)
 
 | Check | Result |
 |---|---|
-| CHD root cause | **Corrected** — `CHDDisc`/libchdr already linked; `chdstream_*` stubs off critical path; no wasm rebuild |
-| Pack | `.data` `c5f0c6ca…` (`1.0.3-rbg-libelf-js-m3u`); wasm `db2b87d8…` unchanged |
-| CHD gameplay / memory / save | `DREAMCAST_CHD_GAMEPLAY_PASS` + `DREAMCAST_CHD_BOUNDED_MEMORY_PASS` + `DREAMCAST_CHD_SAVE_RESTORE_PASS` |
-| CHD Compose offline | **NOT_VERIFIED** — Docker daemon unavailable (`/var/run/docker.sock`); harness `dreamcast-chd-offline-pwa.cjs` ready |
-| Disc-swap | `DREAMCAST_DISC_SWAP_INTERACTIVE_PASS` — frame M3U playlist adapter cold-remount; disc1 grey vs disc2 green |
-| Soak / clean-build regressions | **NOT_VERIFIED** this session (Docker) |
-| Vitest | `media.test.ts` 7/7 (M3U absolute-flat names) |
-| Evidence | `.runtime/test-evidence/PH-12/dreamcast-chd/`, `dreamcast-disc-swap/` |
+| Docker root cause | Agent sandbox hid `/var/run/docker.sock`; host Docker was already running (`docker.service` active) |
+| Clean Compose rebuild | `COMPOSE_CHD_CLEAN_BUILD_PASS` — `./scripts/compose.sh build api web`; Flycast `c5f0c6ca…`; core-lock 397; proxy_ca regular-file preserved |
+| Catalog unblock | Flycast seed extensions + `m3u`; allowlist/lock for pack + `emulator.js` `27e949d3…` |
+| CHD Compose offline | `DREAMCAST_CHD_OFFLINE_PWA_PASS` + `DREAMCAST_CHD_CLEAN_BUILD_PASS` (SW offline; partial-cache repair; integrity reject; no server deps) |
+| Clean-build soak | `CROSS_CONSOLE_SOAK_CLEAN_BUILD_PASS` / `CROSS_CONSOLE_SOAK_FULL_PASS` (10/10, `SOAK_CYCLES=2`) |
+| Regressions | Dreamcast ELF/GDI/CDI/CHD/disc-swap; Arcade; Genesis; NES; FDS; ZX81; Atari8; Atari ST; N64; PSP; Flash; Orbit; Vitest 85; tsc; Django 43; core-lock; PUBLIC_SOURCE_SAFETY; SOURCE_OFFER_GATE_OK |
+| Evidence | `.runtime/test-evidence/PH-12/dreamcast-chd/`, `PH-12/soak/` |
 | Report | `docs/reports/dreamcast-chd-disc-swap.md` |
 
 ### Next concrete task
 
-1. When Docker is available: Compose `DREAMCAST_CHD_OFFLINE_PWA_PASS` + clean-build `cross-console-soak.cjs`
-2. Optional: native Flycast `.m3u` content-path boot (adapter workaround only today)
-3. Owner gates unchanged (publication STOP); product approval for Dreamcast fixtures
+1. Optional: native Flycast `.m3u` content-path boot (adapter workaround only today)
+2. Owner gates unchanged (publication STOP); product approval for Dreamcast fixtures
+3. OS PWA / physical device gates remain **NOT_VERIFIED**
+4. Vectrex / ColecoVision remain **BLOCKED_EXTERNAL** until lawful BIOS
 
 ## Remaining blockers / next
 
@@ -375,4 +375,4 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 8. Continue PH-12.1 Jaguar (only remaining 12.1 EXPERIMENTAL)
 9. Vectrex: BLOCKED_EXTERNAL until authorized `system.img` + gameplay/offline gates
 10. Atari 8-bit: optional `.car`/`.cas`/multi-disk + 400/800 profile smokes after real validation; OS PWA/physical NOT_VERIFIED
-11. Dreamcast: Compose CHD offline + clean soak when Docker available; product approval pending
+11. Dreamcast: Compose CHD offline + clean soak closed; product approval pending; optional native M3U content boot
