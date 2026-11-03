@@ -1,0 +1,491 @@
+{
+  "schema": "rbg-product-approval-matrix-v1",
+  "generated_at": "2026-11-03T03:29:40.763313+00:00",
+  "git_head": "318832d61bc321d3fc4abc3ca6476795c7c39759",
+  "summary": {
+    "total": 53,
+    "pending": 53,
+    "approved": 0,
+    "rejected": 0
+  },
+  "policy": "Engineering fixtures must not appear in any future public distribution candidate until owner product approval is recorded.",
+  "titles": [
+    {
+      "slug": "cc0-a5200-culomin",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "gpl-a7800-rfk",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "gpl-atari-st-pongwars",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "gpl-gb-big2small",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "gpl-ngpc-test",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "gpl-ngp-joypad",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "huc-pce-scroll",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-a2600-berta",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-a2600-pipes",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-amiga-dot",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-arcade-rbgdot",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-atari8-dot",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-c64-wildboa",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-coleco-retropipe",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-cpc-brickblaster",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-dos-floppybird",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-dreamcast-dot",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-dreamcast-dot-chd",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-dreamcast-dot-gdi",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-dreamcast-dot-multidisc",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-fds-move-demo",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-flash-dot",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-gba-dino",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-gba-nonogram",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-gbc-littlegreenblob",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-gbc-waternet",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-gb-dot",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-genesis-breakout",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-genesis-pong",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-gg-snepzhen",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-gg-sushinights",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-gg-waternet",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-j2me-dot",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-j2me-notes",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-j2me-paddle",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-jaguar-2048",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-lynx-dot",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-msx-dot",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-n64-controller-test",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-nds-dinods",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-nes-falling",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-nes-table-tennis",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-ps1-dot",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-psp-dot",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-sg1000-retropipe",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-sms-ninjagirl",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-sms-sushinights",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-snes-gothicvania",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-vb-spong",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-wswan-chips1",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-zx81-dot",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "mit-zx-desolate",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    },
+    {
+      "slug": "orbit-catch",
+      "title": "pending",
+      "platform": "None",
+      "product_approval_status": "published=True",
+      "classification": "engineering_fixture",
+      "public_distribution_eligible": false,
+      "owner_decision": "PENDING_APPROVAL"
+    }
+  ]
+}

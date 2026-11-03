@@ -26,9 +26,13 @@
 | SEC-004 | PASSED | Hostile sandboxed HTML denied launcher IndexedDB (`PH-11`) |
 | UX-001, UX-002 | PASSED (basic + Android) | Mobile layout + keyboard focus; Android fullscreen/orientation (`PH-08`) |
 | DEP-001, DEP-002 | PASSED | Compose stack + proxy build path |
-| IOS-001 | BLOCKED_EXTERNAL | No iOS device — `docs/physical-device-acceptance.md` |
+| IOS-001 | BLOCKED_EXTERNAL | No iOS device — `docs/physical-device-acceptance.md`; PH-13 re-check `docs/release/ios-physical-acceptance.md` (`IOS_PHYSICAL_BLOCKED_EXTERNAL`) |
 | Staging HTTPS | BLOCKED_EXTERNAL | `docs/production-staging-verification.md` (local HTTPS ≠ staging) |
 | PH-08 Android extras | PASSED (scoped) | Offline reverse-removed cold-start; Genesis/PS1/PSP on phone; AUD-001 |
+| PH-13 Android physical re-cert | BLOCKED_EXTERNAL | No device on `adb` 2026-11-03 — `docs/release/android-physical-acceptance.md` |
+| PH-13 source delivery | NOT_VERIFIED | Build gate OK; recipient `OFFER_DELIVERY_NOT_VERIFIED` — `docs/release/source-delivery-audit.md` |
+| PH-13 catalog product approval | PENDING_APPROVAL | 53/53 pending — `docs/release/product-approval-matrix.md` |
+| PH-13 PUBLIC_RELEASE_GO | STOP | Independent gates in `docs/release/go-no-go.md` |
 
 ## Gate verdicts
 
@@ -40,4 +44,6 @@
 | G06–G10 | PARTIAL — Chromium/Firefox + Android Chrome physical; WebKit catalog (no OPFS); gamepad/iOS/staging open |
 | G11 | PARTIAL — Android PH-08 + AUD-001 closed; physical gamepad + iOS + staging remain |
 
-**RELEASE CANDIDATE / NOT COMPLETE** — see `docs/RELEASE_CANDIDATE.md` and `docs/release-acceptance-report.md`. Remaining mandatory blockers: gamepad IN-002-P/D, iOS Safari IOS-001, production staging HTTPS, human product approval (pending / 0 approved). Optional EXPERIMENTAL platform **Jaguar** and blocked cores are out of P0 scope unless PDR changes. N64 + ZX81 + **Atari ST** + **FDS** + **Atari 8-bit** + **Dreamcast** + **Flash/Ruffle** + Arcade **`rbgdot`** engineering acceptance: `VERIFIED_PLAYABLE` (Compose offline PWA PASS where applicable; OS PWA/physical NOT_VERIFIED; product approval pending). **`CROSS_CONSOLE_SOAK_FULL_PASS`** + **`CROSS_CONSOLE_SOAK_CLEAN_BUILD_PASS`** (10/10, 2026-11-03 CHD clean images) + Dreamcast **`DREAMCAST_CHD_OFFLINE_PWA_PASS`** — see `docs/reports/cross-console-soak.md`, `docs/reports/dreamcast-chd-disc-swap.md`. **`COMPOSE_CHD_CLEAN_BUILD_PASS`** / **`RUNTIME_CSP_SECURITY_PASS`** — see rebuild + CSP audit reports. Flash save semantics are **SharedObject only** (not libretro Quick Save). ColecoVision + **Vectrex**: `BLOCKED_EXTERNAL` pending lawful user BIOS (`system.img` / `colecovision.rom`). Other MAME drivers **NOT_VERIFIED**; FBNeo **NO-GO**. Orbit catalog smoke re-PASS 2026-11-01 after pagination/PlayerShell test fix (not an API regression).
+**PH-13 PRIVATE RC (2026-11-03)** — tip lineage `318832d`; pack `docs/release/`; **PUBLIC_RELEASE_GO = STOP**. ENGINEERING/REPRO/SECURITY ready; SOURCE_DELIVERY **NOT_VERIFIED**; CATALOG **PENDING_APPROVAL** (0/53); ANDROID/IOS physical **BLOCKED_EXTERNAL**.
+
+**RELEASE CANDIDATE / NOT COMPLETE** — see `docs/RELEASE_CANDIDATE.md` and `docs/release-acceptance-report.md`. Remaining mandatory blockers: gamepad IN-002-P/D, iOS Safari IOS-001, production staging HTTPS, human product approval (pending / 0 approved), source recipient delivery. Optional EXPERIMENTAL platform **Jaguar** and blocked cores are out of P0 scope unless PDR changes. N64 + ZX81 + **Atari ST** + **FDS** + **Atari 8-bit** + **Dreamcast** + **Flash/Ruffle** + Arcade **`rbgdot`** engineering acceptance: `VERIFIED_PLAYABLE` (Compose offline PWA PASS where applicable; OS PWA/physical NOT_VERIFIED; product approval pending). **`CROSS_CONSOLE_SOAK_FULL_PASS`** + **`CROSS_CONSOLE_SOAK_CLEAN_BUILD_PASS`** (10/10, 2026-11-03 CHD clean images) + Dreamcast **`DREAMCAST_CHD_OFFLINE_PWA_PASS`** — see `docs/reports/cross-console-soak.md`, `docs/reports/dreamcast-chd-disc-swap.md`. **`COMPOSE_CHD_CLEAN_BUILD_PASS`** / **`RUNTIME_CSP_SECURITY_PASS`** — see rebuild + CSP audit reports. Flash save semantics are **SharedObject only** (not libretro Quick Save). ColecoVision + **Vectrex**: `BLOCKED_EXTERNAL` pending lawful user BIOS (`system.img` / `colecovision.rom`). Other MAME drivers **NOT_VERIFIED**; FBNeo **NO-GO**. Orbit catalog smoke re-PASS 2026-11-01 after pagination/PlayerShell test fix (not an API regression).

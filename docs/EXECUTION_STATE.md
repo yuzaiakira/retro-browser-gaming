@@ -2,6 +2,8 @@
 
 ## Verdict
 
+**PH-13 PRIVATE RC / PUBLIC_RELEASE_GO = STOP** (2026-11-03). Engineering gates PASS on tip `318832d` lineage; source delivery **NOT_VERIFIED**; catalog product approval **0/53**; Android/iOS physical **BLOCKED_EXTERNAL**. Pack: `docs/release/` (`go-no-go.md`).
+
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
 **PH-12.1 N64 (2026-10-29):** `mupen64plus_next` **VERIFIED_PLAYABLE** — hold-while-capture smoke `N64_GAMEPLAY_PASS`; save/load; >64 MiB ROM guard. Report `docs/emulator-builds/n64-mupen64plus-next-gameplay.md`.
 
@@ -363,6 +365,29 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 3. OS PWA / physical device gates remain **NOT_VERIFIED**
 4. Vectrex / ColecoVision remain **BLOCKED_EXTERNAL** until lawful BIOS
 
+## PH-13 private release readiness (2026-11-03)
+
+| Check | Result |
+|---|---|
+| Baseline freeze | HEAD `318832d`; branch `feat/platform-expansion-phase-1`; no new consoles |
+| Distribution inventory | 72 technical PUBLIC_CANDIDATE / 4 PRIVATE_ONLY / 5 BLOCKED_LEGAL (+ BIOS external slots) — `docs/release/distribution-inventory.md` |
+| Source delivery | Build `SOURCE_OFFER_GATE_OK`; recipient **`OFFER_DELIVERY_NOT_VERIFIED`**; require-public **FAIL** |
+| Catalog product approval | **53 pending / 0 approved** — `docs/release/product-approval-matrix.md` |
+| Android physical | **`ANDROID_PHYSICAL_BLOCKED_EXTERNAL`** (adb empty) |
+| iOS physical | **`IOS_PHYSICAL_BLOCKED_EXTERNAL`** (no device/tools) |
+| Security | FrameAdapter origin checks; path-scoped CSP; shell **no** `unsafe-eval`; runtime eval narrowly scoped |
+| Private RC | `docs/release/release-candidate-manifest.md` — LOCAL_FULL engineering only |
+| GO/NO-GO | ENGINEERING/REPRO/SECURITY **PASS**; SOURCE **NOT_VERIFIED**; CATALOG **PENDING_APPROVAL**; ANDROID/IOS **BLOCKED_EXTERNAL**; PUBLIC_DISTRIBUTION **FAIL** → **PUBLIC_RELEASE_GO = STOP** |
+| Evidence | `.runtime/test-evidence/PH-13/` |
+| Push / merge / deploy | **Not performed** |
+
+### Next concrete task (PH-13)
+
+1. Owner/counsel: product approvals + corresponding-source HTTPS delivery → re-run require-public gate
+2. QA: connect real Android + iOS; complete OS-level PWA install / offline cold-start checklists
+3. Keep PUBLIC_RELEASE_GO = STOP until all mandatory gates PASS
+4. Optional eng: native Flycast `.m3u` content boot (still NOT_VERIFIED)
+
 ## Remaining blockers / next
 
 1. Owner: authorize Option B public repo push of sanitized candidate (LICENSE enacted)
@@ -370,9 +395,10 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 3. Owner: publish corresponding-source offer on HTTPS; gate must fetch PASS before `OFFER_DELIVERY_VERIFIED`
 4. Product: Alpha game set approvals (incl. Atari ST / FDS / Atari 8-bit / N64/ZX81 fixtures if desired)
 5. Resolve CS for `virtualjaguar_js` (`81_eo` patch + rebuild notes now packaged); Hatari/EmuTOS/atari800 CS pins recorded
-6. QA: physical gamepad + iOS; Ops: staging HTTPS
+6. QA: physical gamepad + iOS + Android PH-13 re-cert; Ops: staging HTTPS
 7. Playwright offline ≠ physical-device offline certification (document only)
 8. Continue PH-12.1 Jaguar (only remaining 12.1 EXPERIMENTAL)
 9. Vectrex: BLOCKED_EXTERNAL until authorized `system.img` + gameplay/offline gates
 10. Atari 8-bit: optional `.car`/`.cas`/multi-disk + 400/800 profile smokes after real validation; OS PWA/physical NOT_VERIFIED
 11. Dreamcast: Compose CHD offline + clean soak closed; product approval pending; optional native M3U content boot
+12. PH-13: PUBLIC_RELEASE_GO remains STOP — see `docs/release/go-no-go.md`
