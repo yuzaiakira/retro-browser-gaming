@@ -130,6 +130,7 @@ Marker: **`COMPOSE_CHD_CLEAN_BUILD_PASS`**.
 | `5e2467c` | chore(policy): sync Flycast m3u pack hashes and emulator.js lock |
 | `e5ed745` | test(dreamcast): strengthen CHD offline PWA and GDI sidecar assert |
 | `0447393` | docs(ph-12): record CHD Compose offline and clean-build soak |
+| `d65115e` | docs(ph-12): fill CHD Compose closeout commit hash table |
 
 Each message checked — **no** `Co-authored-by: Cursor` trailer.
 
