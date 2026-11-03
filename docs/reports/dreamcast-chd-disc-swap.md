@@ -117,6 +117,22 @@ Marker: **`COMPOSE_CHD_CLEAN_BUILD_PASS`**.
 3. OS PWA / physical devices **NOT_VERIFIED**
 4. Owner publication STOP unchanged
 
-## 12. Co-author trailer check
+## 12. Commits
+
+| Hash | Subject |
+|------|---------|
+| `8008d01` | feat(fixtures): add MIT Dreamcast CHD and multi-disc set |
+| `4583da3` | feat(web): Flycast M3U playlist adapter and CHD entry prefer |
+| `6939b0f` | test(dreamcast): CHD gameplay/save and interactive disc-swap smokes |
+| `8d722e0` | docs(ph-12): record Dreamcast CHD and disc-swap evidence |
+| `64d7501` | docs(ph-12): fill Dreamcast CHD disc-swap commit hash table |
+| `72952c5` | fix(api): allow Flycast m3u entries for multidisc seed |
+| `5e2467c` | chore(policy): sync Flycast m3u pack hashes and emulator.js lock |
+| `e5ed745` | test(dreamcast): strengthen CHD offline PWA and GDI sidecar assert |
+| `0447393` | docs(ph-12): record CHD Compose offline and clean-build soak |
+
+Each message checked — **no** `Co-authored-by: Cursor` trailer.
+
+## 13. Co-author trailer check
 
 After each new commit: `git log -1 --format=%B` must not contain `Co-authored-by: Cursor`.
