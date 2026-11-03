@@ -27,8 +27,8 @@ Core id: **`flycast`** (never overwrite existing cores).
 
 | Package | Bytes | SHA-256 |
 |---------|------:|---------|
-| `flycast-wasm.data` | 3430469 | `5ef913f5692e41bd6c8ffe1e501470784bacec7c66ba7cb270d7b1474fca099e` |
-| `flycast-legacy-wasm.data` | 3430469 | same |
+| `flycast-wasm.data` | 3430017 | `c5f0c6ca92300e5d4d747bd9a3ab6db54ae7426656c64a03665f0830635cd075` (`1.0.3-rbg-libelf-js-m3u`) |
+| `flycast-legacy-wasm.data` | 3430017 | same |
 
 #### Local JS modifications (documented; wasm pin preserved)
 
