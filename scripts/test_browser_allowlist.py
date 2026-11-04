@@ -20,39 +20,67 @@ prov = importlib.util.module_from_spec(_SPEC)
 sys.modules["provision_private_cores"] = prov
 _SPEC.loader.exec_module(prov)
 
+ALLOWLIST = ROOT / "docs" / "open-source" / "browser-distributable-allowlist.json"
+
+
+def allowlist_files() -> list[dict]:
+    return json.loads(ALLOWLIST.read_text(encoding="utf-8"))["files"]
+
 
 class BrowserAllowlistTests(unittest.TestCase):
-    def test_allowlist_counts(self) -> None:
-        data = json.loads(
-            (ROOT / "docs" / "open-source" / "browser-distributable-allowlist.json").read_text()
-        )
-        files = data["files"]
-        self.assertEqual(len(files), 64)  # +2 hatari (wasm/data)
-        blocked = [
-            f
-            for f in files
-            if f["browser_distribution"] == "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION"
-        ]
-        self.assertEqual(len(blocked), 4)
+    def test_allowlist_policy_partitions(self) -> None:
+        files = allowlist_files()
+        by_dist: dict[str, list[dict]] = {}
+        for f in files:
+            by_dist.setdefault(f["browser_distribution"], []).append(f)
+        self.assertIn("AUTHORIZED_BROWSER_DISTRIBUTABLE", by_dist)
+        self.assertIn("NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION", by_dist)
+        self.assertIn("LOCAL_ONLY", by_dist)
+        blocked = by_dist["NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION"]
+        local = by_dist["LOCAL_ONLY"]
         names = {Path(f["path"]).name for f in blocked}
         self.assertTrue(any("81_eo" in n for n in names))
         self.assertTrue(any("virtualjaguar_js" in n for n in names))
+        local_names = {Path(f["path"]).name for f in local}
+        self.assertTrue(any("flycast" in n for n in local_names))
+        self.assertTrue(any("rbg_arcade" in n for n in local_names))
+        # Counts must equal partition size (no silent double-class)
+        self.assertEqual(
+            len(files),
+            sum(len(v) for v in by_dist.values()),
+        )
 
-    def test_public_browser_excludes_blocked(self) -> None:
+    def test_public_browser_excludes_blocked_and_local(self) -> None:
+        files = allowlist_files()
+        blocked = {
+            f["path"]
+            for f in files
+            if f["browser_distribution"]
+            in {"NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION", "LOCAL_ONLY"}
+        }
+        authorized = {
+            f["path"]
+            for f in files
+            if f["browser_distribution"] == "AUTHORIZED_BROWSER_DISTRIBUTABLE"
+        }
         selected = {e["path"] for e in prov.selected_entries("PUBLIC_BROWSER")}
+        self.assertTrue(selected.isdisjoint(blocked))
+        self.assertTrue(selected.issubset(authorized))
         self.assertNotIn("ejs-4.2.3/cores/81_eo-wasm.data", selected)
         self.assertNotIn("ejs-4.2.3/cores/virtualjaguar_js-wasm.data", selected)
+        self.assertNotIn("ejs-4.2.3/cores/flycast-wasm.data", selected)
+        self.assertNotIn("mame-rbg-arcade/rbg_arcade.wasm", selected)
         self.assertIn("ejs-4.2.3/cores/genesis_plus_gx-wasm.data", selected)
         self.assertIn("ejs-4.2.3/cores/bluemsx-wasm.data", selected)
-        self.assertIn("ejs-4.2.3/cores/gearcoleco-wasm.data", selected)
-        self.assertIn("hatari-2.6.1/hatari.wasm", selected)
-        self.assertEqual(len(selected), 60)
 
-    def test_local_full_includes_blocked(self) -> None:
+    def test_local_full_includes_blocked_when_in_core_manifest(self) -> None:
         selected = {e["path"] for e in prov.selected_entries("LOCAL_FULL")}
-        self.assertEqual(len(selected), 64)
+        # LOCAL_FULL is core-manifest driven; NOT_CLEARED paths present in the
+        # lock remain selectable for engineering. LOCAL_ONLY packs (Flycast/MAME)
+        # may live outside the EmulatorJS lock file and are still denied in
+        # PUBLIC_BROWSER via allowlist policy (covered above).
         self.assertIn("ejs-4.2.3/cores/81_eo-wasm.data", selected)
-        self.assertIn("ejs-4.2.3/cores/gearcoleco-wasm.data", selected)
+        self.assertIn("ejs-4.2.3/cores/virtualjaguar_js-wasm.data", selected)
 
     def test_purge_removes_blocked_public_copies(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

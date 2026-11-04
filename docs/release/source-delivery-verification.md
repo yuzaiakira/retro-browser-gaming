@@ -42,6 +42,8 @@ Offer path (outside Git tree):
 
 ## Next for SOURCE_DELIVERY_READY=PASS
 
+Follow the **External recipient verification procedure** in `external-acceptance-handoff.md` §5.
+
 1. Authorized HTTPS host + TLS certs (ops)  
 2. Publish assembled tree to `/corresponding-source/<git-sha>/`  
 3. Set `RBG_SOURCE_OFFER_PUBLIC_URL`  

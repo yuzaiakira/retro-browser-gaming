@@ -42,11 +42,25 @@ Capture screenshots + notes for each step under `.runtime/test-evidence/PH-14/an
 15. Repeated launch / disposal  
 16. Memory pressure notes (heavy cores: N64/PSP/Dreamcast/Arcade — per core)  
 17. Network return recovery  
-18. Gamepad connect/disconnect if hardware present (else leave IN-002-P/D blocked)
+18. Gamepad: connect → play → disconnect → reconnect (else leave IN-002-P/D blocked)  
+19. Heavy WASM memory notes per core (N64 / PSP / Dreamcast / Arcade rbgdot) — OOM/tab discard counts as failure for that core only
 
 ## Capability probes (record true/false)
 
 WebGL2 · SharedArrayBuffer · crossOriginIsolated · OPFS · storage quota · gamepad API
+
+## Evidence marker (only after real PASS)
+
+```bash
+mkdir -p .runtime/test-evidence/PH-14/android
+# After checklist complete:
+date -Iseconds > .runtime/test-evidence/PH-14/android/ANDROID_PHYSICAL_PASS
+echo "model=$(adb shell getprop ro.product.model)" >> .runtime/test-evidence/PH-14/android/ANDROID_PHYSICAL_PASS
+```
+
+## Failure reporting
+
+File `FAILURES.md` in the same directory with step number, core/slug, screenshot path, and logs. Do not mark gate PASS if any mandatory step failed.
 
 ## Pass rule
 

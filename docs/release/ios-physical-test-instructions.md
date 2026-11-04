@@ -38,10 +38,24 @@ ideviceinfo -k ProductVersion
 14. WebGL2 / WASM capability notes  
 15. Memory pressure on heavy cores — **per core**; use honest capability gates  
 16. Do **not** weaken COOP/COEP/CSP to force a PASS  
+17. Physical gamepad connect / disconnect / reconnect if hardware available (else leave IN-002 blocked)  
+18. Heavy WASM memory: record tab reloads / WKWebView terminations per core  
 
 ## Unsupported / limited cores
 
 Record individually (threads/SAB/isolation/graphics). Never mark unsupported heavy emulators as globally supported on iOS.
+
+## Evidence marker (only after real PASS)
+
+```bash
+mkdir -p .runtime/test-evidence/PH-14/ios
+date -Iseconds > .runtime/test-evidence/PH-14/ios/IOS_PHYSICAL_PASS
+# Append device model, iOS version, Safari version, git SHA
+```
+
+## Failure reporting
+
+Write `FAILURES.md` beside the marker directory with step, core/slug, and screenshots. Incomplete runs leave the gate **BLOCKED_EXTERNAL** / NOT_VERIFIED.
 
 ## Pass rule
 

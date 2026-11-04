@@ -2,6 +2,8 @@
 
 ## Verdict
 
+**External acceptance handoff / PUBLIC_RELEASE_GO = STOP** (2026-11-04). Unified checklist `docs/release/external-acceptance-checklist.json` + `external-acceptance-handoff.md`; fail-closed `scripts/check-public-release-go.py`. Source package ready; recipient HTTPS / counsel / product / physical still open. Tip lineage `ad562fd`+. Engineering baseline `318832d` preserved.
+
 **PH-14 / PUBLIC_RELEASE_GO = STOP** (2026-11-04). Actionable blocker pack prepared on `8a70f45` lineage: source **package built** + mock integrity OK, recipient HTTPS **NOT_VERIFIED**; legal pack **0 counsel approvals**; product queue **0/53**; staging/Android/iOS **BLOCKED_EXTERNAL**. Engineering baseline `318832d` preserved. See `docs/release/go-no-go.md`, `blocker-registry.md`.
 
 **PH-13 PRIVATE RC / PUBLIC_RELEASE_GO = STOP** (2026-11-03). Engineering gates PASS on tip `318832d` lineage; source delivery **NOT_VERIFIED**; catalog product approval **0/53**; Android/iOS physical **BLOCKED_EXTERNAL**. Pack: `docs/release/` (`go-no-go.md`).

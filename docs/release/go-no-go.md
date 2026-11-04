@@ -1,8 +1,11 @@
-# GO / NO-GO matrix (PH-14)
+# GO / NO-GO matrix (external acceptance handoff)
 
 **Engineering baseline:** `318832d`  
-**Private RC docs (PH-13):** `8a70f45`  
+**Private RC / handoff tip lineage:** `ad562fd`+  
 **Date:** 2026-11-04  
+**Auditor:** `python3 scripts/check-public-release-go.py`  
+**Handoff index:** `external-acceptance-handoff.md`  
+**Checklist JSON:** `external-acceptance-checklist.json`
 
 Status vocabulary: `PASS` | `FAIL` | `NOT_VERIFIED` | `BLOCKED_EXTERNAL` | `PENDING_APPROVAL`.
 
@@ -12,38 +15,38 @@ Gates are **independent**.
 
 | Gate | Status | Evidence |
 |---|---|---|
-| ENGINEERING_READY | **PASS** | Preserved PH-12/13 engineering: CHD/soak/arcade/Flycast claims; Compose healthy; no new consoles |
-| REPRODUCIBLE_BUILD_READY | **PASS** | `CORE_LOCK_OK` 397; allowlist/CS manifests; source package assemble reproducible via `prepare-source-offer-delivery.py` |
-| SECURITY_REVIEW_READY | **PASS** | Path-scoped CSP retained; shell without `unsafe-eval`; FrameAdapter origin checks; staging checklist forbids broadening eval |
-| SOURCE_DELIVERY_READY | **NOT_VERIFIED** | `SOURCE_PACKAGE_BUILT` PASS; mock integrity PASS; recipient HTTPS **not** verified (`BLOCKED_EXTERNAL` host). See `source-delivery-verification.md` |
-| LEGAL_REVIEW_READY | **PENDING_APPROVAL** | Pack generated (`legal-review/`); **0** counsel approvals; license name ≠ approval |
-| CATALOG_PRODUCT_APPROVED | **PENDING_APPROVAL** | Queue export **53 pending / 0 approved**; workflow validated; no auto-approve |
-| ANDROID_PHYSICAL_READY | **BLOCKED_EXTERNAL** | `adb` empty; instructions prepared |
-| IOS_PHYSICAL_READY | **BLOCKED_EXTERNAL** | No iOS device/tools; instructions prepared |
-| PUBLIC_DISTRIBUTION_CLEARED | **FAIL** | Source delivery unverified + counsel pending + product pending + LOCAL_ONLY/BLOCKED cores + physical/staging open |
-| PUBLIC_RELEASE_GO | **STOP** | Mandatory gates incomplete |
+| ENGINEERING_READY | **PASS** | Preserved PH-12/13 engineering; private Compose RC |
+| REPRODUCIBLE_BUILD_READY | **PASS** | `CORE_LOCK_OK` 397; source assemble reproducible |
+| SECURITY_REVIEW_READY | **PASS** | Path-scoped CSP; shell without `unsafe-eval` |
+| SOURCE_DELIVERY_READY | **NOT_VERIFIED** | Package+mock OK; recipient HTTPS missing — B-SRC-01 |
+| LEGAL_REVIEW_READY | **PENDING_APPROVAL** | 81-entry pack; `counsel-decisions.json` absent — B-LEG-01 |
+| CATALOG_PRODUCT_APPROVED | **PENDING_APPROVAL** | 0/53 approved; `public-catalog-slugs.json` absent — B-CAT-01 |
+| ANDROID_PHYSICAL_READY | **BLOCKED_EXTERNAL** | No device / no PASS marker — B-AND-01 |
+| IOS_PHYSICAL_READY | **BLOCKED_EXTERNAL** | No device / no PASS marker — B-IOS-01 |
+| PUBLIC_DISTRIBUTION_CLEARED | **FAIL** | Upstream gates incomplete; LOCAL_ONLY/NOT_CLEARED preserved |
+| PUBLIC_RELEASE_GO | **STOP** | Fail-closed auditor exit 1 |
 
-## Source-delivery sub-levels (not a substitute for SOURCE_DELIVERY_READY)
+## Source-delivery sub-levels
 
 | Sub-level | Status |
 |---|---|
 | SOURCE_PACKAGE_BUILT | PASS |
-| SOURCE_HTTPS_CONFIGURED | PASS (deploy templates only) |
+| SOURCE_HTTPS_CONFIGURED | PASS (templates only) |
 | SOURCE_RECIPIENT_FETCH_VERIFIED | NOT_VERIFIED |
 
 ## Staging HTTPS (supporting)
 
 | Item | Status |
 |---|---|
-| Authorized staging HTTPS acceptance | **BLOCKED_EXTERNAL** (`staging-https-report.md`) |
+| Authorized staging HTTPS | **BLOCKED_EXTERNAL** — B-STG-01 |
 
 ## Aggregate
 
 | Decision | Result |
 |---|---|
-| Private engineering RC | **YES** (LOCAL_FULL / Compose) |
+| Private engineering RC | **YES** |
 | PUBLIC_RELEASE_GO | **STOP** |
 
-## Exact remaining blockers
+## Remaining blockers
 
-See `blocker-registry.md` (B-SRC-01, B-LEG-01, B-CAT-01, B-STG-01, B-AND-01, B-IOS-01, B-PAD-01, B-DIST-01, B-BIOS-01).
+See `blocker-registry.md` and `external-acceptance-checklist.json`.

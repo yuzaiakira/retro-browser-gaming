@@ -1,0 +1,178 @@
+{
+  "schema": "rbg-external-acceptance-checklist-v1",
+  "generated_at": "2026-11-04T07:58:45Z",
+  "git_head": "ad562fdc060d555dfbcebed5ea1bcd3bda8fb508",
+  "PUBLIC_RELEASE_GO": "STOP",
+  "policy": "License names \u2260 approval. Mock source delivery \u2260 recipient verification. Desktop emulation \u2260 physical device.",
+  "blockers": [
+    {
+      "blocker_id": "B-SRC-01",
+      "gate": "SOURCE_DELIVERY_READY",
+      "title": "Recipient HTTPS corresponding-source delivery",
+      "required_action": "Deploy assembled offer to authorized HTTPS host; run require-public gate; complete recipient hash verification",
+      "owner_role": "Ops + Compliance",
+      "prerequisites": [
+        "SOURCE_PACKAGE_BUILT via scripts/prepare-source-offer-delivery.py",
+        "Authorized DNS/TLS for offer host (not game CDN)",
+        "Owner authorization to publish source offer (not private binaries)"
+      ],
+      "evidence_required": [
+        "OFFER_DELIVERY_VERIFIED from check-source-offer-gate.py --require-public-delivery",
+        "Recipient SHA256SUMS check log",
+        "Confirm no .wasm/.data/ROM/BIOS in offer tree"
+      ],
+      "acceptance_criteria": "SOURCE_RECIPIENT_FETCH_VERIFIED=1 and SOURCE_DELIVERY_READY=PASS",
+      "current_status": "NOT_VERIFIED",
+      "evidence_location": "docs/release/source-delivery-verification.md; ~/.cache/rbg-source-offer/",
+      "verification_command": "RBG_SOURCE_OFFER_PUBLIC_URL=https://\u2026/corresponding-source/<sha>/ python3 scripts/check-source-offer-gate.py --require-public-delivery"
+    },
+    {
+      "blocker_id": "B-LEG-01",
+      "gate": "LEGAL_REVIEW_READY",
+      "title": "Counsel clearance of corresponding-source / allowlist artifacts",
+      "required_action": "Human counsel review of legal-review pack; write counsel-decisions.json for each PUBLIC_CANDIDATE artifact",
+      "owner_role": "Counsel",
+      "prerequisites": [
+        "docs/release/legal-review/legal-review-pack.json",
+        "Do not infer approval from SPDX/license names"
+      ],
+      "evidence_required": [
+        "Written counsel memo",
+        "docs/release/legal-review/counsel-decisions.json with CLEARED_FOR_PUBLIC per artifact_id"
+      ],
+      "acceptance_criteria": "LEGAL_REVIEW_READY=PASS via check-public-release-go.py",
+      "current_status": "PENDING_APPROVAL",
+      "evidence_location": "docs/release/legal-review/; docs/release/legal-human-review-summary.md",
+      "verification_command": "python3 scripts/check-public-release-go.py"
+    },
+    {
+      "blocker_id": "B-CAT-01",
+      "gate": "CATALOG_PRODUCT_APPROVED",
+      "title": "Owner product approval for public catalog slugs",
+      "required_action": "Per-title approve_for_product (no bulk automation); declare public-catalog-slugs.json",
+      "owner_role": "Product owner",
+      "prerequisites": [
+        "catalog.approve_game_product permission",
+        "Complete reviewer checklist per title"
+      ],
+      "evidence_required": [
+        "ProductApprovalDecision audit rows",
+        "public-catalog-slugs.json listing only approved slugs"
+      ],
+      "acceptance_criteria": "Every public-catalog-slugs entry has product_approval_status=approved",
+      "current_status": "PENDING_APPROVAL",
+      "evidence_location": "docs/release/product-approval-queue.json; docs/release/product-human-review-summary.md",
+      "verification_command": "python3 scripts/export-product-approval-queue.py && python3 scripts/check-public-release-go.py"
+    },
+    {
+      "blocker_id": "B-STG-01",
+      "gate": "STAGING_HTTPS",
+      "title": "Authorized staging HTTPS acceptance",
+      "required_action": "Deploy committed SHA to staging with trusted TLS; run staging checklist",
+      "owner_role": "Ops",
+      "prerequisites": [
+        "Staging DNS",
+        "Trusted certs",
+        "CATALOG_ALLOW_ENGINEERING false unless acknowledged"
+      ],
+      "evidence_required": [
+        "Staging smoke notes + screenshots",
+        "manage.py check --deploy clean"
+      ],
+      "acceptance_criteria": "STAGING_HTTPS_ACCEPTANCE documented PASS (not LOCAL_HTTPS)",
+      "current_status": "BLOCKED_EXTERNAL",
+      "evidence_location": "docs/release/staging-https-report.md",
+      "verification_command": null
+    },
+    {
+      "blocker_id": "B-AND-01",
+      "gate": "ANDROID_PHYSICAL_READY",
+      "title": "Real Android OS-level PWA certification",
+      "required_action": "Execute android-physical-test-instructions.md; write ANDROID_PHYSICAL_PASS marker",
+      "owner_role": "QA",
+      "prerequisites": [
+        "adb device authorized",
+        "Reachable HTTPS/staging or authorized tunnel"
+      ],
+      "evidence_required": [
+        ".runtime/test-evidence/PH-14/android/ANDROID_PHYSICAL_PASS",
+        "device props + screenshots"
+      ],
+      "acceptance_criteria": "ANDROID_PHYSICAL_READY=PASS with real device evidence",
+      "current_status": "BLOCKED_EXTERNAL",
+      "evidence_location": "docs/release/android-physical-test-instructions.md",
+      "verification_command": "adb devices -l && test -f .runtime/test-evidence/PH-14/android/ANDROID_PHYSICAL_PASS"
+    },
+    {
+      "blocker_id": "B-IOS-01",
+      "gate": "IOS_PHYSICAL_READY",
+      "title": "Real iOS Home Screen web-app certification",
+      "required_action": "Execute ios-physical-test-instructions.md; write IOS_PHYSICAL_PASS marker",
+      "owner_role": "QA",
+      "prerequisites": [
+        "Physical iPhone/iPad",
+        "HTTPS secure context"
+      ],
+      "evidence_required": [
+        ".runtime/test-evidence/PH-14/ios/IOS_PHYSICAL_PASS",
+        "model/iOS/Safari notes"
+      ],
+      "acceptance_criteria": "IOS_PHYSICAL_READY=PASS with physical evidence",
+      "current_status": "BLOCKED_EXTERNAL",
+      "evidence_location": "docs/release/ios-physical-test-instructions.md",
+      "verification_command": "test -f .runtime/test-evidence/PH-14/ios/IOS_PHYSICAL_PASS"
+    },
+    {
+      "blocker_id": "B-PAD-01",
+      "gate": "IN-002-P/D",
+      "title": "Physical gamepad connect/disconnect",
+      "required_action": "Run gamepad acceptance on physical controller",
+      "owner_role": "QA",
+      "prerequisites": [
+        "Hardware gamepad"
+      ],
+      "evidence_required": [
+        "docs/physical-device-acceptance.md update"
+      ],
+      "acceptance_criteria": "IN-002-P and IN-002-D PASSED",
+      "current_status": "BLOCKED_EXTERNAL",
+      "evidence_location": "docs/physical-device-acceptance.md",
+      "verification_command": null
+    },
+    {
+      "blocker_id": "B-DIST-01",
+      "gate": "PUBLIC_DISTRIBUTION_CLEARED",
+      "title": "Exclude LOCAL_ONLY and BLOCKED_LEGAL from public builds",
+      "required_action": "Ship PUBLIC_BROWSER only; keep Flycast/MAME LOCAL_ONLY; keep 81_eo/Jaguar NOT_CLEARED",
+      "owner_role": "Release engineer",
+      "prerequisites": [
+        "Allowlist classifications unchanged"
+      ],
+      "evidence_required": [
+        "check-public-release-go.py",
+        "test_browser_allowlist + test_sync_fail_closed"
+      ],
+      "acceptance_criteria": "PUBLIC_BROWSER disjoint from LOCAL_ONLY/NOT_CLEARED; upstream gates PASS",
+      "current_status": "FAIL",
+      "evidence_location": "docs/release/distribution-inventory.md",
+      "verification_command": "python3 scripts/test_browser_allowlist.py && python3 scripts/test_sync_fail_closed.py && python3 scripts/check-public-release-go.py"
+    },
+    {
+      "blocker_id": "B-BIOS-01",
+      "gate": "platform BIOS",
+      "title": "ColecoVision / Vectrex lawful BIOS",
+      "required_action": "Obtain authorized user BIOS or keep platforms BLOCKED_EXTERNAL",
+      "owner_role": "Legal + QA",
+      "prerequisites": [
+        "No embedding of proprietary BIOS"
+      ],
+      "evidence_required": [
+        "User-import evidence if unlocked; never redistribute BIOS"
+      ],
+      "acceptance_criteria": "Interactive claims only with lawful BIOS present",
+      "current_status": "BLOCKED_EXTERNAL",
+      "evidence_location": "docs/emulator-builds/coleco-gearcoleco-user-bios.md; vecx-firmware-audit.md",
+      "verification_command": null
+    }
+  ]
+}
