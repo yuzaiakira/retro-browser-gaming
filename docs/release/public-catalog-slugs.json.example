@@ -1,0 +1,5 @@
+{
+  "schema": "rbg-public-catalog-slugs-v1",
+  "note": "Owner lists ONLY product-approved slugs for public distribution. Missing file keeps CATALOG_PRODUCT_APPROVED=PENDING_APPROVAL.",
+  "slugs": []
+}

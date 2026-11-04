@@ -102,6 +102,8 @@ export function middleware(request: NextRequest) {
     response.headers.set('Cross-Origin-Resource-Policy', 'cross-origin');
     response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
     response.headers.set('Cross-Origin-Embedder-Policy', 'require-corp');
+    // Dedicated J2ME origin: keep eval for legacy VM glue; do not broaden
+    // connect-src / frame-src beyond self+blob.
     response.headers.set(
       'Content-Security-Policy',
       [
@@ -129,6 +131,58 @@ export function middleware(request: NextRequest) {
   const response = NextResponse.next();
   response.headers.set('Cross-Origin-Resource-Policy', 'same-origin');
   response.headers.set('X-RBG-Launcher', '1');
+
+  // Single CSP owner for launcher host (avoid stacking next.config + meta +
+  // middleware policies). Emulator frames must NOT inherit Next flight
+  // 'unsafe-inline' allowances from the shell.
+  if (pathname.startsWith('/runtime/')) {
+    const ancestors = launcherOrigins().join(' ');
+    response.headers.set(
+      'Content-Security-Policy',
+      [
+        "default-src 'self' blob:",
+        // External frame JS + Emscripten Function()/WASM. No 'unsafe-inline':
+        // frames load versioned .js only (mame/hatari/ruffle/ejs).
+        "script-src 'self' blob: 'unsafe-eval' 'wasm-unsafe-eval'",
+        "worker-src 'self' blob:",
+        "style-src 'self' 'unsafe-inline'",
+        "img-src 'self' blob: data:",
+        "connect-src 'self' blob:",
+        "media-src 'self' blob:",
+        `frame-ancestors ${ancestors}`,
+        "base-uri 'none'",
+        "form-action 'none'",
+        "object-src 'none'",
+      ].join('; '),
+    );
+  } else if (
+    !pathname.startsWith('/api/') &&
+    !pathname.startsWith('/dev-assets/') &&
+    !pathname.startsWith('/cores/')
+  ) {
+    // Next App Router embeds small inline flight payloads in document HTML.
+    // That is a Next shell requirement — not a license to allow inline scripts
+    // inside emulator iframes (handled above).
+    // wasm-unsafe-eval: hash-wasm integrity checks during OPFS download/install.
+    // Do NOT add unsafe-eval on the shell.
+    const j2me = process.env.J2ME_RUNTIME_HOST || 'j2me.localhost';
+    response.headers.set(
+      'Content-Security-Policy',
+      [
+        "default-src 'self' blob:",
+        "script-src 'self' blob: 'unsafe-inline' 'wasm-unsafe-eval'",
+        "style-src 'self' 'unsafe-inline'",
+        "img-src 'self' blob: data:",
+        "connect-src 'self' blob:",
+        "worker-src 'self' blob:",
+        `frame-src 'self' blob: http://${j2me}:* http://${j2me} https://${j2me}:* https://${j2me}`,
+        "frame-ancestors 'self'",
+        "base-uri 'none'",
+        "object-src 'none'",
+      ].join('; '),
+    );
+  }
+
   return response;
 }
 

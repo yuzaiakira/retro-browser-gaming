@@ -205,15 +205,16 @@ class CatalogTests(TestCase):
         )
         self.client.force_login(admin)
         self.assertEqual(self.client.get("/admin/catalog/game/").status_code, 200)
+        # Use a unique code — seed_demo / migrations may already own "arcade".
         response = self.client.post(
             "/admin/catalog/platformcategory/add/",
-            {"code": "arcade", "name": "Arcade", "_save": "Save"},
+            {"code": "arcade-admin-crud", "name": "Arcade", "_save": "Save"},
         )
         self.assertEqual(response.status_code, 302)
-        category = PlatformCategory.objects.get(code="arcade")
+        category = PlatformCategory.objects.get(code="arcade-admin-crud")
         response = self.client.post(
             f"/admin/catalog/platformcategory/{category.pk}/change/",
-            {"code": "arcade", "name": "Arcade cabinets", "_save": "Save"},
+            {"code": "arcade-admin-crud", "name": "Arcade cabinets", "_save": "Save"},
         )
         self.assertEqual(response.status_code, 302)
         category.refresh_from_db()

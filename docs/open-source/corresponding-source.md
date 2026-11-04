@@ -12,6 +12,7 @@ Moving `.data`/`.wasm` payloads out of public Git does **not** remove GPL duties
 | EmulatorJS 4.2.3 launcher / data JS | GPL-3.0 | `apps/web/public/cores/ejs-4.2.3/**/*.js` (+ minify/src where present) | Tracked under `apps/web/public/cores/ejs-4.2.3/`; notice `LICENSES/EmulatorJS-GPL-3.0.txt`; pin `e150dc0491ae747028919fb82d6598954976ede6` |
 | EmulatorJS packaged libretro cores (`.data`) | Core-specific (often GPL-2/3) + EmulatorJS packaging | Private store → `/cores/.../*.data` | Upstream links + hashes in `docs/core-package-lock.json` and `private-core-binaries.manifest.json`; independently rebuilt cores (`81_eo`, `bluemsx`, `virtualjaguar_js`) need build recipes in PH-05 evidence |
 | jsdos / emulators 8.3.8 | GPL-2.0 | `wdosbox.wasm`, `wlibzip.wasm` + JS | JS tracked; notice `LICENSES/emulators-jsdos-GPL-2.0.txt` |
+| Hatari 2.6.1 + EmuTOS | GPL-2.0 | `hatari-2.6.1/hatari.{js,wasm,data}` (EmuTOS in `.data`) | JS tracked; pins + `LICENSES/hatari-GPL-2.0.txt` / `emutos-GPL-2.0.txt`; build notes `docs/emulator-builds/hatari-emutos-atari-st.md` |
 | js2me | MIT | JS under `cores/js2me/` | Fully tracked; `LICENSES/js2me-MIT.txt` |
 | C-BIOS system pack | BSD-style | `system/bluemsx-system.data` (private) | `LICENSES/cbios-0.23.txt` |
 
@@ -57,7 +58,7 @@ Verified local example (2026-10-26):
 
 | Binary class | Gap |
 | --- | --- |
-| `81_eo` | Build notes exist; **patch files not checked into** `scripts/patches/` — do not treat upstream URL alone as sufficient for the modified binary |
+| `81_eo` | Patch series + build notes in `scripts/patches/81_eo/` and `docs/emulator-builds/zx81-eo-loadp-build.md` (locked SHA-256). Still **NEEDS_LEGAL_REVIEW** before public browser redistribution — do not treat technical CS completeness as counsel approval |
 | `virtualjaguar_js` | Rebuild notes only; **EXPERIMENTAL** — withhold product redistribution until source package complete |
 | Stock EJS CDN cores | Prefer lock hashes as shipped truth; counsel confirm unmodified packaging vs upstream |
 | Combined work | iframe isolation used; counsel confirm distribution model vs GPL |
@@ -65,4 +66,4 @@ Verified local example (2026-10-26):
 Also:
 
 - Product-wide publication of independently rebuilt experimental cores.
-- Any future proprietary BIOS workflow (currently none tracked; must stay out of public delivery).
+- User-provided proprietary BIOS workflow (`user-bios.ts` / `install-private-bios.py`) — files stay local; must stay out of public delivery and git.

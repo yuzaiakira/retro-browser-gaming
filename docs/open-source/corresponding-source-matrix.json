@@ -58,13 +58,15 @@
       "local_modifications": "eo_loadp + joypad device init (see PH-05)",
       "patches_or_scripts": [],
       "evidence": [
-        "docs/emulator-builds/zx81-eo-loadp-build.md"
+        "docs/emulator-builds/zx81-eo-loadp-build.md",
+        "scripts/patches/81_eo/0001-rbg-eo-loadp-crt-autostart-joypad.patch",
+        "scripts/patches/81_eo/README.md"
       ],
       "corresponding_source_status": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
       "source_offer_class": "incomplete_patches_missing_in_repo",
       "upstream": "https://github.com/libretro/81-libretro (independently versioned 81_eo EmulatorJS build with eo_loadp; evidence docs/emulator-builds/zx81-eo-loadp-build.md)",
       "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
-      "missing_material": "Complete modified preferred-form source / patch series not present under scripts/patches/; only PH-05 notes (and optional zx81 snippet). Upstream URL insufficient for local modifications."
+      "missing_material": "Technical corresponding source present (scripts/patches/81_eo/ + docs/emulator-builds/zx81-eo-loadp-build.md matching locked SHA-256). Legal review not completed \u2014 remain NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION."
     },
     {
       "path": "ejs-4.2.3/cores/81_eo-wasm.data",
@@ -77,13 +79,15 @@
       "local_modifications": "eo_loadp + joypad device init (see PH-05)",
       "patches_or_scripts": [],
       "evidence": [
-        "docs/emulator-builds/zx81-eo-loadp-build.md"
+        "docs/emulator-builds/zx81-eo-loadp-build.md",
+        "scripts/patches/81_eo/0001-rbg-eo-loadp-crt-autostart-joypad.patch",
+        "scripts/patches/81_eo/README.md"
       ],
       "corresponding_source_status": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
       "source_offer_class": "incomplete_patches_missing_in_repo",
       "upstream": "https://github.com/libretro/81-libretro (independently versioned 81_eo EmulatorJS build with eo_loadp; evidence docs/emulator-builds/zx81-eo-loadp-build.md)",
       "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
-      "missing_material": "Complete modified preferred-form source / patch series not present under scripts/patches/; only PH-05 notes (and optional zx81 snippet). Upstream URL insufficient for local modifications."
+      "missing_material": "Technical corresponding source present (scripts/patches/81_eo/ + docs/emulator-builds/zx81-eo-loadp-build.md matching locked SHA-256). Legal review not completed \u2014 remain NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION."
     },
     {
       "path": "ejs-4.2.3/cores/a5200-legacy-wasm.data",
@@ -114,6 +118,50 @@
       "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
       "source_offer_class": "upstream_emulatorjs_pin_plus_tracked_js",
       "upstream": "https://cdn.emulatorjs.org/4.2.3/data/cores/ (EmulatorJS 4.2.3; pin e150dc0491ae747028919fb82d6598954976ede6)"
+    },
+    {
+      "path": "ejs-4.2.3/cores/atari800-legacy-wasm.data",
+      "sha256": "b7b6664b83fee853bf6ccbd42592b928ac9094348d30510b7ed53841030d484d",
+      "byteSize": 829725,
+      "license": "GPL-2.0 (Atari800/libretro-atari800) + FSF all-permissive AltirraOS/BASIC; EmulatorJS packaging GPL-3.0; RBG memstream ABI patch",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "independently_rebuilt",
+      "local_modifications": "memstream RetroArch ABI for EmulatorJS save/load (scripts/patches/atari800/)",
+      "patches_or_scripts": [
+        "scripts/patches/atari800/0001-rbg-memstream-retroarch-abi.patch",
+        "scripts/patches/atari800/README.md",
+        "scripts/build-atari800-emscripten.sh"
+      ],
+      "evidence": [
+        "docs/emulator-builds/atari8-libretro-build.md",
+        "docs/emulator-builds/atari8-firmware-audit.md"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_patch",
+      "upstream": "https://github.com/libretro/libretro-atari800/tree/4e7fbc73765c1a9670c7506616046ad1d4ccda51 (EmulatorJS/build 677b1334; emsdk 3.1.74)"
+    },
+    {
+      "path": "ejs-4.2.3/cores/atari800-wasm.data",
+      "sha256": "6d19d00650e8cad472fd0d9654810e11ce1a04bb4d3460fa0219d8e632a7b777",
+      "byteSize": 830097,
+      "license": "GPL-2.0 (Atari800/libretro-atari800) + FSF all-permissive AltirraOS/BASIC; EmulatorJS packaging GPL-3.0; RBG memstream ABI patch",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "independently_rebuilt",
+      "local_modifications": "memstream RetroArch ABI for EmulatorJS save/load (scripts/patches/atari800/)",
+      "patches_or_scripts": [
+        "scripts/patches/atari800/0001-rbg-memstream-retroarch-abi.patch",
+        "scripts/patches/atari800/README.md",
+        "scripts/build-atari800-emscripten.sh"
+      ],
+      "evidence": [
+        "docs/emulator-builds/atari8-libretro-build.md",
+        "docs/emulator-builds/atari8-firmware-audit.md"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_patch",
+      "upstream": "https://github.com/libretro/libretro-atari800/tree/4e7fbc73765c1a9670c7506616046ad1d4ccda51 (EmulatorJS/build 677b1334; emsdk 3.1.74)"
     },
     {
       "path": "ejs-4.2.3/cores/beetle_vb-legacy-wasm.data",
@@ -314,6 +362,46 @@
       "upstream": "https://cdn.emulatorjs.org/4.2.3/data/cores/ (EmulatorJS 4.2.3; pin e150dc0491ae747028919fb82d6598954976ede6)"
     },
     {
+      "path": "ejs-4.2.3/cores/flycast-legacy-wasm.data",
+      "sha256": "c5f0c6ca92300e5d4d747bd9a3ab6db54ae7426656c64a03665f0830635cd075",
+      "byteSize": 3430017,
+      "license": "GPL-2.0 (Flycast / nasomers Flycast WASM v1.0); EmulatorJS packaging GPL-3.0",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "independently_rebuilt",
+      "local_modifications": "EJS 4.2.3 7z packaging of upstream v1.0 release artifacts; HLE preferred in frame.js",
+      "patches_or_scripts": [
+        "docs/emulator-builds/flycast-wasm-dreamcast.md",
+        "docs/emulator-builds/dreamcast-firmware-audit.md"
+      ],
+      "evidence": [
+        "docs/emulator-builds/flycast-wasm-dreamcast.md"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_docs",
+      "upstream": "https://github.com/nasomers/flycast-wasm/tree/16e9c7b4b7065a4bd42e7490e8aab3e9283d5415 (flycast 2c48c01)"
+    },
+    {
+      "path": "ejs-4.2.3/cores/flycast-wasm.data",
+      "sha256": "c5f0c6ca92300e5d4d747bd9a3ab6db54ae7426656c64a03665f0830635cd075",
+      "byteSize": 3430017,
+      "license": "GPL-2.0 (Flycast / nasomers Flycast WASM v1.0); EmulatorJS packaging GPL-3.0",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "independently_rebuilt",
+      "local_modifications": "EJS 4.2.3 7z packaging of upstream v1.0 release artifacts; HLE preferred in frame.js",
+      "patches_or_scripts": [
+        "docs/emulator-builds/flycast-wasm-dreamcast.md",
+        "docs/emulator-builds/dreamcast-firmware-audit.md"
+      ],
+      "evidence": [
+        "docs/emulator-builds/flycast-wasm-dreamcast.md"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_docs",
+      "upstream": "https://github.com/nasomers/flycast-wasm/tree/16e9c7b4b7065a4bd42e7490e8aab3e9283d5415 (flycast 2c48c01)"
+    },
+    {
       "path": "ejs-4.2.3/cores/fuse-legacy-wasm.data",
       "sha256": "86d844184aade4e22b7306a09da8fa109d26316aa2eb3cc67a033cccca46671d",
       "byteSize": 1218410,
@@ -372,6 +460,32 @@
       "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
       "source_offer_class": "upstream_emulatorjs_pin_plus_tracked_js",
       "upstream": "https://cdn.emulatorjs.org/4.2.3/data/cores/ (EmulatorJS 4.2.3; pin e150dc0491ae747028919fb82d6598954976ede6)"
+    },
+    {
+      "path": "ejs-4.2.3/cores/gearcoleco-legacy-wasm.data",
+      "sha256": "64de8d0c89b3e56d52c9419d5eae7f7f93d04a4dac36eedf543e4180ec9d2ca0",
+      "byteSize": 891769,
+      "license": "GPL-3.0 (Gearcoleco / EmulatorJS packaging); ColecoVision BIOS not redistributed \u2014 user-provided only",
+      "source": "https://registry.npmjs.org/@emulatorjs/core-gearcoleco/-/core-gearcoleco-4.2.3.tgz (EmulatorJS 4.2.3; pin e150dc0491ae747028919fb82d6598954976ede6)",
+      "evidence": [
+        "docs/emulator-builds/coleco-gearcoleco-user-bios.md"
+      ],
+      "missing_material": null,
+      "corresponding_source_class": "upstream_pin_plus_tracked_js",
+      "notes": "Unmodified EmulatorJS gearcoleco; proprietary BIOS not included"
+    },
+    {
+      "path": "ejs-4.2.3/cores/gearcoleco-wasm.data",
+      "sha256": "164e213e4d5f2c14a0f2b55da973ed5a54ef7601cb352e64c9a73ace1a7ba606",
+      "byteSize": 891907,
+      "license": "GPL-3.0 (Gearcoleco / EmulatorJS packaging); ColecoVision BIOS not redistributed \u2014 user-provided only",
+      "source": "https://registry.npmjs.org/@emulatorjs/core-gearcoleco/-/core-gearcoleco-4.2.3.tgz (EmulatorJS 4.2.3; pin e150dc0491ae747028919fb82d6598954976ede6)",
+      "evidence": [
+        "docs/emulator-builds/coleco-gearcoleco-user-bios.md"
+      ],
+      "missing_material": null,
+      "corresponding_source_class": "upstream_pin_plus_tracked_js",
+      "notes": "Unmodified EmulatorJS gearcoleco; proprietary BIOS not included"
     },
     {
       "path": "ejs-4.2.3/cores/genesis_plus_gx-legacy-wasm.data",
@@ -689,6 +803,19 @@
       "upstream": "https://cdn.emulatorjs.org/4.2.3/data/cores/ (EmulatorJS 4.2.3; pin e150dc0491ae747028919fb82d6598954976ede6)"
     },
     {
+      "path": "ejs-4.2.3/cores/reports/gearcoleco.json",
+      "sha256": "6046e0af623369cac4924f521ff74c91c2644fedf4a677f48c9074ea7028e046",
+      "byteSize": 124,
+      "license": "GPL-3.0 (Gearcoleco / EmulatorJS packaging); ColecoVision BIOS not redistributed \u2014 user-provided only",
+      "source": "https://registry.npmjs.org/@emulatorjs/core-gearcoleco/-/core-gearcoleco-4.2.3.tgz (EmulatorJS 4.2.3; pin e150dc0491ae747028919fb82d6598954976ede6)",
+      "evidence": [
+        "docs/emulator-builds/coleco-gearcoleco-user-bios.md"
+      ],
+      "missing_material": null,
+      "corresponding_source_class": "upstream_pin_plus_tracked_js",
+      "notes": "Unmodified EmulatorJS gearcoleco; proprietary BIOS not included"
+    },
+    {
       "path": "ejs-4.2.3/cores/smsplus-legacy-wasm.data",
       "sha256": "9fcc16b3e4ad662c395542bc96a0142cded1d17cbd8e43f0d5b3205cf4f7d340",
       "byteSize": 855316,
@@ -901,6 +1028,44 @@
       "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE"
     },
     {
+      "path": "hatari-2.6.1/hatari.data",
+      "sha256": "2d6f3f94c212d1d9eb5b9ad913400d934a0fdf56924a7e2c51ff70e27b561b55",
+      "byteSize": 262144,
+      "license": "GPL-2.0 Hatari + GPL-2.0 EmuTOS; RBG snapshot bridge scripts/patches/hatari-2.6.1/",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "independently_rebuilt",
+      "local_modifications": "RBG snapshot bridge (see hatari-emutos-atari-st.md)",
+      "patches_or_scripts": [
+        "scripts/patches/hatari-2.6.1/"
+      ],
+      "evidence": [
+        "docs/emulator-builds/hatari-emutos-atari-st.md"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_patch",
+      "upstream": "https://github.com/hatari/hatari/tree/6a8e26d (v2.6.1 + RBG patches; EmuTOS 02c2db7; emsdk 4.0.4)"
+    },
+    {
+      "path": "hatari-2.6.1/hatari.wasm",
+      "sha256": "cd5cec91bd5c759179c766e162629c1ae4eb6981d1490759e59f54ec19f31db4",
+      "byteSize": 23981938,
+      "license": "GPL-2.0 Hatari + GPL-2.0 EmuTOS; RBG snapshot bridge scripts/patches/hatari-2.6.1/",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "independently_rebuilt",
+      "local_modifications": "RBG snapshot bridge (see hatari-emutos-atari-st.md)",
+      "patches_or_scripts": [
+        "scripts/patches/hatari-2.6.1/"
+      ],
+      "evidence": [
+        "docs/emulator-builds/hatari-emutos-atari-st.md"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_patch",
+      "upstream": "https://github.com/hatari/hatari/tree/6a8e26d (v2.6.1 + RBG patches; EmuTOS 02c2db7; emsdk 4.0.4)"
+    },
+    {
       "path": "jsdos-8.3.8/wdosbox.wasm",
       "sha256": "6c3e68a2669cbde5a2b9c920e64248b15c23b38c0b6080814aff0542676b6e98",
       "byteSize": 1458714,
@@ -933,6 +1098,206 @@
       "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
       "source_offer_class": "tracked_js_plus_npm_pin_8.3.8",
       "upstream": "https://registry.npmjs.org/emulators/-/emulators-8.3.8.tgz (js-dos emulators GPL-2.0)"
+    },
+    {
+      "path": "ruffle-0.7.1/172de42e6619eac8f371.wasm",
+      "sha256": "1ed33b9b71a6b01b9aafafed660be343ffeb2d246c5d79e6425a32bf93e38207",
+      "byteSize": 14302754,
+      "license": "MIT OR Apache-2.0; LICENSES/ruffle-MIT.txt; LICENSES/ruffle-Apache-2.0.txt",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "ruffle_selfhosted",
+      "local_modifications": "none_beyond_official_v0.7.1_selfhosted_package",
+      "patches_or_scripts": [],
+      "evidence": [
+        "docs/emulator-builds/ruffle-web-integration.md",
+        "LICENSES/ruffle-MIT.txt",
+        "LICENSES/ruffle-Apache-2.0.txt",
+        "apps/web/public/cores/ruffle-0.7.1/RBG-PROVENANCE.json"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_docs",
+      "upstream": "https://github.com/ruffle-rs/ruffle/tree/89a7049965f3090e706265670df309a5128233ac (tag v0.7.1 selfhosted zip)"
+    },
+    {
+      "path": "ruffle-0.7.1/878d548199cddef07035.wasm",
+      "sha256": "af9b6a13a8f5e8d305bc3ce28a4edf3f6242df1183e8576ad4ca086e9f21eaea",
+      "byteSize": 14227884,
+      "license": "MIT OR Apache-2.0; LICENSES/ruffle-MIT.txt; LICENSES/ruffle-Apache-2.0.txt",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "ruffle_selfhosted",
+      "local_modifications": "none_beyond_official_v0.7.1_selfhosted_package",
+      "patches_or_scripts": [],
+      "evidence": [
+        "docs/emulator-builds/ruffle-web-integration.md",
+        "LICENSES/ruffle-MIT.txt",
+        "LICENSES/ruffle-Apache-2.0.txt",
+        "apps/web/public/cores/ruffle-0.7.1/RBG-PROVENANCE.json"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_docs",
+      "upstream": "https://github.com/ruffle-rs/ruffle/tree/89a7049965f3090e706265670df309a5128233ac (tag v0.7.1 selfhosted zip)"
+    },
+    {
+      "path": "ruffle-0.7.1/LICENSE_APACHE",
+      "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+      "byteSize": 9723,
+      "license": "MIT OR Apache-2.0; LICENSES/ruffle-MIT.txt; LICENSES/ruffle-Apache-2.0.txt",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "ruffle_selfhosted",
+      "local_modifications": "none_beyond_official_v0.7.1_selfhosted_package",
+      "patches_or_scripts": [],
+      "evidence": [
+        "docs/emulator-builds/ruffle-web-integration.md",
+        "LICENSES/ruffle-MIT.txt",
+        "LICENSES/ruffle-Apache-2.0.txt",
+        "apps/web/public/cores/ruffle-0.7.1/RBG-PROVENANCE.json"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_docs",
+      "upstream": "https://github.com/ruffle-rs/ruffle/tree/89a7049965f3090e706265670df309a5128233ac (tag v0.7.1 selfhosted zip)"
+    },
+    {
+      "path": "ruffle-0.7.1/LICENSE_MIT",
+      "sha256": "4de9338a7879c68e911742a7d691f0797ff1ef8d8a6fb978b0c711e258fe959c",
+      "byteSize": 1097,
+      "license": "MIT OR Apache-2.0; LICENSES/ruffle-MIT.txt; LICENSES/ruffle-Apache-2.0.txt",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "ruffle_selfhosted",
+      "local_modifications": "none_beyond_official_v0.7.1_selfhosted_package",
+      "patches_or_scripts": [],
+      "evidence": [
+        "docs/emulator-builds/ruffle-web-integration.md",
+        "LICENSES/ruffle-MIT.txt",
+        "LICENSES/ruffle-Apache-2.0.txt",
+        "apps/web/public/cores/ruffle-0.7.1/RBG-PROVENANCE.json"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_docs",
+      "upstream": "https://github.com/ruffle-rs/ruffle/tree/89a7049965f3090e706265670df309a5128233ac (tag v0.7.1 selfhosted zip)"
+    },
+    {
+      "path": "ruffle-0.7.1/RBG-PROVENANCE.json",
+      "sha256": "2941846cf32015efaf22e2a800173d3bdfdc35588494b933394aee8bc8341225",
+      "byteSize": 390,
+      "license": "MIT OR Apache-2.0; LICENSES/ruffle-MIT.txt; LICENSES/ruffle-Apache-2.0.txt",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "ruffle_selfhosted",
+      "local_modifications": "none_beyond_official_v0.7.1_selfhosted_package",
+      "patches_or_scripts": [],
+      "evidence": [
+        "docs/emulator-builds/ruffle-web-integration.md",
+        "LICENSES/ruffle-MIT.txt",
+        "LICENSES/ruffle-Apache-2.0.txt",
+        "apps/web/public/cores/ruffle-0.7.1/RBG-PROVENANCE.json"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_docs",
+      "upstream": "https://github.com/ruffle-rs/ruffle/tree/89a7049965f3090e706265670df309a5128233ac (tag v0.7.1 selfhosted zip)"
+    },
+    {
+      "path": "ruffle-0.7.1/README.md",
+      "sha256": "cdbeefd04e27a2fe80f735210fa4c054e376802eb43a16d9b6eeae78500f2bde",
+      "byteSize": 2328,
+      "license": "MIT OR Apache-2.0; LICENSES/ruffle-MIT.txt; LICENSES/ruffle-Apache-2.0.txt",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "ruffle_selfhosted",
+      "local_modifications": "none_beyond_official_v0.7.1_selfhosted_package",
+      "patches_or_scripts": [],
+      "evidence": [
+        "docs/emulator-builds/ruffle-web-integration.md",
+        "LICENSES/ruffle-MIT.txt",
+        "LICENSES/ruffle-Apache-2.0.txt",
+        "apps/web/public/cores/ruffle-0.7.1/RBG-PROVENANCE.json"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_docs",
+      "upstream": "https://github.com/ruffle-rs/ruffle/tree/89a7049965f3090e706265670df309a5128233ac (tag v0.7.1 selfhosted zip)"
+    },
+    {
+      "path": "ruffle-0.7.1/core.ruffle.16d61072ac7fdc4d5013.js",
+      "sha256": "d27c6bdce2a34afb32e8dfa40970bc7e86cbcb912f92db7eb3e1ac70e943bd82",
+      "byteSize": 108322,
+      "license": "MIT OR Apache-2.0; LICENSES/ruffle-MIT.txt; LICENSES/ruffle-Apache-2.0.txt",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "ruffle_selfhosted",
+      "local_modifications": "none_beyond_official_v0.7.1_selfhosted_package",
+      "patches_or_scripts": [],
+      "evidence": [
+        "docs/emulator-builds/ruffle-web-integration.md",
+        "LICENSES/ruffle-MIT.txt",
+        "LICENSES/ruffle-Apache-2.0.txt",
+        "apps/web/public/cores/ruffle-0.7.1/RBG-PROVENANCE.json"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_docs",
+      "upstream": "https://github.com/ruffle-rs/ruffle/tree/89a7049965f3090e706265670df309a5128233ac (tag v0.7.1 selfhosted zip)"
+    },
+    {
+      "path": "ruffle-0.7.1/core.ruffle.994eeef0a471a88cd0e3.js",
+      "sha256": "d89e507ee60d550629e9229aa1e4dd4f9e75ec7db271e0135cbc87dab042ea51",
+      "byteSize": 114743,
+      "license": "MIT OR Apache-2.0; LICENSES/ruffle-MIT.txt; LICENSES/ruffle-Apache-2.0.txt",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "ruffle_selfhosted",
+      "local_modifications": "none_beyond_official_v0.7.1_selfhosted_package",
+      "patches_or_scripts": [],
+      "evidence": [
+        "docs/emulator-builds/ruffle-web-integration.md",
+        "LICENSES/ruffle-MIT.txt",
+        "LICENSES/ruffle-Apache-2.0.txt",
+        "apps/web/public/cores/ruffle-0.7.1/RBG-PROVENANCE.json"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_docs",
+      "upstream": "https://github.com/ruffle-rs/ruffle/tree/89a7049965f3090e706265670df309a5128233ac (tag v0.7.1 selfhosted zip)"
+    },
+    {
+      "path": "ruffle-0.7.1/package.json",
+      "sha256": "822dd0fe6f6a84d4ab41351acd2a789aa9ef75b3fe454ab846c0858157c48d89",
+      "byteSize": 418,
+      "license": "MIT OR Apache-2.0; LICENSES/ruffle-MIT.txt; LICENSES/ruffle-Apache-2.0.txt",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "ruffle_selfhosted",
+      "local_modifications": "none_beyond_official_v0.7.1_selfhosted_package",
+      "patches_or_scripts": [],
+      "evidence": [
+        "docs/emulator-builds/ruffle-web-integration.md",
+        "LICENSES/ruffle-MIT.txt",
+        "LICENSES/ruffle-Apache-2.0.txt",
+        "apps/web/public/cores/ruffle-0.7.1/RBG-PROVENANCE.json"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_docs",
+      "upstream": "https://github.com/ruffle-rs/ruffle/tree/89a7049965f3090e706265670df309a5128233ac (tag v0.7.1 selfhosted zip)"
+    },
+    {
+      "path": "ruffle-0.7.1/ruffle.js",
+      "sha256": "26036a94567088dfb3de88a759e8ed10a4cea07b29500af36f345eef42420098",
+      "byteSize": 465885,
+      "license": "MIT OR Apache-2.0; LICENSES/ruffle-MIT.txt; LICENSES/ruffle-Apache-2.0.txt",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "binary_kind": "ruffle_selfhosted",
+      "local_modifications": "none_beyond_official_v0.7.1_selfhosted_package",
+      "patches_or_scripts": [],
+      "evidence": [
+        "docs/emulator-builds/ruffle-web-integration.md",
+        "LICENSES/ruffle-MIT.txt",
+        "LICENSES/ruffle-Apache-2.0.txt",
+        "apps/web/public/cores/ruffle-0.7.1/RBG-PROVENANCE.json"
+      ],
+      "corresponding_source_status": "READY_FOR_LEGAL_REVIEW",
+      "source_offer_class": "upstream_pin_plus_tracked_docs",
+      "upstream": "https://github.com/ruffle-rs/ruffle/tree/89a7049965f3090e706265670df309a5128233ac (tag v0.7.1 selfhosted zip)"
     }
   ],
   "tracked_frontends": [
@@ -954,7 +1319,7 @@
     }
   ],
   "gaps": [
-    "81_eo and virtualjaguar_js: NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION until complete CS trees exist",
+    "81_eo: technical CS in scripts/patches/81_eo/ (legal review still required); virtualjaguar_js: NOT_CLEARED until complete CS trees exist",
     "PH-05 bluemsx historical build hashes may differ from current lock; shipped truth is core-package-lock + private manifest"
   ],
   "user_facing_offer": [

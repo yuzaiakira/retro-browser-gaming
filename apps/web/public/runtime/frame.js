@@ -1,16 +1,91 @@
 // Adapter bridge pinned to EmulatorJS e150dc0491ae747028919fb82d6598954976ede6.
 // Internal methods are isolated here, audited against the vendored source and runtime-tested.
 let session, started = false, seekableBridge;
+/** Active EmulatorJS core id for core-specific input bridges. */
+let activeCore = '';
 const urls = [];
 /** Shell shortcuts claimed by the parent (session-scoped). Never allow-list F5. */
 let shellCodes = new Set(['Escape', 'KeyP', 'KeyF', 'F8', 'F9']);
+/**
+ * Flycast WASM aborts when the content path is an .m3u (read_m3u → insertGdrom).
+ * Capability-based playlist adapter: boot disc 1, keep companion bytes, swap by
+ * overwriting the boot path + soft-reset so the guest reloads real disc media.
+ */
+let discPlaylist = null;
 const reply = (data) => parent.postMessage({ ...data, session }, location.origin);
 addEventListener('error', (e) => reply({ type: 'error', error: e.message }));
+
+/** Flat M3U names; optional single leading `/` (VFS absolute) stripped. */
+function parseM3uDiscNames(text) {
+  const names = [];
+  for (const line of String(text || '').split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    if (trimmed.includes('\\') || trimmed.includes('..') || trimmed.indexOf('/') > 0) {
+      throw new Error('UNSAFE_M3U_ENTRY');
+    }
+    const flat = trimmed.startsWith('/') ? trimmed.slice(1) : trimmed;
+    if (!/^[A-Za-z0-9][A-Za-z0-9_.-]{0,99}$/.test(flat)) throw new Error('UNSAFE_M3U_ENTRY');
+    if (names.includes(flat)) throw new Error('DUPLICATE_M3U_ENTRY');
+    names.push(flat);
+  }
+  if (!names.length) throw new Error('M3U_EMPTY');
+  return names;
+}
 
 function editableTarget(t) {
   if (!t || typeof t.closest !== 'function') return false;
   if (t.isContentEditable) return true;
   return !!t.closest('input,select,textarea,[contenteditable="true"]');
+}
+
+/**
+ * EightyOne keybovl reads Sinclair keys via RETRO_DEVICE_KEYBOARD (port 1).
+ * EmulatorJS simulate_input only feeds JOYPAD bits; with 81 those bits never
+ * produce matrix keypresses in browser (Module._simulate_input delta=0).
+ * Map RetroPad → ZX81 cursor/fire keys through the same iframe KeyboardEvent
+ * path Playwright Digit5/8 already proved moves Dot.
+ */
+const ZX81_RETROPAD_KEYS = {
+  4: { key: '7', code: 'Digit7', keyCode: 55 }, // Up
+  5: { key: '6', code: 'Digit6', keyCode: 54 }, // Down
+  6: { key: '5', code: 'Digit5', keyCode: 53 }, // Left
+  7: { key: '8', code: 'Digit8', keyCode: 56 }, // Right
+  0: { key: 'r', code: 'KeyR', keyCode: 82 }, // B → RUN (stock 81)
+  8: { key: 'p', code: 'KeyP', keyCode: 80 }, // A → P (Dot fire)
+  1: { key: 'Shift', code: 'ShiftLeft', keyCode: 16 }, // Y
+  9: { key: 'Enter', code: 'Enter', keyCode: 13 }, // X → NEWLINE
+};
+
+function injectZx81RetropadKey(command, value) {
+  const spec = ZX81_RETROPAD_KEYS[command];
+  if (!spec) return;
+  const type = value ? 'keydown' : 'keyup';
+  const opts = {
+    key: spec.key,
+    code: spec.code,
+    keyCode: spec.keyCode,
+    which: spec.keyCode,
+    bubbles: true,
+    cancelable: true,
+  };
+  // EmulatorJS registers keydown on Module.parent (.ejs_parent / #game), not
+  // window. Dispatch there so touch/gamepad work without prior canvas click.
+  const host =
+    document.querySelector('.ejs_parent') ||
+    document.querySelector('#game') ||
+    document.body;
+  const canvas = document.querySelector('canvas');
+  try {
+    if (host && !host.hasAttribute('tabindex')) host.setAttribute('tabindex', '-1');
+    if (canvas && !canvas.hasAttribute('tabindex')) canvas.setAttribute('tabindex', '-1');
+    (canvas || host)?.focus?.({ preventScroll: true });
+  } catch {
+    /* focus best-effort */
+  }
+  const ev = () => new KeyboardEvent(type, opts);
+  host?.dispatchEvent(ev());
+  canvas?.dispatchEvent(ev());
 }
 
 // Capture before EmulatorJS so Pause/Menu/Fullscreen/QuickSave reach the shell.
@@ -19,6 +94,9 @@ addEventListener(
   (e) => {
     if (!session) return;
     if (editableTarget(e.target)) return;
+    // Programmatic ZX81 RetroPad→key inject is untrusted; must reach EmulatorJS
+    // (including KeyP for Dot fire) instead of the Pause shell binding.
+    if (!e.isTrusted) return;
     if (!(shellCodes.has(e.code) || e.key === 'Escape')) return;
     // Never claim F5 — browsers may reload; parent rejects the binding.
     if (e.code === 'F5') return;
@@ -44,11 +122,14 @@ function revoke() {
   urls.length = 0;
   seekableBridge?.dispose();
   seekableBridge = undefined;
+  discPlaylist = null;
 }
 
 function preferSeekable(file, companions, core) {
   // Multi-file discs always use seekable VFS. A few EmulatorJS cores
   // only work reliably via blob URLs (input and/or ZIP mount for DOS).
+  // FDS (.fds) needs a system disksys.rom mount before content load — keep
+  // the simple blob path so externalFiles Uint8Array BIOS writes stay intact.
   if (
     [
       'prosystem',
@@ -68,7 +149,8 @@ function preferSeekable(file, companions, core) {
       'desmume',
       'virtualjaguar',
       'virtualjaguar_js',
-    ].includes(core)
+    ].includes(core) ||
+    (core === 'fceumm' && /\.fds$/i.test(String(file?.name || '')))
   ) {
     return false;
   }
@@ -81,16 +163,146 @@ function seekableReady() {
   return typeof window.RetroSeekableFS?.installSeekableLoader === 'function';
 }
 
+/**
+ * Flycast / RetroArch GL init queries desktop-only getParameter enums on
+ * WebGL2 (SwiftShader/ANGLE). The resulting INVALID_ENUM is treated as fatal
+ * ("Cannot open video driver"). Swallow only that error from getParameter.
+ */
+function installFlycastWebGLShims() {
+  // Force preserveDrawingBuffer for Chromium evidence readback.
+  if (!HTMLCanvasElement.prototype.__rbgFlycastGetContextPatched) {
+    const origGetContext = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function flycastGetContext(type, attrs) {
+      if (type === 'webgl' || type === 'webgl2' || type === 'experimental-webgl') {
+        attrs = Object.assign({}, attrs || {}, { preserveDrawingBuffer: true });
+      }
+      return origGetContext.call(this, type, attrs);
+    };
+    HTMLCanvasElement.prototype.__rbgFlycastGetContextPatched = true;
+  }
+  const patch = (proto) => {
+    if (!proto || proto.__rbgFlycastGetParameterPatched) return;
+    const orig = proto.getParameter;
+    if (typeof orig !== 'function') return;
+    proto.getParameter = function flycastGetParameter(pname) {
+      // Nasomers Flycast WASM runtime note: force GLES3-looking version strings
+      // so RetroArch/Flycast do not pick desktop GLSL paths under WebGL2.
+      if (pname === 0x1f02 /* GL_VERSION */) {
+        return 'OpenGL ES 3.0 WebGL 2.0';
+      }
+      if (pname === 0x8b8c /* GL_SHADING_LANGUAGE_VERSION */) {
+        return 'OpenGL ES GLSL ES 3.00';
+      }
+      const value = orig.call(this, pname);
+      const err = this.getError();
+      if (err === this.INVALID_ENUM) {
+        return 0;
+      }
+      return value;
+    };
+    proto.__rbgFlycastGetParameterPatched = true;
+  };
+  patch(typeof WebGL2RenderingContext !== 'undefined' ? WebGL2RenderingContext.prototype : null);
+  patch(typeof WebGLRenderingContext !== 'undefined' ? WebGLRenderingContext.prototype : null);
+}
+
+/**
+ * Flycast's WebGL2 video driver aborts when Module.canvas has client size 0×0
+ * at callMain. EmulatorJS only appends the canvas after callMain succeeds, so
+ * prime a laid-out host before EJS_Runtime runs. Does not alter other cores.
+ */
+function installFlycastCanvasPrime() {
+  installFlycastWebGLShims();
+  let rawRuntime = null;
+  const wrap = function flycastEjsRuntime(moduleArg) {
+    const canvas = moduleArg && moduleArg.canvas;
+    const host =
+      (moduleArg && moduleArg.parent) ||
+      document.querySelector('#game') ||
+      document.body;
+    if (canvas && host) {
+      if (!canvas.isConnected) {
+        host.appendChild(canvas);
+      }
+      canvas.classList.add('ejs_canvas');
+      canvas.style.display = 'block';
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+      // HTML canvas defaults to 300×150 — Flycast/RA WebGL init must not
+      // see that stub size or context bring-up fails shortly after ready.
+      const hostBox = host.getBoundingClientRect();
+      const targetW = Math.max(640, Math.floor(hostBox.width) || 640);
+      const targetH = Math.max(480, Math.floor(hostBox.height) || 480);
+      canvas.width = targetW;
+      canvas.height = targetH;
+      void canvas.getBoundingClientRect();
+    }
+    // Needed for Chromium evidence screenshots / toDataURL readback.
+    moduleArg.webGLContextAttributes = Object.assign(
+      {},
+      moduleArg.webGLContextAttributes || {},
+      { preserveDrawingBuffer: true, majorVersion: 2 },
+    );
+    return rawRuntime.call(this, moduleArg);
+  };
+  Object.defineProperty(window, 'EJS_Runtime', {
+    configurable: true,
+    enumerable: true,
+    get() {
+      return rawRuntime ? wrap : undefined;
+    },
+    set(fn) {
+      rawRuntime = fn;
+    },
+  });
+}
+
 addEventListener('message', async (event) => {
   if (event.source !== parent || event.origin !== location.origin) return;
   const d = event.data;
   if (d.type === 'init' && !session) {
     session = d.session;
+    activeCore = String(d.core || '');
     const companions = d.companions || [];
     const externalFiles = {};
     for (const file of companions) {
       if (!/^[A-Za-z0-9][A-Za-z0-9_.-]{0,99}$/.test(file.name) || file.name.includes('..') || externalFiles['/' + file.name]) {
         reply({ type: 'error', error: 'UNSAFE_COMPANION_FILE' });
+        return;
+      }
+    }
+
+    // Flycast: translate M3U → boot first disc (core aborts on .m3u content path).
+    let bootFile = d.file;
+    let bootCompanions = companions;
+    discPlaylist = null;
+    if (activeCore === 'flycast' && /\.m3u$/i.test(String(d.file?.name || ''))) {
+      try {
+        const names = parseM3uDiscNames(await d.file.text());
+        const buffers = new Map();
+        for (const name of names) {
+          const file = companions.find((item) => item.name === name);
+          if (!file) {
+            reply({ type: 'error', error: 'M3U_DISC_MISSING:' + name });
+            return;
+          }
+          if (file.size > 32 * 1024 * 1024) {
+            reply({ type: 'error', error: 'M3U_DISC_TOO_LARGE' });
+            return;
+          }
+          buffers.set(name, new Uint8Array(await file.arrayBuffer()));
+        }
+        bootFile = companions.find((item) => item.name === names[0]);
+        bootCompanions = companions;
+        discPlaylist = {
+          names,
+          buffers,
+          index: 0,
+          bootName: names[0],
+          adapter: 'flycast-m3u-file-swap',
+        };
+      } catch (error) {
+        reply({ type: 'error', error: String(error?.message || error) });
         return;
       }
     }
@@ -122,6 +334,11 @@ addEventListener('message', async (event) => {
       mgba: 'gba',
       stella2014: 'atari2600',
       a5200: 'atari5200',
+      // Dedicated Atari 8-bit computer core (not a5200 / 5200).
+      atari800: 'atari2600',
+      // Dreamcast Flycast WASM (not stock EJS 4.2.3 CDN).
+      // EmulatorJS 4.2.3 has no dreamcast scheme; segaSaturn is the closest pad map.
+      flycast: 'segaSaturn',
       beetle_vb: 'vb',
       mupen64plus_next: 'n64',
       // EJS getCores maps c64 → vice_x64sc; pin scheme so UI/tests stay stable.
@@ -150,6 +367,8 @@ addEventListener('message', async (event) => {
       pcsx_rearmed: 'psx',
       ppsspp: 'psp',
       dosbox_pure: 'dos',
+      // EJS getCores maps coleco → gearcoleco; pin scheme for probes/UI.
+      gearcoleco: 'coleco',
     };
     if (controlSchemeByCore[d.core]) {
       window.EJS_controlScheme = controlSchemeByCore[d.core];
@@ -178,19 +397,20 @@ addEventListener('message', async (event) => {
     if (d.core === '81' || d.core === '81_eo') {
       // 81_eo: independently versioned WASM calls eo_loadp for .p (tape path for .tzx).
       // Stock 81 still needs LOAD ""; keep face-button LOAD map for that path.
-      // 81-libretro treats joypad "auto" as joymap 0 (dead) — pin explicit keys.
-      // Use "default" (not digit strings) for D-Pad — matches upstream cursor map.
+      // 81-libretro treats joypad "auto" as joymap 0 (dead). Prefer digit keys over
+      // "default" so EmulatorJS option indices cannot collapse to the auto/dead slot.
       window.EJS_defaultOptions['81_fast_load'] = 'enabled';
       window.EJS_defaultOptions['81_chroma_81'] = 'disabled';
-      window.EJS_defaultOptions['81_joypad_up'] = 'default';
-      window.EJS_defaultOptions['81_joypad_down'] = 'default';
-      window.EJS_defaultOptions['81_joypad_left'] = 'default';
-      window.EJS_defaultOptions['81_joypad_right'] = 'default';
+      window.EJS_defaultOptions['81_joypad_up'] = '7';
+      window.EJS_defaultOptions['81_joypad_down'] = '6';
+      window.EJS_defaultOptions['81_joypad_left'] = '5';
+      window.EJS_defaultOptions['81_joypad_right'] = '8';
       // B → R (RUN keyword at K cursor after eo_loadp); X → NEWLINE; A → P (Dot).
       window.EJS_defaultOptions['81_joypad_b'] = 'r';
       window.EJS_defaultOptions['81_joypad_a'] = 'p';
       window.EJS_defaultOptions['81_joypad_y'] = 'shift';
       window.EJS_defaultOptions['81_joypad_x'] = 'new line';
+      window.EJS_defaultOptions['81_key_hold_time'] = '50';
     }
     if (d.core === 'cap32') {
       // Cap32 autostarts DSK/CDT/M3U; CPC firmware is embedded in the core package.
@@ -214,6 +434,45 @@ addEventListener('message', async (event) => {
       window.EJS_defaultOptions['desmume_pointer_type'] = 'touch';
       window.EJS_defaultOptions.desmume_pointer_type = 'touch';
     }
+    if (d.core === 'atari800') {
+      // Open-firmware 800XL profile only — never select proprietary Atari OS ROMs.
+      // needs_fullpath=true → seekable VFS path (preferSeekable stays true; not in blob list).
+      window.EJS_defaultOptions.atari800_system = '800XL (64K)';
+      window.EJS_defaultOptions['atari800_system'] = '800XL (64K)';
+      window.EJS_defaultOptions.atari800_os_xl = 'AltirraOS';
+      window.EJS_defaultOptions['atari800_os_xl'] = 'AltirraOS';
+      window.EJS_defaultOptions.atari800_basic_version = 'Altirra BASIC';
+      window.EJS_defaultOptions['atari800_basic_version'] = 'Altirra BASIC';
+      window.EJS_defaultOptions.atari800_internalbasic = 'disabled';
+      window.EJS_defaultOptions['atari800_internalbasic'] = 'disabled';
+    }
+    if (d.core === 'flycast') {
+      // Prefer reios HLE — never auto-fetch SEGA BIOS. Upstream WASM sample
+      // defaults HLE off; engineering enables it for lawful homebrew boots.
+      // Match nasomers dreamcast-core-options.json for stable WASM/WebGL2.
+      window.EJS_defaultOptions = window.EJS_defaultOptions || {};
+      window.EJS_defaultOptions.reicast_hle_bios = 'enabled';
+      window.EJS_defaultOptions['reicast_hle_bios'] = 'enabled';
+      window.EJS_defaultOptions.reicast_boot_to_bios = 'disabled';
+      window.EJS_defaultOptions['reicast_boot_to_bios'] = 'disabled';
+      window.EJS_defaultOptions.reicast_threaded_rendering = 'disabled';
+      window.EJS_defaultOptions['reicast_threaded_rendering'] = 'disabled';
+      window.EJS_defaultOptions.reicast_synchronous_rendering = 'disabled';
+      window.EJS_defaultOptions['reicast_synchronous_rendering'] = 'disabled';
+      window.EJS_defaultOptions.reicast_internal_resolution = '640x480';
+      window.EJS_defaultOptions['reicast_internal_resolution'] = '640x480';
+      window.EJS_defaultOptions.reicast_mipmapping = 'disabled';
+      window.EJS_defaultOptions.reicast_enable_rttb = 'disabled';
+      window.EJS_defaultOptions.reicast_alpha_sorting = 'per-strip (fast, least accurate)';
+      window.EJS_defaultOptions.reicast_delay_frame_swapping = 'disabled';
+      window.EJS_defaultOptions.reicast_framerate = 'normal';
+      // Dot (and many 2D homebrew titles) write the Dreamcast framebuffer
+      // directly (vram_s). Without this, Flycast advances frames but presents black.
+      window.EJS_defaultOptions.reicast_emulate_framebuffer = 'enabled';
+      window.EJS_defaultOptions['reicast_emulate_framebuffer'] = 'enabled';
+      window.EJS_threads = false;
+      installFlycastCanvasPrime();
+    }
     window.EJS_Buttons = {
       settings: { visible: false },
       netplay: { visible: false },
@@ -222,9 +481,33 @@ addEventListener('message', async (event) => {
       saveSavFiles: { visible: false },
       loadSavFiles: { visible: false },
     };
-    if (d.bios) {
-      window.EJS_biosUrl = URL.createObjectURL(d.bios);
-      urls.push(window.EJS_biosUrl);
+    {
+      const mediaName = String(d.file?.name || d.name || '');
+      const needsFdsBios = d.core === 'fceumm' && /\.fds$/i.test(mediaName);
+      if (needsFdsBios && !d.bios) {
+        throw new Error(
+          'MISSING_FDS_BIOS: OpenDiskSysROM (disksys.rom) required before FDS launch',
+        );
+      }
+      if (d.bios) {
+        // FCEUmm FDS: mount disksys.rom into RetroArch system_directory.
+        // Prefer a same-realm Uint8Array — blob: URLs are revoked after first
+        // downloadFile fetch, and cross-frame File/Blob can fail toData checks.
+        if (needsFdsBios) {
+          const buf = new Uint8Array(await d.bios.arrayBuffer());
+          if (buf.byteLength !== 8192) {
+            throw new Error(`INVALID_FDS_BIOS_SIZE:${buf.byteLength}`);
+          }
+          // FCEUmm resolves disksys.rom via SYSTEM DIR; when RA reports SYSTEM DIR
+          // empty it falls back to the content directory root (`/disksys.rom`).
+          externalFiles['/home/web_user/retroarch/userdata/system/disksys.rom'] = buf;
+          externalFiles['/disksys.rom'] = buf;
+        } else {
+          const biosUrl = URL.createObjectURL(d.bios);
+          window.EJS_biosUrl = biosUrl;
+          urls.push(biosUrl);
+        }
+      }
     }
     window.EJS_onGameStart = () => {
       started = true;
@@ -278,7 +561,8 @@ addEventListener('message', async (event) => {
           analog:
             d.core === 'ppsspp' ||
             d.core === 'pcsx_rearmed' ||
-            d.core === 'mupen64plus_next',
+            d.core === 'mupen64plus_next' ||
+            d.core === 'flycast',
           seekableMedia: !!seekableBridge,
           onDemandMedia: !!(seekable && seekable.onDemand),
         },
@@ -294,21 +578,31 @@ addEventListener('message', async (event) => {
         externalFiles['/home/web_user/retroarch/userdata/system/'] =
           '/cores/ejs-4.2.3/system/bluemsx-system.data';
       }
-      if (preferSeekable(d.file, companions, d.core) && seekableReady()) {
-        const files = { ['/' + d.file.name]: d.file };
-        for (const file of companions) files['/' + file.name] = file;
-        window.EJS_gameUrl = d.file.name;
+      if (preferSeekable(bootFile, bootCompanions, d.core) && seekableReady()) {
+        const files = { ['/' + bootFile.name]: bootFile };
+        for (const file of bootCompanions) files['/' + file.name] = file;
+        window.EJS_gameUrl = bootFile.name;
         window.EJS_externalFiles = { ...externalFiles };
-        seekableBridge = window.RetroSeekableFS.installSeekableLoader(files, { core: d.core });
+        seekableBridge = window.RetroSeekableFS.installSeekableLoader(files, {
+          core: d.core,
+          // Playlist adapter rewrites the boot path with FS.writeFile (MEMFS only).
+          forceMemfs: !!discPlaylist,
+        });
       } else {
-        const total = [d.file, ...companions].reduce((sum, item) => sum + item.size, 0);
+        const total = [bootFile, ...bootCompanions].reduce((sum, item) => sum + item.size, 0);
+        // mupen64plus_next WASM builds abort on ROMs larger than ~64 MiB
+        // (EmulatorJS #1173); fail closed with a clear error instead of a WASM OOM.
+        if (d.core === 'mupen64plus_next' && total > 64 * 1024 * 1024) {
+          reply({ type: 'error', error: 'N64_ROM_TOO_LARGE' });
+          return;
+        }
         if (total > 256 * 1024 * 1024) {
           reply({ type: 'error', error: 'LARGE_DISC_UNSUPPORTED' });
           return;
         }
-        const url = URL.createObjectURL(d.file);
+        const url = URL.createObjectURL(bootFile);
         urls.push(url);
-        for (const file of companions) {
+        for (const file of bootCompanions) {
           const companionUrl = URL.createObjectURL(file);
           urls.push(companionUrl);
           externalFiles['/' + file.name] = companionUrl;
@@ -322,9 +616,9 @@ addEventListener('message', async (event) => {
       document.body.append(script);
     };
 
-    if (preferSeekable(d.file, companions, d.core)) {
+    if (preferSeekable(bootFile, bootCompanions, d.core)) {
       const seekable = document.createElement('script');
-      seekable.src = '/runtime/seekable-fs.js';
+      seekable.src = '/runtime/seekable-fs.js?v=m3u-swap-2';
       seekable.onload = boot;
       seekable.onerror = () => reply({ type: 'error', error: 'SEEKABLE_LOADER_FAILED' });
       document.head.append(seekable);
@@ -347,9 +641,100 @@ addEventListener('message', async (event) => {
     g = e.gameManager;
   if (d.type === 'input') {
     g.simulateInput(0, d.command, d.value);
+    // 81 / 81_eo: RetroPad simulateInput does not reach keybovl; bridge via
+    // proven iframe keyboard consumption (see ZX81_RETROPAD_KEYS).
+    if (activeCore === '81' || activeCore === '81_eo') {
+      injectZx81RetropadKey(d.command, d.value);
+    }
     return;
   }
   if (d.type !== 'command') return;
+
+  /** Cold-remount selected playlist disc (Flycast cannot M3U-boot; soft-reset keeps old ELF). */
+  async function remountPlaylistDisc(index) {
+    if (!discPlaylist) throw new Error('DISC_PLAYLIST_MISSING');
+    if (index < 0 || index >= discPlaylist.names.length) throw new Error('DISK_INDEX_OUT_OF_RANGE');
+    const target = discPlaylist.names[index];
+    const bytes = discPlaylist.buffers.get(target);
+    if (!bytes) throw new Error('DISK_BYTES_MISSING');
+    if (!window.RetroSeekableFS?.installSeekableLoader) throw new Error('SEEKABLE_UNAVAILABLE');
+    if (typeof window.EmulatorJS !== 'function') throw new Error('EMULATORJS_MISSING');
+
+    started = false;
+    try {
+      window.EJS_emulator?.callExit?.();
+    } catch {
+      /* ignore */
+    }
+    try {
+      window.EJS_emulator?.gameManager?.Module?.abort?.();
+    } catch {
+      /* ignore expected abort */
+    }
+    seekableBridge?.dispose();
+    seekableBridge = undefined;
+    const host = document.querySelector('#game');
+    if (host) host.innerHTML = '';
+    window.EJS_emulator = undefined;
+
+    const bootFile = new File([bytes], target);
+    const companionFiles = discPlaylist.names.map(
+      (name) => new File([discPlaylist.buffers.get(name)], name),
+    );
+    const files = { ['/' + bootFile.name]: bootFile };
+    for (const file of companionFiles) files['/' + file.name] = file;
+
+    window.EJS_gameUrl = bootFile.name;
+    window.EJS_gameName = bootFile.name;
+    window.EJS_core = 'flycast';
+    discPlaylist.bootName = target;
+    discPlaylist.index = index;
+
+    const remounted = new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error('DISC_REMOUNT_TIMEOUT')), 180000);
+      const onStart = () => {
+        clearTimeout(timer);
+        started = true;
+        resolve(true);
+      };
+      window.EJS_onGameStart = onStart;
+    });
+
+    seekableBridge = window.RetroSeekableFS.installSeekableLoader(files, {
+      core: 'flycast',
+      forceMemfs: true,
+    });
+
+    const config = {
+      gameUrl: window.EJS_gameUrl,
+      dataPath: window.EJS_pathtodata,
+      system: 'flycast',
+      gameName: window.EJS_gameName,
+      color: window.EJS_color,
+      volume: window.EJS_volume,
+      startOnLoad: true,
+      backgroundColor: window.EJS_backgroundColor,
+      controlScheme: window.EJS_controlScheme,
+      threads: false,
+      defaultOptions: window.EJS_defaultOptions,
+      disableDatabases: true,
+      disableLocalStorage: true,
+      externalFiles: window.EJS_externalFiles || {},
+    };
+    window.EJS_emulator = new window.EmulatorJS(window.EJS_player || '#game', config);
+    if (typeof window.EJS_onGameStart === 'function') {
+      window.EJS_emulator.on('start', window.EJS_onGameStart);
+    }
+    await remounted;
+    return {
+      index: discPlaylist.index,
+      count: discPlaylist.names.length,
+      adapter: discPlaylist.adapter,
+      active: target,
+      remounted: true,
+    };
+  }
+
   try {
     let value = null;
     switch (d.method) {
@@ -375,6 +760,40 @@ addEventListener('message', async (event) => {
       case 'seekableStats':
         value = seekableBridge ? seekableBridge.stats() : null;
         break;
+      case 'diskCount':
+        if (discPlaylist) {
+          value = discPlaylist.names.length;
+        } else {
+          value = typeof g.getDiskCount === 'function' ? g.getDiskCount() : 0;
+        }
+        break;
+      case 'diskIndex':
+        if (discPlaylist) {
+          value = discPlaylist.index;
+        } else {
+          value = typeof g.getCurrentDisk === 'function' ? g.getCurrentDisk() : 0;
+        }
+        break;
+      case 'setDiskIndex': {
+        const index = Number(d.value);
+        if (!Number.isInteger(index) || index < 0) throw new Error('DISK_INDEX_INVALID');
+        if (discPlaylist) {
+          // Full cold remount of the selected CHD — soft-reset keeps the old ELF in RAM.
+          value = await remountPlaylistDisc(index);
+          break;
+        }
+        if (typeof g.setCurrentDisk !== 'function') {
+          throw new Error('DISK_CONTROL_UNSUPPORTED');
+        }
+        const count = typeof g.getDiskCount === 'function' ? g.getDiskCount() : 0;
+        if (count > 0 && index >= count) throw new Error('DISK_INDEX_OUT_OF_RANGE');
+        g.setCurrentDisk(index);
+        value = {
+          index: typeof g.getCurrentDisk === 'function' ? g.getCurrentDisk() : index,
+          count,
+        };
+        break;
+      }
       default:
         throw new Error('UNSUPPORTED_OPERATION');
     }

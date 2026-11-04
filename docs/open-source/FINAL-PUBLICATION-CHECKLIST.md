@@ -33,7 +33,7 @@ Session verification recorded separately in the engineer final report (exact SHA
 | README does not claim entire tree is MIT | **PASS** |
 | `first-party-license-scope.md` / `third-party-notices.md` / `LICENSES/` | **PASS** |
 | EmulatorJS GPL-3.0 / jsdos GPL-2.0 / js2me MIT retained | **PASS** |
-| `81_eo` / `virtualjaguar_js` remain NOT_CLEARED | **PASS** (documented withhold) |
+| `81_eo` / `virtualjaguar_js` remain NOT_CLEARED | **PASS** (documented withhold; `81_eo` has in-repo patches but no legal clearance claimed) |
 | Docs hygiene (`check-docs-hygiene.py`) | **PASS** |
 | No tracked browser profiles / generated evidence | **PASS** |
 | History removal manifest (60 paths) absent on candidate | **PASS** |

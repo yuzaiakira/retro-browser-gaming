@@ -1,0 +1,13 @@
+{
+  "schema": "rbg-counsel-decisions-v1",
+  "note": "Counsel fills CLEARED_FOR_PUBLIC or WITHHOLD per artifact_id. Empty/missing file keeps LEGAL_REVIEW_READY=PENDING_APPROVAL.",
+  "decisions": [
+    {
+      "artifact_id": "CS-0001",
+      "decision": "WITHHOLD",
+      "reviewer": "Counsel Name",
+      "decided_at": "YYYY-MM-DD",
+      "notes": "Example only — do not copy as approval"
+    }
+  ]
+}

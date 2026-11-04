@@ -63,6 +63,68 @@ BIOS_CATALOG: list[dict] = [
         "max_bytes": 0,
         "open_firmware": False,
     },
+    {
+        "id": "colecovision",
+        "label": "ColecoVision BIOS (colecovision.rom) — required for gearcoleco",
+        "core": "gearcoleco",
+        "required": True,
+        "notes": (
+            "Proprietary ADAM OS-7 / ColecoVision BIOS. Supply only firmware you are "
+            "authorized to use. Exact 8192-byte image. Hash match verifies identity only. "
+            "Never publish via anonymous routes. Browser import also via Settings → user BIOS."
+        ),
+        "dest_name": "colecovision/colecovision.rom",
+        "expected_sha256": None,
+        "min_bytes": 8192,
+        "max_bytes": 8192,
+        "open_firmware": False,
+    },
+    {
+        "id": "fds-opendisksys",
+        "label": "Famicom Disk System OpenDiskSysROM (LGPL-3.0)",
+        "core": "fceumm",
+        "required": False,
+        "notes": (
+            "OpenDiskSysROM LGPL-3.0 (RetrolariumLab b3cbc00d…). Required only for .fds "
+            "launches — never for NES .nes. Do not install Nintendo disksys.rom. "
+            "Corresponding source: docs/emulator-builds/fds-open-bios-feasibility.md"
+        ),
+        "dest_name": "fds/disksys.rom",
+        "expected_sha256": (
+            "6ce74ea4e9407c8d1175a58b7af08f073fa6b9f9b54e4f4954828ae1b6872ba6"
+        ),
+        "min_bytes": 8192,
+        "max_bytes": 8192,
+        "open_firmware": True,
+    },
+    {
+        "id": "vectrex",
+        "label": "Vectrex executive ROM system.img (proprietary)",
+        "core": "vecx",
+        "required": True,
+        "notes": (
+            "GCE/Milton Bradley Vectrex executive ROM (8192 bytes). Required for "
+            "patched vecx WASM. Never redistribute in public packages. "
+            "See docs/emulator-builds/vecx-firmware-audit.md."
+        ),
+        "dest_name": "vectrex/system.img",
+        "expected_sha256": None,
+        "min_bytes": 8192,
+        "max_bytes": 8192,
+        "open_firmware": False,
+    },
+    {
+        "id": "sega-cd-reserved",
+        "label": "Sega CD / Mega-CD BIOS (reserved)",
+        "core": "genesis_plus_gx",
+        "required": False,
+        "notes": "Proprietary regional CD BIOS. Slot reserved for PH-12.2 — not enabled for cartridge Genesis.",
+        "dest_name": "sega-cd/bios_CD_U.bin",
+        "expected_sha256": None,
+        "min_bytes": 128 * 1024,
+        "max_bytes": 512 * 1024,
+        "open_firmware": False,
+    },
 ]
 
 

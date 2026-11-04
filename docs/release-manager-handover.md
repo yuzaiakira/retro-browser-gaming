@@ -60,7 +60,7 @@ Inventory snapshot 2026-10-22 (re-checked): **42 pending, 0 approved** — `priv
 Proposed public shortlist: `docs/product-release-shortlist-20261022.md`.  
 Packets: `docs/catalog-product-approval-report-20261021.md` (update counts when approving).
 
-**Do not** product-approve EXPERIMENTAL platforms (Jaguar, ZX81, N64) without new playability evidence.
+**Do not** product-approve EXPERIMENTAL platforms (Jaguar, ZX81) without new playability evidence. N64 is engineering `VERIFIED_PLAYABLE` but still needs explicit product approval before public catalog promotion.
 
 ---
 
@@ -104,7 +104,8 @@ curl -fsSI https://<launcher-host>/ | grep -i content-security
 
 | Item | Status |
 | --- | --- |
-| ZX81, Jaguar, N64 | EXPERIMENTAL |
+| ZX81, Jaguar | EXPERIMENTAL |
+| N64 | VERIFIED_PLAYABLE (engineering; product approval pending) |
 | FBNeo | BLOCKED_FIXTURE |
 | Atari ST (hatari) | BLOCKED_CORE |
 | Sega 32X | BLOCKED_LEGAL |

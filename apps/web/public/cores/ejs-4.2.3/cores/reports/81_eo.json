@@ -1,7 +1,7 @@
 {
   "core": "81_eo",
-  "buildStart": "2026-10-22T11:39:20+00:00",
-  "buildEnd": "2026-10-22T11:40:07+00:00",
+  "buildStart": "2026-11-02T05:43:24+00:00",
+  "buildEnd": "2026-11-02T05:44:06+00:00",
   "options": {},
-  "note": "eo_loadp + z88dk CRT autostart + JOYPAD force"
+  "note": "eo_loadp CRT + CDFLAG/FRAMES + JOYPAD_MASK; scripts/patches/81_eo/; rebuilt 2026-11-02"
 }

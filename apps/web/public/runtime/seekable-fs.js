@@ -4,8 +4,8 @@
  * Strategy:
  * - Small files (< ON_DEMAND_THRESHOLD): stream into MEMFS in ≤8 MiB slices
  *   so the JavaScript heap never holds a full-file ArrayBuffer.
- * - Large files, or PS1/PSP cores when SharedArrayBuffer is available: mount
- *   Blob-backed nodes that read windows through a dedicated worker into a
+ * - Large files, or PS1/PSP/Dreamcast cores when SharedArrayBuffer is available:
+ *   mount Blob-backed nodes that read windows through a dedicated worker into a
  *   SharedArrayBuffer. The WASM heap never receives a full-file copy at mount
  *   time; cores issue random-access reads through FS stream_ops.
  *
@@ -13,13 +13,42 @@
  * XHR, so it is not usable from the EmulatorJS iframe main thread. WORKERFS
  * is not compiled into the vendored cores. WasmFS/OPFS backends would need a
  * core rebuild; File objects from OPFS already work with this BlobFS path.
+ * FileSystemSyncAccessHandle is used by the download worker for writes; the
+ * blob-reader worker optionally accepts SyncAccessHandle registration for
+ * reads when a handle is available.
  */
 (function (global) {
   const PAYLOAD_BYTES = 8 * 1024 * 1024;
   const ON_DEMAND_THRESHOLD = 16 * 1024 * 1024;
   const SAB_HEADER = 16;
   const READ_TIMEOUT_MS = 60000;
-  const ON_DEMAND_CORES = new Set(['ppsspp', 'pcsx_rearmed']);
+  // Cores that must never MEMFS-copy disc media even when under the threshold.
+  const ON_DEMAND_CORES = new Set(['ppsspp', 'pcsx_rearmed', 'flycast']);
+  // Prefer playlist/cue sheets before single-disc images so multi-disc M3U
+  // mounts keep disk-control aware of every companion image.
+  const ENTRY_EXTS = [
+    '.m3u',
+    '.cue',
+    '.gdi',
+    '.cdi',
+    '.chd',
+    '.pbp',
+    '.iso',
+    '.cso',
+    '.bin',
+    '.elf',
+  ];
+
+  function assertReadRange(offset, length, size) {
+    if (!Number.isFinite(offset) || !Number.isFinite(length)) {
+      throw new Error('INVALID_READ_RANGE');
+    }
+    if (offset < 0 || length < 0) throw new Error('NEGATIVE_OFFSET_OR_LENGTH');
+    if (!Number.isSafeInteger(offset) || !Number.isSafeInteger(length)) {
+      throw new Error('OFFSET_OVERFLOW');
+    }
+    if (size != null && offset > size) throw new Error('OFFSET_PAST_EOF');
+  }
 
   async function writeFileChunked(FS, absolutePath, file) {
     const size = file.size;
@@ -56,6 +85,7 @@
   }
 
   async function readSlice(file, offset, length) {
+    assertReadRange(offset, length, file.size);
     if (length > PAYLOAD_BYTES) throw new Error('SEEKABLE_READ_TOO_LARGE');
     if (offset >= file.size) return new Uint8Array(0);
     const end = Math.min(file.size, offset + length);
@@ -86,8 +116,20 @@
     }
     let nextId = 1;
     let ready = false;
+    let generation = 0;
     let lastError = null;
-    const stats = { bytesRead: 0, peakPayload: 0, reads: 0, spinMs: 0 };
+    let disposed = false;
+    const stats = {
+      bytesRead: 0,
+      peakPayload: 0,
+      reads: 0,
+      seeks: 0,
+      spinMs: 0,
+      lastLatencyMs: 0,
+      totalLatencyMs: 0,
+      outstanding: 0,
+      lastOffset: 0,
+    };
     const pendingReady = [];
 
     worker.onerror = (event) => {
@@ -99,6 +141,7 @@
       const message = event.data || {};
       if (message.type === 'ready') {
         ready = true;
+        generation = message.generation || generation;
         while (pendingReady.length) pendingReady.shift()(null);
       }
       if (message.type === 'error') lastError = message.error;
@@ -106,14 +149,13 @@
     worker.postMessage({ type: 'init', sab });
 
     function waitReady() {
+      if (disposed) throw new Error('BLOB_READER_DISPOSED');
       if (ready) return;
-      // Allow the worker's 'ready' message to land: yield via Atomics.wait is
-      // illegal on the main thread, so callers that need sync must first await
-      // ensureReady() from an async context.
       throw new Error('BLOB_READER_NOT_READY');
     }
 
     function ensureReady() {
+      if (disposed) return Promise.reject(new Error('BLOB_READER_DISPOSED'));
       if (ready) return Promise.resolve();
       return new Promise((resolve, reject) => {
         const timer = setTimeout(() => reject(new Error('BLOB_READER_INIT_TIMEOUT')), 10000);
@@ -130,9 +172,11 @@
       while (Atomics.compareExchange(control, 2, 0, 1) !== 0) {
         if (performance.now() - start > READ_TIMEOUT_MS) throw new Error('BLOB_LOCK_TIMEOUT');
       }
+      stats.outstanding += 1;
     }
 
     function release() {
+      stats.outstanding = Math.max(0, stats.outstanding - 1);
       Atomics.store(control, 2, 0);
     }
 
@@ -143,11 +187,20 @@
       return id;
     }
 
+    /** Optional OPFS SyncAccessHandle registration (Dedicated Worker). */
+    function registerHandle(handle, size) {
+      waitReady();
+      const id = nextId++;
+      worker.postMessage({ type: 'registerHandle', id, handle, size });
+      return id;
+    }
+
     function unregister(id) {
       worker.postMessage({ type: 'unregister', id });
     }
 
     function readInto(id, offset, length, dest, destOffset) {
+      assertReadRange(offset, length);
       if (length <= 0) return 0;
       if (length > PAYLOAD_BYTES) throw new Error('BLOB_READ_TOO_LARGE');
       waitReady();
@@ -156,13 +209,19 @@
         Atomics.store(control, 0, 0);
         Atomics.store(control, 1, 0);
         lastError = null;
-        worker.postMessage({ type: 'read', id, offset, length });
+        if (offset !== stats.lastOffset) stats.seeks += 1;
+        stats.lastOffset = offset;
         const start = performance.now();
+        worker.postMessage({ type: 'read', id, offset, length, generation });
         while (Atomics.load(control, 0) === 0) {
           if (lastError) throw new Error(lastError);
+          if (disposed) throw new Error('BLOB_READER_DISPOSED');
           if (performance.now() - start > READ_TIMEOUT_MS) throw new Error('BLOB_READ_TIMEOUT');
         }
-        stats.spinMs += performance.now() - start;
+        const latency = performance.now() - start;
+        stats.spinMs += latency;
+        stats.lastLatencyMs = latency;
+        stats.totalLatencyMs += latency;
         if (Atomics.load(control, 0) < 0) throw new Error(lastError || 'BLOB_READ_FAILED');
         const n = Atomics.load(control, 1);
         if (n > 0) dest.set(payload.subarray(0, n), destOffset || 0);
@@ -176,6 +235,7 @@
     }
 
     function readSync(id, offset, length) {
+      assertReadRange(offset, length);
       if (length > PAYLOAD_BYTES) throw new Error('BLOB_READ_TOO_LARGE');
       const out = new Uint8Array(Math.max(0, length));
       const n = readInto(id, offset, out.length, out, 0);
@@ -183,6 +243,13 @@
     }
 
     function dispose() {
+      disposed = true;
+      ready = false;
+      try {
+        worker.postMessage({ type: 'dispose' });
+      } catch {
+        /* ignore */
+      }
       try {
         worker.terminate();
       } catch {
@@ -193,11 +260,12 @@
     return {
       ensureReady,
       register,
+      registerHandle,
       unregister,
       readInto,
       readSync,
       dispose,
-      stats: () => ({ ...stats }),
+      stats: () => ({ ...stats, generation, disposed }),
       sabByteLength: sab.byteLength,
     };
   }
@@ -209,8 +277,6 @@
     if (FS.analyzePath(absolutePath).exists) FS.unlink(absolutePath);
 
     const id = reader.register(file);
-    // Mirror Emscripten createLazyFile: a contents object with length + get(),
-    // plus stream_ops.read that performs windowed copies.
     const contents = {
       length: file.size,
       chunkSize: PAYLOAD_BYTES,
@@ -232,14 +298,16 @@
     });
 
     function writeChunks(stream, buffer, offset, length, position) {
+      assertReadRange(position, length, file.size);
       if (position >= file.size || length <= 0) return 0;
       let remaining = Math.min(length, file.size - position);
       let written = 0;
       while (remaining > 0) {
         const want = Math.min(PAYLOAD_BYTES, remaining);
-        const dest = buffer instanceof Uint8Array
-          ? buffer
-          : new Uint8Array(buffer.buffer || buffer, buffer.byteOffset || 0, buffer.length || length);
+        const dest =
+          buffer instanceof Uint8Array
+            ? buffer
+            : new Uint8Array(buffer.buffer || buffer, buffer.byteOffset || 0, buffer.length || length);
         const n = reader.readInto(id, position + written, want, dest, offset + written);
         if (n <= 0) break;
         written += n;
@@ -262,7 +330,9 @@
       let position = offset;
       if (whence === 1) position += stream.position;
       else if (whence === 2) position += file.size;
-      if (position < 0) throw new FS.ErrnoError(28);
+      if (!Number.isFinite(position) || position < 0) throw new FS.ErrnoError(28);
+      if (!Number.isSafeInteger(position)) throw new FS.ErrnoError(28);
+      if (position !== stream.position) mountStats.seeks += 1;
       stream.position = position;
       return position;
     };
@@ -306,14 +376,31 @@
     return id;
   }
 
-  function preferOnDemand(core, file) {
+  // Tiny text sidecars must stay in MEMFS: RetroArch's M3U/CUE/GDI parsers
+  // fread the whole sheet synchronously, and BlobFS windows can abort that path
+  // ("failed to read m3u file"). Large binary media still use on-demand BlobFS.
+  const MEMFS_SIDE_EXTS = new Set(['.m3u', '.cue', '.gdi', '.ccd', '.toc', '.lst']);
+
+  function isMemfsSidecar(pathOrName) {
+    const name = String(pathOrName || '').toLowerCase();
+    const dot = name.lastIndexOf('.');
+    if (dot < 0) return false;
+    return MEMFS_SIDE_EXTS.has(name.slice(dot));
+  }
+
+  function preferOnDemand(core, file, path, forceMemfsMedia) {
     if (typeof SharedArrayBuffer === 'undefined') return false;
+    // Playlist/cue sheets stay in MEMFS (filestream_gets).
+    if (isMemfsSidecar(path || file?.name)) return false;
+    // Multi-disc adapter overwrites the boot path via FS.writeFile — requires MEMFS.
+    if (forceMemfsMedia) return false;
     if (ON_DEMAND_CORES.has(core)) return true;
     return (file?.size || 0) >= ON_DEMAND_THRESHOLD;
   }
 
   function installSeekableLoader(filesByPath, options = {}) {
     const core = options.core || '';
+    const forceMemfsOpt = !!options.forceMemfs;
     const stats = {
       bytesRead: 0,
       bytesWritten: 0,
@@ -322,8 +409,11 @@
       mounts: 0,
       chunks: 0,
       reads: 0,
+      seeks: 0,
       mode: 'pending',
       onDemand: false,
+      onDemandSkippedForM3u: false,
+      forceMemfs: forceMemfsOpt,
       wasmHeapBefore: 0,
       wasmHeapAfterMount: 0,
       modes: [],
@@ -332,13 +422,12 @@
     let reader = null;
 
     const preferEntry = () => {
-      for (const path of Object.keys(filesByPath)) {
-        const lower = path.toLowerCase();
-        if (lower.endsWith('.cue') || lower.endsWith('.pbp') || lower.endsWith('.iso') || lower.endsWith('.cso') || lower.endsWith('.bin')) {
-          return path.startsWith('/') ? path : `/${path}`;
-        }
+      const paths = Object.keys(filesByPath);
+      for (const ext of ENTRY_EXTS) {
+        const hit = paths.find((path) => path.toLowerCase().endsWith(ext));
+        if (hit) return hit.startsWith('/') ? hit : `/${hit}`;
       }
-      const first = Object.keys(filesByPath)[0];
+      const first = paths[0];
       return first.startsWith('/') ? first : `/${first}`;
     };
 
@@ -368,7 +457,16 @@
           const activeCore = this.getCore() || core;
 
           const entries = Object.entries(filesByPath);
-          const anyOnDemand = entries.some(([, file]) => preferOnDemand(activeCore, file));
+          const hasM3u = entries.some(([path]) => path.toLowerCase().endsWith('.m3u'));
+          const totalBytes = entries.reduce((sum, [, file]) => sum + (file?.size || 0), 0);
+          // forceMemfs: disc-swap adapter. hasM3u+small: legacy M3U content path.
+          const forceMemfsMedia =
+            forceMemfsOpt ||
+            (hasM3u && totalBytes > 0 && totalBytes <= 32 * 1024 * 1024);
+          stats.onDemandSkippedForM3u = forceMemfsMedia;
+          const anyOnDemand = entries.some(([path, file]) =>
+            preferOnDemand(activeCore, file, path, forceMemfsMedia),
+          );
           if (anyOnDemand) {
             reader = createBlobReader();
             if (!reader) throw new Error('BLOB_READER_UNAVAILABLE');
@@ -378,12 +476,20 @@
 
           for (const [path, file] of entries) {
             const absolute = path.startsWith('/') ? path : `/${path}`;
-            if (preferOnDemand(activeCore, file) && reader) {
+            if (preferOnDemand(activeCore, file, absolute, forceMemfsMedia) && reader) {
               const id = createBlobBackedFile(FS, absolute, file, reader, stats);
               registeredIds.push(id);
               stats.mounts += 1;
               stats.modes.push('blobfs-ondemand');
               stats.mode = 'blobfs-ondemand';
+            } else if (isMemfsSidecar(absolute)) {
+              // Exact UTF-8 write — RetroArch filestream_open/gets expects a normal MEMFS node.
+              const text = await file.text();
+              FS.writeFile(absolute, text);
+              stats.bytesWritten += text.length;
+              stats.mounts += 1;
+              stats.modes.push('memfs-sidecar-utf8');
+              if (stats.mode === 'pending') stats.mode = 'memfs-sidecar-utf8';
             } else {
               const result = await writeFileChunked(FS, absolute, file);
               stats.bytesWritten += result.bytesWritten;
@@ -404,7 +510,10 @@
           const entryPath = preferEntry();
           this.fileName = entryPath.replace(/^\//, '');
           this.config.gameUrl = this.fileName;
-          global.__RETRO_SEEKABLE_STATS__ = () => ({ ...stats, reader: reader ? reader.stats() : null });
+          global.__RETRO_SEEKABLE_STATS__ = () => ({
+            ...stats,
+            reader: reader ? reader.stats() : null,
+          });
           await this.downloadBios();
           await this.downloadStartState();
           await this.downloadGameParent();
@@ -457,5 +566,6 @@
     preferOnDemand,
     PAYLOAD_BYTES,
     ON_DEMAND_THRESHOLD,
+    ON_DEMAND_CORES: Array.from(ON_DEMAND_CORES),
   };
 })(window);

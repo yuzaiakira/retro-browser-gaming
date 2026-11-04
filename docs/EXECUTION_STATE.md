@@ -2,7 +2,41 @@
 
 ## Verdict
 
+**External acceptance handoff / PUBLIC_RELEASE_GO = STOP** (2026-11-04). Unified checklist `docs/release/external-acceptance-checklist.json` + `external-acceptance-handoff.md`; fail-closed `scripts/check-public-release-go.py`. Source package ready; recipient HTTPS / counsel / product / physical still open. Tip lineage `ad562fd`+. Engineering baseline `318832d` preserved.
+
+**PH-14 / PUBLIC_RELEASE_GO = STOP** (2026-11-04). Actionable blocker pack prepared on `8a70f45` lineage: source **package built** + mock integrity OK, recipient HTTPS **NOT_VERIFIED**; legal pack **0 counsel approvals**; product queue **0/53**; staging/Android/iOS **BLOCKED_EXTERNAL**. Engineering baseline `318832d` preserved. See `docs/release/go-no-go.md`, `blocker-registry.md`.
+
+**PH-13 PRIVATE RC / PUBLIC_RELEASE_GO = STOP** (2026-11-03). Engineering gates PASS on tip `318832d` lineage; source delivery **NOT_VERIFIED**; catalog product approval **0/53**; Android/iOS physical **BLOCKED_EXTERNAL**. Pack: `docs/release/` (`go-no-go.md`).
+
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
+**PH-12.1 N64 (2026-10-29):** `mupen64plus_next` **VERIFIED_PLAYABLE** — hold-while-capture smoke `N64_GAMEPLAY_PASS`; save/load; >64 MiB ROM guard. Report `docs/emulator-builds/n64-mupen64plus-next-gameplay.md`.
+
+**PH-12.1 ZX81 (2026-10-29; soak integrity refresh 2026-11-02):** `81_eo` **VERIFIED_PLAYABLE** — CRT autostart + CDFLAG/FRAMES; Chromium `ZX81_GAMEPLAY_PASS` (RetroPad Left/Right via `frame.js`→`.ejs_parent` Digit bridge + keyboard 5/8; save 49 KiB); stock `81` untouched. Physical gamepad **NOT_VERIFIED**. CS: `scripts/patches/81_eo/` + locked wasm SHA `09c7afa9…` / report `04c8b1f9…` (rebuild after private-store loss; EJS `minimumEJSVersion` 4.2.2) — still NOT_CLEARED pending legal review.
+
+**PH-12.2 ColecoVision (2026-10-29):** **BLOCKED_EXTERNAL** — reusable user-BIOS architecture (`user-bios.ts`, Settings importer, `install-private-bios.py`); pinned `gearcoleco` 4.2.3; MIT RetroPIPE fixture. Lawful `colecovision.rom` **not** available in this environment → no interactive gameplay claim. Sega CD slot remains reserved (disabled). See `docs/emulator-builds/coleco-gearcoleco-user-bios.md`.
+
+**PH-12.3 Atari ST (2026-10-31 evening):** Hatari **v2.6.1** + EmuTOS; RBGH deferred snapshots; Compose `ATARI_ST_OFFLINE_PWA_PASS` (persistent Chromium profile, SW offline cold-start, `deltaRA=0`, partial-cache repair). **VERIFIED_PLAYABLE** (engineering). OS-level PWA install + physical Android/iOS **NOT_VERIFIED**. Product approval **pending**. Report `docs/emulator-builds/hatari-emutos-atari-st.md`; evidence `.runtime/test-evidence/PH-12/atari-st/`.
+
+**PH-12.2 FDS (2026-10-31 night):** OpenDiskSysROM LGPL mount + fail-closed BIOS gating (`entryExtensions: ["fds"]` so NES never requires disksys). MIT move-demo A/B/A `FDS_MOVE_DEMO_INTERACTIVE_PASS`; Compose `FDS_OFFLINE_PWA_PASS`; `NES_FCEUMM_REGRESSION_PASS`. Engineering catalog `mit-fds-move-demo` (product approval **pending**). **VERIFIED_PLAYABLE** (engineering). OS PWA/physical **NOT_VERIFIED**. `docs/emulator-builds/fds-open-bios-feasibility.md`; evidence `.runtime/test-evidence/PH-12/fds/`.
+
+**PH-12.3 Vectrex (2026-10-31 night):** Firmware audit **NO-GO** for embedding GCE/MB `system.img` (`320ccdcc…`, contains Mine Storm). Patched `libretro-vecx` `dccff540…` loads user BIOS only; MIT Dot fixture; registry + user-BIOS slot. **BLOCKED_EXTERNAL** — no authorized BIOS in environment → no `VECTREX_GAMEPLAY_PASS` / offline PWA. Docs: `vecx-firmware-audit.md`, `vecx-vectrex-build.md`; evidence `.runtime/test-evidence/PH-12/vectrex/`.
+
+**PH-12.3 Atari 8-bit (2026-11-01):** `atari800` (libretro-atari800 `4e7fbc73…` + memstream ABI patch; emsdk 3.1.74; EJS/build `677b1334…`) with **AltirraOS + Altirra BASIC only** (no proprietary Atari OS). Distinct from `a5200`. MIT Dot `.xex` (`bd52416d…`). Chromium A/B/A `ATARI8_GAMEPLAY_PASS`; save ~188768 B `ATARI8_SAVE_RESTORE_PASS`; Compose `ATARI8_OFFLINE_PWA_PASS`. **VERIFIED_PLAYABLE** (engineering). Product approval **pending**. OS PWA/physical **NOT_VERIFIED**. Docs: `atari8-libretro-build.md`, `atari8-firmware-audit.md`; evidence `.runtime/test-evidence/PH-12/atari8/`.
+
+**Orbit catalog smoke triage (2026-11-01):** Prior `tests/smoke.cjs` timeout was **test staleness** (paginated Discover no longer shows Orbit on page 1; PlayerShell uses Quick save/load). Not a catalog API defect. Fixed smoke: `RESPONSIVE_KEYBOARD_PASS` … `OFFLINE_LOAD_PASS`. Evidence `.runtime/test-evidence/PH-12/orbit-smoke-triage/`.
+
+**PH-12.5 Dreamcast / Flycast WASM (2026-11-01):** Pin **v1.0** `16e9c7b4…` / Flycast `2c48c01`; GPLv2; packaged `flycast-wasm.data` `5ef913f5…` (wasm `db2b87d8…` + libelf JS polyfill / zip soft-stubs; allowlist **`LOCAL_ONLY`**). MIT Dot ELF `ffafb5d5…`. Chromium **`DREAMCAST_HLE_BOOT_VISIBLE`** + **`DREAMCAST_GAMEPLAY_PASS`** + **`DREAMCAST_SAVE_RESTORE_PASS`** + Compose **`DREAMCAST_OFFLINE_PWA_PASS`** (HLE + `reicast_emulate_framebuffer`; no SEGA BIOS). **VERIFIED_PLAYABLE** (engineering). Product approval **pending**. OS PWA/physical **NOT_VERIFIED**. Docs: `flycast-wasm-dreamcast.md`, `dreamcast-firmware-audit.md`; evidence `.runtime/test-evidence/PH-12/dreamcast/`.
+
+**PH-12.5 Dreamcast large-media (2026-11-02):** Flycast forced onto BlobFS on-demand; 64-bit-safe SAB reader + diagnostics; GDI/M3U parsers. Truncated mkdcdisc GDI: **`DREAMCAST_GDI_GAMEPLAY_PASS`** + **`DREAMCAST_GDI_SAVE_RESTORE_PASS`** + Compose **`DREAMCAST_GDI_OFFLINE_PWA_PASS`** (catalog `mit-dreamcast-dot-gdi`). mkdcdisc CDI (~706 MiB): **`DREAMCAST_CDI_GAMEPLAY_PASS`** (wasm heap 256 MiB; MEMFS `bytesWritten=0`; peak staging ~2 KiB). Download faults re-PASS incl. 100 MiB restart + 1 GiB bounded heap. Docs: `flycast-media-formats.md`, `docs/reports/dreamcast-large-media-hardening.md`; evidence `.runtime/test-evidence/PH-12/dreamcast-large-media/`.
+
+**PH-12.5 Dreamcast CHD + disc-swap (Compose closeout 2026-11-03):** Prior “CHD blocked by `chdstream_*` stubs” was **incorrect** — Flycast uses **CHDDisc → libchdr**. Pack `c5f0c6ca…` / `1.0.3-rbg-libelf-js-m3u`. Chromium CHD gameplay/memory/save + interactive disc-swap PASS. Docker “missing socket” was **agent sandbox isolation** (host `docker.service` was already active). Clean Compose rebuild **`COMPOSE_CHD_CLEAN_BUILD_PASS`**; Compose **`DREAMCAST_CHD_OFFLINE_PWA_PASS`** + **`DREAMCAST_CHD_CLEAN_BUILD_PASS`**; clean-build soak **`CROSS_CONSOLE_SOAK_CLEAN_BUILD_PASS`** (10/10, `SOAK_CYCLES=2`). Allowlist/lock synced for Flycast pack + `emulator.js`; seed Flycast extensions include `m3u`. Report `docs/reports/dreamcast-chd-disc-swap.md`; evidence `.runtime/test-evidence/PH-12/dreamcast-chd|soak/`.
+
+**PH-12.6 Flash / Ruffle (2026-11-01):** Official selfhosted **0.7.1** (`v0.7.1` / `89a70499…`; zip `ef12edbe…`; MIT OR Apache-2.0). Dedicated `ruffle-frame` + CSP; `polyfills:false`; EI off; MIT Dot SWF `3f5c78f2…` (Haxe 4.3). **`FLASH_RUFFLE_GAMEPLAY_PASS`** + SharedObject **`FLASH_RUFFLE_PROGRESS_PERSISTENCE_PASS`** + Compose **`FLASH_RUFFLE_OFFLINE_PWA_PASS`**. **`saveState=false`** (no Quick Save). **VERIFIED_PLAYABLE** (engineering) under documented save semantics. Product approval **pending**. Docs: `ruffle-web-integration.md`, `flash-save-capabilities.md`, `flash-security-audit.md`; evidence `.runtime/test-evidence/PH-12/flash/`.
+
+**PH-12.4 Arcade / MAME WASM (2026-11-01 evening):** License **GO** for **`rbgdot`** only; FBNeo/MAMEDev free ROMs **NO-GO**. Root cause: `drawogl.cpp` → `glShadeModel` under WebGL. Fix: `NO_OPENGL=1` + `-video soft` (stale `drawogl.o` must be rebuilt). wasm `1d211f74…` / js `a3325ef7…` (`LOCAL_ONLY`). Chromium **`ARCADE_RBGDOT_GAMEPLAY_PASS`** + **`ARCADE_RBGDOT_SAVE_RESTORE_PASS`** + Compose **`ARCADE_RBGDOT_OFFLINE_PWA_PASS`** (SW offline; post-repair offline re-boot soft). Frame RPC uses `reply` protocol. **VERIFIED_PLAYABLE** (engineering). Product approval **pending**. OS PWA/physical **NOT_VERIFIED**. Other MAME drivers unverified. Docs: `mame-wasm-arcade.md`; evidence `.runtime/test-evidence/PH-12/arcade/`.
+
+**Cross-console soak (2026-11-02):** **`CROSS_CONSOLE_SOAK_FULL_PASS`** and **`CROSS_CONSOLE_SOAK_CLEAN_BUILD_PASS`** (10/10, `SOAK_CYCLES=2`) on freshly built Compose images. ZX81: lock/provision + report allowlist (`09c7afa9…`). FDS: harness OpenDiskSysROM IDB seed. BuildKit: `/dev/null` secret placeholder replaced with empty regular file → **`COMPOSE_CLEAN_REBUILD_PASS`**. CSP: path-scoped middleware policy; runtime **no** `unsafe-inline`; shell `wasm-unsafe-eval` for hash-wasm, **no** `unsafe-eval` → **`RUNTIME_CSP_SECURITY_PASS`**. Arcade rbgdot gameplay/save/offline PASS on clean image. Reports: `docs/reports/cross-console-soak.md`, `compose-rebuild-verification.md`, `runtime-csp-audit.md`. Product approval **PENDING**; OS PWA/physical **NOT_VERIFIED**; other MAME drivers **NOT_VERIFIED**; FBNeo **NO-GO**.
+
 **Player UX (PH-UX):** immersive PlayerShell + Gameplay UX Reliability — verified 2026-10-26.  
 **Hub UX (PH-UX-HUB):** Premium Gaming Hub — verified 2026-10-26.  
 **Hub UX Acceptance (Sprint 3.1):** offline persistent-profile journey, catalog Back/Forward history, Continue Playing accuracy, stable hub shots — verified 2026-10-26.  
@@ -22,11 +56,20 @@
 
 | Item | Status |
 |---|---|
-| VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX |
-| EXPERIMENTAL | ZX81 / Jaguar / N64 |
-| FBNeo | BLOCKED_FIXTURE |
-| Atari ST | BLOCKED_CORE — hatari absent |
-| Core lock | **373 files** |
+| VERIFIED_PLAYABLE | Prior set + Amiga + CPC + NDS + MSX + **N64** + **ZX81** + **Atari ST** + **FDS** + **Atari 8-bit** + **Dreamcast** + **Flash/Ruffle** |
+| EXPERIMENTAL | Jaguar |
+| Arcade `rbgdot` | **VERIFIED_PLAYABLE** (engineering) — `ARCADE_RBGDOT_*` gameplay/save/offline; product pending |
+| BLOCKED_EXTERNAL | ColecoVision; **Vectrex** (awaiting authorized `system.img`) |
+| FBNeo | BLOCKED_FIXTURE (do not ship in unrestricted public app) |
+| Arcade | VERIFIED_PLAYABLE (engineering) — `rbgdot` only; `ARCADE_RBGDOT_GAMEPLAY_PASS` + save + offline PWA; product pending; other drivers unverified |
+| Atari ST | VERIFIED_PLAYABLE — offline PWA SW journey PASS; OS PWA/physical NOT_VERIFIED |
+| Atari 8-bit | VERIFIED_PLAYABLE (engineering) — `ATARI8_GAMEPLAY_PASS` + `ATARI8_SAVE_RESTORE_PASS` + `ATARI8_OFFLINE_PWA_PASS`; product approval pending; distinct from 5200 |
+| Dreamcast | VERIFIED_PLAYABLE (engineering) — ELF + GDI + CDI + CHD gameplay/save/offline + interactive disc-swap; Compose `DREAMCAST_CHD_OFFLINE_PWA_PASS` + clean soak PASS; reios HLE; no SEGA BIOS; product approval pending; OS PWA/physical NOT_VERIFIED |
+| Flash / Ruffle | VERIFIED_PLAYABLE (engineering) — `FLASH_RUFFLE_GAMEPLAY_PASS` + SharedObject progress + `FLASH_RUFFLE_OFFLINE_PWA_PASS`; Quick Save not claimed; product approval pending |
+| FDS | VERIFIED_PLAYABLE (engineering) — `FDS_OFFLINE_PWA_PASS` + `NES_FCEUMM_REGRESSION_PASS`; product approval pending |
+| Vectrex | BLOCKED_EXTERNAL — external-BIOS vecx path + MIT Dot; no lawful BIOS → no gameplay claim |
+| Core lock | **397 files** LOCAL_FULL (includes `ruffle-0.7.1/*` + `81_eo` report) |
+| Cross-console soak | **`CROSS_CONSOLE_SOAK_FULL_PASS`** + **`CROSS_CONSOLE_SOAK_CLEAN_BUILD_PASS`** (10/10, 2026-11-03 CHD clean images) |
 
 ## Player UX pass (2026-10-26)
 
@@ -198,13 +241,191 @@
 2. Approve Option B1 push of **20261028** candidate to a **new** public repo
 3. Do not force-push or open the existing private GitHub repo
 
+## PH-12.1 N64 pass (2026-10-29)
+
+| Check | Result |
+|---|---|
+| Root cause | USB64 fixture is live-input-only; prior smoke released before capture |
+| Smoke | `N64_GAMEPLAY_PASS` (stick `x:80` + A while held; `stateBytes=16793440`) |
+| Offline after boot | PASS |
+| ROM size guard | `frame.js` → `N64_ROM_TOO_LARGE` above 64 MiB |
+| Catalog seed | `n64` console + `mit-n64-controller-test` fixture |
+| Vitest / typecheck | 68 passed / `tsc --noEmit` OK |
+| Evidence | `.runtime/test-evidence/PH-12/n64/` + `docs/emulator-builds/n64-mupen64plus-next-gameplay.md` |
+
+### Jaguar re-check (same day)
+
+Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` with MIT jag2048; raw `.bin` still ~6824 lit without proven input delta. Remains **EXPERIMENTAL** — `docs/emulator-builds/jaguar-ph12-recheck-20261029.md`.
+
+## PH-12.1 ZX81 pass (2026-10-29)
+
+| Check | Result |
+|---|---|
+| Root cause | Fixture CDFLAG/`altint_on` FRAMES wait blocked CRT→main; EJS RetroPad `simulateInput` does not feed keybovl |
+| Fix | `81_eo` `eo_loadp` CRT `$4092` + CDFLAG/FRAMES patch; smoke uses keyboard 5/8 |
+| Smoke | `ZX81_GAMEPLAY_PASS` (`stateBytes=49216`, input/menu frame deltas) |
+| Native | Dot `_x` 15→31→0 with lit FB (`native-dotmove.txt`) |
+| Stock `81` | Unchanged |
+| Vitest / typecheck | runtime-errors OK / `tsc --noEmit` OK |
+| Evidence | `.runtime/test-evidence/PH-12/zx81/` + `docs/emulator-builds/zx81-eo-loadp-build.md` |
+
+### Next concrete task
+
+1. Vectrex: operator imports authorized `system.img` → gameplay A/B/A + Compose offline → reconsider VERIFIED_PLAYABLE
+2. PH-12.1: Jaguar — only with a rights-clear Alpine/`.j64` path or honest EXPERIMENTAL closeout
+3. Flash / Dreamcast / Atari ST / FDS / Atari 8-bit: optional OS-level PWA install + physical-device gates (explicitly NOT_VERIFIED); optional Flash dedicated-origin hardening
+4. Product: human product-approval for engineering fixtures — never auto-approve
+5. Owner gates unchanged (publication STOP)
+
+## PH-12.2 FDS pass (2026-10-31 night)
+
+| Check | Result |
+|---|---|
+| BIOS | OpenDiskSysROM LGPL-3.0 `6ce74ea4…` @ `/disksys.rom` + system path; fail-closed missing/invalid |
+| NES isolation | `entryExtensions: ["fds"]` — NES never requires disksys; `NES_FCEUMM_REGRESSION_PASS` |
+| Interactive A/B/A | `FDS_MOVE_DEMO_INTERACTIVE_PASS` (leftVsIdle/rightVsLeft ≈312) |
+| Compose offline | `FDS_OFFLINE_PWA_PASS` (SW offline; OS PWA/physical NOT_VERIFIED) |
+| Partial-cache repair | PASS; BIOS IDB survived |
+| Engineering catalog | `mit-fds-move-demo` seeded; `product_approval_status=pending` |
+| Quality gates | Vitest 75; tsc OK; Django 43; Atari offline PASS; N64/ZX81/NES smokes PASS; core-lock LOCAL_FULL+SOURCE_ONLY; PUBLIC_SOURCE_SAFETY_PASS |
+| Evidence | `.runtime/test-evidence/PH-12/fds/` |
+
+## PH-12.3 Atari 8-bit pass (2026-11-01)
+
+| Check | Result |
+|---|---|
+| Firmware | AltirraOS + Altirra BASIC (FSF all-permissive) — GO; no proprietary Atari OS bundled |
+| WASM | `atari800` pin `4e7fbc73…`; hashes `6d19d006…` / `b7b6664b…`; memstream ABI patch |
+| Interactive A/B/A | `ATARI8_GAMEPLAY_PASS` (left/right/fire vs idle; seekable VFS) |
+| Save/restore | `ATARI8_SAVE_RESTORE_PASS` (~188768 B; restore deltaVsA=0; post-restore interaction) |
+| Compose offline | `ATARI8_OFFLINE_PWA_PASS` (library cold-start, SW offline, partial-cache repair) |
+| Engineering catalog | `mit-atari8-dot` / console `atari-8bit`; `product_approval_status=pending` |
+| Isolation | Does **not** inherit Atari 5200 (`a5200`) evidence |
+| Evidence | `.runtime/test-evidence/PH-12/atari8/` |
+| Regressions | Atari ST / FDS / NES / Genesis core / a5200 / N64 / ZX81 GAMEPLAY_PASS; Vitest 76; tsc OK; Django 43; core-lock 382 LOCAL_FULL; PUBLIC_SOURCE_SAFETY_PASS; SOURCE_OFFER_GATE_OK |
+
+## PH-12.6 Flash / Ruffle pass (2026-11-01)
+
+| Check | Result |
+|---|---|
+| Runtime | Ruffle 0.7.1 selfhosted; commit `89a70499…`; zip `ef12edbe…`; MIT OR Apache-2.0 |
+| Isolation | Dedicated frame; `polyfills:false`; EI off; CSP `connect-src 'self'`; SWF bytes only |
+| Fixture | MIT Dot SWF `3f5c78f2…` (Haxe 4.3.7) |
+| Interactive | `FLASH_RUFFLE_GAMEPLAY_PASS` |
+| Progress | SharedObject `FLASH_RUFFLE_PROGRESS_PERSISTENCE_PASS` — **not** Quick Save |
+| Compose offline | `FLASH_RUFFLE_OFFLINE_PWA_PASS` |
+| Baseline | Genesis `GENESIS_GAMEPLAY_PASS`; Orbit `OFFLINE_LOAD_PASS`; historical EXIT=137 preserved under `.runtime/test-evidence/PH-12/flash/baseline-genesis-exit137.json` |
+| Regressions | Genesis/Orbit/Atari8/Atari ST/FDS/NES/N64/ZX81/Dreamcast PASS; Vitest 76; tsc OK; Django 43; core-lock 395; PUBLIC_SOURCE_SAFETY_PASS; SOURCE_OFFER_GATE_OK |
+| Evidence | `.runtime/test-evidence/PH-12/flash/` |
+
+## PH-12.5 Dreamcast pass (2026-11-01)
+
+| Check | Result |
+|---|---|
+| BIOS/HLE | reios HLE **GO** on this WASM pack (no `dc_boot.bin` / `dc_flash.bin`); SEGA BIOS never bundled |
+| Core | Flycast WASM v1.0 `16e9c7b4…` / Flycast `2c48c01`; pack `5ef913f5…` (3430469 B); wasm `db2b87d8…` |
+| Fixture | MIT Dot ELF `ffafb5d5…` (KallistiOS) |
+| Interactive | `DREAMCAST_GAMEPLAY_PASS` (Left/Right/A; `emulate_framebuffer`) |
+| Save/restore | `DREAMCAST_SAVE_RESTORE_PASS` (~28 MiB) |
+| Compose offline | `DREAMCAST_OFFLINE_PWA_PASS` (SW cold-start; library; restore+save; no server deps) |
+| Engineering catalog | `mit-dreamcast-dot`; `product_approval_status=pending` |
+| Allowlist | `LOCAL_ONLY` (sync fields fixed so Compose LOCAL_FULL starts) |
+| Evidence | `.runtime/test-evidence/PH-12/dreamcast/` |
+| Regressions | Genesis / Atari8 / Atari ST / FDS / NES / N64 / ZX81 GAMEPLAY_PASS; Vitest 76; tsc OK; Django 43; core-lock 385 LOCAL_FULL; PUBLIC_SOURCE_SAFETY_PASS; SOURCE_OFFER_GATE_OK |
+
+## PH-12.5 Dreamcast large-media pass (2026-11-02)
+
+| Check | Result |
+|---|---|
+| BlobFS | flycast in `ON_DEMAND_CORES`; 64-bit offsets; diagnostics (reads/seeks/latency/outstanding) |
+| GDI gameplay/save | `DREAMCAST_GDI_GAMEPLAY_PASS` + `DREAMCAST_GDI_SAVE_RESTORE_PASS` (~36 MiB) |
+| GDI offline | Compose `DREAMCAST_GDI_OFFLINE_PWA_PASS` (`mit-dreamcast-dot-gdi`) |
+| CDI gameplay | `DREAMCAST_CDI_GAMEPLAY_PASS` (740076137 B; heapBoundOk; peakStaging 2335) |
+| CHD | **BLOCKED** in this pass — superseded evening of 2026-11-02 (see CHD + disc-swap section) |
+| Downloads | All `DOWNLOAD_*_PASS` incl. 100 MiB restart + 1 GiB bounded memory |
+| ELF baseline | `DREAMCAST_GAMEPLAY_PASS` + `DREAMCAST_OFFLINE_PWA_PASS` re-PASS |
+| Regressions | Vitest 85; tsc OK; Django 43; Genesis/NES/Atari8/Atari ST/FDS/Flash/Arcade/PSP/PS1/SNES PASS; arcade first attempt flaky page-close then retry PASS |
+| Evidence | `.runtime/test-evidence/PH-12/dreamcast-large-media/` |
+| Commits (unpushed) | `e294044` … `e7d1c3f` on `feat/platform-expansion-phase-1` — no Cursor co-author trailers |
+| Full 10-platform soak | Not re-run this pass; representative Genesis/NES/Atari8/Atari ST/FDS/Flash/Arcade/PSP/PS1/SNES + Dreamcast ELF/GDI/CDI PASS |
+
+## PH-12.5 Dreamcast CHD Compose closeout (2026-11-03)
+
+| Check | Result |
+|---|---|
+| Docker root cause | Agent sandbox hid `/var/run/docker.sock`; host Docker was already running (`docker.service` active) |
+| Clean Compose rebuild | `COMPOSE_CHD_CLEAN_BUILD_PASS` — `./scripts/compose.sh build api web`; Flycast `c5f0c6ca…`; core-lock 397; proxy_ca regular-file preserved |
+| Catalog unblock | Flycast seed extensions + `m3u`; allowlist/lock for pack + `emulator.js` `27e949d3…` |
+| CHD Compose offline | `DREAMCAST_CHD_OFFLINE_PWA_PASS` + `DREAMCAST_CHD_CLEAN_BUILD_PASS` (SW offline; partial-cache repair; integrity reject; no server deps) |
+| Clean-build soak | `CROSS_CONSOLE_SOAK_CLEAN_BUILD_PASS` / `CROSS_CONSOLE_SOAK_FULL_PASS` (10/10, `SOAK_CYCLES=2`) |
+| Regressions | Dreamcast ELF/GDI/CDI/CHD/disc-swap; Arcade; Genesis; NES; FDS; ZX81; Atari8; Atari ST; N64; PSP; Flash; Orbit; Vitest 85; tsc; Django 43; core-lock; PUBLIC_SOURCE_SAFETY; SOURCE_OFFER_GATE_OK |
+| Evidence | `.runtime/test-evidence/PH-12/dreamcast-chd/`, `PH-12/soak/` |
+| Report | `docs/reports/dreamcast-chd-disc-swap.md` |
+
+### Next concrete task
+
+1. Optional: native Flycast `.m3u` content-path boot (adapter workaround only today)
+2. Owner gates unchanged (publication STOP); product approval for Dreamcast fixtures
+3. OS PWA / physical device gates remain **NOT_VERIFIED**
+4. Vectrex / ColecoVision remain **BLOCKED_EXTERNAL** until lawful BIOS
+
+## PH-13 private release readiness (2026-11-03)
+
+| Check | Result |
+|---|---|
+| Baseline freeze | HEAD `318832d`; branch `feat/platform-expansion-phase-1`; no new consoles |
+| Distribution inventory | 72 technical PUBLIC_CANDIDATE / 4 PRIVATE_ONLY / 5 BLOCKED_LEGAL (+ BIOS external slots) — `docs/release/distribution-inventory.md` |
+| Source delivery | Build `SOURCE_OFFER_GATE_OK`; recipient **`OFFER_DELIVERY_NOT_VERIFIED`**; require-public **FAIL** |
+| Catalog product approval | **53 pending / 0 approved** — `docs/release/product-approval-matrix.md` |
+| Android physical | **`ANDROID_PHYSICAL_BLOCKED_EXTERNAL`** (adb empty) |
+| iOS physical | **`IOS_PHYSICAL_BLOCKED_EXTERNAL`** (no device/tools) |
+| Security | FrameAdapter origin checks; path-scoped CSP; shell **no** `unsafe-eval`; runtime eval narrowly scoped |
+| Private RC | `docs/release/release-candidate-manifest.md` — LOCAL_FULL engineering only |
+| GO/NO-GO | ENGINEERING/REPRO/SECURITY **PASS**; SOURCE **NOT_VERIFIED**; CATALOG **PENDING_APPROVAL**; ANDROID/IOS **BLOCKED_EXTERNAL**; PUBLIC_DISTRIBUTION **FAIL** → **PUBLIC_RELEASE_GO = STOP** |
+| Evidence | `.runtime/test-evidence/PH-13/` |
+| Push / merge / deploy | **Not performed** |
+
+### Next concrete task (PH-13)
+
+1. Owner/counsel: product approvals + corresponding-source HTTPS delivery → re-run require-public gate
+2. QA: connect real Android + iOS; complete OS-level PWA install / offline cold-start checklists
+3. Keep PUBLIC_RELEASE_GO = STOP until all mandatory gates PASS
+4. Optional eng: native Flycast `.m3u` content boot (still NOT_VERIFIED)
+
+## PH-14 actionable blockers (2026-11-04)
+
+| Check | Result |
+|---|---|
+| Baseline freeze | HEAD was `8a70f45`; ancestor `318832d`; dirty=0; classifications preserved |
+| Source package | `SOURCE_PACKAGE_BUILT` + mock `OFFER_ARCHIVE_INTEGRITY_OK` via `prepare-source-offer-delivery.py` |
+| Source recipient HTTPS | **NOT_VERIFIED** / host **BLOCKED_EXTERNAL** |
+| Legal review pack | 81 JSON/CSV entries; counsel approvals **0** — `docs/release/legal-review/` |
+| Product approval queue | 53 pending / 0 approved — export only; workflow validated |
+| Staging HTTPS | **BLOCKED_EXTERNAL** |
+| Android / iOS | **BLOCKED_EXTERNAL**; executable instructions added |
+| Validation newly run | core-lock; public-source; source-offer; Django 43; Vitest 85; tsc |
+| Soak/CHD | Prior evidence retained; **not** re-executed as new PH-14 PASSes |
+| PUBLIC_RELEASE_GO | **STOP** |
+
+### Next concrete task (PH-14)
+
+1. Ops: authorized HTTPS source-offer host → `--require-public-delivery` PASS
+2. Counsel: decisions on `legal-review/` pack (do not auto-approve)
+3. Product owner: per-title approvals via Admin/`approve_for_product` (no bulk automation)
+4. Ops: staging HTTPS cutover; QA: physical Android/iOS checklists
+5. Keep PUBLIC_RELEASE_GO = STOP
+
 ## Remaining blockers / next
 
-1. Owner: confirm copyright holder + authority; enact MIT root LICENSE only then
-2. Owner: authorize Option B public repo push of sanitized candidate
-3. Counsel: legal-review package; `NEEDS_LEGAL_REVIEW` ≠ approval
-4. Owner: publish corresponding-source offer on HTTPS; gate must fetch PASS before `OFFER_DELIVERY_VERIFIED`
-5. Product: Alpha game set approvals
-6. Resolve CS for `81_eo` / `virtualjaguar_js`
-7. QA: physical gamepad + iOS; Ops: staging HTTPS
-8. Playwright offline ≠ physical-device offline certification (document only)
+1. Owner: authorize Option B public repo push of sanitized candidate (LICENSE enacted)
+2. Counsel: legal-review package; `NEEDS_LEGAL_REVIEW` ≠ approval — use `docs/release/legal-review/`
+3. Owner: publish corresponding-source offer on HTTPS; gate must fetch PASS before `OFFER_DELIVERY_VERIFIED`
+4. Product: Alpha game set approvals (incl. Atari ST / FDS / Atari 8-bit / N64/ZX81 fixtures if desired)
+5. Resolve CS for `virtualjaguar_js` (`81_eo` patch + rebuild notes now packaged); Hatari/EmuTOS/atari800 CS pins recorded
+6. QA: physical gamepad + iOS + Android re-cert; Ops: staging HTTPS
+7. Playwright offline ≠ physical-device offline certification (document only)
+8. Continue PH-12.1 Jaguar (only remaining 12.1 EXPERIMENTAL)
+9. Vectrex: BLOCKED_EXTERNAL until authorized `system.img` + gameplay/offline gates
+10. Atari 8-bit: optional `.car`/`.cas`/multi-disk + 400/800 profile smokes after real validation; OS PWA/physical NOT_VERIFIED
+11. Dreamcast: Compose CHD offline + clean soak closed; product approval pending; optional native M3U content boot
+12. PH-14: PUBLIC_RELEASE_GO remains STOP — see `docs/release/blocker-registry.md`

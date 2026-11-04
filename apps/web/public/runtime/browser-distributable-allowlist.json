@@ -35,19 +35,19 @@
     },
     {
       "path": "ejs-4.2.3/cores/81_eo-legacy-wasm.data",
-      "sha256": "a5a3eb292163426ce0836edb452d89eed377031994c6e72fc226981a63902664",
-      "byteSize": 744425,
+      "sha256": "0ac838d27655b98aab10d1f6a152f158b030d04656bb7ba35c08eeb9539c76f7",
+      "byteSize": 740257,
       "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
-      "reason": "Independently modified; patch sources not checked into scripts/patches/ \u2014 NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
-      "corresponding_source_class": "incomplete"
+      "reason": "Independently modified GPL binary; CS patches in scripts/patches/81_eo/ but legal review not completed \u2014 NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+      "corresponding_source_class": "in_repo_patches_pending_legal"
     },
     {
       "path": "ejs-4.2.3/cores/81_eo-wasm.data",
-      "sha256": "ce6f24ba97915c0de17cc3a764cdb0c60a34e0e172b3c670e3c6d71f3b5ee046",
-      "byteSize": 744308,
+      "sha256": "09c7afa97a99240a99ab9f5b074f8ff967a357cfd63e647126525b2bbe8fae81",
+      "byteSize": 740844,
       "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
-      "reason": "Independently modified; patch sources not checked into scripts/patches/ \u2014 NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
-      "corresponding_source_class": "incomplete"
+      "reason": "Independently modified GPL binary; CS patches in scripts/patches/81_eo/ but legal review not completed \u2014 NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+      "corresponding_source_class": "in_repo_patches_pending_legal"
     },
     {
       "path": "ejs-4.2.3/cores/a5200-legacy-wasm.data",
@@ -64,6 +64,20 @@
       "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
       "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
       "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/atari800-legacy-wasm.data",
+      "sha256": "b7b6664b83fee853bf6ccbd42592b928ac9094348d30510b7ed53841030d484d",
+      "byteSize": 829725,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Reproducible libretro-atari800 WASM with AltirraOS open firmware; no proprietary Atari OS ROMs"
+    },
+    {
+      "path": "ejs-4.2.3/cores/atari800-wasm.data",
+      "sha256": "6d19d00650e8cad472fd0d9654810e11ce1a04bb4d3460fa0219d8e632a7b777",
+      "byteSize": 830097,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Reproducible libretro-atari800 WASM with AltirraOS open firmware; no proprietary Atari OS ROMs"
     },
     {
       "path": "ejs-4.2.3/cores/beetle_vb-legacy-wasm.data",
@@ -162,6 +176,24 @@
       "corresponding_source_class": "upstream_pin_plus_tracked_js"
     },
     {
+      "path": "ejs-4.2.3/cores/flycast-legacy-wasm.data",
+      "sha256": "c5f0c6ca92300e5d4d747bd9a3ab6db54ae7426656c64a03665f0830635cd075",
+      "license": "GPL-2.0",
+      "reason": "Flycast WASM v1.0 + RBG libelf JS polyfill/soft-stubs + m3u pack metadata; Dreamcast engineering; no SEGA BIOS; not cleared for anonymous public CDN",
+      "byteSize": 3430017,
+      "browser_distribution": "LOCAL_ONLY",
+      "corresponding_source_class": "upstream_pin_plus_local_js_polyfill"
+    },
+    {
+      "path": "ejs-4.2.3/cores/flycast-wasm.data",
+      "sha256": "c5f0c6ca92300e5d4d747bd9a3ab6db54ae7426656c64a03665f0830635cd075",
+      "license": "GPL-2.0",
+      "reason": "Flycast WASM v1.0 + RBG libelf JS polyfill/soft-stubs + m3u pack metadata; Dreamcast engineering; no SEGA BIOS; not cleared for anonymous public CDN",
+      "byteSize": 3430017,
+      "browser_distribution": "LOCAL_ONLY",
+      "corresponding_source_class": "upstream_pin_plus_local_js_polyfill"
+    },
+    {
       "path": "ejs-4.2.3/cores/fuse-legacy-wasm.data",
       "sha256": "86d844184aade4e22b7306a09da8fa109d26316aa2eb3cc67a033cccca46671d",
       "byteSize": 1218410,
@@ -191,6 +223,22 @@
       "byteSize": 967156,
       "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
       "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/gearcoleco-legacy-wasm.data",
+      "sha256": "64de8d0c89b3e56d52c9419d5eae7f7f93d04a4dac36eedf543e4180ec9d2ca0",
+      "byteSize": 891769,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Unmodified EmulatorJS 4.2.3 @emulatorjs/core-gearcoleco package; tracked lock + notices; no proprietary BIOS included",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "ejs-4.2.3/cores/gearcoleco-wasm.data",
+      "sha256": "164e213e4d5f2c14a0f2b55da973ed5a54ef7601cb352e64c9a73ace1a7ba606",
+      "byteSize": 891907,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Unmodified EmulatorJS 4.2.3 @emulatorjs/core-gearcoleco package; tracked lock + notices; no proprietary BIOS included",
       "corresponding_source_class": "upstream_pin_plus_tracked_js"
     },
     {
@@ -362,6 +410,22 @@
       "corresponding_source_class": "upstream_pin_plus_tracked_js"
     },
     {
+      "path": "ejs-4.2.3/cores/reports/81_eo.json",
+      "sha256": "04c8b1f9f95b9478b70ec45888f677c835f1dc93d1c13b5675c9f7dcd25f8c69",
+      "byteSize": 227,
+      "browser_distribution": "NOT_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+      "reason": "Report metadata for independently modified 81_eo; keep with LOCAL_FULL until legal clearance",
+      "corresponding_source_class": "in_repo_patches_pending_legal"
+    },
+    {
+      "path": "ejs-4.2.3/cores/reports/gearcoleco.json",
+      "sha256": "6046e0af623369cac4924f521ff74c91c2644fedf4a677f48c9074ea7028e046",
+      "byteSize": 124,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Unmodified EmulatorJS 4.2.3 @emulatorjs/core-gearcoleco package; tracked lock + notices; no proprietary BIOS included",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
       "path": "ejs-4.2.3/cores/smsplus-legacy-wasm.data",
       "sha256": "9fcc16b3e4ad662c395542bc96a0142cded1d17cbd8e43f0d5b3205cf4f7d340",
       "byteSize": 855316,
@@ -466,6 +530,22 @@
       "corresponding_source_class": "patches_in_repo"
     },
     {
+      "path": "hatari-2.6.1/hatari.data",
+      "sha256": "2d6f3f94c212d1d9eb5b9ad913400d934a0fdf56924a7e2c51ff70e27b561b55",
+      "byteSize": 262144,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Hatari+EmuTOS GPL-2.0 with RBG snapshot bridge",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "hatari-2.6.1/hatari.wasm",
+      "sha256": "cd5cec91bd5c759179c766e162629c1ae4eb6981d1490759e59f54ec19f31db4",
+      "byteSize": 23981938,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Hatari+EmuTOS GPL-2.0 with RBG snapshot bridge",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
       "path": "jsdos-8.3.8/wdosbox.wasm",
       "sha256": "6c3e68a2669cbde5a2b9c920e64248b15c23b38c0b6080814aff0542676b6e98",
       "byteSize": 1458714,
@@ -480,6 +560,114 @@
       "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
       "reason": "EmulatorJS/jsdos packaged binary with lock hash; tracked JS + LICENSES provide CS baseline",
       "corresponding_source_class": "upstream_pin_plus_tracked_js"
+    },
+    {
+      "path": "mame-rbg-arcade/rbg_arcade.js",
+      "sha256": "a3325ef75767cbdb9aafc47734cf0ddcaafa88b82b2236c9ddf94bdd8a59e56c",
+      "byteSize": 280938,
+      "browser_distribution": "LOCAL_ONLY",
+      "license": "GPL-2.0-or-later",
+      "reason": "Engineering MAME SUBTARGET rbgdot; LOCAL_ONLY \u2014 not cleared for PUBLIC_BROWSER",
+      "corresponding_source_class": "PINNED_UPSTREAM_PLUS_PATCH"
+    },
+    {
+      "path": "mame-rbg-arcade/rbg_arcade.wasm",
+      "sha256": "1d211f7486cf0f4578492fa40cebd43ea7ff4bbc22ef6098dd65fa5be9093742",
+      "byteSize": 25165326,
+      "browser_distribution": "LOCAL_ONLY",
+      "license": "GPL-2.0-or-later",
+      "reason": "Engineering MAME SUBTARGET rbgdot; LOCAL_ONLY \u2014 not cleared for PUBLIC_BROWSER",
+      "corresponding_source_class": "PINNED_UPSTREAM_PLUS_PATCH"
+    },
+    {
+      "path": "ruffle-0.7.1/172de42e6619eac8f371.wasm",
+      "sha256": "1ed33b9b71a6b01b9aafafed660be343ffeb2d246c5d79e6425a32bf93e38207",
+      "byteSize": 14302754,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Official Ruffle 0.7.1 selfhosted web package (MIT OR Apache-2.0); pinned tag v0.7.1 / 89a70499\u2026; no commercial SWF",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "path": "ruffle-0.7.1/878d548199cddef07035.wasm",
+      "sha256": "af9b6a13a8f5e8d305bc3ce28a4edf3f6242df1183e8576ad4ca086e9f21eaea",
+      "byteSize": 14227884,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Official Ruffle 0.7.1 selfhosted web package (MIT OR Apache-2.0); pinned tag v0.7.1 / 89a70499\u2026; no commercial SWF",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "path": "ruffle-0.7.1/LICENSE_APACHE",
+      "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+      "byteSize": 9723,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Official Ruffle 0.7.1 selfhosted web package (MIT OR Apache-2.0); pinned tag v0.7.1 / 89a70499\u2026; no commercial SWF",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "path": "ruffle-0.7.1/LICENSE_MIT",
+      "sha256": "4de9338a7879c68e911742a7d691f0797ff1ef8d8a6fb978b0c711e258fe959c",
+      "byteSize": 1097,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Official Ruffle 0.7.1 selfhosted web package (MIT OR Apache-2.0); pinned tag v0.7.1 / 89a70499\u2026; no commercial SWF",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "path": "ruffle-0.7.1/RBG-PROVENANCE.json",
+      "sha256": "2941846cf32015efaf22e2a800173d3bdfdc35588494b933394aee8bc8341225",
+      "byteSize": 390,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Official Ruffle 0.7.1 selfhosted web package (MIT OR Apache-2.0); pinned tag v0.7.1 / 89a70499\u2026; no commercial SWF",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "path": "ruffle-0.7.1/README.md",
+      "sha256": "cdbeefd04e27a2fe80f735210fa4c054e376802eb43a16d9b6eeae78500f2bde",
+      "byteSize": 2328,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Official Ruffle 0.7.1 selfhosted web package (MIT OR Apache-2.0); pinned tag v0.7.1 / 89a70499\u2026; no commercial SWF",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "path": "ruffle-0.7.1/core.ruffle.16d61072ac7fdc4d5013.js",
+      "sha256": "d27c6bdce2a34afb32e8dfa40970bc7e86cbcb912f92db7eb3e1ac70e943bd82",
+      "byteSize": 108322,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Official Ruffle 0.7.1 selfhosted web package (MIT OR Apache-2.0); pinned tag v0.7.1 / 89a70499\u2026; no commercial SWF",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "path": "ruffle-0.7.1/core.ruffle.994eeef0a471a88cd0e3.js",
+      "sha256": "d89e507ee60d550629e9229aa1e4dd4f9e75ec7db271e0135cbc87dab042ea51",
+      "byteSize": 114743,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Official Ruffle 0.7.1 selfhosted web package (MIT OR Apache-2.0); pinned tag v0.7.1 / 89a70499\u2026; no commercial SWF",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "path": "ruffle-0.7.1/package.json",
+      "sha256": "822dd0fe6f6a84d4ab41351acd2a789aa9ef75b3fe454ab846c0858157c48d89",
+      "byteSize": 418,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Official Ruffle 0.7.1 selfhosted web package (MIT OR Apache-2.0); pinned tag v0.7.1 / 89a70499\u2026; no commercial SWF",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "path": "ruffle-0.7.1/ruffle.js",
+      "sha256": "26036a94567088dfb3de88a759e8ed10a4cea07b29500af36f345eef42420098",
+      "byteSize": 465885,
+      "browser_distribution": "AUTHORIZED_BROWSER_DISTRIBUTABLE",
+      "reason": "Official Ruffle 0.7.1 selfhosted web package (MIT OR Apache-2.0); pinned tag v0.7.1 / 89a70499\u2026; no commercial SWF",
+      "corresponding_source_class": "upstream_pin_plus_tracked_js",
+      "license": "MIT OR Apache-2.0"
     }
   ]
 }

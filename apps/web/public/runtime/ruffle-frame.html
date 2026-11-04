@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Flash / Ruffle runtime</title>
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'none'; script-src 'self' 'wasm-unsafe-eval' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; worker-src 'self' blob:; font-src 'self' data:; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'"
+  />
+  <link rel="stylesheet" href="/runtime/frame.css" />
+  <style>
+    html, body, #container {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      background: #0b0b12;
+      overflow: hidden;
+    }
+    #container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #container ruffle-player {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+  <script src="/runtime/ruffle-boot.js"></script>
+  <script src="/cores/ruffle-0.7.1/ruffle.js"></script>
+</head>
+<body>
+  <div id="container" aria-label="Flash game stage"></div>
+  <script src="/runtime/ruffle-frame.js"></script>
+</body>
+</html>

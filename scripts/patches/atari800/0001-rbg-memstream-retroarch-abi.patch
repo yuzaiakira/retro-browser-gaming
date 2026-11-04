@@ -1,0 +1,136 @@
+diff --git a/atari800/src/statesav.c b/atari800/src/statesav.c
+index 8793ff8..04baed4 100644
+--- a/atari800/src/statesav.c
++++ b/atari800/src/statesav.c
+@@ -489,9 +489,9 @@ int Retro_SaveAtariState(uint8_t* data, size_t size, UBYTE SaveVerbose)
+ 	state_stream_error = false;
+ 	if (!data || size < 1) goto error;
+ 
+-	/* memstream_open() now takes the backing buffer and size up front
+-	 * (upstream libretro-common removed memstream_set_buffer). */
+-	state_stream = memstream_open(data, size, 1);
++	/* EmulatorJS RetroArch memstream ABI. */
++	memstream_set_buffer(data, (uint64_t)size);
++	state_stream = memstream_open(1);
+ 	if (!state_stream) goto error;
+ 
+ 	if (memstream_write(state_stream, "ATARI800", 8) != 8) goto error;
+@@ -549,7 +549,8 @@ int Retro_ReadAtariState(const uint8_t* data, size_t size)
+ 	if (state_stream) { memstream_close(state_stream); state_stream = NULL; }
+ 	state_stream_error = false;
+ 
+-	state_stream = memstream_open((uint8_t*)data, size, 0);
++	memstream_set_buffer((uint8_t*)data, (uint64_t)size);
++	state_stream = memstream_open(0);
+ 	if (!state_stream) goto error;
+ 
+ 	if (memstream_read(state_stream, header_string, 8) != 8) goto error;
+diff --git a/libretro/libretro-common/include/streams/memory_stream.h b/libretro/libretro-common/include/streams/memory_stream.h
+index b379399..3f29b8f 100644
+--- a/libretro/libretro-common/include/streams/memory_stream.h
++++ b/libretro/libretro-common/include/streams/memory_stream.h
+@@ -32,7 +32,7 @@ RETRO_BEGIN_DECLS
+ 
+ typedef struct memstream memstream_t;
+ 
+-memstream_t *memstream_open(uint8_t *data, uint64_t size, unsigned writing);
++memstream_t *memstream_open(unsigned writing);
+ 
+ void memstream_close(memstream_t *stream);
+ 
+@@ -48,12 +48,14 @@ char *memstream_gets(memstream_t *stream, char *s, size_t len);
+ 
+ uint64_t memstream_pos(memstream_t *stream);
+ 
+-uint64_t memstream_get_size(memstream_t *stream);
+-
+ void memstream_rewind(memstream_t *stream);
+ 
+ int64_t memstream_seek(memstream_t *stream, int64_t offset, int whence);
+ 
++void memstream_set_buffer(uint8_t *buffer, uint64_t size);
++
++uint64_t memstream_get_last_size(void);
++
+ uint64_t memstream_get_ptr(memstream_t *stream);
+ 
+ RETRO_END_DECLS
+diff --git a/libretro/libretro-common/streams/memory_stream.c b/libretro/libretro-common/streams/memory_stream.c
+index 4e59906..bbbf84b 100644
+--- a/libretro/libretro-common/streams/memory_stream.c
++++ b/libretro/libretro-common/streams/memory_stream.c
+@@ -26,6 +26,11 @@
+ 
+ #include <streams/memory_stream.h>
+ 
++/* TODO/FIXME - static globals */
++static uint8_t* g_buffer      = NULL;
++static uint64_t g_size         = 0;
++static uint64_t last_file_size = 0;
++
+ struct memstream
+ {
+    uint64_t size;
+@@ -35,21 +40,31 @@ struct memstream
+    unsigned writing;
+ };
+ 
++void memstream_set_buffer(uint8_t *s, uint64_t len)
++{
++   g_buffer = s;
++   g_size   = len;
++}
+ 
+-memstream_t *memstream_open(uint8_t *buf, uint64_t size, unsigned writing)
++memstream_t *memstream_open(unsigned writing)
+ {
+    memstream_t *stream;
++   if (!g_buffer || !g_size)
++      return NULL;
+ 
+    stream = (memstream_t*)malloc(sizeof(*stream));
+ 
+    if (!stream)
+       return NULL;
+ 
++   stream->buf       = g_buffer;
++   stream->size      = g_size;
+    stream->ptr       = 0;
+    stream->max_ptr   = 0;
+    stream->writing   = writing;
+-   stream->buf       = buf;
+-   stream->size      = size;
++
++   g_buffer          = NULL;
++   g_size            = 0;
+ 
+    return stream;
+ }
+@@ -59,6 +74,7 @@ void memstream_close(memstream_t *stream)
+    if (!stream)
+       return;
+ 
++   last_file_size = stream->writing ? stream->max_ptr : stream->size;
+    free(stream);
+ }
+ 
+@@ -67,11 +83,6 @@ uint64_t memstream_get_ptr(memstream_t *stream)
+    return stream->ptr;
+ }
+ 
+-uint64_t memstream_get_size(memstream_t *stream)
+-{
+-   return stream->size;
+-}
+-
+ uint64_t memstream_read(memstream_t *stream, void *data, uint64_t bytes)
+ {
+    uint64_t avail = 0;
+@@ -144,6 +155,7 @@ void memstream_rewind(memstream_t *stream)
+ 
+ uint64_t memstream_pos(memstream_t *stream) { return stream->ptr; }
+ char *memstream_gets(memstream_t *stream, char *s, size_t len) { return NULL; }
++uint64_t memstream_get_last_size(void) { return last_file_size; }
+ 
+ int memstream_getc(memstream_t *stream)
+ {

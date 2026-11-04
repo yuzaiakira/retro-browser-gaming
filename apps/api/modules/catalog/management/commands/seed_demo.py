@@ -17,12 +17,14 @@ SYSTEMS = [
     ("sega-gg", "Sega Game Gear", "handheld"),
     ("sega-sg1000", "Sega SG-1000", "console"),
     ("nes", "NES / Famicom", "console"),
+    ("fds", "Famicom Disk System", "console"),
     ("snes", "Super Nintendo", "console"),
     ("gb", "Game Boy", "handheld"),
     ("gbc", "Game Boy Color", "handheld"),
     ("gba", "Game Boy Advance", "handheld"),
     ("atari-2600", "Atari 2600", "console"),
     ("atari-5200", "Atari 5200", "console"),
+    ("atari-8bit", "Atari 8-bit", "computer"),
     ("atari-7800", "Atari 7800", "console"),
     ("lynx", "Atari Lynx", "handheld"),
     ("virtual-boy", "Virtual Boy", "handheld"),
@@ -34,11 +36,17 @@ SYSTEMS = [
     ("c64", "Commodore 64", "computer"),
     ("zx-spectrum", "ZX Spectrum", "computer"),
     ("amiga", "Commodore Amiga", "computer"),
+    ("atari-st", "Atari ST", "computer"),
     ("zx81", "Sinclair ZX81", "computer"),
     ("amstrad-cpc", "Amstrad CPC", "computer"),
     ("msx", "MSX", "computer"),
+    ("colecovision", "ColecoVision", "console"),
     ("nds", "Nintendo DS", "handheld"),
+    ("n64", "Nintendo 64", "console"),
     ("atari-jaguar", "Atari Jaguar", "console"),
+    ("dreamcast", "Sega Dreamcast", "console"),
+    ("arcade", "Arcade", "arcade"),
+    ("flash", "Adobe Flash", "computer"),
     ("j2me", "Java ME / J2ME", "handheld"),
     ("ps1", "PlayStation", "console"),
     ("psp", "PlayStation Portable", "handheld"),
@@ -47,12 +55,13 @@ SYSTEMS = [
 WASM_CORES = [
     ("genesis_plus_gx", ["md", "bin", "gg"], ["wasm", "secureContext"]),
     ("smsplus", ["sms", "sg"], ["wasm", "secureContext"]),
-    ("fceumm", ["nes"], ["wasm", "secureContext"]),
+    ("fceumm", ["nes", "fds"], ["wasm", "secureContext"]),
     ("snes9x", ["sfc", "smc"], ["wasm", "secureContext"]),
     ("gambatte", ["gb", "gbc"], ["wasm", "secureContext"]),
     ("mgba", ["gba"], ["wasm", "secureContext"]),
     ("stella2014", ["a26", "bin"], ["wasm", "secureContext"]),
     ("a5200", ["a52", "bin"], ["wasm", "secureContext"]),
+    ("atari800", ["xex", "atr", "com", "bin", "car", "cas"], ["wasm", "secureContext"]),
     ("beetle_vb", ["vb", "vboy", "bin"], ["wasm", "secureContext"]),
     ("vice_x64sc", ["d64", "prg", "tap", "t64", "crt"], ["wasm", "secureContext"]),
     ("fuse", ["tap", "tzx", "z80", "sna"], ["wasm", "secureContext"]),
@@ -61,7 +70,9 @@ WASM_CORES = [
     ("81_eo", ["p", "tzx"], ["wasm", "secureContext"]),
     ("cap32", ["dsk", "cdt", "sna", "m3u"], ["wasm", "secureContext"]),
     ("bluemsx", ["rom", "ri", "mx1", "mx2", "dsk", "cas", "m3u"], ["wasm", "secureContext"]),
+    ("gearcoleco", ["col", "cv", "rom", "bin"], ["wasm", "secureContext"]),
     ("desmume", ["nds"], ["wasm", "webgl2", "secureContext"]),
+    ("mupen64plus_next", ["z64", "n64", "v64"], ["wasm", "webgl2", "secureContext"]),
     ("virtualjaguar", ["j64", "jag", "rom", "abs", "bin"], ["wasm", "secureContext"]),
     ("prosystem", ["a78", "bin"], ["wasm", "secureContext"]),
     ("handy", ["lnx", "lyx"], ["wasm", "secureContext"]),
@@ -71,6 +82,12 @@ WASM_CORES = [
     ("pcsx_rearmed", ["cue", "chd", "bin"], ["wasm", "secureContext"]),
     ("ppsspp", ["iso", "cso", "pbp"], ["wasm", "threads", "webgl2", "secureContext"]),
     ("jsdos", ["zip"], ["wasm", "secureContext"]),
+    ("hatari", ["st", "msa", "dim", "stx"], ["wasm", "secureContext"]),
+    # bin/raw: GDI companion tracks (mkdcdisc / Redump-style multi-file discs).
+    # m3u: multi-disc playlists (frame playlist adapter; CHD/GDI/CDI companions).
+    ("flycast", ["elf", "cdi", "gdi", "chd", "cue", "iso", "bin", "raw", "m3u"], ["wasm", "webgl2", "secureContext"]),
+    ("ruffle", ["swf"], ["wasm", "secureContext"]),
+    ("mame_rbg_arcade", ["zip"], ["wasm", "secureContext"]),
     ("js2me", ["jar"], ["secureContext"]),
 ]
 
@@ -79,12 +96,14 @@ CONSOLE_FIXTURE_SLUGS = {
     "sega-ms",
     "sega-gg",
     "nes",
+    "fds",
     "snes",
     "gb",
     "gbc",
     "gba",
     "atari-2600",
     "atari-5200",
+    "atari-8bit",
     "atari-7800",
     "lynx",
     "virtual-boy",
@@ -97,11 +116,17 @@ CONSOLE_FIXTURE_SLUGS = {
     "c64",
     "zx-spectrum",
     "amiga",
+    "atari-st",
     "zx81",
     "amstrad-cpc",
     "msx",
+    "colecovision",
     "nds",
+    "n64",
     "atari-jaguar",
+    "dreamcast",
+    "arcade",
+    "flash",
     "j2me",
     "ps1",
     "psp",
@@ -119,7 +144,7 @@ class Command(BaseCommand):
             "--with-console-fixtures",
             action="store_true",
             help=(
-                "Publish MIT/GPL engineering console fixtures (Genesis through Atari 2600, "
+                "Publish MIT/GPL engineering console fixtures (Genesis through N64 and Atari, "
                 "PC Engine HuCard, SG-1000, PS1/PSP) into the catalog."
             ),
         )
@@ -155,6 +180,12 @@ class Command(BaseCommand):
         for code, ext, cap in WASM_CORES:
             if code == "jsdos":
                 core_version = "jsdos-8.3.8"
+            elif code == "hatari":
+                core_version = "hatari-2.6.1"
+            elif code == "ruffle":
+                core_version = "ruffle-0.7.1"
+            elif code == "mame_rbg_arcade":
+                core_version = "mame-rbgdot-dev"
             elif code == "js2me":
                 core_version = "js2me-szymor"
             else:
@@ -461,6 +492,32 @@ class Command(BaseCommand):
                 "supported."
             ),
         )
+        results["fds"] = self._import_files(
+            fixtures,
+            slug="mit-fds-move-demo",
+            title="MIT FDS Move Demo",
+            description=(
+                "First-party MIT Famicom Disk System sprite fixture for engineering "
+                "acceptance. Left/Right move X; A toggles Y. Requires user-imported "
+                "OpenDiskSysROM (LGPL-3.0) — never ships Nintendo BIOS."
+            ),
+            console="fds",
+            core={"code": "fceumm", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="fds-rbg-move-demo.fds",
+            files=[("fds-rbg-move-demo.fds", "disk", "application/octet-stream")],
+            license_ref="MIT; .fixtures/fds-rbg-move-demo.README.md",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "scripts/build-fds-rbg-move-demo.py; sha256 c8b5b2b3…; "
+                "OpenDiskSysROM LGPL user-BIOS (docs/emulator-builds/fds-open-bios-feasibility.md)"
+            ),
+            genre="Homebrew",
+            compatibility_note=(
+                "Engineering-only. Import OpenDiskSysROM as disksys.rom in Settings before play. "
+                "Product approval remains pending."
+            ),
+        )
         results["snes"] = self._import_files(
             fixtures,
             slug="mit-snes-gothicvania",
@@ -693,6 +750,205 @@ class Command(BaseCommand):
                 "supported. Optional official 5200 BIOS not redistributed."
             ),
         )
+        results["atari8"] = self._import_files(
+            fixtures,
+            slug="mit-atari8-dot",
+            title="MIT Atari 8-bit Dot",
+            description=(
+                "First-party MIT Atari 8-bit Dot (.xex) for engineering acceptance "
+                "only. Uses libretro-atari800 with bundled AltirraOS / Altirra BASIC "
+                "(open firmware). Distinct from Atari 5200. Not a commercial ROM."
+            ),
+            console="atari-8bit",
+            core={"code": "atari800", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-atari8-dot.xex",
+            files=[("mit-atari8-dot.xex", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/atari8-dot-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "scripts/build-atari8-dot-fixture.py; "
+                ".fixtures/mit-atari8-dot.README.md; "
+                "docs/emulator-builds/atari8-firmware-audit.md"
+            ),
+            genre="Action",
+            compatibility_note=(
+                "Engineering: atari800 / 800XL + AltirraOS; seekable VFS for "
+                "needs_fullpath; product approval pending."
+            ),
+        )
+        results["dreamcast"] = self._import_files(
+            fixtures,
+            slug="mit-dreamcast-dot",
+            title="MIT Dreamcast Dot",
+            description=(
+                "First-party MIT Dreamcast Dot (.elf) for engineering acceptance "
+                "only. Uses Flycast WASM with reios HLE BIOS (no SEGA BIOS "
+                "redistributed). Not a commercial disc or ROM."
+            ),
+            console="dreamcast",
+            core={"code": "flycast", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-dreamcast-dot.elf",
+            files=[("mit-dreamcast-dot.elf", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/dreamcast-dot-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "scripts/build-dreamcast-dot-fixture.sh; "
+                ".fixtures/mit-dreamcast-dot.README.md; "
+                "docs/emulator-builds/dreamcast-firmware-audit.md"
+            ),
+            genre="Action",
+            compatibility_note=(
+                "Engineering: flycast / reios HLE + emulate_framebuffer for vram_s "
+                "Dot; product approval pending; SEGA BIOS never bundled."
+            ),
+        )
+        results["dreamcast-gdi"] = self._import_files(
+            fixtures,
+            slug="mit-dreamcast-dot-gdi",
+            title="MIT Dreamcast Dot GDI",
+            description=(
+                "First-party MIT Dreamcast Dot as a truncated multi-track GDI "
+                "(mkdcdisc --gdi-truncate). Engineering large-media acceptance "
+                "only — not a commercial GD-ROM. reios HLE; no SEGA BIOS."
+            ),
+            console="dreamcast",
+            core={"code": "flycast", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-dreamcast-dot.gdi",
+            files=[
+                ("mit-dreamcast-dot.gdi", "disk", "text/plain"),
+                ("mit-dreamcast-dot-track01.bin", "disk", "application/octet-stream"),
+                ("mit-dreamcast-dot-track02.raw", "disk", "application/octet-stream"),
+                ("mit-dreamcast-dot-track03.bin", "disk", "application/octet-stream"),
+            ],
+            license_ref="MIT; LICENSES/dreamcast-dot-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "scripts/build-dreamcast-disc-fixtures.sh; "
+                ".fixtures/mit-dreamcast-dot.README.md; "
+                "docs/emulator-builds/flycast-media-formats.md"
+            ),
+            genre="Action",
+            compatibility_note=(
+                "Engineering: flycast BlobFS on-demand GDI; truncated image for "
+                "emulator/ODE; product approval pending; SEGA BIOS never bundled."
+            ),
+        )
+        results["dreamcast-chd"] = self._import_files(
+            fixtures,
+            slug="mit-dreamcast-dot-chd",
+            title="MIT Dreamcast Dot CHD",
+            description=(
+                "First-party MIT Dreamcast Dot as CHDv5 (chdman createcd from "
+                "truncated mkdcdisc GDI). Engineering CHD acceptance only — not "
+                "a commercial GD-ROM. reios HLE; no SEGA BIOS."
+            ),
+            console="dreamcast",
+            core={"code": "flycast", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-dreamcast-dot.chd",
+            files=[("mit-dreamcast-dot.chd", "disk", "application/octet-stream")],
+            license_ref="MIT; LICENSES/dreamcast-dot-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "scripts/build-dreamcast-chd-and-multidisc.sh; "
+                ".fixtures/mit-dreamcast-dot.chd.sha256; "
+                "docs/emulator-builds/flycast-media-formats.md"
+            ),
+            genre="Action",
+            compatibility_note=(
+                "Engineering: flycast CHDDisc/libchdr + BlobFS on-demand; "
+                "product approval pending; SEGA BIOS never bundled."
+            ),
+        )
+        results["dreamcast-multidisc"] = self._import_files(
+            fixtures,
+            slug="mit-dreamcast-dot-multidisc",
+            title="MIT Dreamcast Dot Multi-Disc",
+            description=(
+                "First-party two-disc M3U: disc1 cool-grey Dot CHD + disc2 "
+                "green-idle Dot CHD (DOT_VARIANT=2). Engineering disc-swap "
+                "acceptance only — not commercial media. reios HLE; no SEGA BIOS."
+            ),
+            console="dreamcast",
+            core={"code": "flycast", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-dreamcast-dot-multidisc.m3u",
+            files=[
+                ("mit-dreamcast-dot-multidisc.m3u", "disk", "text/plain"),
+                ("mit-dreamcast-dot.chd", "disk", "application/octet-stream"),
+                ("mit-dreamcast-dot-disc2.chd", "disk", "application/octet-stream"),
+            ],
+            license_ref="MIT; LICENSES/dreamcast-dot-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "scripts/build-dreamcast-chd-and-multidisc.sh; "
+                "fixtures/dreamcast-dot/build-disc2.sh; "
+                "docs/reports/dreamcast-chd-disc-swap.md"
+            ),
+            genre="Action",
+            compatibility_note=(
+                "Engineering: flycast M3U disk-control swap; distinguishable "
+                "idle colors; product approval pending; SEGA BIOS never bundled."
+            ),
+        )
+        results["flash"] = self._import_files(
+            fixtures,
+            slug="mit-flash-dot",
+            title="MIT Flash Dot",
+            description=(
+                "First-party MIT Flash Dot (.swf) for engineering acceptance only. "
+                "Uses self-hosted Ruffle 0.7.1 (MIT OR Apache-2.0). Not a commercial "
+                "SWF. Progress uses Flash SharedObject — not libretro save states."
+            ),
+            console="flash",
+            core={"code": "ruffle", "version": "ruffle-0.7.1"},
+            revision="fixture-1",
+            entry="mit-flash-dot.swf",
+            files=[("mit-flash-dot.swf", "rom", "application/x-shockwave-flash")],
+            license_ref="MIT; LICENSES/flash-dot-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "scripts/build-flash-dot-fixture.sh; "
+                ".fixtures/mit-flash-dot.README.md; "
+                "docs/emulator-builds/ruffle-web-integration.md"
+            ),
+            genre="Action",
+            compatibility_note=(
+                "Engineering: Ruffle 0.7.1; saveState=false; SharedObject progress; "
+                "ExternalInterface disabled; product approval pending."
+            ),
+        )
+        results["arcade"] = self._import_files(
+            fixtures,
+            slug="mit-arcade-rbgdot",
+            title="MIT Arcade RBG Dot",
+            description=(
+                "First-party MIT Arcade ROMset (rbgdot.id ZIP) for engineering "
+                "acceptance only. Uses a narrowly scoped GPL MAME-derived WASM "
+                "SUBTARGET (driver rbgdot). Not a commercial arcade ROM. FBNeo is "
+                "not used. Product publication approval pending."
+            ),
+            console="arcade",
+            core={"code": "mame_rbg_arcade", "version": "mame-rbgdot-dev"},
+            revision="fixture-1",
+            entry="mit-arcade-rbgdot.zip",
+            files=[("mit-arcade-rbgdot.zip", "rom", "application/zip")],
+            license_ref="MIT; LICENSES/arcade-rbgdot-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                ".fixtures/mit-arcade-rbgdot.README.md; "
+                "docs/emulator-builds/arcade-license-audit.md; "
+                "docs/emulator-builds/arcade-romset-policy.md"
+            ),
+            genre="Action",
+            compatibility_note=(
+                "Engineering: mame_rbg_arcade / rbgdot only; ROMset validation "
+                "required; product approval pending; MAME trademark not claimed."
+            ),
+        )
         results["vb"] = self._import_files(
             fixtures,
             slug="mit-vb-spong",
@@ -775,6 +1031,26 @@ class Command(BaseCommand):
                 "physical/virtual keyboard for adventure input."
             ),
         )
+        results["atari-st"] = self._import_files(
+            fixtures,
+            slug="gpl-atari-st-pongwars",
+            title="GPL Atari ST Pong Wars",
+            description=(
+                "GPL-3.0 Pong Wars (Neil Rackett) bootable .ST disk for Hatari + EmuTOS. "
+                "Self-playing demo; no proprietary Atari TOS redistributed."
+            ),
+            console="atari-st",
+            core={"code": "hatari", "version": "hatari-2.6.1"},
+            revision="fixture-1",
+            entry="gpl-atari-st-pongwars.st",
+            files=[("gpl-atari-st-pongwars.st", "rom", "application/octet-stream")],
+            license_ref="GPL-3.0; LICENSES/atari-st-pongwars-GPL-3.0.txt",
+            provenance="https://github.com/neilrackett/atarist-pongwars/releases/tag/v2.0.0",
+            evidence=(
+                "PONGWARS.ST v2.0.0 sha256 2c5ca8e1…; Hatari 2.6.1 + EmuTOS etos256us "
+                "(docs/emulator-builds/hatari-emutos-atari-st.md)"
+            ),
+        )
         results["amiga"] = self._import_files(
             fixtures,
             slug="mit-amiga-dot",
@@ -821,6 +1097,30 @@ class Command(BaseCommand):
                 "Verified Chromium gameplay with 81_eo (eo_loadp .p inject); RetroPad "
                 "D-Pad maps to ZX81 cursor keys 5/6/7/8. Save states supported. "
                 "PRODUCT_PENDING."
+            ),
+        )
+        results["colecovision"] = self._import_files(
+            fixtures,
+            slug="mit-coleco-retropipe",
+            title="MIT ColecoVision RetroPIPE",
+            description=(
+                "MIT RetroPIPE ColecoVision homebrew for engineering acceptance only. "
+                "Uses EmulatorJS gearcoleco. Proprietary ColecoVision BIOS is NOT "
+                "redistributed — operators must import authorized colecovision.rom "
+                "via Settings / install-private-bios.py. PRODUCT_PENDING."
+            ),
+            console="colecovision",
+            core={"code": "gearcoleco", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-coleco-retropipe.rom",
+            files=[("mit-coleco-retropipe.rom", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/retropipe-ColecoVision-MIT.txt",
+            provenance="https://github.com/visrealm/retropipe/releases/tag/v0.2",
+            evidence="visrealm/retropipe v0.2 retropipe_v0-2-0_cv.rom",
+            genre="Puzzle",
+            compatibility_note=(
+                "BLOCKED_EXTERNAL pending lawful user-provided colecovision.rom BIOS. "
+                "Core + MIT ROM pinned; gameplay not marked VERIFIED_PLAYABLE without BIOS."
             ),
         )
         results["cpc"] = self._import_files(
@@ -902,6 +1202,36 @@ class Command(BaseCommand):
             compatibility_note=(
                 "Verified Chromium gameplay with desmume / nds scheme; A + stylus "
                 "touch jump; dual-screen layout; save states supported. HLE BIOS only."
+            ),
+        )
+        results["n64"] = self._import_files(
+            fixtures,
+            slug="mit-n64-controller-test",
+            title="MIT N64 Controller Test",
+            description=(
+                "MIT-licensed USB64 N64 controller input test homebrew for engineering "
+                "acceptance only. Uses EmulatorJS mupen64plus_next (no proprietary N64 "
+                "BIOS redistributed). Not a commercial ROM. Titles that request atypical "
+                "64 MiB RDRAM allocations or ROMs larger than 64 MiB may fail under "
+                "browser WASM memory limits."
+            ),
+            console="n64",
+            core={"code": "mupen64plus_next", "version": CORE_VERSION},
+            revision="fixture-1",
+            entry="mit-n64-controller-test.z64",
+            files=[("mit-n64-controller-test.z64", "rom", "application/octet-stream")],
+            license_ref="MIT; LICENSES/n64-controller-test-MIT.txt",
+            provenance="https://spdx.org/licenses/MIT.html",
+            evidence=(
+                "Ryzee119/n64_controller_test release build-202008190836 "
+                "n64_controller_test.z64 (https://github.com/Ryzee119/n64_controller_test)"
+            ),
+            genre="Utility",
+            compatibility_note=(
+                "Verified Chromium interactive gameplay with mupen64plus_next / n64 "
+                "scheme; stick + face buttons update the USB64 HUD while held; save "
+                "states supported. Oversized (>64 MiB) ROMs and Expansion-Pak titles "
+                "that force huge RDRAM WASM allocations remain unsupported."
             ),
         )
         results["jaguar"] = self._import_files(

@@ -56,4 +56,32 @@ describe('capability classification', () => {
     expect(result.reasons.some((r) => /OPFS|Origin Private File System/i.test(r))).toBe(true);
     expect(result.reasons.some((r) => /Web Locks/i.test(r))).toBe(false);
   });
+
+  it('gates future console cores on declared thread, WASM and WebGL2 requirements', () => {
+    const futureCore = {
+      recommended_core: {
+        code: 'flycast_wasm',
+        runtime_type: 'wasm',
+        min_capabilities: ['wasm', 'threads', 'webgl2'],
+      },
+    } as unknown as Release;
+    expect(probe(device, futureCore).status).toBe('limited');
+    expect(probe({ ...device, threads: false }, futureCore)).toMatchObject({
+      status: 'unsupported',
+      reasons: expect.arrayContaining([expect.stringMatching(/SharedArrayBuffer/)]),
+    });
+    expect(probe({ ...device, wasm: false }, futureCore).status).toBe('unsupported');
+    expect(probe({ ...device, webgl2: false }, futureCore).status).toBe('unsupported');
+  });
+
+  it('honors explicit WASM requirements on a JavaScript runtime', () => {
+    const hybrid = {
+      recommended_core: {
+        code: 'new-web-runtime',
+        runtime_type: 'js',
+        min_capabilities: ['wasm'],
+      },
+    } as unknown as Release;
+    expect(probe({ ...device, wasm: false }, hybrid).status).toBe('unsupported');
+  });
 });

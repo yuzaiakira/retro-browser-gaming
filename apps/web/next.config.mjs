@@ -1,14 +1,8 @@
 const backend = process.env.API_INTERNAL_URL || 'http://127.0.0.1:8000';
 const j2meHost = process.env.J2ME_RUNTIME_HOST || 'j2me.localhost';
-const launcherHost = process.env.LAUNCHER_HOST || 'launcher.localhost';
-const dedicated = process.env.NEXT_PUBLIC_J2ME_DEDICATED_ORIGIN === 'true';
 
-// blob: is required for native-html installs (Orbit etc. use blob: object URLs in
-// an iframe). frame-src does not inherit default-src, so omitting blob: blocks play.
-const launcherCsp = dedicated
-  ? `default-src 'self' blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self' blob: http://${j2meHost}:* http://${j2meHost} https://${j2meHost}:* https://${j2meHost}; frame-ancestors 'self'; base-uri 'none'`
-  : null;
-
+// CSP is owned by middleware.ts so /runtime/* and launcher HTML do not stack
+// conflicting Content-Security-Policy headers. Keep transport isolation here.
 export default {
   output: 'standalone',
   skipTrailingSlashRedirect: true,
@@ -34,7 +28,6 @@ export default {
           ...security,
           // Default CORP for launcher; j2me host overrides to cross-origin in middleware.
           { key: 'Cross-Origin-Resource-Policy', value: 'same-origin' },
-          ...(launcherCsp ? [{ key: 'Content-Security-Policy', value: launcherCsp }] : []),
         ],
       },
       {
@@ -52,12 +45,16 @@ export default {
         ],
       },
       {
+        // frame-ancestors only as a static hint; full CSP is set in middleware.
         source: '/runtime/:path*',
         headers: [
           {
-            key: 'Content-Security-Policy',
-            value:
-              "default-src 'self' blob:; script-src 'self' blob: 'unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'self' blob:; frame-ancestors 'self' http://launcher.localhost:* https://launcher.localhost:* http://localhost:* https://localhost:*; base-uri 'none'",
+            key: 'X-RBG-Runtime-Frame',
+            value: '1',
+          },
+          {
+            key: 'Cross-Origin-Resource-Policy',
+            value: 'same-origin',
           },
         ],
       },

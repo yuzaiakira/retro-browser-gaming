@@ -19,13 +19,13 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 | Amstrad CPC | `cap32` (CDN present; explicit `EJS_core=cap32`) | GPLv2+ | CPC firmware embedded | MIT Brick Blaster DSK (`issalig/brick_blaster` v1.0_RC4) | **VERIFIED_PLAYABLE** |
 | Amiga | `puae` | GPLv2 | AROS Kickstart fallback (no proprietary kick ROM) | MIT Amiga Dot ADF (first-party) | **VERIFIED_PLAYABLE** |
 | MSX | `bluemsx` (independently built WASM; not stock EJS CDN) | GPLv2+ blueMSX-libretro | C-BIOS 0.23 (BSD-style) SYSTEM pack | MIT MSX Dot `.rom` (first-party z88dk) | **VERIFIED_PLAYABLE** — Auto→C-BIOS; catalog offline; save/restore fixed (`PH-05/msx-savestate-abi-20261022.md`) |
-| Atari ST | `hatari` (absent) | — | EmuTOS candidate if core existed | — | **BLOCKED_CORE** (`PH-05/msx-atarist-blocker-20261022.md`) |
+| Atari ST | Hatari 2.6.1 (self-hosted WASM) | GPL-2.0 Hatari | EmuTOS `etos256us` (GPL-2.0) | GPL-3.0 Pong Wars | **EXPERIMENTAL** — gameplay PASS; save/load BLOCKED (`docs/emulator-builds/hatari-emutos-atari-st.md`) |
 | Commodore 64 | `vice_x64sc` (EJS default for `c64`) | GPLv2 | Stock ROMs embedded in EJS package | MIT Wild Boa PRG (`tstamborski/Wild-Boa-Snake`) | **VERIFIED_PLAYABLE** |
-| Nintendo 64 | `mupen64plus_next` | GPLv2-family (EJS package) | — | MIT `Ryzee119/n64_controller_test` boots; GameJam 1.2.1 OOMs on 64 MB RDRAM | **EXPERIMENTAL** (boot/render only; input delta open) |
+| Nintendo 64 | `mupen64plus_next` | GPLv2-family (EJS package) | — | MIT `Ryzee119/n64_controller_test` interactive | **VERIFIED_PLAYABLE** (hold-input HUD + save/load; >64 MiB ROM guard) |
 | ColecoVision | `gearcoleco` | present on CDN | Proprietary `colecovision.rom` | MIT RetroPIPE | BLOCKED_FIRMWARE (prior) |
 | Sega 32X | PicoDrive | Non-commercial | — | MIT Wave Rider candidate | BLOCKED_LEGAL (prior) |
 | Sega CD | genesis_plus_gx | OK | Proprietary SEGA CD BIOS | — | BLOCKED_FIRMWARE (prior) |
-| N64 | `mupen64plus_next` | present on CDN | — | Legal ROM TBD | RESEARCHED |
+| N64 | `mupen64plus_next` | present on CDN | — | MIT USB64 controller-test | **VERIFIED_PLAYABLE** |
 | NDS | `desmume` (selected; `melonds` rejected) | GPL-2.0 | HLE BIOS (no proprietary firmware) | MIT DinoDS (`BotRandomness/DinoDS`) | **VERIFIED_PLAYABLE** |
 | FBNeo / MAME | `fbneo` (CDN present; not locked) | GPLv2+ | — | **No vendored ZIP** — Gridlee is mamedev.org-only (do not bundle); no other redistributable match found | **BLOCKED_FIXTURE** (`PH-05/fbneo-blocker-20261022.md`) |
 | Jaguar | `virtualjaguar` | GPL-3.0 | Embedded HLE BIOS | MIT jag2048 (`toarnold/jag2048`) JAGR | **EXPERIMENTAL** — black FB; JST_JAGSERVER vs pinned core (`PH-05/jaguar-blocker-20261022.md`) |
@@ -51,6 +51,7 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 |  2026-10-22 | ZX81 native CDFLAG/altint diagnosis (still EXPERIMENTAL); MSX bluemsx WASM + C-BIOS locked (EXPERIMENTAL, no gameplay) | `PH-05/zx81-native-diagnosis-20261022.md`, `PH-05/msx-bluemsx-rxml-build-20261022.md` |
 |  2026-10-22 | MSX (`bluemsx`) VERIFIED_PLAYABLE — Dot + C-BIOS SYSTEM + offline | `PH-05/msx-expansion-20261022.md` |
 |  2026-10-22 | MSX save-state ABI fixed (Board.saveState zero-arity); clean build script | `PH-05/msx-savestate-abi-20261022.md`, `PH-05/msx-clean-build-20261022.txt` |
+|  2026-10-29 | N64 (`mupen64plus_next`) VERIFIED_PLAYABLE — hold-while-capture smoke | `docs/emulator-builds/n64-mupen64plus-next-gameplay.md`, `.runtime/test-evidence/PH-12/n64/` |
 
 ## Working order (hypothesis)
 
@@ -59,9 +60,10 @@ Status vocabulary maps to `docs/EMULATOR_SUPPORT_MATRIX.md`. Update this file on
 3. Amiga (`puae` + first-party MIT ADF) ← **done**
 4. MSX ← **EXPERIMENTAL packages** (rxml fixed; C-BIOS locked; fixture/gameplay open); Atari ST still **BLOCKED_CORE**
 5. Cap32 + NDS ← **done**; FBNeo blocked (no Gridlee vendor); Jaguar EXPERIMENTAL; ZX81 Dot still blocked after native diagnosis
-6. N64 remains EXPERIMENTAL until new evidence
-7. Firmware-unblocked Sega CD / ColecoVision / 32X / Vectrex / Intellivision when authorization or external WASM exists
-8. Higher-demand Saturn / Dreamcast / 3DS / PS2 only with measured browser feasibility
+6. N64 ← **done** (standard fixtures); oversized ROM / huge-RDRAM titles remain limited
+7. PH-12.1 remaining: Jaguar black FB + ZX81 interactive
+8. Firmware-unblocked Sega CD / ColecoVision / 32X / Vectrex / Intellivision when authorization or external WASM exists
+9. Higher-demand Saturn / Dreamcast / 3DS / PS2 only with measured browser feasibility
 
 ## Rules
 

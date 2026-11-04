@@ -8,12 +8,12 @@
 | API-004 | PASSED | Native PostgreSQL, authenticated S3 Range, Django/Next healthy in Compose |
 | CAT-001 | PASSED (HTML5 + consoles) | Catalog install HTML5 + Genesis/PS1/PSP; Firefox install/offline; Orbit re-PASS 2026-10-22 after CSP/origin fix |
 | CAT-002 | PASSED | Empty/error/offline UX (`PH-11/acceptance-gates-20261022.txt`) |
-| DL-001–DL-012 | PASSED | Prior fault suite + Compose evidence (`PH-03/download-faults-20261020.md`) |
-| DL-013 | PASSED (scoped) | 1 GiB Range + page JS heap bound; RSS unavailable via Playwright (`download-faults-rss-20261020.txt`) |
+| DL-001–DL-012 | PASSED | Prior fault suite + Compose evidence (`PH-03/download-faults-20261020.md`); re-PASS 2026-11-02 on `launcher.localhost:13000` during Dreamcast large-media hardening |
+| DL-013 | PASSED (scoped) | 1 GiB Range + page JS heap bound; RSS unavailable via Playwright (`download-faults-rss-20261020.txt`); re-PASS 2026-11-02 (`DOWNLOAD_1GIB_BOUNDED_MEMORY_PASS`) |
 | OFF-001–OFF-003 | PASSED (HTML5) | Persistent-profile cold-start (`PH-02/offline-pwa-20261020.md`); Orbit player path re-validated 2026-10-22 |
 | OFF-004 | PASSED (wasm core) | Deleted Genesis wasm.data offline; OPFS retained (`PH-02/offline-pwa-off004-core-20261020.md`) |
 | OFF-005 | PASSED | Waiting SW does not disrupt Save state |
-| EMU-001–EMU-004 | PASSED (scoped) | Gameplay + BlobFS + catalog offline; regression 2026-10-22 (`PH-11/emulator-regression-20261022.txt`); Android AUD-001 |
+| EMU-001–EMU-004 | PASSED (scoped) | Gameplay + BlobFS + catalog offline; regression 2026-10-22 (`PH-11/emulator-regression-20261022.txt`); Android AUD-001; Dreamcast large-media GDI/CDI + CHD gameplay/save + interactive disc-swap; Compose **`DREAMCAST_CHD_OFFLINE_PWA_PASS`** + **`CROSS_CONSOLE_SOAK_CLEAN_BUILD_PASS`** 2026-11-03 (`docs/reports/dreamcast-chd-disc-swap.md`) |
 | EMU-005, EMU-006 | PASSED | Lifecycle + unsupported core (`PH-11/acceptance-gates-20261022.txt`) |
 | CMP-001, CMP-002 | PASSED (unit) | `compatibility.test.ts` |
 | IN-001 | PASSED (Chromium) | Keyboard → InputRouter (`PH-11`) |
@@ -26,9 +26,19 @@
 | SEC-004 | PASSED | Hostile sandboxed HTML denied launcher IndexedDB (`PH-11`) |
 | UX-001, UX-002 | PASSED (basic + Android) | Mobile layout + keyboard focus; Android fullscreen/orientation (`PH-08`) |
 | DEP-001, DEP-002 | PASSED | Compose stack + proxy build path |
-| IOS-001 | BLOCKED_EXTERNAL | No iOS device — `docs/physical-device-acceptance.md` |
+| IOS-001 | BLOCKED_EXTERNAL | No iOS device — `docs/physical-device-acceptance.md`; PH-13 re-check `docs/release/ios-physical-acceptance.md` (`IOS_PHYSICAL_BLOCKED_EXTERNAL`) |
 | Staging HTTPS | BLOCKED_EXTERNAL | `docs/production-staging-verification.md` (local HTTPS ≠ staging) |
 | PH-08 Android extras | PASSED (scoped) | Offline reverse-removed cold-start; Genesis/PS1/PSP on phone; AUD-001 |
+| PH-13 Android physical re-cert | BLOCKED_EXTERNAL | No device on `adb` 2026-11-03 — `docs/release/android-physical-acceptance.md` |
+| PH-13 source delivery | NOT_VERIFIED | Build gate OK; recipient `OFFER_DELIVERY_NOT_VERIFIED` — `docs/release/source-delivery-audit.md` |
+| PH-13 catalog product approval | PENDING_APPROVAL | 53/53 pending — `docs/release/product-approval-matrix.md` |
+| PH-13 PUBLIC_RELEASE_GO | STOP | Independent gates in `docs/release/go-no-go.md` |
+| PH-14 source package built | PASSED (scoped) | Assemble + mock integrity; recipient HTTPS still NOT_VERIFIED — `docs/release/source-delivery-verification.md` |
+| PH-14 legal review pack | PENDING_APPROVAL | Pack generated; 0 counsel approvals — `docs/release/legal-review/` |
+| PH-14 product approval queue | PENDING_APPROVAL | Export 53/0; no auto-approve — `docs/release/product-approval-queue.md` |
+| PH-14 staging HTTPS | BLOCKED_EXTERNAL | `docs/release/staging-https-report.md` |
+| PH-14 Android / iOS | BLOCKED_EXTERNAL | Re-detected empty; instructions in `docs/release/*-physical-test-instructions.md` |
+| PH-14 PUBLIC_RELEASE_GO | STOP | `docs/release/go-no-go.md` + `blocker-registry.md` |
 
 ## Gate verdicts
 
@@ -40,4 +50,6 @@
 | G06–G10 | PARTIAL — Chromium/Firefox + Android Chrome physical; WebKit catalog (no OPFS); gamepad/iOS/staging open |
 | G11 | PARTIAL — Android PH-08 + AUD-001 closed; physical gamepad + iOS + staging remain |
 
-**RELEASE CANDIDATE / NOT COMPLETE** — see `docs/RELEASE_CANDIDATE.md` and `docs/release-acceptance-report.md`. Remaining mandatory blockers: gamepad IN-002-P/D, iOS Safari IOS-001, production staging HTTPS, human product approval (42 pending / 0 approved as of 2026-10-22). Optional EXPERIMENTAL platforms (ZX81/Jaguar/N64) and blocked cores are out of P0 scope unless PDR changes.
+**PH-13 PRIVATE RC (2026-11-03)** — tip lineage `318832d`; pack `docs/release/`; **PUBLIC_RELEASE_GO = STOP**. ENGINEERING/REPRO/SECURITY ready; SOURCE_DELIVERY **NOT_VERIFIED**; CATALOG **PENDING_APPROVAL** (0/53); ANDROID/IOS physical **BLOCKED_EXTERNAL**.
+
+**RELEASE CANDIDATE / NOT COMPLETE** — see `docs/RELEASE_CANDIDATE.md` and `docs/release-acceptance-report.md`. Remaining mandatory blockers: gamepad IN-002-P/D, iOS Safari IOS-001, production staging HTTPS, human product approval (pending / 0 approved), source recipient delivery. Optional EXPERIMENTAL platform **Jaguar** and blocked cores are out of P0 scope unless PDR changes. N64 + ZX81 + **Atari ST** + **FDS** + **Atari 8-bit** + **Dreamcast** + **Flash/Ruffle** + Arcade **`rbgdot`** engineering acceptance: `VERIFIED_PLAYABLE` (Compose offline PWA PASS where applicable; OS PWA/physical NOT_VERIFIED; product approval pending). **`CROSS_CONSOLE_SOAK_FULL_PASS`** + **`CROSS_CONSOLE_SOAK_CLEAN_BUILD_PASS`** (10/10, 2026-11-03 CHD clean images) + Dreamcast **`DREAMCAST_CHD_OFFLINE_PWA_PASS`** — see `docs/reports/cross-console-soak.md`, `docs/reports/dreamcast-chd-disc-swap.md`. **`COMPOSE_CHD_CLEAN_BUILD_PASS`** / **`RUNTIME_CSP_SECURITY_PASS`** — see rebuild + CSP audit reports. Flash save semantics are **SharedObject only** (not libretro Quick Save). ColecoVision + **Vectrex**: `BLOCKED_EXTERNAL` pending lawful user BIOS (`system.img` / `colecovision.rom`). Other MAME drivers **NOT_VERIFIED**; FBNeo **NO-GO**. Orbit catalog smoke re-PASS 2026-11-01 after pagination/PlayerShell test fix (not an API regression).

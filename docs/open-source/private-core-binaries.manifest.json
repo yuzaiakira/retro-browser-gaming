@@ -42,8 +42,8 @@
     },
     {
       "path": "ejs-4.2.3/cores/81_eo-legacy-wasm.data",
-      "sha256": "a5a3eb292163426ce0836edb452d89eed377031994c6e72fc226981a63902664",
-      "byteSize": 744425,
+      "sha256": "0ac838d27655b98aab10d1f6a152f158b030d04656bb7ba35c08eeb9539c76f7",
+      "byteSize": 740257,
       "license": "GPL-3.0 (81-libretro / EightyOne); independently versioned EmulatorJS-compatible build with eo_loadp for .p; ZX81 firmware embedded \u2014 no separate Sinclair ROM files redistributed",
       "source": "https://github.com/libretro/81-libretro (independently versioned 81_eo EmulatorJS build with eo_loadp; evidence PH-05/zx81-eo-loadp-build-20261022.md)",
       "category": "PRIVATE_REPOSITORY_ASSET",
@@ -54,8 +54,8 @@
     },
     {
       "path": "ejs-4.2.3/cores/81_eo-wasm.data",
-      "sha256": "ce6f24ba97915c0de17cc3a764cdb0c60a34e0e172b3c670e3c6d71f3b5ee046",
-      "byteSize": 744308,
+      "sha256": "09c7afa97a99240a99ab9f5b074f8ff967a357cfd63e647126525b2bbe8fae81",
+      "byteSize": 740844,
       "license": "GPL-3.0 (81-libretro / EightyOne); independently versioned EmulatorJS-compatible build with eo_loadp for .p; ZX81 firmware embedded \u2014 no separate Sinclair ROM files redistributed",
       "source": "https://github.com/libretro/81-libretro (independently versioned 81_eo EmulatorJS build with eo_loadp; evidence PH-05/zx81-eo-loadp-build-20261022.md)",
       "category": "PRIVATE_REPOSITORY_ASSET",
@@ -87,6 +87,24 @@
       "public_git": false,
       "original_path": "apps/web/public/cores/ejs-4.2.3/cores/a5200-wasm.data",
       "private_path": ".private-runtime/cores/ejs-4.2.3/cores/a5200-wasm.data"
+    },
+    {
+      "path": "ejs-4.2.3/cores/atari800-legacy-wasm.data",
+      "sha256": "b7b6664b83fee853bf6ccbd42592b928ac9094348d30510b7ed53841030d484d",
+      "byteSize": 829725,
+      "license": "GPL-2.0 (Atari800/libretro-atari800) + FSF all-permissive AltirraOS/BASIC; EmulatorJS packaging GPL-3.0; RBG memstream ABI patch",
+      "source": "https://github.com/libretro/libretro-atari800/tree/4e7fbc73765c1a9670c7506616046ad1d4ccda51 (EmulatorJS/build 677b1334; emsdk 3.1.74; scripts/patches/atari800/0001-rbg-memstream-retroarch-abi.patch; docs/emulator-builds/atari8-libretro-build.md)",
+      "original_path": "apps/web/public/cores/ejs-4.2.3/cores/atari800-legacy-wasm.data",
+      "private_path": ".private-runtime/cores/ejs-4.2.3/cores/atari800-legacy-wasm.data"
+    },
+    {
+      "path": "ejs-4.2.3/cores/atari800-wasm.data",
+      "sha256": "6d19d00650e8cad472fd0d9654810e11ce1a04bb4d3460fa0219d8e632a7b777",
+      "byteSize": 830097,
+      "license": "GPL-2.0 (Atari800/libretro-atari800) + FSF all-permissive AltirraOS/BASIC; EmulatorJS packaging GPL-3.0; RBG memstream ABI patch",
+      "source": "https://github.com/libretro/libretro-atari800/tree/4e7fbc73765c1a9670c7506616046ad1d4ccda51 (EmulatorJS/build 677b1334; emsdk 3.1.74; scripts/patches/atari800/0001-rbg-memstream-retroarch-abi.patch; docs/emulator-builds/atari8-libretro-build.md)",
+      "original_path": "apps/web/public/cores/ejs-4.2.3/cores/atari800-wasm.data",
+      "private_path": ".private-runtime/cores/ejs-4.2.3/cores/atari800-wasm.data"
     },
     {
       "path": "ejs-4.2.3/cores/beetle_vb-legacy-wasm.data",
@@ -233,6 +251,24 @@
       "private_path": ".private-runtime/cores/ejs-4.2.3/cores/fceumm-wasm.data"
     },
     {
+      "path": "ejs-4.2.3/cores/flycast-legacy-wasm.data",
+      "sha256": "c5f0c6ca92300e5d4d747bd9a3ab6db54ae7426656c64a03665f0830635cd075",
+      "byteSize": 3430017,
+      "license": "GPL-2.0 (Flycast / nasomers Flycast WASM v1.0); EmulatorJS packaging GPL-3.0",
+      "source": "https://github.com/nasomers/flycast-wasm/tree/16e9c7b4b7065a4bd42e7490e8aab3e9283d5415 (upstream flycast 2c48c01; docs/emulator-builds/flycast-wasm-dreamcast.md)",
+      "original_path": "apps/web/public/cores/ejs-4.2.3/cores/flycast-legacy-wasm.data",
+      "private_path": ".private-runtime/cores/ejs-4.2.3/cores/flycast-legacy-wasm.data"
+    },
+    {
+      "path": "ejs-4.2.3/cores/flycast-wasm.data",
+      "sha256": "c5f0c6ca92300e5d4d747bd9a3ab6db54ae7426656c64a03665f0830635cd075",
+      "byteSize": 3430017,
+      "license": "GPL-2.0 (Flycast / nasomers Flycast WASM v1.0); EmulatorJS packaging GPL-3.0",
+      "source": "https://github.com/nasomers/flycast-wasm/tree/16e9c7b4b7065a4bd42e7490e8aab3e9283d5415 (upstream flycast 2c48c01; docs/emulator-builds/flycast-wasm-dreamcast.md)",
+      "original_path": "apps/web/public/cores/ejs-4.2.3/cores/flycast-wasm.data",
+      "private_path": ".private-runtime/cores/ejs-4.2.3/cores/flycast-wasm.data"
+    },
+    {
       "path": "ejs-4.2.3/cores/fuse-legacy-wasm.data",
       "sha256": "86d844184aade4e22b7306a09da8fa109d26316aa2eb3cc67a033cccca46671d",
       "byteSize": 1218410,
@@ -279,6 +315,28 @@
       "public_git": false,
       "original_path": "apps/web/public/cores/ejs-4.2.3/cores/gambatte-wasm.data",
       "private_path": ".private-runtime/cores/ejs-4.2.3/cores/gambatte-wasm.data"
+    },
+    {
+      "path": "ejs-4.2.3/cores/gearcoleco-legacy-wasm.data",
+      "sha256": "64de8d0c89b3e56d52c9419d5eae7f7f93d04a4dac36eedf543e4180ec9d2ca0",
+      "byteSize": 891769,
+      "license": "GPL-3.0 (Gearcoleco / EmulatorJS packaging); ColecoVision BIOS not redistributed \u2014 user-provided only",
+      "source": "https://registry.npmjs.org/@emulatorjs/core-gearcoleco/-/core-gearcoleco-4.2.3.tgz (EmulatorJS 4.2.3; pin e150dc0491ae747028919fb82d6598954976ede6)",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "public_git": false,
+      "original_path": "apps/web/public/cores/ejs-4.2.3/cores/gearcoleco-legacy-wasm.data"
+    },
+    {
+      "path": "ejs-4.2.3/cores/gearcoleco-wasm.data",
+      "sha256": "164e213e4d5f2c14a0f2b55da973ed5a54ef7601cb352e64c9a73ace1a7ba606",
+      "byteSize": 891907,
+      "license": "GPL-3.0 (Gearcoleco / EmulatorJS packaging); ColecoVision BIOS not redistributed \u2014 user-provided only",
+      "source": "https://registry.npmjs.org/@emulatorjs/core-gearcoleco/-/core-gearcoleco-4.2.3.tgz (EmulatorJS 4.2.3; pin e150dc0491ae747028919fb82d6598954976ede6)",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "public_git": false,
+      "original_path": "apps/web/public/cores/ejs-4.2.3/cores/gearcoleco-wasm.data"
     },
     {
       "path": "ejs-4.2.3/cores/genesis_plus_gx-legacy-wasm.data",
@@ -533,6 +591,17 @@
       "private_path": ".private-runtime/cores/ejs-4.2.3/cores/puae-wasm.data"
     },
     {
+      "path": "ejs-4.2.3/cores/reports/gearcoleco.json",
+      "sha256": "6046e0af623369cac4924f521ff74c91c2644fedf4a677f48c9074ea7028e046",
+      "byteSize": 124,
+      "license": "GPL-3.0 (Gearcoleco / EmulatorJS packaging); ColecoVision BIOS not redistributed \u2014 user-provided only",
+      "source": "https://registry.npmjs.org/@emulatorjs/core-gearcoleco/-/core-gearcoleco-4.2.3.tgz (EmulatorJS 4.2.3; pin e150dc0491ae747028919fb82d6598954976ede6)",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "public_git": false,
+      "original_path": "apps/web/public/cores/ejs-4.2.3/cores/reports/gearcoleco.json"
+    },
+    {
       "path": "ejs-4.2.3/cores/smsplus-legacy-wasm.data",
       "sha256": "9fcc16b3e4ad662c395542bc96a0142cded1d17cbd8e43f0d5b3205cf4f7d340",
       "byteSize": 855316,
@@ -689,6 +758,30 @@
       "private_path": ".private-runtime/cores/ejs-4.2.3/system/bluemsx-system.data"
     },
     {
+      "path": "hatari-2.6.1/hatari.data",
+      "sha256": "2d6f3f94c212d1d9eb5b9ad913400d934a0fdf56924a7e2c51ff70e27b561b55",
+      "byteSize": 262144,
+      "license": "GPL-2.0 Hatari + GPL-2.0 EmuTOS; RBG snapshot bridge scripts/patches/hatari-2.6.1/",
+      "source": "hatari v2.6.1@6a8e26d + patches; EmuTOS 02c2db7; emsdk 4.0.4",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "public_git": false,
+      "original_path": "apps/web/public/cores/hatari-2.6.1/hatari.data",
+      "private_path": ".private-runtime/cores/hatari-2.6.1/hatari.data"
+    },
+    {
+      "path": "hatari-2.6.1/hatari.wasm",
+      "sha256": "cd5cec91bd5c759179c766e162629c1ae4eb6981d1490759e59f54ec19f31db4",
+      "byteSize": 23981938,
+      "license": "GPL-2.0 Hatari + GPL-2.0 EmuTOS; RBG snapshot bridge scripts/patches/hatari-2.6.1/",
+      "source": "hatari v2.6.1@6a8e26d + patches; EmuTOS 02c2db7; emsdk 4.0.4",
+      "category": "PRIVATE_REPOSITORY_ASSET",
+      "browser_delivery": "authorized_when_provisioned",
+      "public_git": false,
+      "original_path": "apps/web/public/cores/hatari-2.6.1/hatari.wasm",
+      "private_path": ".private-runtime/cores/hatari-2.6.1/hatari.wasm"
+    },
+    {
       "path": "jsdos-8.3.8/wdosbox.wasm",
       "sha256": "6c3e68a2669cbde5a2b9c920e64248b15c23b38c0b6080814aff0542676b6e98",
       "byteSize": 1458714,
@@ -711,6 +804,15 @@
       "public_git": false,
       "original_path": "apps/web/public/cores/jsdos-8.3.8/wlibzip.wasm",
       "private_path": ".private-runtime/cores/jsdos-8.3.8/wlibzip.wasm"
+    },
+    {
+      "path": "ejs-4.2.3/cores/reports/81_eo.json",
+      "sha256": "04c8b1f9f95b9478b70ec45888f677c835f1dc93d1c13b5675c9f7dcd25f8c69",
+      "byteSize": 227,
+      "license": "GPL-3.0",
+      "source": "scripts/patches/81_eo rebuild report",
+      "original_path": "apps/web/public/cores/ejs-4.2.3/cores/reports/81_eo.json",
+      "private_path": ".private-runtime/cores/ejs-4.2.3/cores/reports/81_eo.json"
     }
   ]
 }

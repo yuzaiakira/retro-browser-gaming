@@ -148,6 +148,15 @@ export class FrameAdapter implements EmulatorAdapter {
       if (options.core === 'jsdos') {
         this.frame.src = '/runtime/dos-frame.html';
         this.targetOrigin = location.origin;
+      } else if (options.core === 'hatari') {
+        this.frame.src = '/runtime/hatari-frame.html';
+        this.targetOrigin = location.origin;
+      } else if (options.core === 'ruffle') {
+        this.frame.src = '/runtime/ruffle-frame.html';
+        this.targetOrigin = location.origin;
+      } else if (options.core === 'mame_rbg_arcade') {
+        this.frame.src = '/runtime/mame-frame.html';
+        this.targetOrigin = location.origin;
       } else if (options.core === 'js2me' && j2meOrigin) {
         this.frame.src = `${j2meOrigin}${J2ME_FRAME_PATH}`;
         this.targetOrigin = j2meOrigin;
@@ -188,11 +197,14 @@ export class FrameAdapter implements EmulatorAdapter {
 
   private call(method: string, value?: unknown) {
     const id = ++this.count;
+    // Hatari / large WASM snapshots need headroom beyond the default 10s RPC budget.
+    const timeoutMs =
+      method === 'save' || method === 'load' ? 60000 : 10000;
     return new Promise<unknown>((resolve, reject) => {
       const timer = setTimeout(() => {
         this.pending.delete(id);
         reject(new Error(`${method} timed out`));
-      }, 10000);
+      }, timeoutMs);
       this.pending.set(id, { resolve, reject, timer });
       this.post({ type: 'command', session: this.session, id, method, value });
     });
@@ -206,6 +218,19 @@ export class FrameAdapter implements EmulatorAdapter {
       payloadCapacity: number;
       mounts: number;
     } | null>;
+  }
+
+  /** Capability-based disc control (Flycast/libretro get_disk_count / set_current_disk). */
+  async diskCount() {
+    return this.call('diskCount') as Promise<number>;
+  }
+
+  async diskIndex() {
+    return this.call('diskIndex') as Promise<number>;
+  }
+
+  async setDiskIndex(index: number) {
+    return this.call('setDiskIndex', index) as Promise<{ index: number; count: number }>;
   }
 
   async importRmsMigration(payload: unknown) {
@@ -256,10 +281,15 @@ export class FrameAdapter implements EmulatorAdapter {
     }
     this.pending.clear();
     try {
-      if (this.core === 'js2me' && this.targetOrigin && this.targetOrigin !== location.origin) {
+      if (
+        (this.core === 'js2me' && this.targetOrigin && this.targetOrigin !== location.origin) ||
+        this.core === 'ruffle' ||
+        this.core === 'flycast' ||
+        this.core === 'mame_rbg_arcade'
+      ) {
         this.frame.contentWindow?.postMessage(
           { type: 'command', session: this.session, id: ++this.count, method: 'dispose' },
-          this.targetOrigin,
+          this.targetOrigin || location.origin,
         );
       }
     } catch {

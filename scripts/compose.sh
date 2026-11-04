@@ -17,4 +17,19 @@ fi
 
 : "${DOCKER_CONFIG:=/tmp/retro-browser-gaming-docker}"
 export DOCKER_CONFIG
+
+# Ensure the optional proxy CA secret resolves to a regular file. BuildKit
+# rejects /dev/null (char device) without a special allow flag; never print CA.
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+EMPTY_PROXY_CA="${ROOT}/infra/docker/empty-proxy-ca.pem"
+if [[ -z "${CODEX_PROXY_CERT:-}" ]]; then
+  if [[ ! -f "$EMPTY_PROXY_CA" ]]; then
+    : >"$EMPTY_PROXY_CA"
+  fi
+  export CODEX_PROXY_CERT="$EMPTY_PROXY_CA"
+elif [[ ! -f "${CODEX_PROXY_CERT}" ]]; then
+  echo "compose.sh: CODEX_PROXY_CERT must be a regular file (got: ${CODEX_PROXY_CERT})" >&2
+  exit 1
+fi
+
 exec docker compose "$@"

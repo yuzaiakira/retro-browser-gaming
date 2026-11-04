@@ -8,7 +8,7 @@
 | --- | --- |
 | Source-only clone | App builds; HTML5 Orbit path can work with seeded fixtures; WASM consoles need authorized private cores |
 | Authorized full runtime | Import backup → provision → LOCAL_FULL |
-| Unsupported / experimental | Keep ZX81, Jaguar, N64 as experimental; FBNeo/Atari ST blocked as before |
+| Unsupported / experimental | Keep ZX81, Jaguar as experimental; N64 engineering-verified (product approval separate); FBNeo/Atari ST blocked as before |
 
 ## Suggested Alpha surface (owner approval)
 

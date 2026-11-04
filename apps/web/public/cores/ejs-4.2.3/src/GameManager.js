@@ -85,18 +85,30 @@ class EJS_GameManager {
     }
     loadExternalFiles() {
         return new Promise(async (resolve, reject) => {
-            if (this.EJS.config.externalFiles && this.EJS.config.externalFiles.constructor.name === "Object") {
-                for (const key in this.EJS.config.externalFiles) {
+            const ext = this.EJS.config.externalFiles;
+            // Accept plain objects and seekable-VFS wrappers (constructor.name may not be "Object").
+            if (ext && typeof ext === "object") {
+                for (const key in ext) {
+                    const asset = ext[key];
+                    // Direct MEMFS write for in-memory BIOS/system bytes (FDS disksys.rom).
+                    if (asset instanceof Uint8Array || asset instanceof ArrayBuffer || ArrayBuffer.isView(asset)) {
+                        try {
+                            this.writeFile(key, asset);
+                        } catch (e) {
+                            console.warn("Failed to write in-memory external file '" + key + "'.", e);
+                        }
+                        continue;
+                    }
                     await new Promise(done => {
-                        this.EJS.downloadFile(this.EJS.config.externalFiles[key], null, true, { responseType: "arraybuffer", method: "GET" }).then(async (res) => {
+                        this.EJS.downloadFile(asset, null, true, { responseType: "arraybuffer", method: "GET" }).then(async (res) => {
                             if (res === -1) {
-                                if (this.EJS.debug) console.warn("Failed to fetch file from '" + this.EJS.config.externalFiles[key] + "'. Make sure the file exists.");
+                                console.warn("Failed to fetch external file '" + key + "'");
                                 return done();
                             }
                             let path = key;
                             if (key.trim().endsWith("/")) {
                                 const invalidCharacters = /[#<$+%>!`&*'|{}/\\?"=@:^\r\n]/ig;
-                                let name = this.EJS.config.externalFiles[key].split("/").pop().split("#")[0].split("?")[0].replace(invalidCharacters, "").trim();
+                                let name = String(asset).split("/").pop().split("#")[0].split("?")[0].replace(invalidCharacters, "").trim();
                                 if (!name) return done();
                                 const files = await this.EJS.checkCompression(new Uint8Array(res.data), this.EJS.localization("Decompress Game Assets"));
                                 if (files["!!notCompressedData"]) {
@@ -111,7 +123,7 @@ class EJS_GameManager {
                             try {
                                 this.writeFile(path, res.data);
                             } catch(e) {
-                                if (this.EJS.debug) console.warn("Failed to write file to '" + path + "'. Make sure there are no conflicting files.");
+                                console.warn("Failed to write file to '" + path + "'.", e);
                             }
                             done();
                         });
@@ -129,7 +141,14 @@ class EJS_GameManager {
             current += parts[i] + "/";
             this.mkdir(current);
         }
-        this.FS.writeFile(path, data);
+        // downloadFile(arraybuffer) yields ArrayBuffer; MEMFS writeFile wants Uint8Array.
+        // Without this, FDS disksys.rom system mounts fail silently (catch in loadExternalFiles).
+        let bytes = data;
+        if (data instanceof ArrayBuffer) bytes = new Uint8Array(data);
+        else if (ArrayBuffer.isView(data) && !(data instanceof Uint8Array)) {
+            bytes = new Uint8Array(data.buffer, data.byteOffset, data.byteLength);
+        }
+        this.FS.writeFile(path, bytes);
     }
     mkdir(path) {
         try {
