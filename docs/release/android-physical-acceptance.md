@@ -1,18 +1,18 @@
 # Android physical PWA acceptance (PH-13)
 
-**Date:** 2026-11-03  
-**Frozen HEAD:** `318832d`  
+**Date:** 2026-11-04 (PH-14 re-check)  
+**Frozen engineering baseline:** `318832d`  
 **Method:** Real device required. Desktop Chrome device emulation is **not** accepted.
 
 ## Device detection (this session)
 
 ```text
 adb devices -l
-→ daemon started; List of devices attached
-→ ERROR: Unable to retrieve device list!  (empty / no authorized device)
+→ List of devices attached
+→ (empty)
 ```
 
-**Result:** no USB Android handset visible to `adb`.
+**Result:** no USB Android handset visible to `adb`. Executable checklist: `android-physical-test-instructions.md`.
 
 ## Gate
 

@@ -1,7 +1,9 @@
 # Distribution inventory (PH-13)
 
-**Frozen HEAD:** `318832d`  
+**Engineering baseline:** `318832d`  
+**PH-14 reaffirmation:** 2026-11-04 — classifications unchanged (no new consoles).  
 **Machine-readable:** `docs/release/distribution-inventory.json`  
+**Counsel pack:** `docs/release/legal-review/` (all `NEEDS_LEGAL_REVIEW`; 0 approvals)  
 **Sources of truth:** `docs/open-source/browser-distributable-allowlist.json`, `docs/open-source/corresponding-source-matrix.json`
 
 ## Decision vocabulary

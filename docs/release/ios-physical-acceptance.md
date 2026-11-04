@@ -1,16 +1,17 @@
 # iOS / Safari physical acceptance (PH-13)
 
-**Date:** 2026-11-03  
-**Frozen HEAD:** `318832d`  
+**Date:** 2026-11-04 (PH-14 re-check)  
+**Frozen engineering baseline:** `318832d`  
 **Method:** Real iPhone/iPad required. Playwright WebKit and desktop Safari are **not** equivalent.
 
 ## Device detection (this session)
 
 ```text
-idevice_id -l → IOS_TOOLS_UNAVAILABLE (libimobiledevice not present / no device)
+idevice_id -l → IOS_TOOLS_UNAVAILABLE
+adb-style empty; no Home Screen install performed
 ```
 
-No iPhone/iPad was attached; no Home Screen web-app install was performed.
+Executable checklist: `ios-physical-test-instructions.md`.
 
 ## Gate
 

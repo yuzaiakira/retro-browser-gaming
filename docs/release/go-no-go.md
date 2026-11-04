@@ -1,60 +1,49 @@
-# GO / NO-GO matrix (PH-13)
+# GO / NO-GO matrix (PH-14)
 
-**Baseline:** `318832d` (`feat/platform-expansion-phase-1`)  
-**Date:** 2026-11-03  
+**Engineering baseline:** `318832d`  
+**Private RC docs (PH-13):** `8a70f45`  
+**Date:** 2026-11-04  
 
-Status vocabulary only: `PASS` | `FAIL` | `NOT_VERIFIED` | `BLOCKED_EXTERNAL` | `PENDING_APPROVAL`.
+Status vocabulary: `PASS` | `FAIL` | `NOT_VERIFIED` | `BLOCKED_EXTERNAL` | `PENDING_APPROVAL`.
 
-Gates are **independent**. Satisfying one never implies another.
+Gates are **independent**.
 
 ## Independent gates
 
-| Gate | Status | Rationale |
+| Gate | Status | Evidence |
 |---|---|---|
-| ENGINEERING_READY | **PASS** | Dreamcast ELF/GDI/CDI/CHD (separated claims), playlist disc-swap, arcade `rbgdot`, clean soak 10/10, Compose healthy, core-lock 397 — engineering evidence preserved |
-| REPRODUCIBLE_BUILD_READY | **PASS** | Clean Compose rebuild + core-lock + allowlist/CS manifests on tip lineage; LOCAL_FULL reproducible for private RC |
-| SECURITY_REVIEW_READY | **PASS** | Runtime CSP path-scoped (`RUNTIME_CSP_SECURITY_PASS`); FrameAdapter origin checks; shell without `unsafe-eval`; residual `unsafe-eval` limited to `/runtime/*` + J2ME origin |
-| SOURCE_DELIVERY_READY | **NOT_VERIFIED** | Build gate OK; recipient delivery `OFFER_DELIVERY_NOT_VERIFIED`; require-public → FAIL; counsel rows still `NEEDS_LEGAL_REVIEW` |
-| CATALOG_PRODUCT_APPROVED | **PENDING_APPROVAL** | 53/53 catalog titles `pending`; 0 owner approvals |
-| ANDROID_PHYSICAL_READY | **BLOCKED_EXTERNAL** | No Android device on `adb` this session (`ANDROID_PHYSICAL_BLOCKED_EXTERNAL`) |
-| IOS_PHYSICAL_READY | **BLOCKED_EXTERNAL** | No iOS device/tools (`IOS_PHYSICAL_BLOCKED_EXTERNAL`); IOS-001 unchanged |
-| PUBLIC_DISTRIBUTION_CLEARED | **FAIL** | Product pending + source delivery unverified + LOCAL_ONLY/NOT_CLEARED cores + physical gates open + publication checklist STOP |
+| ENGINEERING_READY | **PASS** | Preserved PH-12/13 engineering: CHD/soak/arcade/Flycast claims; Compose healthy; no new consoles |
+| REPRODUCIBLE_BUILD_READY | **PASS** | `CORE_LOCK_OK` 397; allowlist/CS manifests; source package assemble reproducible via `prepare-source-offer-delivery.py` |
+| SECURITY_REVIEW_READY | **PASS** | Path-scoped CSP retained; shell without `unsafe-eval`; FrameAdapter origin checks; staging checklist forbids broadening eval |
+| SOURCE_DELIVERY_READY | **NOT_VERIFIED** | `SOURCE_PACKAGE_BUILT` PASS; mock integrity PASS; recipient HTTPS **not** verified (`BLOCKED_EXTERNAL` host). See `source-delivery-verification.md` |
+| LEGAL_REVIEW_READY | **PENDING_APPROVAL** | Pack generated (`legal-review/`); **0** counsel approvals; license name ≠ approval |
+| CATALOG_PRODUCT_APPROVED | **PENDING_APPROVAL** | Queue export **53 pending / 0 approved**; workflow validated; no auto-approve |
+| ANDROID_PHYSICAL_READY | **BLOCKED_EXTERNAL** | `adb` empty; instructions prepared |
+| IOS_PHYSICAL_READY | **BLOCKED_EXTERNAL** | No iOS device/tools; instructions prepared |
+| PUBLIC_DISTRIBUTION_CLEARED | **FAIL** | Source delivery unverified + counsel pending + product pending + LOCAL_ONLY/BLOCKED cores + physical/staging open |
+| PUBLIC_RELEASE_GO | **STOP** | Mandatory gates incomplete |
 
-## Aggregate decision
+## Source-delivery sub-levels (not a substitute for SOURCE_DELIVERY_READY)
+
+| Sub-level | Status |
+|---|---|
+| SOURCE_PACKAGE_BUILT | PASS |
+| SOURCE_HTTPS_CONFIGURED | PASS (deploy templates only) |
+| SOURCE_RECIPIENT_FETCH_VERIFIED | NOT_VERIFIED |
+
+## Staging HTTPS (supporting)
+
+| Item | Status |
+|---|---|
+| Authorized staging HTTPS acceptance | **BLOCKED_EXTERNAL** (`staging-https-report.md`) |
+
+## Aggregate
 
 | Decision | Result |
 |---|---|
-| Private engineering RC usable for internal review | **YES** (LOCAL_FULL / Compose) |
+| Private engineering RC | **YES** (LOCAL_FULL / Compose) |
 | PUBLIC_RELEASE_GO | **STOP** |
 
-Mandatory owner-defined release gates for publication are **not** all satisfied. Publication, merge-to-main, tagging, public deploy, and visibility change remain **STOP**.
+## Exact remaining blockers
 
-## Remaining blockers (publication)
-
-1. Recipient-facing corresponding-source delivery (`SOURCE_DELIVERY_READY`)  
-2. Counsel clearance for `NEEDS_LEGAL_REVIEW` / NOT_CLEARED / LOCAL_ONLY redistribution  
-3. Owner product approval for every public catalog title  
-4. Real Android OS-level PWA re-cert on this tip  
-5. Real iOS Home Screen web-app cert  
-6. OS-level PWA install verification (desktop/mobile) where claimed  
-7. Physical gamepad IN-002-P/D (pre-existing)  
-8. Staging HTTPS (pre-existing)  
-9. Exclude/disable PRIVATE_ONLY + blocked cores from any public build  
-
-## What must not be claimed
-
-- Native Flycast `.m3u` boot  
-- All MAME drivers / FBNeo  
-- ColecoVision / Vectrex interactive play without lawful BIOS  
-- iOS or Android PH-13 re-cert PASSes without devices  
-- Public redistribution of Flycast / rbgdot packs  
-
-## Related docs
-
-- `PH-13-release-readiness.md`  
-- `distribution-inventory.md`  
-- `source-delivery-audit.md`  
-- `product-approval-matrix.md`  
-- `android-physical-acceptance.md`  
-- `ios-physical-acceptance.md`  
-- `release-candidate-manifest.md`  
+See `blocker-registry.md` (B-SRC-01, B-LEG-01, B-CAT-01, B-STG-01, B-AND-01, B-IOS-01, B-PAD-01, B-DIST-01, B-BIOS-01).

@@ -2,6 +2,8 @@
 
 ## Verdict
 
+**PH-14 / PUBLIC_RELEASE_GO = STOP** (2026-11-04). Actionable blocker pack prepared on `8a70f45` lineage: source **package built** + mock integrity OK, recipient HTTPS **NOT_VERIFIED**; legal pack **0 counsel approvals**; product queue **0/53**; staging/Android/iOS **BLOCKED_EXTERNAL**. Engineering baseline `318832d` preserved. See `docs/release/go-no-go.md`, `blocker-registry.md`.
+
 **PH-13 PRIVATE RC / PUBLIC_RELEASE_GO = STOP** (2026-11-03). Engineering gates PASS on tip `318832d` lineage; source delivery **NOT_VERIFIED**; catalog product approval **0/53**; Android/iOS physical **BLOCKED_EXTERNAL**. Pack: `docs/release/` (`go-no-go.md`).
 
 **RELEASE CANDIDATE / NOT COMPLETE** (product/device/staging gates unchanged).  
@@ -388,17 +390,40 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 3. Keep PUBLIC_RELEASE_GO = STOP until all mandatory gates PASS
 4. Optional eng: native Flycast `.m3u` content boot (still NOT_VERIFIED)
 
+## PH-14 actionable blockers (2026-11-04)
+
+| Check | Result |
+|---|---|
+| Baseline freeze | HEAD was `8a70f45`; ancestor `318832d`; dirty=0; classifications preserved |
+| Source package | `SOURCE_PACKAGE_BUILT` + mock `OFFER_ARCHIVE_INTEGRITY_OK` via `prepare-source-offer-delivery.py` |
+| Source recipient HTTPS | **NOT_VERIFIED** / host **BLOCKED_EXTERNAL** |
+| Legal review pack | 81 JSON/CSV entries; counsel approvals **0** — `docs/release/legal-review/` |
+| Product approval queue | 53 pending / 0 approved — export only; workflow validated |
+| Staging HTTPS | **BLOCKED_EXTERNAL** |
+| Android / iOS | **BLOCKED_EXTERNAL**; executable instructions added |
+| Validation newly run | core-lock; public-source; source-offer; Django 43; Vitest 85; tsc |
+| Soak/CHD | Prior evidence retained; **not** re-executed as new PH-14 PASSes |
+| PUBLIC_RELEASE_GO | **STOP** |
+
+### Next concrete task (PH-14)
+
+1. Ops: authorized HTTPS source-offer host → `--require-public-delivery` PASS
+2. Counsel: decisions on `legal-review/` pack (do not auto-approve)
+3. Product owner: per-title approvals via Admin/`approve_for_product` (no bulk automation)
+4. Ops: staging HTTPS cutover; QA: physical Android/iOS checklists
+5. Keep PUBLIC_RELEASE_GO = STOP
+
 ## Remaining blockers / next
 
 1. Owner: authorize Option B public repo push of sanitized candidate (LICENSE enacted)
-2. Counsel: legal-review package; `NEEDS_LEGAL_REVIEW` ≠ approval
+2. Counsel: legal-review package; `NEEDS_LEGAL_REVIEW` ≠ approval — use `docs/release/legal-review/`
 3. Owner: publish corresponding-source offer on HTTPS; gate must fetch PASS before `OFFER_DELIVERY_VERIFIED`
 4. Product: Alpha game set approvals (incl. Atari ST / FDS / Atari 8-bit / N64/ZX81 fixtures if desired)
 5. Resolve CS for `virtualjaguar_js` (`81_eo` patch + rebuild notes now packaged); Hatari/EmuTOS/atari800 CS pins recorded
-6. QA: physical gamepad + iOS + Android PH-13 re-cert; Ops: staging HTTPS
+6. QA: physical gamepad + iOS + Android re-cert; Ops: staging HTTPS
 7. Playwright offline ≠ physical-device offline certification (document only)
 8. Continue PH-12.1 Jaguar (only remaining 12.1 EXPERIMENTAL)
 9. Vectrex: BLOCKED_EXTERNAL until authorized `system.img` + gameplay/offline gates
 10. Atari 8-bit: optional `.car`/`.cas`/multi-disk + 400/800 profile smokes after real validation; OS PWA/physical NOT_VERIFIED
 11. Dreamcast: Compose CHD offline + clean soak closed; product approval pending; optional native M3U content boot
-12. PH-13: PUBLIC_RELEASE_GO remains STOP — see `docs/release/go-no-go.md`
+12. PH-14: PUBLIC_RELEASE_GO remains STOP — see `docs/release/blocker-registry.md`

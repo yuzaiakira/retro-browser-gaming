@@ -33,6 +33,12 @@
 | PH-13 source delivery | NOT_VERIFIED | Build gate OK; recipient `OFFER_DELIVERY_NOT_VERIFIED` — `docs/release/source-delivery-audit.md` |
 | PH-13 catalog product approval | PENDING_APPROVAL | 53/53 pending — `docs/release/product-approval-matrix.md` |
 | PH-13 PUBLIC_RELEASE_GO | STOP | Independent gates in `docs/release/go-no-go.md` |
+| PH-14 source package built | PASSED (scoped) | Assemble + mock integrity; recipient HTTPS still NOT_VERIFIED — `docs/release/source-delivery-verification.md` |
+| PH-14 legal review pack | PENDING_APPROVAL | Pack generated; 0 counsel approvals — `docs/release/legal-review/` |
+| PH-14 product approval queue | PENDING_APPROVAL | Export 53/0; no auto-approve — `docs/release/product-approval-queue.md` |
+| PH-14 staging HTTPS | BLOCKED_EXTERNAL | `docs/release/staging-https-report.md` |
+| PH-14 Android / iOS | BLOCKED_EXTERNAL | Re-detected empty; instructions in `docs/release/*-physical-test-instructions.md` |
+| PH-14 PUBLIC_RELEASE_GO | STOP | `docs/release/go-no-go.md` + `blocker-registry.md` |
 
 ## Gate verdicts
 

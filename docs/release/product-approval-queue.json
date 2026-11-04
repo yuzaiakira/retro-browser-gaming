@@ -1,0 +1,2144 @@
+{
+  "schema": "rbg-product-approval-queue-v1",
+  "generated_at": "2026-11-04T07:16:10Z",
+  "policy": "No bulk auto-approval. Engineering VERIFIED_PLAYABLE does not approve. Pending titles must stay hidden from public catalogs (CATALOG_ALLOW_ENGINEERING false in production).",
+  "workflow": {
+    "permission": "catalog.approve_game_product",
+    "services": [
+      "approve_for_product",
+      "reject_product_approval",
+      "clear_product_approval"
+    ],
+    "audit_model": "ProductApprovalDecision (append-only)",
+    "admin_actions": [
+      "approve_product_selected",
+      "reject_product_selected",
+      "clear_product_selected"
+    ]
+  },
+  "summary": {
+    "total": 53,
+    "pending": 53,
+    "approved": 0,
+    "rejected": 0
+  },
+  "titles": [
+    {
+      "slug": "cc0-a5200-culomin",
+      "title": "CC0 Atari 5200 Culomin",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/f8313f6f72c9fdb23cbc9ac2a2b7744bd47e539bcc2d073b555475e05e28e2b8/cc0-a5200-culomin.a52",
+          "kind": "rom",
+          "license_text_or_reference": "CC0-1.0; LICENSES/culomin-A5200-CC0.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "atari-5200",
+          "core": "a5200@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "gpl-a7800-rfk",
+      "title": "GPL Atari 7800 robotfindskitten",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/8ba293389dfc6885d3c5d1eb2224a68b8e2493bd48525406b533dfa2bd9ad91d/gpl-a7800-rfk.a78",
+          "kind": "rom",
+          "license_text_or_reference": "GPL-2.0; LICENSES/rfk7800-GPL-2.0.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://www.gnu.org/licenses/old-licenses/gpl-2.0.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "atari-7800",
+          "core": "prosystem@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "gpl-atari-st-pongwars",
+      "title": "GPL Atari ST Pong Wars",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/2c5ca8e161bec25ccb2a96452b837420b145538f67fa4e31c8075f204bbee99c/gpl-atari-st-pongwars.st",
+          "kind": "rom",
+          "license_text_or_reference": "GPL-3.0; LICENSES/atari-st-pongwars-GPL-3.0.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://github.com/neilrackett/atarist-pongwars/releases/tag/v2.0.0"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "atari-st",
+          "core": "hatari@hatari-2.6.1",
+          "manifest_entries": 3
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "gpl-gb-big2small",
+      "title": "GPL GB Big2Small",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/59c096333f93c12c8eb25a5fcffa2be15001abcd5d20b9a82c2bc2dae7e625b2/gpl-gb-big2small.gb",
+          "kind": "rom",
+          "license_text_or_reference": "GPL-3.0; LICENSES/big2small-GB-GPL-3.0.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://www.gnu.org/licenses/gpl-3.0.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "gb",
+          "core": "gambatte@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "gpl-ngpc-test",
+      "title": "GPL NGPC Test",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/d6e6c4d85e6f029b11bafbb6077ff30942daf940de0b61fde17c86904797dbf1/gpl-ngpc-test.ngp",
+          "kind": "rom",
+          "license_text_or_reference": "GPL-3.0; LICENSES/NGPC-Code-GPL-3.0.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://www.gnu.org/licenses/gpl-3.0.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "ngpc",
+          "core": "mednafen_ngp@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "gpl-ngp-joypad",
+      "title": "GPL NGP Joypad",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/e6a68881e42a50419063b78f3bd7bdc7aa5eda35503df9f74f3a9655fe1cf442/gpl-ngp-joypad.ngp",
+          "kind": "rom",
+          "license_text_or_reference": "GPL-3.0; LICENSES/NGPC-Code-GPL-3.0.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://www.gnu.org/licenses/gpl-3.0.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "ngp",
+          "core": "mednafen_ngp@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "huc-pce-scroll",
+      "title": "HuC PCE Scroll",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/5397d79a9fdeba1c1911d331ed564700f9d3981f62f9984ae289ddb9a8dcf35d/huc-pce-scroll.pce",
+          "kind": "rom",
+          "license_text_or_reference": "GPL-2.0; LICENSES/HuC-GPL-2.0.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://www.gnu.org/licenses/old-licenses/gpl-2.0.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "pce",
+          "core": "mednafen_pce@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-a2600-berta",
+      "title": "MIT Atari 2600 Berta",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/3e0efbbf4aba069cbe06d5bf2795c2110914aa40e378743cfcc40321aae3928d/mit-a2600-berta.a26",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/berta-A2600-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "atari-2600",
+          "core": "stella2014@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-a2600-pipes",
+      "title": "MIT Atari 2600 Pipes",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/5313fe8d2733d7d8e0ce5b53c4708552b8fb4daffe25fb5fb841cee350e7ff60/mit-a2600-pipes.a26",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/pipes-A2600-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "atari-2600",
+          "core": "stella2014@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-amiga-dot",
+      "title": "MIT Amiga Dot",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/348b009bd77f9f1bf483dd98f11492bdd80c1bfbba470f63544ec02b842e87ba/mit-amiga-dot.adf",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/amiga-dot-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "amiga",
+          "core": "puae@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-arcade-rbgdot",
+      "title": "MIT Arcade RBG Dot",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/98e2ed54bc93da8c855eaa23b340a964352e555d90cb5927841bf0a735df4637/mit-arcade-rbgdot.zip",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/arcade-rbgdot-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "arcade",
+          "core": "mame_rbg_arcade@mame-rbgdot-dev",
+          "manifest_entries": 2
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-atari8-dot",
+      "title": "MIT Atari 8-bit Dot",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/bd52416d2d76201b3aa6c442eb197b338f3cd567fab2865a13aae0a12d81e16c/mit-atari8-dot.xex",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/atari8-dot-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "atari-8bit",
+          "core": "atari800@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-c64-wildboa",
+      "title": "MIT C64 Wild Snake Boa",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/e11afe038524051a8174100ac67c34a2018ff5359ed34be1a86dcf5645663947/mit-c64-wildboa.prg",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/wildboa-C64-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "c64",
+          "core": "vice_x64sc@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-coleco-retropipe",
+      "title": "MIT ColecoVision RetroPIPE",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/94d38da05124a356132066cd27ca3ca044a99c1630ff3b54f0d5c779110c58e4/mit-coleco-retropipe.rom",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/retropipe-ColecoVision-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://github.com/visrealm/retropipe/releases/tag/v0.2"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "colecovision",
+          "core": "gearcoleco@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-cpc-brickblaster",
+      "title": "MIT CPC Brick Blaster",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/0213b3b5ef409c0ba66916771c9b3379dcab5236c10bce2313ffa9d00f1600e1/mit-cpc-brickblaster.dsk",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/brickblaster-CPC-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "amstrad-cpc",
+          "core": "cap32@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-dos-floppybird",
+      "title": "MIT DOS Floppy Bird",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/5666cf078694f5fa1e50da7ddd70d7ba1e0a6bdce702606c454d2e8261e133c1/mit-dos-floppybird.zip",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/floppybird-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://github.com/icebreaker/floppybird"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "dos",
+          "core": "jsdos@jsdos-8.3.8",
+          "manifest_entries": 6
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-dreamcast-dot",
+      "title": "MIT Dreamcast Dot",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/ffafb5d50a89c0c8077ec2cbfe80ff82306d7f8bec8d7e98e9eaf7c213f0608e/mit-dreamcast-dot.elf",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/dreamcast-dot-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "dreamcast",
+          "core": "flycast@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-dreamcast-dot-chd",
+      "title": "MIT Dreamcast Dot CHD",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/9c5071f347c34bed41bffb05c04966bf241b19a7c519b60ce3397cdd7c5efbf4/mit-dreamcast-dot.chd",
+          "kind": "disk",
+          "license_text_or_reference": "MIT; LICENSES/dreamcast-dot-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "dreamcast",
+          "core": "flycast@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-dreamcast-dot-gdi",
+      "title": "MIT Dreamcast Dot GDI",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/3091f715dddb73ba7a84e21989db96f2c2e4cd107bf41ff88971203c72d9913a/mit-dreamcast-dot.gdi",
+          "kind": "disk",
+          "license_text_or_reference": "MIT; LICENSES/dreamcast-dot-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        },
+        {
+          "asset": "sha256/ad8db41115b67cfb14d2eff6ebf512de8e34470f5320ab1fb3322b11befb4475/mit-dreamcast-dot-track01.bin",
+          "kind": "disk",
+          "license_text_or_reference": "MIT; LICENSES/dreamcast-dot-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        },
+        {
+          "asset": "sha256/15453e38e9c8e03d6e7854c2414f93e944b6059b4933847ebf735834407cec48/mit-dreamcast-dot-track02.raw",
+          "kind": "disk",
+          "license_text_or_reference": "MIT; LICENSES/dreamcast-dot-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        },
+        {
+          "asset": "sha256/7d01fb21085c0a722bad704a91e6e465478748f83c69a224c5963c60d9108515/mit-dreamcast-dot-track03.bin",
+          "kind": "disk",
+          "license_text_or_reference": "MIT; LICENSES/dreamcast-dot-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "dreamcast",
+          "core": "flycast@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-dreamcast-dot-multidisc",
+      "title": "MIT Dreamcast Dot Multi-Disc",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/0f4ac3e52c853d13f8f75f565d4db8b96b76f552ab4e0d73e9b6672f4ece767f/mit-dreamcast-dot-multidisc.m3u",
+          "kind": "disk",
+          "license_text_or_reference": "MIT; LICENSES/dreamcast-dot-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        },
+        {
+          "asset": "sha256/9c5071f347c34bed41bffb05c04966bf241b19a7c519b60ce3397cdd7c5efbf4/mit-dreamcast-dot.chd",
+          "kind": "disk",
+          "license_text_or_reference": "MIT; LICENSES/dreamcast-dot-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        },
+        {
+          "asset": "sha256/3e8b39ee1ed399086bdf3ebf339e6c3d003e7c539220f794bc02929f69e1c0dc/mit-dreamcast-dot-disc2.chd",
+          "kind": "disk",
+          "license_text_or_reference": "MIT; LICENSES/dreamcast-dot-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "dreamcast",
+          "core": "flycast@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-fds-move-demo",
+      "title": "MIT FDS Move Demo",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/c8b5b2b3f0f8f75112b1fc78269fc991952c0165bf72f6a1514e8562583541a5/fds-rbg-move-demo.fds",
+          "kind": "disk",
+          "license_text_or_reference": "MIT; .fixtures/fds-rbg-move-demo.README.md",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "fds",
+          "core": "fceumm@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-flash-dot",
+      "title": "MIT Flash Dot",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/3f5c78f2e7afa71acb84d2459d024399720c241c96a33a55b3a909469e57f85e/mit-flash-dot.swf",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/flash-dot-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "flash",
+          "core": "ruffle@ruffle-0.7.1",
+          "manifest_entries": 10
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-gba-dino",
+      "title": "MIT GBA Dino",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/5942beac698ecee57c4d93da042b37ce632121f3500804cf3679d5edd642663d/mit-gba-dino.gba",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/dino-GBA-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "gba",
+          "core": "mgba@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-gba-nonogram",
+      "title": "MIT GBA Nonogram Advance",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/e9947cf38f5b537f694ee3bd76dcc21dd6f4ed1b96bf33ae36940b9d20e1164b/mit-gba-nonogram.gba",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/nonogram-GBA-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "gba",
+          "core": "mgba@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-gbc-littlegreenblob",
+      "title": "MIT GBC Little Green Blob",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/f09a451929bdb761c846b81641dfae586c2f875ae0a8e5cb6b71e25c60c5eee4/mit-gbc-littlegreenblob.gbc",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/littlegreenblob-GBC-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "gbc",
+          "core": "gambatte@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-gbc-waternet",
+      "title": "MIT GBC Waternet",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/76bfa37e0db237d5d50a3084fca9a876592aaabfd6a9533adadd2d356998423d/mit-gbc-waternet.gbc",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/waternet-GBC-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "gbc",
+          "core": "gambatte@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-gb-dot",
+      "title": "MIT GB Dot",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/3d37551b0b313de84cc5467e794ebd675589c50d19a8179b76211b3534632330/mit-gb-dot.gb",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/gb-dot-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "gb",
+          "core": "gambatte@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-genesis-breakout",
+      "title": "MIT Genesis Breakout",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/8263cc413eb701e40fb5286ca18ebe37f2a120fc2c9b16b4795f8866ee5c59eb/mit-genesis-breakout.bin",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/retro-homebrew-games-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "sega-md",
+          "core": "genesis_plus_gx@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-genesis-pong",
+      "title": "MIT Genesis Pong",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/4f077c764972b23c6f2ea6056ebc3b8bf1da972d95f400259de676f787f1061d/mit-genesis-pong.bin",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/retro-homebrew-games-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "sega-md",
+          "core": "genesis_plus_gx@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-gg-snepzhen",
+      "title": "MIT GG Snepzhen Solitaire",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/7b743fb9b995a9d2a875f8bcf6a81e3f2e23130d5ed1fbf1e377eb02dd9d9f6e/mit-gg-snepzhen.gg",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/snepzhen-GG-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "sega-gg",
+          "core": "genesis_plus_gx@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-gg-sushinights",
+      "title": "MIT GG Sushi Nights",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/5c27018c31e775e57c53d663082d1190ea3f77aa353c368f4fb682dd66764b9a/mit-gg-sushinights.gg",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/sushinights-GG-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "sega-gg",
+          "core": "genesis_plus_gx@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-gg-waternet",
+      "title": "MIT GG Waternet",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/ab9f288e2b556263cddd7856deb67269cfe08ac1e6729ca9e44c5e2c19bb1d8c/mit-gg-waternet.gg",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/waternet-GG-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "sega-gg",
+          "core": "genesis_plus_gx@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-j2me-dot",
+      "title": "MIT J2ME Dot",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/63afd7fa5a851eec7e64ea25e49d36a5239a8c935cbb80600851c10fed2a50e2/mit-j2me-dot.jar",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/j2me-dot-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "j2me",
+          "core": "js2me@js2me-szymor",
+          "manifest_entries": 247
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-j2me-notes",
+      "title": "MIT J2ME Notes",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/cbefc73227873438c5558768417e16037717f5008705f1272c2733430ef87370/mit-j2me-notes.jar",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/j2me-dot-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "j2me",
+          "core": "js2me@js2me-szymor",
+          "manifest_entries": 247
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-j2me-paddle",
+      "title": "MIT J2ME Paddle",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/51c0c9d9f9ae89520a9bcb9c74207f8d0eb7541a907c9996237993780998a5a8/mit-j2me-paddle.jar",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/j2me-dot-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "j2me",
+          "core": "js2me@js2me-szymor",
+          "manifest_entries": 247
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-jaguar-2048",
+      "title": "MIT Jaguar 2048",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/311e7a3480041c9ac01a2e129d8aaf5e76d9d5c8879c35fcc1f067582bef0bfe/mit-jaguar-2048.jag",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/jag2048-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "atari-jaguar",
+          "core": "virtualjaguar@ejs-4.2.3",
+          "manifest_entries": 22
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-lynx-dot",
+      "title": "MIT Lynx Dot",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/55565eea9522ef738520bb8e71542eb89a3ad7709f4a7c06b75bce250301ad8c/mit-lynx-dot.lnx",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/lynx-dot-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "lynx",
+          "core": "handy@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-msx-dot",
+      "title": "MIT MSX Dot",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/57e77ece49b72b5e0ad319e8c62955c24e887bd426622073f57fbefba108e995/mit-msx-dot.rom",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/msx-dot-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "msx",
+          "core": "bluemsx@ejs-4.2.3",
+          "manifest_entries": 20
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-n64-controller-test",
+      "title": "MIT N64 Controller Test",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/6b042a945797401b2fb4f6dea11ace65ea07ebf6557830b7bda665826a0a2b2b/mit-n64-controller-test.z64",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/n64-controller-test-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "n64",
+          "core": "mupen64plus_next@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-nds-dinods",
+      "title": "MIT NDS DinoDS",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/f31cc7de00f33394639280caf1069f9e63b4937ae04bc968a0413045455efdcc/mit-nds-dinods.nds",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/dinods-NDS-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "nds",
+          "core": "desmume@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-nes-falling",
+      "title": "MIT NES Falling",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/e22b947542c2d7e595bf84725b333be7af8189c5965b9c53e356a249c7d79943/mit-nes-falling.nes",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/falling-NES-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "nes",
+          "core": "fceumm@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-nes-table-tennis",
+      "title": "MIT NES Table Tennis",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/05122457672f95fcf2ee518c3f37e506617725c2d031100b1b1c8b7785068ea3/mit-nes-table-tennis.nes",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/table-tennis-NES-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "nes",
+          "core": "fceumm@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-ps1-dot",
+      "title": "MIT PS1 Dot",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/83d980c4a51822ffb05838d3292722ee0a19079da7a2b12e6fcd310bd3e3f302/mit-ps1-dot.cue",
+          "kind": "disk",
+          "license_text_or_reference": "MIT; fixtures/ps1-dot/LICENSE.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        },
+        {
+          "asset": "sha256/23ab460d425b94f2e9a8269e2933fb59ffc4739e2aae026b46772076d1265206/dot_track01.bin",
+          "kind": "disk",
+          "license_text_or_reference": "MIT; fixtures/ps1-dot/LICENSE.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        },
+        {
+          "asset": "sha256/fd3e68b001470f2cbd0cfa193d84d76ad2267b49ca4fcee031b15cd647ceaa05/dot_track02.bin",
+          "kind": "disk",
+          "license_text_or_reference": "MIT; fixtures/ps1-dot/LICENSE.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "ps1",
+          "core": "pcsx_rearmed@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-psp-dot",
+      "title": "MIT PSP Dot",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/0b4bae0155a8648bfb019b84278db973fcb9aaa8f8b7ec8003b6113b742fa1a7/mit-psp-dot.pbp",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; fixtures/psp-dot/LICENSE.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "psp",
+          "core": "ppsspp@ejs-4.2.3",
+          "manifest_entries": 18
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-sg1000-retropipe",
+      "title": "MIT SG-1000 RetroPIPE",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/5d8045c511df923409baffe6f2b2dd0df130a7df2a85058e149a1d459ff95834/mit-sg1000-retropipe.sg",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/retropipe-SG1000-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "sega-sg1000",
+          "core": "smsplus@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-sms-ninjagirl",
+      "title": "MIT SMS Ninja Girl",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/9eb439b9aa883d53411ff1785600bb370edc45e10436b96c216502ac162f1c06/mit-sms-ninjagirl.sms",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/ninjagirl-SMS-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "sega-ms",
+          "core": "smsplus@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-sms-sushinights",
+      "title": "MIT SMS Sushi Nights",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/450ade55e6b892d6777d44d8f54223a62fdbf0a98e78e73d3cf3233bef226558/mit-sms-sushinights.sms",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/sushinights-SMS-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "sega-ms",
+          "core": "smsplus@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-snes-gothicvania",
+      "title": "MIT SNES Gothicvania",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/11d32045c69839309490676fe2dd46e3385806f79c8dad279c2d1f4ffa6027df/mit-snes-gothicvania.sfc",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/gothicvania-SNES-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "snes",
+          "core": "snes9x@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-vb-spong",
+      "title": "MIT Virtual Boy SPONG",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/3dd37416b920cbaeb3c844b918ca9e8c2dab7beaa42a387b9e76edfdfff90bfc/mit-vb-spong.vb",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/spong-VB-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "virtual-boy",
+          "core": "beetle_vb@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-wswan-chips1",
+      "title": "MIT WonderSwan chips1",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/7a428e958ef789ed072deb3081dc9654b83af2befd2e7627c3b30c8542cd0e7b/mit-wswan-chips1.wsc",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/chips1-WSWAN-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "wswan",
+          "core": "mednafen_wswan@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-zx81-dot",
+      "title": "MIT ZX81 Dot",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/fb81bc0bba7f6cbe0ccb6b9267f4cf464f2969edce2d2f3f8e0b2c056e45c7c5/mit-zx81-dot.p",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/zx81-dot-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "zx81",
+          "core": "81_eo@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "mit-zx-desolate",
+      "title": "MIT ZX Spectrum Desolate",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/bc366a4b4b1d4d61876e4207a4f9b277c2bdd92c030f7e25b3015d4a0a83ad14/mit-zx-desolate.tap",
+          "kind": "rom",
+          "license_text_or_reference": "MIT; LICENSES/desolate-ZX-MIT.txt",
+          "source_type": "upstream",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [
+        {
+          "console": "zx-spectrum",
+          "core": "fuse@ejs-4.2.3",
+          "manifest_entries": 19
+        }
+      ],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    },
+    {
+      "slug": "orbit-catch",
+      "title": "Orbit Catch",
+      "published_engineering": true,
+      "engineering_ready": true,
+      "product_approval_status": "pending",
+      "product_approved_at": null,
+      "product_approved_by_id": null,
+      "catalog_scope": "engineering-demo",
+      "public_catalog_eligible": false,
+      "license_evidence": [
+        {
+          "asset": "sha256/edc45cea04097c37598ca709112469cb341414e0eb8ef236b2c989b391080a93/orbit.html",
+          "kind": "html_bundle",
+          "license_text_or_reference": "MIT; original source in apps/api/modules/demo/orbit.html and LICENSES/orbit-MIT.txt",
+          "source_type": "first-party",
+          "approved_for_distribution": true,
+          "provenance_url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "firmware_core_notes": [],
+      "reviewer_checklist": {
+        "copyright_or_authorization": "PENDING_HUMAN",
+        "game_license": "PENDING_HUMAN",
+        "artwork_rights": "PENDING_HUMAN",
+        "sound_rights": "PENDING_HUMAN",
+        "firmware_path_ok": "PENDING_HUMAN",
+        "core_distribution_cleared": "PENDING_HUMAN",
+        "provenance_complete": "PENDING_HUMAN"
+      },
+      "decision_audit": [],
+      "notes": ""
+    }
+  ]
+}
