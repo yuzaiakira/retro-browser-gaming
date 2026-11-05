@@ -2,7 +2,7 @@
 
 ## Verdict
 
-**PH-20 human approval workflow / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Tip `b7a8587` lineage+. Owner attestation manifests **18** groups / **146** files; counsel decision manifests **52** groups / **65** questions; unresolved legal flags **3**; human approvals received **0**. Validator + mirror `HUMAN_APPROVALS` fail-closed. Tests: `scripts/test_human_approvals.py` **15 passed**. **PUBLIC_SOURCE_MIRROR_READY=NOT_CLEARED**; **GITHUB_SOURCE_PUSH_READY=NOT_CLEARED**; **PUBLIC_RELEASE_GO=STOP**. Report: `docs/release/legal-review/approval-validation-report.md`.
+**PH-20 human approval workflow / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Tip `d4dbbad`. Owner attestation manifests **18** groups / **146** files; counsel decision manifests **52** groups / **65** questions; unresolved legal flags **3**; human approvals received **0**. Validator + mirror `HUMAN_APPROVALS` fail-closed. Tests: `scripts/test_human_approvals.py` **15 passed**. **PUBLIC_SOURCE_MIRROR_READY=NOT_CLEARED**; **GITHUB_SOURCE_PUSH_READY=NOT_CLEARED**; **PUBLIC_RELEASE_GO=STOP**. Report: `docs/release/legal-review/approval-validation-report.md`.
 
 **PH-19 provenance remediation / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Tip `0e920f2` lineage+. Technical provenance gaps **200→0** via `fixture-provenance-index.json` (201 linkages); **3** residual legal-uncertainty flags; NLR still **562**; groups **52**; questions **65**; auto-approvals **0**. **PUBLIC_SOURCE_MIRROR_READY=NOT_CLEARED**; **GITHUB_SOURCE_PUSH_READY=NOT_CLEARED**; **PUBLIC_RELEASE_GO=STOP**. Report: `docs/release/legal-review/provenance-remediation-report.md`.
 

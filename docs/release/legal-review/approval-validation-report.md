@@ -1,7 +1,7 @@
 # Approval validation report (PH-20)
 
 **Generated:** 2026-11-05 (workflow tooling commit)  
-**Private tip (pre-commit):** `b7a8587` lineage  
+**Private tip:** `d4dbbad` (PH-20 tooling) / docs follow-up `c7d4c5b`  
 **Policy:** Fail-closed. No forged owner/counsel decisions. Synthetic test identities are fixture-only.
 
 ## Counts
