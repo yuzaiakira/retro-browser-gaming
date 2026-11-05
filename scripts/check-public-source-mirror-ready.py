@@ -50,7 +50,17 @@ def main() -> int:
     ap.add_argument(
         "--report",
         type=Path,
-        default=ROOT / "docs" / "release" / "public-source-mirror-verification.md",
+        default=ROOT
+        / ".runtime"
+        / "test-evidence"
+        / "PH-17"
+        / "public-source-mirror-verification.md",
+        help="Primary machine/human report path (default under .runtime)",
+    )
+    ap.add_argument(
+        "--write-docs",
+        action="store_true",
+        help="Also write docs/release/public-source-mirror-verification.md",
     )
     args = ap.parse_args()
 
@@ -317,8 +327,14 @@ def main() -> int:
                 f"- backup_bundle: `{state.get('backup_bundle')}`",
             ]
         )
+    report_body = "\n".join(report_lines) + "\n"
     args.report.parent.mkdir(parents=True, exist_ok=True)
-    args.report.write_text("\n".join(report_lines) + "\n", encoding="utf-8")
+    args.report.write_text(report_body, encoding="utf-8")
+    if args.write_docs:
+        docs_report = (
+            ROOT / "docs" / "release" / "public-source-mirror-verification.md"
+        )
+        docs_report.write_text(report_body, encoding="utf-8")
 
     print(f"PUBLIC_SOURCE_MIRROR_READY={verdict}")
     for b in blockers:
