@@ -2,6 +2,8 @@
 
 ## Verdict
 
+**Development on `main` / PUBLIC_RELEASE_GO = STOP** (2026-11-04). Integrated `feat/platform-expansion-phase-1` via merge `d650bf4` (includes `b53e66d` handoff). Future engineering continues on `main`. External blockers unchanged. Report: `docs/release/main-integration-report.md`.
+
 **External acceptance handoff / PUBLIC_RELEASE_GO = STOP** (2026-11-04). Unified checklist `docs/release/external-acceptance-checklist.json` + `external-acceptance-handoff.md`; fail-closed `scripts/check-public-release-go.py`. Source package ready; recipient HTTPS / counsel / product / physical still open. Tip lineage `ad562fd`+. Engineering baseline `318832d` preserved.
 
 **PH-14 / PUBLIC_RELEASE_GO = STOP** (2026-11-04). Actionable blocker pack prepared on `8a70f45` lineage: source **package built** + mock integrity OK, recipient HTTPS **NOT_VERIFIED**; legal pack **0 counsel approvals**; product queue **0/53**; staging/Android/iOS **BLOCKED_EXTERNAL**. Engineering baseline `318832d` preserved. See `docs/release/go-no-go.md`, `blocker-registry.md`.
@@ -414,6 +416,24 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 3. Product owner: per-title approvals via Admin/`approve_for_product` (no bulk automation)
 4. Ops: staging HTTPS cutover; QA: physical Android/iOS checklists
 5. Keep PUBLIC_RELEASE_GO = STOP
+
+## Main integration (2026-11-04/05)
+
+| Check | Result |
+|---|---|
+| Merge | `--no-ff` `feat/platform-expansion-phase-1` → `main` as `d650bf4` |
+| Contains | `b53e66d` handoff + PH-12…14 lineage |
+| Skipped | `backup/pre-strip-cursor-coauthor` (parallel superseded history) |
+| Regressions | Vitest 85, tsc, Next build, Django 43, multi-core smokes + CHD/GDI/FDS PASS |
+| Auditor | `PUBLIC_RELEASE_GO=STOP` exit 1 |
+| Push | **Not performed** |
+
+### Next concrete task (on `main`)
+
+1. Continue release prep only on `main` (no routine feature branches)
+2. External: source HTTPS delivery, counsel, product approvals, staging, physical QA
+3. Keep PUBLIC_RELEASE_GO = STOP until mandatory gates PASS
+4. Push `main` only when owner separately authorizes a normal fast-forward push
 
 ## Remaining blockers / next
 

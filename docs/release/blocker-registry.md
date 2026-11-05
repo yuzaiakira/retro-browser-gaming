@@ -1,10 +1,11 @@
 # Release blocker registry
 
-**Engineering baseline:** `318832d`  
-**Handoff tip lineage:** `ad562fd`+  
+**Development branch:** `main` (merge `d650bf4`)  
+**Engineering baseline:** `318832d` / handoff `b53e66d`  
 **PUBLIC_RELEASE_GO:** **STOP**  
 **Canonical machine checklist:** `external-acceptance-checklist.json`  
-**Human index:** `external-acceptance-handoff.md`
+**Human index:** `external-acceptance-handoff.md`  
+**Integration:** `main-integration-report.md`
 
 | ID | Blocker | Gate | Status | Owner |
 |---|---|---|---|---|

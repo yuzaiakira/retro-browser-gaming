@@ -1,9 +1,10 @@
 # External acceptance handoff
 
-**Tip at handoff prep:** `ad562fd`  
+**Development branch:** `main` (integration merge `d650bf4`, includes handoff `b53e66d`)  
 **Engineering baseline:** `318832d`  
 **PUBLIC_RELEASE_GO:** **STOP**  
-**Machine-readable checklist:** `external-acceptance-checklist.json`
+**Machine-readable checklist:** `external-acceptance-checklist.json`  
+**Integration report:** `main-integration-report.md`
 
 This document is the single external-facing index. Detailed procedures live in linked files — this page does not duplicate full inventories.
 

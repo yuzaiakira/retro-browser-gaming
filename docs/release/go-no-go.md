@@ -1,11 +1,13 @@
 # GO / NO-GO matrix (external acceptance handoff)
 
-**Engineering baseline:** `318832d`  
-**Private RC / handoff tip lineage:** `ad562fd`+  
+**Development branch:** `main` (integration merge `d650bf4`)  
+**Engineering baseline tip (feat):** `b53e66d` / CHD baseline `318832d`  
 **Date:** 2026-11-04  
 **Auditor:** `python3 scripts/check-public-release-go.py`  
 **Handoff index:** `external-acceptance-handoff.md`  
-**Checklist JSON:** `external-acceptance-checklist.json`
+**Checklist JSON:** `external-acceptance-checklist.json`  
+**Integration report:** `main-integration-report.md`  
+**Note:** Merge into `main` does **not** change PUBLIC_RELEASE_GO.
 
 Status vocabulary: `PASS` | `FAIL` | `NOT_VERIFIED` | `BLOCKED_EXTERNAL` | `PENDING_APPROVAL`.
 
