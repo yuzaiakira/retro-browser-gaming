@@ -2,7 +2,9 @@
 
 ## Verdict
 
-**PH-16 history remediation / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Private tip `24b8c55` **unchanged**. Isolated sanitized candidate `e881502…` **PASS** (tip tree identical; history auditors clean; web 85 + Django 43). **TIP_HYGIENE=PASS**; **HISTORY_SANITIZATION_CANDIDATE=PASS**; **HISTORY_SANITIZED_TESTS=PASS**; **GITHUB_SOURCE_PUSH_READY=NOT_CLEARED** (origin still hosts restricted history; no authorized migration); **PUBLIC_RELEASE_GO=STOP**. Docs: `docs/release/git-history-remediation-plan.md`. Backup+candidate outside repo under `retro-browser-gaming-ph16-{backup,candidate}-20261105T080855Z`. Do not rewrite/push/publish.
+**PH-17 Option B public-source mirror / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Private tip pin `3748fb9` (Cursor trailer stripped from prior docs tip). Local mirror candidate `8032be2` — tip equivalence PASS, history clean, refs=`main` only. **PUBLIC_SOURCE_MIRROR_READY=NOT_CLEARED** (562 NEEDS_LEGAL_REVIEW + counsel absent). **GITHUB_SOURCE_PUSH_READY=NOT_CLEARED**. **PUBLIC_RELEASE_GO=STOP**. Pipeline: `scripts/build-public-source-mirror.sh` + `check-public-source-mirror-ready.py`. Docs: `docs/release/public-source-mirror-plan.md`. No remote created/pushed.
+
+**PH-16 history remediation / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Private tip `24b8c55` lineage. Isolated sanitized candidate `e881502…` **PASS**. **TIP_HYGIENE=PASS**; **HISTORY_SANITIZATION_CANDIDATE=PASS**; **HISTORY_SANITIZED_TESTS=PASS**; **GITHUB_SOURCE_PUSH_READY=NOT_CLEARED**; **PUBLIC_RELEASE_GO=STOP**. Docs: `docs/release/git-history-remediation-plan.md`.
 
 **Development on `main` / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Tip `12a614b` lineage. **GITHUB_SOURCE_PUSH_READY = NOT_CLEARED** — tip tree clean of private `.wasm`/`.data`, but reachable history still contains emulator binaries + `docs/test-evidence/` profiles (`main-push-safety-audit.md`). Integrated feat via `d650bf4`. Do not push public source or deploy.
 
@@ -434,9 +436,9 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 
 ### Next concrete task (on `main`)
 
-1. Owner decide Option B (new public repo from sanitized candidate) vs Option A (rewrite remotes); do **not** auto-migrate
-2. Keep private `main` history intact until approved migration; do not push unsanitized `main` publicly
-3. External product gates unchanged: source HTTPS delivery, counsel, product approvals, staging, physical QA
+1. Counsel: `counsel-decisions.json` for PUBLIC_CANDIDATE rows; rebuild mirror until `PUBLIC_SOURCE_MIRROR_READY=PASS`
+2. Owner: authorize Option B destination repo only after mirror gate PASS; never flip private GitHub visibility
+3. Keep private `main` history intact; do not push unsanitized `main` publicly
 4. Keep `PUBLIC_RELEASE_GO=STOP` and `GITHUB_SOURCE_PUSH_READY=NOT_CLEARED` until independent clearances
 
 ## PH-16 sanitized history candidate (2026-11-05)

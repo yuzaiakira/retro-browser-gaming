@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # Build an Option B1 sanitized public candidate in an ISOLATED disposable clone.
 # NEVER run git-filter-repo against the original private worktree.
+#
+# Prefer the PH-17 Option B mirror pipeline for publication readiness:
+#   ./scripts/build-public-source-mirror.sh
+#   python3 scripts/check-public-source-mirror-ready.py
 set -euo pipefail
 
 PRIVATE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

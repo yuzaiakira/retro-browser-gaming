@@ -1,0 +1,5364 @@
+{
+  "schema": "rbg-public-source-file-policy-v1",
+  "generated_at": "2026-11-05T08:29:44Z",
+  "classified_tree_sha": "3748fb9ee2795a6ac6d37b8bbab513c243de9b4c",
+  "tree_root": "/home/akira/Projects/git-contribute/retro-browser-gaming",
+  "classes": [
+    "PUBLIC_SOURCE_ALLOWED",
+    "NEEDS_LEGAL_REVIEW",
+    "PRIVATE_ONLY",
+    "BLOCKED_LEGAL",
+    "BLOCKED_EXTERNAL"
+  ],
+  "rules_notes": [
+    "Sanitized Git history does not imply legal publishability.",
+    "Counsel decisions are external; this script never clears NEEDS_LEGAL_REVIEW.",
+    "PRIVATE_ONLY / BLOCKED_* paths must be absent from a public tip tree.",
+    "Third-party emulator JS and fixtures remain NEEDS_LEGAL_REVIEW until counsel_decisions.json clears them."
+  ],
+  "summary": {
+    "tracked_files": 1066,
+    "counts": {
+      "PUBLIC_SOURCE_ALLOWED": 504,
+      "NEEDS_LEGAL_REVIEW": 562
+    },
+    "blocking_for_mirror": {
+      "PRIVATE_ONLY": 0,
+      "BLOCKED_LEGAL": 0,
+      "BLOCKED_EXTERNAL": 0,
+      "NEEDS_LEGAL_REVIEW": 562
+    }
+  },
+  "files": [
+    {
+      "path": ".agents/skills/browser-emulation/SKILL.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": ".agents/skills/devops-and-release/SKILL.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": ".agents/skills/django-backend/SKILL.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": ".agents/skills/nextjs-frontend/SKILL.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": ".agents/skills/offline-download-storage/SKILL.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": ".agents/skills/offline-pwa-and-controls/SKILL.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": ".agents/skills/security-and-licensing/SKILL.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": ".agents/skills/software-architecture/SKILL.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": ".agents/skills/testing-and-verification/SKILL.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": ".dockerignore",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": ".env.example",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": ".fixtures/cc0-a5200-culomin.a52",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/dot_track01.bin",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/dot_track02.bin",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/dreamcast-dot.gdi.sha256",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/fds-dreamful-diskmag.README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/fds-dreamful-diskmag.fds",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/fds-rbg-move-demo.README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/fds-rbg-move-demo.fds",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/gpl-a7800-rfk.a78",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/gpl-atari-st-pongwars.st",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/gpl-gb-big2small.gb",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/gpl-ngp-joypad.ngp",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/gpl-ngpc-test.ngp",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/huc-pce-scroll.pce",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-a2600-berta.a26",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-a2600-pipes.a26",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-amiga-dot.adf",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-arcade-rbgdot.README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-arcade-rbgdot.zip",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-atari8-dot.README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-atari8-dot.xex",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-c64-wildboa.d64",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-c64-wildboa.prg",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-coleco-retropipe.rom",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-cpc-brickblaster.dsk",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-dos-floppybird.zip",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-dreamcast-dot-disc2-track01.bin",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-dreamcast-dot-disc2-track02.raw",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-dreamcast-dot-disc2-track03.bin",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-dreamcast-dot-disc2.chd",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-dreamcast-dot-disc2.chd.sha256",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-dreamcast-dot-disc2.elf",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-dreamcast-dot-disc2.gdi",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-dreamcast-dot-multidisc-gdi.m3u",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-dreamcast-dot-multidisc.m3u",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-dreamcast-dot-multidisc.m3u.sha256",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-dreamcast-dot-track01.bin",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-dreamcast-dot-track02.raw",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-dreamcast-dot-track03.bin",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-dreamcast-dot.README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-dreamcast-dot.chd",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-dreamcast-dot.chd.sha256",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-dreamcast-dot.elf",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-dreamcast-dot.gdi",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-dreamcast-dot.sha256",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-flash-dot.README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-flash-dot.sha256",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-flash-dot.swf",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-gb-dot.gb",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-gba-dino.gba",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-gba-nonogram.gba",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-gbc-littlegreenblob.gbc",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-gbc-waternet.gbc",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-genesis-breakout.bin",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-genesis-pong.bin",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-gg-snepzhen.gg",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-gg-sushinights.gg",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-gg-waternet.gg",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-j2me-dot.jad",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-j2me-dot.jar",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-j2me-notes.jad",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-j2me-notes.jar",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-j2me-paddle.jad",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-j2me-paddle.jar",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-jaguar-2048.bin",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-jaguar-2048.jag",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-lynx-dot.lnx",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-msx-dot.rom",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-n64-controller-test.z64",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-nds-dinods.nds",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-nes-falling.nes",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-nes-table-tennis.nes",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-ps1-dot-single.bin",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-ps1-dot-single.cue",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-ps1-dot.cue",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-psp-dot.pbp",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-sg1000-retropipe.sg",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-sms-ninjagirl.sms",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-sms-sushinights.sms",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-snes-gothicvania.sfc",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-vb-spong.vb",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-vectrex-dot.README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-vectrex-dot.bin",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-wswan-chips1.wsc",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-zx-desolate.tap",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-zx81-dot-noaltint.p",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/mit-zx81-dot.p",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".fixtures/rbgdot.id",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": ".github/workflows/backend.yml",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": ".gitignore",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "AGENTS.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "LICENSE",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/EmulatorJS-GPL-3.0.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/HuC-GPL-2.0.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/NGPC-Code-GPL-3.0.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/OpenDiskSysROM-LGPL-3.0.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/amiga-dot-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/arcade-rbgdot-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/atari-st-pongwars-GPL-3.0.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/atari8-dot-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/berta-A2600-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/big2small-GB-GPL-3.0.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/brickblaster-CPC-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/cbios-0.23.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/chips1-WSWAN-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/culomin-A5200-CC0.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/desolate-ZX-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/dino-GBA-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/dinods-NDS-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/dreamcast-dot-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/emulators-jsdos-GPL-2.0.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/emutos-GPL-2.0.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/falling-NES-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/flash-dot-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/floppybird-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/gb-dot-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/gothicvania-SNES-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/hatari-GPL-2.0.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/j2me-dot-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/jag2048-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/js2me-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/littlegreenblob-GBC-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/lynx-dot-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/msx-dot-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/n64-controller-test-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/ninjagirl-SMS-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/nonogram-GBA-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/orbit-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/pipes-A2600-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/retro-homebrew-games-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/retropipe-ColecoVision-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/retropipe-SG1000-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/rfk7800-GPL-2.0.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/ruffle-Apache-2.0.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/ruffle-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/snepzhen-GG-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/spong-VB-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/sushinights-GG-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/sushinights-SMS-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/table-tennis-NES-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/vectrex-dot-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/waternet-GBC-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/waternet-GG-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/wildboa-C64-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "LICENSES/zx81-dot-MIT.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "NOTICE",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "license / notice text"
+    },
+    {
+      "path": "README.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "SECURITY.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/config/__init__.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/config/errors.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/config/middleware.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/config/settings.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/config/urls.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/config/wsgi.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/manage.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/__init__.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/__init__.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/admin.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/apps.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/checks.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/core_lock.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/importer.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/management/__init__.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/management/commands/__init__.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/management/commands/import_manifest.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/management/commands/init_storage.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/management/commands/seed_demo.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/management/commands/verify_storage.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/migrations/0001_initial.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/migrations/0002_alter_gameasset_object_key.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/migrations/0003_emulatorcore_runtime_type_js.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/migrations/0004_game_product_approval.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/migrations/0005_product_approval_permission_history.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/migrations/__init__.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/models.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/permissions.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/serializers.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/services.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/storage.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/validators.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/catalog/views.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/modules/demo/orbit.html",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/requirements-dev.in",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/requirements-dev.lock",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/requirements.in",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/requirements.lock",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/tests/__init__.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/api/tests/test_catalog.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/AGENTS.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/eslint.config.mjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/next-env.d.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/next.config.mjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/package-lock.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/package.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/cores/README.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/compression/README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/compression/extract7z.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/compression/extractzip.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/compression/libunrar.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/.npmignore",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/core-README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/package.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/81.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/81_eo.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "NOT_CLEARED core lineage metadata/JS \u2014 counsel required; binary excluded from tip"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/a5200.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/atari800.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/beetle_vb.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/bluemsx.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/cap32.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/desmume.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/dosbox_pure.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/fceumm.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/flycast.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "LOCAL_ONLY runtime lineage pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/fuse.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/gambatte.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/gearcoleco.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/genesis_plus_gx.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/handy.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/mednafen_ngp.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/mednafen_pce.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/mednafen_wswan.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/mgba.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/mupen64plus_next.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/pcsx_rearmed.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/ppsspp.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/prosystem.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/puae.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/smsplus.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/snes9x.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/stella2014.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/vice_x64sc.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/virtualjaguar.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/reports/virtualjaguar_js.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "NOT_CLEARED core lineage metadata/JS \u2014 counsel required; binary excluded from tip"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/emulator.css",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/loader.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/af-FR.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/ar-AR.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/ben-BEN.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/de-GER.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/el-GR.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/en-US.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/es-ES.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/fa-AF.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/hi-HI.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/it-IT.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/ja-JA.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/jv-JV.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/ko-KO.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/pt-BR.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/retroarch.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/ro-RO.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/ru-RU.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/tr-TR.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/vi-VN.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/localization/zh-CN.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/src/GameManager.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/src/compression.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/src/emulator.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/src/gamepad.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/src/nipplejs.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/src/shaders.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/src/socket.io.min.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/src/storage.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/version.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/hatari-2.6.1/hatari.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/ATTRIBUTION.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/CONTRIBUTORS.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/LICENSE",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/LICENSE_NOTE.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/SOURCE_COMMIT.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/buildApp.sh",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/conv.py",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/css/buttons.css",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/css/buttons/images/icons/dialog.png",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/css/buttons/images/icons/dialog@1.5x.png",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/css/buttons/images/icons/dialog@2x.png",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/css/buttons/images/icons/view.png",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/css/buttons/images/icons/view@1.5x.png",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/css/buttons/images/icons/view@2x.png",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/css/buttons/images/ui/danger-disabled.png",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/css/buttons/images/ui/danger-press.png",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/css/buttons/images/ui/danger.png",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/css/buttons/images/ui/default.png",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/css/buttons/images/ui/disabled.png",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/css/buttons/images/ui/recommend.png",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/css/buttons/images/ui/shadow.png",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/css/buttons/images/ui/shadow@1.5x.png",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/css/buttons/images/ui/shadow@2x.png",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/css/buttons/index.html",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/css/emulator.css",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/generateTests.sh",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/img/arrow_up.png",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/img/icon128.png",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/index.html",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/bufferStream.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/classes.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/convert.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/emulator.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/events.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/execute.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/js2me.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/launcher.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/loader.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/manifest.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/nokia/mid/impl/jms/core/Launcher.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/nokia/mid/sound/Sound.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/nokia/mid/ui/CanvasItem.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/nokia/mid/ui/DeviceControl.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/nokia/mid/ui/DirectGraphics.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/nokia/mid/ui/DirectUtils.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/nokia/mid/ui/FullCanvas.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/nokia/mid/ui/TextEditor.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/nokia/mid/ui/TextEditorListener.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/nokia/mid/ui/frameanimator/FrameAnimator.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/nokia/mid/ui/frameanimator/FrameAnimatorListener.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/nokia/mid/ui/gestures/GestureEvent.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/nokia/mid/ui/gestures/GestureInteractiveZone.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/nokia/mid/ui/gestures/GestureListener.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/nokia/mid/ui/gestures/GestureRegistrationManager.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/nokia/mid/ui/lcdui/DisplayStateListener.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/nokia/mid/ui/lcdui/Indicator.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/nokia/mid/ui/lcdui/IndicatorManager.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/samsung/util/AudioClip.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/samsung/util/SM.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/com/samsung/util/SMS.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/io/BufferStream.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/io/ByteArrayInputStream.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/io/ByteArrayOutputStream.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/io/DataInput.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/io/DataInputStream.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/io/DataOutputStream.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/io/DynamicOutputStream.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/io/EOFException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/io/IOException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/io/InputStream.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/io/InputStreamReader.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/io/InterruptedIOException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/io/OutputStream.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/io/PrintStream.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/io/Reader.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/io/UTFDataFormatException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/io/UnsupportedEncodingException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/io/Writer.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/ArithmeticException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/ArrayIndexOutOfBoundsException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/ArrayObject.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/ArrayStoreException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/Boolean.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/Byte.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/Character.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/Class.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/ClassCastException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/ClassNotFoundException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/Double.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/Error.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/Exception.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/Float.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/IOException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/IllegalAccessException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/IllegalArgumentException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/IllegalMonitorStateException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/IllegalStateException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/IndexOutOfBoundsException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/InstantiationException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/Integer.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/InterruptedException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/Long.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/Math.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/NegativeArraySizeException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/NoClassDefFoundError.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/NullPointerException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/NumberFormatException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/Object.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/OutOfMemoryError.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/Runnable.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/Runtime.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/RuntimeException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/SecurityException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/Short.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/String.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/StringBuffer.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/StringBuilder.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/StringIndexOutOfBoundsException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/System.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/Thread.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/Throwable.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/UnsupportedOperationException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/VirtualMachineError.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/lang/ref/WeakReference.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/security/DigestException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/security/MessageDigest.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/security/NoSuchAlgorithmException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/util/ArrayEnumeration.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/util/Calendar.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/util/Date.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/util/Enumeration.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/util/Hashtable.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/util/NoSuchElementException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/util/Properties.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/util/Random.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/util/Stack.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/util/TimeZone.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/util/Timer.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/util/TimerTask.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/java/util/Vector.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/crypto/Cipher.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/crypto/spec/IvParameterSpec.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/crypto/spec/SecretKeySpec.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/io/Connection.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/io/ConnectionNotFoundException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/io/Connector.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/io/ContentConnection.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/io/HttpConnection.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/io/InputConnection.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/io/OutputConnection.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/io/SecureConnection.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/io/SecurityInfo.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/io/SocketConnection.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/io/SocketConnectionImpl.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/io/StreamConnection.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/io/file/ConnectionClosedException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/io/file/FileConnection.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/io/file/FileConnectionImpl.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/io/file/FileEnumeration.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/Alert.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/AlertType.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/Canvas.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/ChoiceGroup.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/Command.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/CommandListener.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/Display.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/Displayable.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/Font.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/Form.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/Gauge.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/Graphics.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/Image.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/ImageItem.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/Item.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/ItemCommandListener.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/List.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/Screen.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/Spacer.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/StringItem.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/TextBox.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/TextField.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/Ticker.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/game/GameCanvas.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/game/Layer.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/game/Sprite.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/lcdui/game/TiledLayer.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/m3g/Appearance.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/m3g/Background.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/m3g/Camera.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/m3g/Graphics3D.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/m3g/Image2D.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/m3g/Light.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/m3g/Loader.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/m3g/Material.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/m3g/Mesh.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/m3g/Texture2D.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/m3g/Transform.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/m3g/TriangleStripArray.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/m3g/VertexArray.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/m3g/VertexBuffer.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/m3g/World.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/media/Control.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/media/Controllable.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/media/Manager.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/media/MediaException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/media/Player.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/media/PlayerImpl.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/media/PlayerListener.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/media/control/MIDIControl.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/media/control/VolumeControl.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/media/control/VolumeControlImpl.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/midlet/MIDlet.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/midlet/MIDletStateChangeException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/pki/Certificate.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/pki/CertificateException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/rms/InvalidRecordIDException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/rms/RecordComparator.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/rms/RecordEnumeration.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/rms/RecordEnumerationImpl.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/rms/RecordFilter.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/rms/RecordStore.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/rms/RecordStoreException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/rms/RecordStoreFullException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/rms/RecordStoreNotFoundException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/microedition/rms/RecordStoreNotOpenException.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/wireless/messaging/Message.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/wireless/messaging/MessageConnection.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/me/javax/wireless/messaging/TextMessage.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/methodStub.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/numbers.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/program_pumba.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/program_simba.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/program_timon.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/program_zazu.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/remote.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/resources.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/threads.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/utils.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/worker.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/workers.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/zip/inflate.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/zip/zip-ext.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/js/zip/zip.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/manifest.webapp",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/manifest.webapp_x",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/runTest.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/js2me/runTests.sh",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/jsdos-8.3.8/LICENSE.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/jsdos-8.3.8/emulators.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/jsdos-8.3.8/wdosbox.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/jsdos-8.3.8/wlibzip.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/mame-rbg-arcade/rbg_arcade.html",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "LOCAL_ONLY runtime lineage pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/mame-rbg-arcade/rbg_arcade.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "LOCAL_ONLY runtime lineage pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ruffle-0.7.1/LICENSE_APACHE",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ruffle-0.7.1/LICENSE_MIT",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ruffle-0.7.1/RBG-PROVENANCE.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ruffle-0.7.1/README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ruffle-0.7.1/core.ruffle.16d61072ac7fdc4d5013.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ruffle-0.7.1/core.ruffle.994eeef0a471a88cd0e3.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ruffle-0.7.1/package.json",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/cores/ruffle-0.7.1/ruffle.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "third-party emulator frontend pending counsel"
+    },
+    {
+      "path": "apps/web/public/fixtures/gg/LICENSE",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/fixtures/gg/PROVENANCE.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/icons/icon-192.png",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/icons/icon-512.png",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/j2me-install.html",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/j2me-sw.js",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/manifest.webmanifest",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/blob-reader.worker.js",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/browser-distributable-allowlist.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/csp-security-probe.html",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/csp-security-probe.js",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/dos-frame.html",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/dos-frame.js",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/frame.css",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/frame.html",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/frame.js",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/hatari-frame.html",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/hatari-frame.js",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/j2me-allowlist.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/j2me-boot.js",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/j2me-frame.html",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/j2me-frame.js",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/j2me-isolated/j2me-frame-isolated.html",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/j2me-isolated/j2me-frame-isolated.js",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/j2me-rms-idb.js",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/j2me-runtime-manifest.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/j2me-secure.js",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/mame-frame.html",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/mame-frame.js",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/ruffle-boot.js",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/ruffle-frame.html",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/ruffle-frame.js",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/runtime/seekable-fs.js",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/public/sw.js",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/app/[[...path]]/page.tsx",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/app/error.tsx",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/app/globals.css",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/app/layout.tsx",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/app/loading.tsx",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/app/not-found.tsx",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/emulators/arcade/romset.test.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/emulators/arcade/romset.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/emulators/contracts.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/emulators/frame-adapter.test.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/emulators/frame-adapter.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/emulators/j2me-origin.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/emulators/media.test.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/emulators/media.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/emulators/registry.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/emulators/user-bios.test.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/emulators/user-bios.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/App.tsx",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/Art.tsx",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/ConfirmDialog.tsx",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/GameCard.tsx",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/GameMenu.tsx",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/GamepadStatus.tsx",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/Player.tsx",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/Settings.tsx",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/TouchControls.tsx",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/UserBiosImporter.tsx",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/catalog-query.test.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/catalog-query.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/compatibility.test.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/compatibility.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/downloads.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/hub-history.test.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/hub-history.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/hub-sort.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/input.test.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/input.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/j2me-rms-bridge.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/j2me-rms-migrate.test.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/j2me-rms-migrate.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/j2me-runtime-install.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/launcher-gamepad.test.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/launcher-gamepad.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/offline.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/player-display.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/player-prefs-store.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/player-prefs.test.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/player-prefs.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/player-shortcuts.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/range.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/runtime-errors.test.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/runtime-errors.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/save-slot-meta.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/save-slots.test.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/save-slots.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/features/saves.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/lib/api.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/lib/db.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/lib/storage.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/lib/types.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/middleware.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/policy/browser-distributable-allowlist.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/workers/benchmark.worker.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/src/workers/download.worker.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/acceptance-gates.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/android-offline-cold.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/android-physical.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/arcade-rbgdot-direct-diag.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/arcade-rbgdot-offline-pwa.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/arcade-rbgdot-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/atari-st-hatari-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/atari-st-offline-pwa.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/atari8-diag.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/atari8-offline-pwa.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/atari8-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/audio-gesture.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/browser-matrix-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/catalog-console-offline.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/catalog-j2me-dedicated-offline.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/catalog-j2me-offline.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/console-journey.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/core-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/cross-console-soak.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/dos-jsdos-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/download-faults.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/dreamcast-cdi-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/dreamcast-chd-offline-pwa.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/dreamcast-chd-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/dreamcast-disc-swap-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/dreamcast-gdi-offline-pwa.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/dreamcast-gdi-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/dreamcast-hle-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/dreamcast-offline-pwa.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/evidence-dir.js",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/fds-offline-pwa.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/fds-opendisksys-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/final-ux-acceptance.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/flash-offline-pwa.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/flash-ruffle-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/gg-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/hub-offline-journey.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/hub-ux.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/j2me-cache-recovery.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/j2me-isolated-origin-poc.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/j2me-js2me-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/j2me-local-https-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/j2me-multi-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/j2me-offline-paddle-notes.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/j2me-rms-migration-poc.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/j2me-rms-rollback-safety.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/j2me-security-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/j2me-sw-integrity.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/j2me-sw-promotion-faults.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/libretro-family-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/long-session-soak.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/n64-input-diag.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/nes-fceumm-regression.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/nes-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/offline-pwa.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/ondemand-media.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/player-personalization.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/player-ux.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/ps1-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/psp-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/seekable-media.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/sms-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tests/vectrex-bios-gate-smoke.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "apps/web/tsconfig.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "compose.override.example.yaml",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "compose.yaml",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/EMULATOR_SUPPORT_MATRIX.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/EXECUTION_STATE.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/PDR.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/PH-12-platform-expansion.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/PROJECT_GOAL.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/RELEASE_CANDIDATE.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/acceptance-matrix.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/architecture.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/asset-import.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/asset-provenance.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/browser-support.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/catalog-product-approval-report-20261021.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/compatibility-matrix.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/core-package-lock.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/decisions/001-runtime.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/decisions/002-storage.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/dependencies.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/deployment.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/README.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/arcade-license-audit.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/arcade-romset-policy.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/atari8-firmware-audit.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/atari8-libretro-build.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/bluemsx-msx-expansion.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/bluemsx-rxml-build.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/bluemsx-savestate-abi.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/coleco-gearcoleco-user-bios.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/dreamcast-firmware-audit.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/fds-open-bios-feasibility.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/flash-save-capabilities.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/flash-security-audit.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/flycast-media-formats.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/flycast-wasm-dreamcast.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/hatari-emutos-atari-st.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/jaguar-ph12-recheck-20261029.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/jaguar-virtualjaguar-js-build.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/mame-wasm-arcade.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/n64-mupen64plus-next-gameplay.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/ruffle-web-integration.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/vecx-firmware-audit.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/vecx-vectrex-build.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/emulator-builds/zx81-eo-loadp-build.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/final-handover.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/j2me-compatibility.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/j2me-security-architecture.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/known-limitations.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/licenses-and-assets.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/open-source/FINAL-PUBLICATION-CHECKLIST.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/FINAL-PUBLICATION-READINESS.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/asset-license-audit.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/backup-restore-acceptance-20261026.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/backup-reverify-20261026.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/browser-distributable-allowlist.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/corresponding-source-matrix.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/corresponding-source.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/docs-cleanup-summary.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/final-source-release-readiness-20261028.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/first-party-license-scope.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/github-publication-plan.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/history-migration-runbook.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/history-removal-manifest.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/history-rewrite-impact.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/legal-review-package.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/license-decision-sheet.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/license-ownership-questions.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/local-private-assets.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/not-cleared-cores.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/option-b-publication-steps.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/owner-approval-checklist.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/path-classification-20261028.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/private-asset-architecture.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/private-asset-backup.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/private-core-binaries.manifest.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/production-private-assets.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/proposed-licenses/LICENSE.apache-2.0.proposed.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/proposed-licenses/LICENSE.gpl-3.0.proposed.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/proposed-licenses/LICENSE.mit.proposed.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/proposed-licenses/NOTICE.proposed.txt",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/proposed-licenses/README.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/provision-mode-defaults.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/public-alpha-game-set.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/public-alpha-notes.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/public-candidate-summary-20261026.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/public-candidate-verification-20261026.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/public-repository-readiness.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/recommended-application-license.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/runtime-distribution-audit-20261026.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/second-backup-commands.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/source-offer-publication-runbook.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/open-source/third-party-notices.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/physical-device-acceptance-checklist-sprint6.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/physical-device-acceptance.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/platform-expansion-master-plan.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/product-release-shortlist-20261022.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/production-staging-verification.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/progress/phase-00.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/progress/phase-01.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/progress/phase-02.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/progress/phase-03.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/progress/phase-04.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/progress/phase-05.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/progress/phase-06.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/progress/phase-07.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/progress/phase-08.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/progress/phase-09.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/progress/phase-10.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/progress/phase-11.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/progress/platform-expansion-20261020.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/qa-summary.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/qa/deferred-physical-acceptance.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/qa/physical-acceptance-checklist.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/release-acceptance-report.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/release-manager-handover.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/release/PH-13-release-readiness.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/PH-14-release-readiness.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/android-physical-acceptance.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/android-physical-test-instructions.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/blocker-registry.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/distribution-inventory.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/distribution-inventory.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/external-acceptance-checklist.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/external-acceptance-handoff.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/git-history-filter-test-report.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/git-history-remediation-plan.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/git-history-removal-inventory.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/go-no-go.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/ios-physical-acceptance.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/ios-physical-test-instructions.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/legal-human-review-summary.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/legal-review/README.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/legal-review/counsel-decisions.json.example",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/legal-review/legal-review-pack.csv",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/legal-review/legal-review-pack.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/main-integration-report.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/main-push-safety-audit.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/ph14-validation-report.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/product-approval-matrix.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/product-approval-matrix.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/product-approval-queue.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/product-approval-queue.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/product-human-review-summary.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/public-catalog-slugs.json.example",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/release-candidate-manifest.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/source-delivery-audit.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/source-delivery-verification.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/staging-https-report.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/reports/compose-rebuild-verification.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/reports/cross-console-soak.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/reports/dreamcast-chd-disc-swap.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/reports/dreamcast-large-media-hardening.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/reports/runtime-csp-audit.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "docs/test-evidence.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "fixtures/a5200-culomin/LICENSE.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/a5200-culomin/main.c.rom",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/a7800-rfk/COPYING",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/a7800-rfk/README.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/amiga-dot/.gitignore",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/amiga-dot/LICENSE.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/amiga-dot/Makefile",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/amiga-dot/README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/amiga-dot/Startup-Sequence",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/amiga-dot/main.c",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/dos-floppybird/AUTORUN.BAT",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/dos-floppybird/LICENSE.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/dos-floppybird/flpybird.com",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/dreamcast-dot/LICENSE.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/dreamcast-dot/Makefile",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/dreamcast-dot/build-disc2.sh",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/dreamcast-dot/build-discs.sh",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/dreamcast-dot/dot.c",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/flash-dot/Dot.hx",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/flash-dot/LICENSE.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/flash-dot/Makefile",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/flash-dot/mit-flash-dot.swf",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/gb-dot/LICENSE.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/gb-dot/README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/gb-dot/main.c",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-dot/LICENSE.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-dot/PROVENANCE.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-dot/build.sh",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-dot/src/javax/microedition/lcdui/Canvas.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-dot/src/javax/microedition/lcdui/Display.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-dot/src/javax/microedition/lcdui/Displayable.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-dot/src/javax/microedition/lcdui/Graphics.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-dot/src/javax/microedition/midlet/MIDlet.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-dot/src/javax/microedition/midlet/MIDletStateChangeException.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-dot/src/javax/microedition/rms/InvalidRecordIDException.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-dot/src/javax/microedition/rms/RecordStore.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-dot/src/javax/microedition/rms/RecordStoreException.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-dot/src/javax/microedition/rms/RecordStoreFullException.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-dot/src/javax/microedition/rms/RecordStoreNotFoundException.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-dot/src/retro/j2me/dot/DotCanvas.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-dot/src/retro/j2me/dot/DotMIDlet.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/LICENSE.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/PROVENANCE.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/build.sh",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/src/javax/microedition/lcdui/Canvas.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/src/javax/microedition/lcdui/Command.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/src/javax/microedition/lcdui/CommandListener.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/src/javax/microedition/lcdui/Display.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/src/javax/microedition/lcdui/Displayable.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/src/javax/microedition/lcdui/Form.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/src/javax/microedition/lcdui/Graphics.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/src/javax/microedition/lcdui/Item.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/src/javax/microedition/lcdui/StringItem.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/src/javax/microedition/lcdui/TextField.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/src/javax/microedition/midlet/MIDlet.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/src/javax/microedition/midlet/MIDletStateChangeException.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/src/javax/microedition/rms/InvalidRecordIDException.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/src/javax/microedition/rms/RecordStore.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/src/javax/microedition/rms/RecordStoreException.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/src/javax/microedition/rms/RecordStoreFullException.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/src/javax/microedition/rms/RecordStoreNotFoundException.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-notes/src/retro/j2me/notes/NotesMIDlet.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-paddle/LICENSE.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-paddle/PROVENANCE.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-paddle/build.sh",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-paddle/src/java/lang/InterruptedException.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-paddle/src/java/lang/Runnable.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-paddle/src/java/lang/Thread.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-paddle/src/javax/microedition/lcdui/Canvas.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-paddle/src/javax/microedition/lcdui/Display.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-paddle/src/javax/microedition/lcdui/Displayable.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-paddle/src/javax/microedition/lcdui/Graphics.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-paddle/src/javax/microedition/midlet/MIDlet.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-paddle/src/javax/microedition/midlet/MIDletStateChangeException.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-paddle/src/javax/microedition/rms/InvalidRecordIDException.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-paddle/src/javax/microedition/rms/RecordStore.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-paddle/src/javax/microedition/rms/RecordStoreException.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-paddle/src/javax/microedition/rms/RecordStoreFullException.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-paddle/src/javax/microedition/rms/RecordStoreNotFoundException.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-paddle/src/retro/j2me/paddle/PaddleCanvas.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/j2me-paddle/src/retro/j2me/paddle/PaddleMIDlet.java",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/lynx-dot/LICENSE.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/lynx-dot/main.c",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/msx-dot/LICENSE.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/msx-dot/README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/msx-dot/dot.c",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/msx-dot/mit-msx-dot.rom",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/n64-controller-test/LICENSE.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/n64-controller-test/mit-n64-controller-test.z64",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/pce-scroll/README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/pce-scroll/scroll.c",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/ps1-dot/CMakeLists.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/ps1-dot/LICENSE.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/ps1-dot/README.TXT",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/ps1-dot/README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/ps1-dot/build.sh",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/ps1-dot/iso.xml",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/ps1-dot/scripts/gen_tone_wav.py",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/ps1-dot/src/main.c",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/ps1-dot/system.cnf",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/psp-dot/LICENSE.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/psp-dot/Makefile",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/psp-dot/README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/psp-dot/build.sh",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/psp-dot/src/main.c",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/vb-spong/LICENSE.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/vb-spong/SPONG Demo (2019-06-20).vb",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/zx81-81-eo-loadp/eo_loadp-cdflag-crt.c.snippet",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/zx81-dot/LICENSE.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/zx81-dot/README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/zx81-dot/dot.c",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/zx81-dot/mit-zx81-dot-fast",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/zx81-dot/mit-zx81-dot-fast.P",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/zx81-dot/mit-zx81-dot-fast.map",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/zx81-dot/mit-zx81-dot-slow",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/zx81-dot/mit-zx81-dot-slow.P",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/zx81-dot/mit-zx81-dot-slow.map",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "fixtures/zx81-dot/patch_skip_altint.py",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "game fixture pending counsel row clearance"
+    },
+    {
+      "path": "infra/dev-certs/.gitignore",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "infra/dev-certs/README.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "infra/docker/api.Dockerfile",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "infra/docker/empty-proxy-ca.pem",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "infra/docker/object-store-entrypoint.sh",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "infra/docker/object-store.Dockerfile",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "infra/docker/web.Dockerfile",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "infra/docker/webkit-test.Dockerfile",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "infra/reverse-proxy/edge.conf",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "infra/reverse-proxy/local.conf",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "packages/contracts/api.d.ts",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "packages/contracts/openapi.yaml",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "packages/contracts/package-lock.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "packages/contracts/package.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "pyproject.toml",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/assemble-corresponding-source-offer.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/audit-public-history.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/browser-smoke.sh",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/build-81-eo-emscripten.sh",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/build-atari8-dot-fixture.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/build-atari800-emscripten.sh",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/build-bluemsx-clean.sh",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/build-dreamcast-chd-and-multidisc.sh",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/build-dreamcast-disc-fixtures.sh",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/build-dreamcast-dot-fixture.sh",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/build-fds-rbg-move-demo.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/build-flash-dot-fixture.sh",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/build-mame-rbg-arcade-wasm.sh",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "LOCAL_ONLY runtime lineage pending counsel"
+    },
+    {
+      "path": "scripts/build-sanitized-candidate.sh",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/build-vectrex-dot-fixture.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/build-vecx-emscripten.sh",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/check-browser-policy-consistency.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/check-docs-hygiene.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/check-migrations.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/check-no-private-cores-tracked.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/check-public-release-go.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/check-public-source-safety.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/check-source-offer-gate.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/compose.sh",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/dev-https-edge-proxy.mjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/export-product-approval-queue.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/generate-dev-https-certs.sh",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/generate-j2me-runtime-manifest.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/generate-legal-review-pack.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/http-smoke.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/init-env.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/install-private-bios.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/patch-mame-rbg-gl-stubs.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/patches/81_eo/0001-rbg-eo-loadp-crt-autostart-joypad.patch",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "corresponding-source patches pending counsel"
+    },
+    {
+      "path": "scripts/patches/81_eo/README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "corresponding-source patches pending counsel"
+    },
+    {
+      "path": "scripts/patches/atari800/0001-rbg-memstream-retroarch-abi.patch",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "corresponding-source patches pending counsel"
+    },
+    {
+      "path": "scripts/patches/atari800/README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "corresponding-source patches pending counsel"
+    },
+    {
+      "path": "scripts/patches/bluemsx/0002-bluemsx-gate-private-rxml-static-linking.patch",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "corresponding-source patches pending counsel"
+    },
+    {
+      "path": "scripts/patches/bluemsx/0002-note-static-linking-rxml.txt",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "corresponding-source patches pending counsel"
+    },
+    {
+      "path": "scripts/patches/bluemsx/0003-board-saveState-zero-arity-wasm.patch",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "corresponding-source patches pending counsel"
+    },
+    {
+      "path": "scripts/patches/bluemsx/README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "corresponding-source patches pending counsel"
+    },
+    {
+      "path": "scripts/patches/bluemsx/frontend-rxml/rxml.c",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "corresponding-source patches pending counsel"
+    },
+    {
+      "path": "scripts/patches/bluemsx/frontend-rxml/rxml.h",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "corresponding-source patches pending counsel"
+    },
+    {
+      "path": "scripts/patches/bluemsx/libretro-font.i",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "corresponding-source patches pending counsel"
+    },
+    {
+      "path": "scripts/patches/hatari-2.6.1/emscripten.js",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "corresponding-source patches pending counsel"
+    },
+    {
+      "path": "scripts/patches/hatari-2.6.1/emscripten_rbg_snapshot.c",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "corresponding-source patches pending counsel"
+    },
+    {
+      "path": "scripts/patches/hatari-2.6.1/emscripten_rbg_snapshot.h",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "corresponding-source patches pending counsel"
+    },
+    {
+      "path": "scripts/patches/hatari-2.6.1/memorySnapShot.h",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "corresponding-source patches pending counsel"
+    },
+    {
+      "path": "scripts/patches/hatari-2.6.1/snapshot-bridge.patch",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "corresponding-source patches pending counsel"
+    },
+    {
+      "path": "scripts/patches/mame-rbgdot/mame.lst.snippet",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "corresponding-source patches pending counsel"
+    },
+    {
+      "path": "scripts/patches/mame-rbgdot/rbgdot.cpp",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "corresponding-source patches pending counsel"
+    },
+    {
+      "path": "scripts/patches/vecx/0001-rbg-external-vectrex-bios.patch",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "corresponding-source patches pending counsel"
+    },
+    {
+      "path": "scripts/patches/vecx/README.md",
+      "class": "NEEDS_LEGAL_REVIEW",
+      "reason": "corresponding-source patches pending counsel"
+    },
+    {
+      "path": "scripts/physical-android-forward.sh",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/prepare-source-offer-delivery.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/private-asset-backup.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/provision-private-cores.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/rebuild-bluemsx-emscripten.sh",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/run-local-api.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/setup.sh",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/sync-private-cores.mjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/test-backend.sh",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/test_browser_allowlist.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/test_private_asset_backup.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/test_source_offer_delivery.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/test_sync_fail_closed.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/verify-core-lock.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/web-entrypoint.sh",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/zx81-native-harness.c",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "spikes/dos-jsdos/README.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "spikes/j2me-rms/idb-persistence.browser.cjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "spikes/j2me-rms/idb-persistence.mjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "spikes/j2me-rms/record-store.mjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "spikes/j2me-rms/record-store.test.mjs",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    }
+  ]
+}
