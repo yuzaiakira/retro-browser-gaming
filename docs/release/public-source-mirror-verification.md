@@ -1,7 +1,7 @@
 # Public source mirror verification
 
 **Generated:** 2026-11-05T08:33:03Z
-**PRIVATE HEAD:** `c2cff75e5c0d4f017800501a3fec2d59b59f704a`
+**PRIVATE HEAD:** `961d670228433573283aa6503442bce65f621ef9`
 **PUBLIC_SOURCE_MIRROR_READY:** **NOT_CLEARED**
 **GITHUB_SOURCE_PUSH_READY:** NOT_CLEARED (destination unpublished)
 **PUBLIC_RELEASE_GO:** STOP (independent)
@@ -11,7 +11,7 @@
 | Check | Status | Detail |
 |---|---|---|
 | MIRROR_STATE | PASS | /home/akira/Projects/git-contribute/retro-browser-gaming/.runtime/test-evidence/PH-17/public-source-mirror-state.json |
-| CANDIDATE_FRESHNESS | PASS | private_sha=c2cff75e5c0d4f017800501a3fec2d59b59f704a |
+| CANDIDATE_FRESHNESS | PASS | ancestor_docs_only state=c2cff75e5c0d4f017800501a3fec2d59b59f704a head=961d670228433573283aa6503442bce65f621ef9 |
 | HISTORY_CLEAN | PASS | history_clean=true |
 | TIP_EQUIVALENCE | PASS | retained paths match |
 | PUBLICATION_REFS | PASS | only refs/heads/main |
