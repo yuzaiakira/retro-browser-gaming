@@ -2,8 +2,9 @@
 
 **Date:** 2026-11-05  
 **Branch:** `main`  
-**Audited tip:** `12a614b29a61f01055e49ce4608463a664c0d28e`  
-**Ahead of `origin/main`:** 79 commits  
+**Audited tip (pre-audit-doc):** `12a614b29a61f01055e49ce4608463a664c0d28e`  
+**Audit documentation commit:** `c8a8dc4382530f9fbcdbae9688b183eb93d5eba0`  
+**Ahead of `origin/main`:** 80 commits (includes this audit)  
 **Auditor commands evidence:** `.runtime/test-evidence/main-push-audit/`
 
 ## Verdicts (independent)
