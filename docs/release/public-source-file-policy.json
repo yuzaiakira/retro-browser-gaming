@@ -1,7 +1,7 @@
 {
   "schema": "rbg-public-source-file-policy-v1",
-  "generated_at": "2026-11-05T08:29:44Z",
-  "classified_tree_sha": "3748fb9ee2795a6ac6d37b8bbab513c243de9b4c",
+  "generated_at": "2026-11-05T08:31:29Z",
+  "classified_tree_sha": "ff3fe256931351103e28ca064ff0cbbc418602d1",
   "tree_root": "/home/akira/Projects/git-contribute/retro-browser-gaming",
   "classes": [
     "PUBLIC_SOURCE_ALLOWED",
@@ -17,9 +17,9 @@
     "Third-party emulator JS and fixtures remain NEEDS_LEGAL_REVIEW until counsel_decisions.json clears them."
   ],
   "summary": {
-    "tracked_files": 1066,
+    "tracked_files": 1072,
     "counts": {
-      "PUBLIC_SOURCE_ALLOWED": 504,
+      "PUBLIC_SOURCE_ALLOWED": 510,
       "NEEDS_LEGAL_REVIEW": 562
     },
     "blocking_for_mirror": {
@@ -4276,6 +4276,21 @@
       "reason": "open-source / release documentation"
     },
     {
+      "path": "docs/release/public-source-file-policy.json",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/public-source-mirror-plan.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
+      "path": "docs/release/public-source-mirror-verification.md",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "open-source / release documentation"
+    },
+    {
       "path": "docs/release/release-candidate-manifest.md",
       "class": "PUBLIC_SOURCE_ALLOWED",
       "reason": "open-source / release documentation"
@@ -5056,6 +5071,11 @@
       "reason": "LOCAL_ONLY runtime lineage pending counsel"
     },
     {
+      "path": "scripts/build-public-source-mirror.sh",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
       "path": "scripts/build-sanitized-candidate.sh",
       "class": "PUBLIC_SOURCE_ALLOWED",
       "reason": "first-party or build/support path"
@@ -5096,12 +5116,22 @@
       "reason": "first-party or build/support path"
     },
     {
+      "path": "scripts/check-public-source-mirror-ready.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
       "path": "scripts/check-public-source-safety.py",
       "class": "PUBLIC_SOURCE_ALLOWED",
       "reason": "first-party or build/support path"
     },
     {
       "path": "scripts/check-source-offer-gate.py",
+      "class": "PUBLIC_SOURCE_ALLOWED",
+      "reason": "first-party or build/support path"
+    },
+    {
+      "path": "scripts/classify-public-source-tree.py",
       "class": "PUBLIC_SOURCE_ALLOWED",
       "reason": "first-party or build/support path"
     },

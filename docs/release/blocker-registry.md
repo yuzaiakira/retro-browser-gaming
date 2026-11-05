@@ -19,7 +19,7 @@
 | B-DIST-01 | LOCAL_ONLY / BLOCKED_LEGAL exclusion + upstream gates | PUBLIC_DISTRIBUTION_CLEARED | **FAIL** | Release |
 | B-BIOS-01 | ColecoVision / Vectrex lawful BIOS | platform | **BLOCKED_EXTERNAL** | Legal + QA |
 | B-HIST-01 | Historical private cores + `docs/test-evidence/` still reachable from private `main` **and** `origin/main`/`origin/feat` | GITHUB_SOURCE_PUSH_READY | **NOT_CLEARED** | Release / OSS | PH-16/17 isolated candidates PASS; do not flip private repo public. See `git-history-remediation-plan.md` |
-| B-MIR-01 | Public-source mirror legal clearance (`NEEDS_LEGAL_REVIEW` + counsel) | PUBLIC_SOURCE_MIRROR_READY | **NOT_CLEARED** | Counsel + Release | Technical mirror `8032be2` from `3748fb9` OK; gate fail-closed. `public-source-mirror-plan.md` |
+| B-MIR-01 | Public-source mirror legal clearance (`NEEDS_LEGAL_REVIEW` + counsel) | PUBLIC_SOURCE_MIRROR_READY | **NOT_CLEARED** | Counsel + Release | Technical mirror `402e889` from `ff3fe25` OK; gate fail-closed. `public-source-mirror-plan.md` |
 
 Full prerequisites, evidence, acceptance criteria, and verification commands: **`external-acceptance-checklist.json`** (do not duplicate here). Push audit: `main-push-safety-audit.md`. PH-16: `git-history-remediation-plan.md`. PH-17: `public-source-mirror-plan.md`, `public-source-file-policy.json`, `public-source-mirror-verification.md`.
 

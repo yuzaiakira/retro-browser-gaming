@@ -2,7 +2,7 @@
 
 ## Verdict
 
-**PH-17 Option B public-source mirror / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Private tip pin `3748fb9` (Cursor trailer stripped from prior docs tip). Local mirror candidate `8032be2` — tip equivalence PASS, history clean, refs=`main` only. **PUBLIC_SOURCE_MIRROR_READY=NOT_CLEARED** (562 NEEDS_LEGAL_REVIEW + counsel absent). **GITHUB_SOURCE_PUSH_READY=NOT_CLEARED**. **PUBLIC_RELEASE_GO=STOP**. Pipeline: `scripts/build-public-source-mirror.sh` + `check-public-source-mirror-ready.py`. Docs: `docs/release/public-source-mirror-plan.md`. No remote created/pushed.
+**PH-17 Option B public-source mirror / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Private tip pin `ff3fe25` (Cursor trailer stripped from prior docs tip). Local mirror candidate `402e889` — tip equivalence PASS, history clean, refs=`main` only. **PUBLIC_SOURCE_MIRROR_READY=NOT_CLEARED** (562 NEEDS_LEGAL_REVIEW + counsel absent). **GITHUB_SOURCE_PUSH_READY=NOT_CLEARED**. **PUBLIC_RELEASE_GO=STOP**. Pipeline: `scripts/build-public-source-mirror.sh` + `check-public-source-mirror-ready.py`. Docs: `docs/release/public-source-mirror-plan.md`. No remote created/pushed.
 
 **PH-16 history remediation / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Private tip `24b8c55` lineage. Isolated sanitized candidate `e881502…` **PASS**. **TIP_HYGIENE=PASS**; **HISTORY_SANITIZATION_CANDIDATE=PASS**; **HISTORY_SANITIZED_TESTS=PASS**; **GITHUB_SOURCE_PUSH_READY=NOT_CLEARED**; **PUBLIC_RELEASE_GO=STOP**. Docs: `docs/release/git-history-remediation-plan.md`.
 

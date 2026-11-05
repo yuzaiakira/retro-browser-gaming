@@ -17,13 +17,13 @@ Technical sanitization of an isolated candidate from the current private tip **P
 
 | Item | Value |
 |---|---|
-| Private `main` tip (pin) | `3748fb9ee2795a6ac6d37b8bbab513c243de9b4c` |
-| Clean candidate SHA | `8032be200fc056fdc012a592f33f871fefaa0b31` |
-| Candidate tree | `/home/akira/Projects/git-contribute/retro-browser-gaming-public-mirror-20261105TPH17/tree` |
-| Tip-scoped input bundle | `…/private-main-3748fb9ee279.bundle` |
-| Bundle SHA-256 | `b3d6807a895365ac6a44c000da4b7db9d62be742f413eddbe3f6edb6e5283338` |
+| Private `main` tip (pin) | `ff3fe256931351103e28ca064ff0cbbc418602d1` |
+| Clean candidate SHA | `402e889613d8d0aec235b82313b36f4ceb593ecd` |
+| Candidate tree | `/home/akira/Projects/git-contribute/retro-browser-gaming-public-mirror-20261105TPH17B/tree` |
+| Tip-scoped input bundle | `/home/akira/Projects/git-contribute/retro-browser-gaming-public-mirror-20261105TPH17B/private-main-ff3fe2569313.bundle` |
+| Bundle SHA-256 | `eeb3064d410674d579de73aef8bc77f5b7abf4bd88af000bc9adbb45a3c6b1ed` |
 | Prior PH-16 backup (verified) | `…/retro-browser-gaming-ph16-backup-20261105T080855Z/` (`220c812e…`) |
-| Commits ahead of `origin/main` | 82 (preserved; not pushed) |
+| Commits ahead of `origin/main` | 83 (preserved; not pushed) |
 
 ## Repeatable pipeline
 
@@ -75,7 +75,7 @@ See `public-source-file-policy.json` (full path inventory).
 
 | Class | Count (tip `3748fb9`) |
 |---|---|
-| PUBLIC_SOURCE_ALLOWED | 504 |
+| PUBLIC_SOURCE_ALLOWED | 510 |
 | NEEDS_LEGAL_REVIEW | 562 |
 | PRIVATE_ONLY | 0 |
 | BLOCKED_LEGAL | 0 |
