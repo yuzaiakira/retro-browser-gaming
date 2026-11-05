@@ -2,7 +2,9 @@
 
 ## Verdict
 
-**PH-17 Option B public-source mirror / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Private tip `6a85ad8` (mirror built from `c2cff75`; docs/tooling drift allowed by freshness gate). Mirror pin `c2cff75` (Cursor trailer stripped from prior docs tip). Local mirror candidate `c8c6fba` — tip equivalence PASS, history clean, refs=`main` only. **PUBLIC_SOURCE_MIRROR_READY=NOT_CLEARED** (562 NEEDS_LEGAL_REVIEW + counsel absent). **GITHUB_SOURCE_PUSH_READY=NOT_CLEARED**. **PUBLIC_RELEASE_GO=STOP**. Pipeline: `scripts/build-public-source-mirror.sh` + `check-public-source-mirror-ready.py`. Docs: `docs/release/public-source-mirror-plan.md`. No remote created/pushed.
+**PH-18 legal review queues / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Tip `ca93b52` lineage. All **562** tip `NEEDS_LEGAL_REVIEW` files documented → **30** review groups / **43** independent questions / **0** auto-approvals. **PUBLIC_SOURCE_MIRROR_READY=NOT_CLEARED**; **GITHUB_SOURCE_PUSH_READY=NOT_CLEARED**; **PUBLIC_RELEASE_GO=STOP**. Packs under `docs/release/legal-review/` (`file-provenance.json`, `review-groups.json`, `owner-attestation-queue.md`, `counsel-review-pack.md`). Do not forge counsel decisions.
+
+**PH-17 Option B public-source mirror / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Candidate `c8c6fba` from pin `c2cff75`. **PUBLIC_SOURCE_MIRROR_READY=NOT_CLEARED** (legal). Pipeline: `scripts/build-public-source-mirror.sh`. No remote created/pushed.
 
 **PH-16 history remediation / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Private tip `24b8c55` lineage. Isolated sanitized candidate `e881502…` **PASS**. **TIP_HYGIENE=PASS**; **HISTORY_SANITIZATION_CANDIDATE=PASS**; **HISTORY_SANITIZED_TESTS=PASS**; **GITHUB_SOURCE_PUSH_READY=NOT_CLEARED**; **PUBLIC_RELEASE_GO=STOP**. Docs: `docs/release/git-history-remediation-plan.md`.
 
@@ -436,7 +438,7 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 
 ### Next concrete task (on `main`)
 
-1. Counsel: `counsel-decisions.json` for PUBLIC_CANDIDATE rows; rebuild mirror until `PUBLIC_SOURCE_MIRROR_READY=PASS`
+1. Counsel: work PH-18 `counsel-review-pack.md` / `review-groups.json` + fill real `counsel-decisions.json`; owner attestation queue; then rebuild mirror until `PUBLIC_SOURCE_MIRROR_READY=PASS`
 2. Owner: authorize Option B destination repo only after mirror gate PASS; never flip private GitHub visibility
 3. Keep private `main` history intact; do not push unsanitized `main` publicly
 4. Keep `PUBLIC_RELEASE_GO=STOP` and `GITHUB_SOURCE_PUSH_READY=NOT_CLEARED` until independent clearances

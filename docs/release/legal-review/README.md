@@ -31,3 +31,14 @@
 - `docs/open-source/corresponding-source-matrix.json`
 - `docs/open-source/browser-distributable-allowlist.json`
 - `docs/release/source-delivery-verification.md`
+
+## PH-18 tip-file review queues
+
+| File | Purpose |
+|---|---|
+| `file-provenance.json` | Per-path provenance for all NEEDS_LEGAL_REVIEW tip files |
+| `review-groups.json` | Grouped review units with exact membership |
+| `owner-attestation-queue.md` | Owner attestation candidates (unsigned) |
+| `counsel-review-pack.md` | Counsel-facing grouped questions |
+
+**PH-18 counts:** 562 files → 26 groups; 37 independent questions; approved_by_automation=0.

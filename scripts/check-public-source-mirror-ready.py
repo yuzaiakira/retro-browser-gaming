@@ -21,6 +21,8 @@ DEFAULT_STATE = ROOT / ".runtime" / "test-evidence" / "PH-17" / "public-source-m
 POLICY = ROOT / "docs" / "release" / "public-source-file-policy.json"
 COUNSEL = ROOT / "docs" / "release" / "legal-review" / "counsel-decisions.json"
 LEGAL_PACK = ROOT / "docs" / "release" / "legal-review" / "legal-review-pack.json"
+PROVENANCE = ROOT / "docs" / "release" / "legal-review" / "file-provenance.json"
+REVIEW_GROUPS = ROOT / "docs" / "release" / "legal-review" / "review-groups.json"
 MANIFEST = ROOT / "docs" / "open-source" / "history-removal-manifest.txt"
 
 
@@ -100,10 +102,12 @@ def main() -> int:
                     "docs/EXECUTION_STATE.md",
                     "docs/release/blocker-registry.md",
                     "docs/release/git-history-",
+                    "docs/release/legal-review/",
                     "scripts/build-public-source-mirror.sh",
                     "scripts/check-public-source-mirror-ready.py",
                     "scripts/classify-public-source-tree.py",
                     "scripts/build-sanitized-candidate.sh",
+                    "scripts/build-legal-review-queues.py",
                     ".runtime/",
                 )
                 material = []
@@ -288,6 +292,46 @@ def main() -> int:
         checks["REMOVAL_MANIFEST"] = {"status": "FAIL", "detail": "absent"}
     else:
         checks["REMOVAL_MANIFEST"] = {"status": "PASS", "detail": "present"}
+
+    # PH-18 provenance pack — required evidence for NLR tip files; never auto-clears
+    prov = load_json(PROVENANCE)
+    groups = load_json(REVIEW_GROUPS)
+    if not prov or not groups:
+        blockers.append("PH-18 file-provenance/review-groups missing")
+        checks["PROVENANCE_PACK"] = {"status": "FAIL", "detail": "absent"}
+    else:
+        cov = prov.get("coverage", {})
+        nlr_expected = int(
+            (policy or {}).get("summary", {})
+            .get("blocking_for_mirror", {})
+            .get("NEEDS_LEGAL_REVIEW", -1)
+        )
+        documented = int(cov.get("nlr_files_documented", 0))
+        if not cov.get("complete") or (
+            nlr_expected >= 0 and documented != nlr_expected
+        ):
+            blockers.append(
+                f"provenance pack incomplete/outdated documented={documented} nlr={nlr_expected}"
+            )
+            checks["PROVENANCE_PACK"] = {
+                "status": "FAIL",
+                "detail": cov,
+            }
+        elif int(groups.get("summary", {}).get("auto_approved_groups", 0) or 0) > 0:
+            blockers.append("review-groups reports auto_approved_groups>0 (forbidden)")
+            checks["PROVENANCE_PACK"] = {
+                "status": "FAIL",
+                "detail": "auto-approval detected",
+            }
+        else:
+            checks["PROVENANCE_PACK"] = {
+                "status": "PASS",
+                "detail": {
+                    "groups": groups.get("summary", {}).get("review_groups"),
+                    "documented": documented,
+                    "auto_approved_groups": 0,
+                },
+            }
 
     ready = len(blockers) == 0
     verdict = "PASS" if ready else "NOT_CLEARED"
