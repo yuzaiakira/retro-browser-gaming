@@ -2,6 +2,8 @@
 
 ## Verdict
 
+**Development on `main` / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Tip `12a614b` lineage. **GITHUB_SOURCE_PUSH_READY = NOT_CLEARED** — tip tree clean of private `.wasm`/`.data`, but reachable history still contains emulator binaries + `docs/test-evidence/` profiles (`main-push-safety-audit.md`). Integrated feat via `d650bf4`. Do not push public source or deploy.
+
 **Development on `main` / PUBLIC_RELEASE_GO = STOP** (2026-11-04). Integrated `feat/platform-expansion-phase-1` via merge `d650bf4` (includes `b53e66d` handoff). Future engineering continues on `main`. External blockers unchanged. Report: `docs/release/main-integration-report.md`.
 
 **External acceptance handoff / PUBLIC_RELEASE_GO = STOP** (2026-11-04). Unified checklist `docs/release/external-acceptance-checklist.json` + `external-acceptance-handoff.md`; fail-closed `scripts/check-public-release-go.py`. Source package ready; recipient HTTPS / counsel / product / physical still open. Tip lineage `ad562fd`+. Engineering baseline `318832d` preserved.

@@ -7,7 +7,8 @@
 **Handoff index:** `external-acceptance-handoff.md`  
 **Checklist JSON:** `external-acceptance-checklist.json`  
 **Integration report:** `main-integration-report.md`  
-**Note:** Merge into `main` does **not** change PUBLIC_RELEASE_GO.
+**Push safety audit:** `main-push-safety-audit.md` — **GITHUB_SOURCE_PUSH_READY = NOT_CLEARED** (historical private cores / test-evidence blobs)  
+**Note:** Merge into `main` does **not** change PUBLIC_RELEASE_GO. Tip hygiene ≠ history-clean public source push.
 
 Status vocabulary: `PASS` | `FAIL` | `NOT_VERIFIED` | `BLOCKED_EXTERNAL` | `PENDING_APPROVAL`.
 
