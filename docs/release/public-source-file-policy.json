@@ -1,7 +1,7 @@
 {
   "schema": "rbg-public-source-file-policy-v1",
-  "generated_at": "2026-11-05T08:31:29Z",
-  "classified_tree_sha": "ff3fe256931351103e28ca064ff0cbbc418602d1",
+  "generated_at": "2026-11-05T08:33:03Z",
+  "classified_tree_sha": "c2cff75e5c0d4f017800501a3fec2d59b59f704a",
   "tree_root": "/home/akira/Projects/git-contribute/retro-browser-gaming",
   "classes": [
     "PUBLIC_SOURCE_ALLOWED",

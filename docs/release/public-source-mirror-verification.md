@@ -1,7 +1,7 @@
 # Public source mirror verification
 
-**Generated:** 2026-11-05T08:32:06Z
-**PRIVATE HEAD:** `7a4aa14bdbeffaea4f031a650cdf0c2fc2ba52e2`
+**Generated:** 2026-11-05T08:33:03Z
+**PRIVATE HEAD:** `c2cff75e5c0d4f017800501a3fec2d59b59f704a`
 **PUBLIC_SOURCE_MIRROR_READY:** **NOT_CLEARED**
 **GITHUB_SOURCE_PUSH_READY:** NOT_CLEARED (destination unpublished)
 **PUBLIC_RELEASE_GO:** STOP (independent)
@@ -11,7 +11,7 @@
 | Check | Status | Detail |
 |---|---|---|
 | MIRROR_STATE | PASS | /home/akira/Projects/git-contribute/retro-browser-gaming/.runtime/test-evidence/PH-17/public-source-mirror-state.json |
-| CANDIDATE_FRESHNESS | FAIL | candidate not built from expected private tip |
+| CANDIDATE_FRESHNESS | PASS | private_sha=c2cff75e5c0d4f017800501a3fec2d59b59f704a |
 | HISTORY_CLEAN | PASS | history_clean=true |
 | TIP_EQUIVALENCE | PASS | retained paths match |
 | PUBLICATION_REFS | PASS | only refs/heads/main |
@@ -22,20 +22,28 @@
 | LIVE_HISTORY_SCAN | PASS | no cores/evidence |
 | FILE_POLICY_HARD | PASS | {"PRIVATE_ONLY": 0, "BLOCKED_LEGAL": 0, "BLOCKED_EXTERNAL": 0, "NEEDS_LEGAL_REVIEW": 562} |
 | FILE_POLICY_LEGAL | NOT_CLEARED | NEEDS_LEGAL_REVIEW=562 |
-| FILE_POLICY_FRESH | PASS | ff3fe256931351103e28ca064ff0cbbc418602d1 |
+| FILE_POLICY_FRESH | PASS | c2cff75e5c0d4f017800501a3fec2d59b59f704a |
 | ROOT_LICENSE | PASS | LICENSE present |
 | COUNSEL | NOT_CLEARED | pack_entries=81 |
 | REMOVAL_MANIFEST | PASS | present |
 
 ## Blockers
 
-- stale candidate: state.private_sha=ff3fe256931351103e28ca064ff0cbbc418602d1 expected=7a4aa14bdbeffaea4f031a650cdf0c2fc2ba52e2
 - unreviewed content remains: NEEDS_LEGAL_REVIEW=562
 - counsel-decisions.json absent — licenses unresolved
 
 ## Candidate
 
-- private_sha: `ff3fe256931351103e28ca064ff0cbbc418602d1`
-- candidate_sha: `402e889613d8d0aec235b82313b36f4ceb593ecd`
-- candidate_tree: `/home/akira/Projects/git-contribute/retro-browser-gaming-public-mirror-20261105TPH17B/tree`
-- backup_bundle: `/home/akira/Projects/git-contribute/retro-browser-gaming-public-mirror-20261105TPH17B/private-main-ff3fe2569313.bundle`
+- private_sha: `c2cff75e5c0d4f017800501a3fec2d59b59f704a`
+- candidate_sha: `c8c6fbafcd868da364cd4546683a451eb02973d6`
+- candidate_tree: `/home/akira/Projects/git-contribute/retro-browser-gaming-public-mirror-20261105TPH17C/tree`
+- backup_bundle: `/home/akira/Projects/git-contribute/retro-browser-gaming-public-mirror-20261105TPH17C/private-main-c2cff75e5c0d.bundle`
+
+## Classification buckets (NEEDS_LEGAL_REVIEW)
+
+Emulator frontends, fixtures, patches, and LOCAL_ONLY build recipes remain NEEDS_LEGAL_REVIEW. Hard tip blockers: 0.
+
+## Independent gates
+
+- GITHUB_SOURCE_PUSH_READY=NOT_CLEARED
+- PUBLIC_RELEASE_GO=STOP
