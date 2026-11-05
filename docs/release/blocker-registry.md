@@ -18,9 +18,9 @@
 | B-PAD-01 | Physical gamepad IN-002-P/D | IN-002 | **BLOCKED_EXTERNAL** | QA |
 | B-DIST-01 | LOCAL_ONLY / BLOCKED_LEGAL exclusion + upstream gates | PUBLIC_DISTRIBUTION_CLEARED | **FAIL** | Release |
 | B-BIOS-01 | ColecoVision / Vectrex lawful BIOS | platform | **BLOCKED_EXTERNAL** | Legal + QA |
-| B-HIST-01 | Historical private cores + `docs/test-evidence/` still reachable from `main` | GITHUB_SOURCE_PUSH_READY | **NOT_CLEARED** | Release / OSS | Sanitized Option B candidate + `--expect-history-clean` — do not auto-rewrite |
+| B-HIST-01 | Historical private cores + `docs/test-evidence/` still reachable from private `main` **and** `origin/main`/`origin/feat` | GITHUB_SOURCE_PUSH_READY | **NOT_CLEARED** | Release / OSS | PH-16 isolated candidate `e881502…` PASS; original `main` unrewritten. See `git-history-remediation-plan.md` |
 
-Full prerequisites, evidence, acceptance criteria, and verification commands: **`external-acceptance-checklist.json`** (do not duplicate here). Push audit: `main-push-safety-audit.md`.
+Full prerequisites, evidence, acceptance criteria, and verification commands: **`external-acceptance-checklist.json`** (do not duplicate here). Push audit: `main-push-safety-audit.md`. PH-16: `git-history-remediation-plan.md`, `git-history-removal-inventory.json`, `git-history-filter-test-report.md`.
 
 ## Non-blockers (private engineering RC)
 

@@ -1,0 +1,924 @@
+{
+  "schema": "rbg-git-history-removal-inventory-v1",
+  "phase": "PH-16.1",
+  "generated_at": "2026-11-05T08:14:31Z",
+  "original_main_sha": "24b8c55ee7df3b2b78c7622eda294f85e373f589",
+  "origin_main_sha": "a467eb560b64d5b2c830c2b05432031a7ddc22d2",
+  "notes": [
+    "Flat paths in docs/open-source/history-removal-manifest.txt do not match historical EmulatorJS layout under ejs-*/cores/.",
+    "Filter must use actual historical path prefixes, not obsolete flat names alone.",
+    "Tip currently tracks zero private cores wasm/data and zero docs/test-evidence files."
+  ],
+  "summary": {
+    "restricted_core_binary_paths": 59,
+    "restricted_core_total_bytes": 84889929,
+    "core_paths_also_on_origin_main": 59,
+    "test_evidence_blobs": 1090,
+    "test_evidence_bytes": 33867274,
+    "test_evidence_on_origin_main": true,
+    "tip_tracked_restricted_paths": [],
+    "git_lfs_pointer_blobs_found": 0,
+    "tip_secretish_paths": [
+      ".env.example",
+      "apps/web/public/cores/js2me/js/me/javax/crypto/spec/SecretKeySpec.js",
+      "infra/docker/empty-proxy-ca.pem"
+    ]
+  },
+  "filter_path_prefixes_recommended": [
+    "docs/test-evidence/"
+  ],
+  "filter_path_globs_recommended": [
+    "apps/web/public/cores/**/*.wasm",
+    "apps/web/public/cores/**/*.data"
+  ],
+  "filter_exact_paths": [
+    "apps/web/public/cores/ejs-4.2.3/compression/libunrar.wasm",
+    "apps/web/public/cores/ejs-4.2.3/cores/81-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/81-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/81_eo-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/81_eo-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/a5200-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/a5200-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/beetle_vb-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/beetle_vb-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/bluemsx-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/bluemsx-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/cap32-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/cap32-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/desmume-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/desmume-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/dosbox_pure-thread-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/dosbox_pure-thread-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/fceumm-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/fceumm-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/fuse-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/fuse-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/gambatte-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/gambatte-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/genesis_plus_gx-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/genesis_plus_gx-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/handy-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/handy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/mednafen_ngp-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/mednafen_ngp-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/mednafen_pce-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/mednafen_pce-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/mednafen_wswan-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/mednafen_wswan-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/mgba-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/mgba-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/mupen64plus_next-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/mupen64plus_next-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/pcsx_rearmed-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/pcsx_rearmed-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/ppsspp-thread-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/prosystem-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/prosystem-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/puae-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/puae-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/smsplus-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/smsplus-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/snes9x-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/snes9x-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/stella2014-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/stella2014-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/vice_x64sc-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/vice_x64sc-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/virtualjaguar-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/virtualjaguar-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/virtualjaguar_js-legacy-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/cores/virtualjaguar_js-wasm.data",
+    "apps/web/public/cores/ejs-4.2.3/system/bluemsx-system.data",
+    "apps/web/public/cores/jsdos-8.3.8/wdosbox.wasm",
+    "apps/web/public/cores/jsdos-8.3.8/wlibzip.wasm"
+  ],
+  "do_not_remove": [
+    "apps/web/public/cores/**/*.js (including rbg_arcade.js)",
+    "licenses, patches, manifests, SOURCE_OFFER, build scripts",
+    "legal fixtures under .fixtures/ and fixtures/"
+  ],
+  "entries": [
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/compression/libunrar.wasm",
+      "classification": "VENDOR_WASM_BINARY",
+      "blob_ids": [
+        "44f0999667377732dc4da5d09c1989e6369082f2"
+      ],
+      "blob_count": 1,
+      "total_bytes": 173799,
+      "max_blob_bytes": 173799,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/81-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "95c5e3b8333e235bf79466a91ab2586c9c16bb5c"
+      ],
+      "blob_count": 1,
+      "total_bytes": 885589,
+      "max_blob_bytes": 885589,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/81-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "6a884e0c40d3845ac9d5b22a32edd66fcd74c09e"
+      ],
+      "blob_count": 1,
+      "total_bytes": 885523,
+      "max_blob_bytes": 885523,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/81_eo-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "b07698ddf3f1c1f0695177d9bdc649fe55939f7f",
+        "d1e43117cbbe31d0629ae71c8b7481eb65b607b4"
+      ],
+      "blob_count": 2,
+      "total_bytes": 1486744,
+      "max_blob_bytes": 744425,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/81_eo-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "21c9a627b73aa2d4a307789324326ba249ec1a44",
+        "844bcd3723bd93e78f7007af3049068adc14adcf"
+      ],
+      "blob_count": 2,
+      "total_bytes": 1487704,
+      "max_blob_bytes": 744308,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/a5200-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "f969cfec09058e996cf0220b3c8628b6c52b6a4a"
+      ],
+      "blob_count": 1,
+      "total_bytes": 880582,
+      "max_blob_bytes": 880582,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/a5200-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "349681008ad6703d789abbd42bc6b50c350c2b30"
+      ],
+      "blob_count": 1,
+      "total_bytes": 881560,
+      "max_blob_bytes": 881560,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/beetle_vb-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "c6aae9175da426e03759e132bccc86d6350f9ab2"
+      ],
+      "blob_count": 1,
+      "total_bytes": 857641,
+      "max_blob_bytes": 857641,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/beetle_vb-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "5fc74247d826c05509d528b40492e365348c086e"
+      ],
+      "blob_count": 1,
+      "total_bytes": 858313,
+      "max_blob_bytes": 858313,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/bluemsx-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "433db0f6debedb17e215b26297ecbe6241c46809",
+        "80fd21654ad2bb763d0016cb6709392b76ee06f9"
+      ],
+      "blob_count": 2,
+      "total_bytes": 8170734,
+      "max_blob_bytes": 4085848,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/bluemsx-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "2046be2f33a127203e1154a9fb904a8c93a5ca3f",
+        "446a77af51206e531ee42983c5cc7513a57c1084"
+      ],
+      "blob_count": 2,
+      "total_bytes": 8169681,
+      "max_blob_bytes": 4085068,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/cap32-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "6362e647e9280854f38b9b393a16ad1b877385af"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1018339,
+      "max_blob_bytes": 1018339,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/cap32-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "099ff14baf2f64febf663beadb0e14cf1ccfeaee"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1018926,
+      "max_blob_bytes": 1018926,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/desmume-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "5d57c9718e832ea937e2b3a24cc85ee256c7af8f"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1171393,
+      "max_blob_bytes": 1171393,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/desmume-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "cc3e15365a91ba0a8c127fb323c574babda2ddaf"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1172604,
+      "max_blob_bytes": 1172604,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/dosbox_pure-thread-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "c3b68ec9c550a732b7438937ad5cd38164e7e2a1"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1792195,
+      "max_blob_bytes": 1792195,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/dosbox_pure-thread-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "41b2f95e67c1f74a48082c254850061e92cde8e6"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1793257,
+      "max_blob_bytes": 1793257,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/fceumm-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "f707bfcd90ef397fbeaacacb6ca7a2fdca072baf"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1053006,
+      "max_blob_bytes": 1053006,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/fceumm-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "7357ba18d9a662b1610cd079690a38716b113e4b"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1054015,
+      "max_blob_bytes": 1054015,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/fuse-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "b62986423871378ab305f5a656f798016edbc242"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1218410,
+      "max_blob_bytes": 1218410,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/fuse-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "638c4478c40ea66d972b38e19a57949f2941143e"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1218229,
+      "max_blob_bytes": 1218229,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/gambatte-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "34aebfe41c82cbfc25794b72357982e319bdc4fc"
+      ],
+      "blob_count": 1,
+      "total_bytes": 967022,
+      "max_blob_bytes": 967022,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/gambatte-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "1deb4a5e26f5f97c34d224aba7cf175fec3afee7"
+      ],
+      "blob_count": 1,
+      "total_bytes": 967156,
+      "max_blob_bytes": 967156,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/genesis_plus_gx-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "49c2c5acbb5152ddc2481dc21a677c8d35547aee"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1204803,
+      "max_blob_bytes": 1204803,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/genesis_plus_gx-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "316db63b8b3d6c1588505a3312991c3cce4bba87"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1203661,
+      "max_blob_bytes": 1203661,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/handy-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "7243280329e9e03fb37a7e85a118092f9dfcb832"
+      ],
+      "blob_count": 1,
+      "total_bytes": 862944,
+      "max_blob_bytes": 862944,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/handy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "8916f8aea571d0514ad07f75e2343809c5855793"
+      ],
+      "blob_count": 1,
+      "total_bytes": 862304,
+      "max_blob_bytes": 862304,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/mednafen_ngp-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "617d36b26b8077817a975f65cb025edf11ffd8fd"
+      ],
+      "blob_count": 1,
+      "total_bytes": 872066,
+      "max_blob_bytes": 872066,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/mednafen_ngp-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "328c81322f1cd87ee0493d0cd86f6203b5436cd0"
+      ],
+      "blob_count": 1,
+      "total_bytes": 871904,
+      "max_blob_bytes": 871904,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/mednafen_pce-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "45d9a7832308724ec9a417b2336d1051413d4217"
+      ],
+      "blob_count": 1,
+      "total_bytes": 995095,
+      "max_blob_bytes": 995095,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/mednafen_pce-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "d216939d122ff3f0270c6717d5dbf16d68e010da"
+      ],
+      "blob_count": 1,
+      "total_bytes": 994844,
+      "max_blob_bytes": 994844,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/mednafen_wswan-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "ec4d92b70596d92275f0db8ae73ab0497cbc4441"
+      ],
+      "blob_count": 1,
+      "total_bytes": 879089,
+      "max_blob_bytes": 879089,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/mednafen_wswan-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "69de368197af0c302508c3542dd019793be27d53"
+      ],
+      "blob_count": 1,
+      "total_bytes": 879301,
+      "max_blob_bytes": 879301,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/mgba-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "a5db1d8963e583155a9653b8889ec5e4f8b19106"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1054993,
+      "max_blob_bytes": 1054993,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/mgba-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "7c4a884fdbe9f93b5cc2abcfe75d7d587b2e564e"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1055616,
+      "max_blob_bytes": 1055616,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/mupen64plus_next-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "8e0c939f5f7d88df34e68e8dda6e560ed412f4cb"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1451870,
+      "max_blob_bytes": 1451870,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/mupen64plus_next-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "a3f346853fb12d2170ff14e4fbd1a262c36d9005"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1451795,
+      "max_blob_bytes": 1451795,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/pcsx_rearmed-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "b92a712d3d42382895d0e66744d46985ba1703a9"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1038636,
+      "max_blob_bytes": 1038636,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/pcsx_rearmed-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "3c5de96eda52fac7e9e8efeb3c4e96a1f9e546e8"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1039627,
+      "max_blob_bytes": 1039627,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/ppsspp-thread-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "4de81fadb4371005fe1ad7d10393b631a4ac770d"
+      ],
+      "blob_count": 1,
+      "total_bytes": 4581537,
+      "max_blob_bytes": 4581537,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/prosystem-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "36fbdcda05429326851a084b2179c6bf00a89408"
+      ],
+      "blob_count": 1,
+      "total_bytes": 852780,
+      "max_blob_bytes": 852780,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/prosystem-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "6b23cb02cdf31c5b4980965c5bcf1ec192f246db"
+      ],
+      "blob_count": 1,
+      "total_bytes": 852864,
+      "max_blob_bytes": 852864,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/puae-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "b854e6c9885bcb87f770b3ead8d2213a9cc53008"
+      ],
+      "blob_count": 1,
+      "total_bytes": 4138844,
+      "max_blob_bytes": 4138844,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/puae-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "b24a37b5442c2339ce25bef9f6c815c799f909cb"
+      ],
+      "blob_count": 1,
+      "total_bytes": 4140232,
+      "max_blob_bytes": 4140232,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/smsplus-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "b38484ad6451525d412b99a2afdb772b237c03ab"
+      ],
+      "blob_count": 1,
+      "total_bytes": 855316,
+      "max_blob_bytes": 855316,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/smsplus-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "2d1f90df231eb500d625a9dd40303ecf67a9018b"
+      ],
+      "blob_count": 1,
+      "total_bytes": 855876,
+      "max_blob_bytes": 855876,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/snes9x-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "e814787c014660766db577ec9aaeb0abdb6eaf97"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1092437,
+      "max_blob_bytes": 1092437,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/snes9x-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "362f152d4280f7cb11ef621b12de3cb62402aadb"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1093765,
+      "max_blob_bytes": 1093765,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/stella2014-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "3b101bcac218cefbdb9f7e392b41708bf16a69ad"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1051741,
+      "max_blob_bytes": 1051741,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/stella2014-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "da288dbfaae56d90f8f0f8ee0c499c860d18c27a"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1051659,
+      "max_blob_bytes": 1051659,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/vice_x64sc-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "d53169e245c53eed4276e2df9e6091c5b5d58f8f"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1523390,
+      "max_blob_bytes": 1523390,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/vice_x64sc-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "12cf800343a52c99bf438bd94e3d63bc7620b953"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1523457,
+      "max_blob_bytes": 1523457,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/virtualjaguar-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "e37fa16c831d0587284b9d461e22df31705f71d1"
+      ],
+      "blob_count": 1,
+      "total_bytes": 943525,
+      "max_blob_bytes": 943525,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/virtualjaguar-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "85cc65a54bc9ba20c6fc64835cf0320bc06cb60e"
+      ],
+      "blob_count": 1,
+      "total_bytes": 942590,
+      "max_blob_bytes": 942590,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/virtualjaguar_js-legacy-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "ec33ca6d42ddd20c0e3bce5f13f0fd005e29a293"
+      ],
+      "blob_count": 1,
+      "total_bytes": 796907,
+      "max_blob_bytes": 796907,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/cores/virtualjaguar_js-wasm.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "46400729dca96f99394260004ecb4364ae534c02"
+      ],
+      "blob_count": 1,
+      "total_bytes": 797157,
+      "max_blob_bytes": 797157,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/ejs-4.2.3/system/bluemsx-system.data",
+      "classification": "PRIVATE_EMULATOR_BINARY",
+      "blob_ids": [
+        "b9e1487ab82025500ee89ce1e51cc659c73a2093"
+      ],
+      "blob_count": 1,
+      "total_bytes": 323087,
+      "max_blob_bytes": 323087,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/jsdos-8.3.8/wdosbox.wasm",
+      "classification": "VENDOR_WASM_BINARY",
+      "blob_ids": [
+        "3141d04a853465fd662ee763f4d18c94cde2eec1"
+      ],
+      "blob_count": 1,
+      "total_bytes": 1458714,
+      "max_blob_bytes": 1458714,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path": "apps/web/public/cores/jsdos-8.3.8/wlibzip.wasm",
+      "classification": "VENDOR_WASM_BINARY",
+      "blob_ids": [
+        "782b492e515267d018dcdff974d13f754282a28a"
+      ],
+      "blob_count": 1,
+      "total_bytes": 113081,
+      "max_blob_bytes": 113081,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    },
+    {
+      "path_prefix": "docs/test-evidence/",
+      "classification": "HISTORICAL_TEST_EVIDENCE",
+      "blob_count": 1090,
+      "path_count": 1090,
+      "total_bytes": 33867274,
+      "reachable_from_origin_main": true,
+      "action": "REMOVE_DIRECTORY_PREFIX_FROM_PUBLIC_HISTORY",
+      "retain_in_private_repo": true
+    }
+  ],
+  "git_lfs_findings": [],
+  "remote_exposure": {
+    "github_repo": "yuzaiakira/retro-browser-gaming",
+    "visibility_at_assessment": "private",
+    "forks": 0,
+    "tags": "none",
+    "local_pr_refs": "none",
+    "origin_main_sha": "a467eb560b64d5b2c830c2b05432031a7ddc22d2",
+    "restricted_core_paths_reachable_from_origin_main": 59,
+    "test_evidence_reachable_from_origin_main": true,
+    "origin_feat_branch_also_hosts_cores": true,
+    "github_tip_tracked_core_wasm_data_count": 0,
+    "github_tip_test_evidence_paths": [
+      "docs/test-evidence.md"
+    ],
+    "implication": "Rewriting only local main is insufficient before any public visibility flip or public mirror push; origin/main and origin/feat still host historical blobs while repo remains private.",
+    "remediation_required_before_public": [
+      "Do not make this GitHub repository public with current history",
+      "Prefer Option B: new public repo seeded from sanitized candidate only",
+      "If rewriting private origin is chosen: coordinated force-push of main+feat, expire caches, notify collaborators, audit forks (currently 0)",
+      "Do not merge backup/* or pre-filter feature tips into public history"
+    ]
+  },
+  "backup": {
+    "stamp": "20261105T080855Z",
+    "path_outside_repo": "/home/akira/Projects/git-contribute/retro-browser-gaming-ph16-backup-20261105T080855Z",
+    "bundle": "retro-browser-gaming-all-refs.bundle",
+    "bundle_sha256": "220c812e498774d15252fbe9153d8ccbe07581c1e9459f03194121c2e2dae0a4",
+    "original_main_sha": "24b8c55ee7df3b2b78c7622eda294f85e373f589",
+    "restore_smoke": "PASS",
+    "classification": "RESTRICTED_PRIVATE_BACKUP"
+  },
+  "filter_candidate": {
+    "stamp": "20261105T080855Z",
+    "path_outside_repo": "/home/akira/Projects/git-contribute/retro-browser-gaming-ph16-candidate-20261105T080855Z",
+    "before_sha": "24b8c55ee7df3b2b78c7622eda294f85e373f589",
+    "after_sha": "e88150235e4f4d3dbcb5ded860789da01eacfdc9",
+    "commit_map": ".../commit-map.txt",
+    "tip_tree_identical_to_original": "PASS",
+    "history_restricted_paths_clean": "PASS"
+  }
+}

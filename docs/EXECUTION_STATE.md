@@ -2,6 +2,8 @@
 
 ## Verdict
 
+**PH-16 history remediation / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Private tip `24b8c55` **unchanged**. Isolated sanitized candidate `e881502…` **PASS** (tip tree identical; history auditors clean; web 85 + Django 43). **TIP_HYGIENE=PASS**; **HISTORY_SANITIZATION_CANDIDATE=PASS**; **HISTORY_SANITIZED_TESTS=PASS**; **GITHUB_SOURCE_PUSH_READY=NOT_CLEARED** (origin still hosts restricted history; no authorized migration); **PUBLIC_RELEASE_GO=STOP**. Docs: `docs/release/git-history-remediation-plan.md`. Backup+candidate outside repo under `retro-browser-gaming-ph16-{backup,candidate}-20261105T080855Z`. Do not rewrite/push/publish.
+
 **Development on `main` / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Tip `12a614b` lineage. **GITHUB_SOURCE_PUSH_READY = NOT_CLEARED** — tip tree clean of private `.wasm`/`.data`, but reachable history still contains emulator binaries + `docs/test-evidence/` profiles (`main-push-safety-audit.md`). Integrated feat via `d650bf4`. Do not push public source or deploy.
 
 **Development on `main` / PUBLIC_RELEASE_GO = STOP** (2026-11-04). Integrated `feat/platform-expansion-phase-1` via merge `d650bf4` (includes `b53e66d` handoff). Future engineering continues on `main`. External blockers unchanged. Report: `docs/release/main-integration-report.md`.
@@ -432,14 +434,27 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 
 ### Next concrete task (on `main`)
 
-1. Continue release prep only on `main` (no routine feature branches)
-2. External: source HTTPS delivery, counsel, product approvals, staging, physical QA
-3. Keep PUBLIC_RELEASE_GO = STOP until mandatory gates PASS
-4. Push `main` only when owner separately authorizes a normal fast-forward push
+1. Owner decide Option B (new public repo from sanitized candidate) vs Option A (rewrite remotes); do **not** auto-migrate
+2. Keep private `main` history intact until approved migration; do not push unsanitized `main` publicly
+3. External product gates unchanged: source HTTPS delivery, counsel, product approvals, staging, physical QA
+4. Keep `PUBLIC_RELEASE_GO=STOP` and `GITHUB_SOURCE_PUSH_READY=NOT_CLEARED` until independent clearances
+
+## PH-16 sanitized history candidate (2026-11-05)
+
+| Check | Result |
+|---|---|
+| Original `main` | `24b8c55` unchanged |
+| Candidate | `e881502` (isolated clone only) |
+| Tip tree parity | Identical 1063 paths / 0 SHA mismatches |
+| History auditors | `HISTORY_AUDIT_PASS` / public-source safety PASS |
+| Tests | Vitest 85, tsc, eslint, Django 43 on candidate |
+| Backup | Verified bundle outside repo (`…-ph16-backup-20261105T080855Z`) |
+| Origin exposure | Restricted cores still on private `origin/main` + `origin/feat` |
+| Push / rewrite | **Not performed** |
 
 ## Remaining blockers / next
 
-1. Owner: authorize Option B public repo push of sanitized candidate (LICENSE enacted)
+1. Owner: authorize Option B public repo push of **sanitized** candidate only (LICENSE enacted); re-audit published remote before clearing `GITHUB_SOURCE_PUSH_READY`
 2. Counsel: legal-review package; `NEEDS_LEGAL_REVIEW` ≠ approval — use `docs/release/legal-review/`
 3. Owner: publish corresponding-source offer on HTTPS; gate must fetch PASS before `OFFER_DELIVERY_VERIFIED`
 4. Product: Alpha game set approvals (incl. Atari ST / FDS / Atari 8-bit / N64/ZX81 fixtures if desired)
