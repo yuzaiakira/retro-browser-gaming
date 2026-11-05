@@ -1,0 +1,599 @@
+{
+  "schema": "rbg-owner-attestation-manifests-v1",
+  "generated_at": "2026-11-05T09:19:42Z",
+  "git_head": "b7a858773851f4827cdcd3238a44de8579217003",
+  "compatible_policy_tree_sha": "c2cff75e5c0d4f017800501a3fec2d59b59f704a",
+  "summary": {
+    "attestation_groups": 18,
+    "first_party_files": 146,
+    "human_approvals_received": 0
+  },
+  "groups": [
+    {
+      "attestation_group_id": "OA-001",
+      "bucket": "fixtures/j2me-notes",
+      "member_count": 21,
+      "members": [
+        "fixtures/j2me-notes/LICENSE.txt",
+        "fixtures/j2me-notes/PROVENANCE.md",
+        "fixtures/j2me-notes/build.sh",
+        "fixtures/j2me-notes/src/javax/microedition/lcdui/Canvas.java",
+        "fixtures/j2me-notes/src/javax/microedition/lcdui/Command.java",
+        "fixtures/j2me-notes/src/javax/microedition/lcdui/CommandListener.java",
+        "fixtures/j2me-notes/src/javax/microedition/lcdui/Display.java",
+        "fixtures/j2me-notes/src/javax/microedition/lcdui/Displayable.java",
+        "fixtures/j2me-notes/src/javax/microedition/lcdui/Form.java",
+        "fixtures/j2me-notes/src/javax/microedition/lcdui/Graphics.java",
+        "fixtures/j2me-notes/src/javax/microedition/lcdui/Item.java",
+        "fixtures/j2me-notes/src/javax/microedition/lcdui/StringItem.java",
+        "fixtures/j2me-notes/src/javax/microedition/lcdui/TextField.java",
+        "fixtures/j2me-notes/src/javax/microedition/midlet/MIDlet.java",
+        "fixtures/j2me-notes/src/javax/microedition/midlet/MIDletStateChangeException.java",
+        "fixtures/j2me-notes/src/javax/microedition/rms/InvalidRecordIDException.java",
+        "fixtures/j2me-notes/src/javax/microedition/rms/RecordStore.java",
+        "fixtures/j2me-notes/src/javax/microedition/rms/RecordStoreException.java",
+        "fixtures/j2me-notes/src/javax/microedition/rms/RecordStoreFullException.java",
+        "fixtures/j2me-notes/src/javax/microedition/rms/RecordStoreNotFoundException.java",
+        "fixtures/j2me-notes/src/retro/j2me/notes/NotesMIDlet.java"
+      ],
+      "scope_sha256": "c4032e5aa4b745cb89abe2a6988fc93800343d0baf9bb721e2c189fea955f90f",
+      "intended_publication_license": [
+        "MIT"
+      ],
+      "notice_paths": [
+        "LICENSES/j2me-dot-MIT.txt",
+        "fixtures/j2me-notes/LICENSE.txt"
+      ],
+      "git_authors_sample_union": [
+        "Akira <yuzai.akira@gmail.com>"
+      ],
+      "git_authorship_disclaimer": "Git authorship does not prove copyright ownership or redistribution rights.",
+      "known_third_party_notes": [],
+      "required_decision": "OWNER_ATTESTED",
+      "compatible_policy_tree_sha": "c2cff75e5c0d4f017800501a3fec2d59b59f704a",
+      "status": "NEEDS_REVIEW",
+      "auto_approved": false
+    },
+    {
+      "attestation_group_id": "OA-002",
+      "bucket": ".fixtures/dreamcast-first-party",
+      "member_count": 20,
+      "members": [
+        ".fixtures/dreamcast-dot.gdi.sha256",
+        ".fixtures/mit-dreamcast-dot-disc2-track01.bin",
+        ".fixtures/mit-dreamcast-dot-disc2-track02.raw",
+        ".fixtures/mit-dreamcast-dot-disc2-track03.bin",
+        ".fixtures/mit-dreamcast-dot-disc2.chd",
+        ".fixtures/mit-dreamcast-dot-disc2.chd.sha256",
+        ".fixtures/mit-dreamcast-dot-disc2.elf",
+        ".fixtures/mit-dreamcast-dot-disc2.gdi",
+        ".fixtures/mit-dreamcast-dot-multidisc-gdi.m3u",
+        ".fixtures/mit-dreamcast-dot-multidisc.m3u",
+        ".fixtures/mit-dreamcast-dot-multidisc.m3u.sha256",
+        ".fixtures/mit-dreamcast-dot-track01.bin",
+        ".fixtures/mit-dreamcast-dot-track02.raw",
+        ".fixtures/mit-dreamcast-dot-track03.bin",
+        ".fixtures/mit-dreamcast-dot.README.md",
+        ".fixtures/mit-dreamcast-dot.chd",
+        ".fixtures/mit-dreamcast-dot.chd.sha256",
+        ".fixtures/mit-dreamcast-dot.elf",
+        ".fixtures/mit-dreamcast-dot.gdi",
+        ".fixtures/mit-dreamcast-dot.sha256"
+      ],
+      "scope_sha256": "d0b6f6cd7809118ac868f504e24c5238c9e003f32907932aaa36f163a45c5973",
+      "intended_publication_license": [
+        "MIT"
+      ],
+      "notice_paths": [
+        ".fixtures/mit-dreamcast-dot.README.md",
+        "LICENSES/dreamcast-dot-MIT.txt",
+        "fixtures/dreamcast-dot/LICENSE.txt"
+      ],
+      "git_authors_sample_union": [
+        "Akira <yuzai.akira@gmail.com>"
+      ],
+      "git_authorship_disclaimer": "Git authorship does not prove copyright ownership or redistribution rights.",
+      "known_third_party_notes": [],
+      "required_decision": "OWNER_ATTESTED",
+      "compatible_policy_tree_sha": "c2cff75e5c0d4f017800501a3fec2d59b59f704a",
+      "status": "NEEDS_REVIEW",
+      "auto_approved": false
+    },
+    {
+      "attestation_group_id": "OA-003",
+      "bucket": "fixtures/j2me-paddle",
+      "member_count": 19,
+      "members": [
+        "fixtures/j2me-paddle/LICENSE.txt",
+        "fixtures/j2me-paddle/PROVENANCE.md",
+        "fixtures/j2me-paddle/build.sh",
+        "fixtures/j2me-paddle/src/java/lang/InterruptedException.java",
+        "fixtures/j2me-paddle/src/java/lang/Runnable.java",
+        "fixtures/j2me-paddle/src/java/lang/Thread.java",
+        "fixtures/j2me-paddle/src/javax/microedition/lcdui/Canvas.java",
+        "fixtures/j2me-paddle/src/javax/microedition/lcdui/Display.java",
+        "fixtures/j2me-paddle/src/javax/microedition/lcdui/Displayable.java",
+        "fixtures/j2me-paddle/src/javax/microedition/lcdui/Graphics.java",
+        "fixtures/j2me-paddle/src/javax/microedition/midlet/MIDlet.java",
+        "fixtures/j2me-paddle/src/javax/microedition/midlet/MIDletStateChangeException.java",
+        "fixtures/j2me-paddle/src/javax/microedition/rms/InvalidRecordIDException.java",
+        "fixtures/j2me-paddle/src/javax/microedition/rms/RecordStore.java",
+        "fixtures/j2me-paddle/src/javax/microedition/rms/RecordStoreException.java",
+        "fixtures/j2me-paddle/src/javax/microedition/rms/RecordStoreFullException.java",
+        "fixtures/j2me-paddle/src/javax/microedition/rms/RecordStoreNotFoundException.java",
+        "fixtures/j2me-paddle/src/retro/j2me/paddle/PaddleCanvas.java",
+        "fixtures/j2me-paddle/src/retro/j2me/paddle/PaddleMIDlet.java"
+      ],
+      "scope_sha256": "eb01f34ef54f08437fb3af345286aae66b1be8fd5234d76d16fc934e841d733e",
+      "intended_publication_license": [
+        "MIT"
+      ],
+      "notice_paths": [
+        "LICENSES/j2me-dot-MIT.txt",
+        "fixtures/j2me-paddle/LICENSE.txt"
+      ],
+      "git_authors_sample_union": [
+        "Akira <yuzai.akira@gmail.com>"
+      ],
+      "git_authorship_disclaimer": "Git authorship does not prove copyright ownership or redistribution rights.",
+      "known_third_party_notes": [],
+      "required_decision": "OWNER_ATTESTED",
+      "compatible_policy_tree_sha": "c2cff75e5c0d4f017800501a3fec2d59b59f704a",
+      "status": "NEEDS_REVIEW",
+      "auto_approved": false
+    },
+    {
+      "attestation_group_id": "OA-004",
+      "bucket": "fixtures/j2me-dot",
+      "member_count": 16,
+      "members": [
+        "fixtures/j2me-dot/LICENSE.txt",
+        "fixtures/j2me-dot/PROVENANCE.md",
+        "fixtures/j2me-dot/build.sh",
+        "fixtures/j2me-dot/src/javax/microedition/lcdui/Canvas.java",
+        "fixtures/j2me-dot/src/javax/microedition/lcdui/Display.java",
+        "fixtures/j2me-dot/src/javax/microedition/lcdui/Displayable.java",
+        "fixtures/j2me-dot/src/javax/microedition/lcdui/Graphics.java",
+        "fixtures/j2me-dot/src/javax/microedition/midlet/MIDlet.java",
+        "fixtures/j2me-dot/src/javax/microedition/midlet/MIDletStateChangeException.java",
+        "fixtures/j2me-dot/src/javax/microedition/rms/InvalidRecordIDException.java",
+        "fixtures/j2me-dot/src/javax/microedition/rms/RecordStore.java",
+        "fixtures/j2me-dot/src/javax/microedition/rms/RecordStoreException.java",
+        "fixtures/j2me-dot/src/javax/microedition/rms/RecordStoreFullException.java",
+        "fixtures/j2me-dot/src/javax/microedition/rms/RecordStoreNotFoundException.java",
+        "fixtures/j2me-dot/src/retro/j2me/dot/DotCanvas.java",
+        "fixtures/j2me-dot/src/retro/j2me/dot/DotMIDlet.java"
+      ],
+      "scope_sha256": "dca7f16ed469ca9683e742fd6808099bf7010f29e0afe102883b3a5b0bee79a7",
+      "intended_publication_license": [
+        "MIT"
+      ],
+      "notice_paths": [
+        "LICENSES/j2me-dot-MIT.txt",
+        "fixtures/j2me-dot/LICENSE.txt"
+      ],
+      "git_authors_sample_union": [
+        "Akira <yuzai.akira@gmail.com>"
+      ],
+      "git_authorship_disclaimer": "Git authorship does not prove copyright ownership or redistribution rights.",
+      "known_third_party_notes": [],
+      "required_decision": "OWNER_ATTESTED",
+      "compatible_policy_tree_sha": "c2cff75e5c0d4f017800501a3fec2d59b59f704a",
+      "status": "NEEDS_REVIEW",
+      "auto_approved": false
+    },
+    {
+      "attestation_group_id": "OA-005",
+      "bucket": ".fixtures/mit-first-party-misc",
+      "member_count": 10,
+      "members": [
+        ".fixtures/mit-atari8-dot.README.md",
+        ".fixtures/mit-atari8-dot.xex",
+        ".fixtures/mit-flash-dot.README.md",
+        ".fixtures/mit-flash-dot.sha256",
+        ".fixtures/mit-flash-dot.swf",
+        ".fixtures/mit-ps1-dot-single.bin",
+        ".fixtures/mit-ps1-dot-single.cue",
+        ".fixtures/mit-vectrex-dot.README.md",
+        ".fixtures/mit-vectrex-dot.bin",
+        ".fixtures/mit-zx81-dot-noaltint.p"
+      ],
+      "scope_sha256": "c4821fb9c8a4c47feca693f27c7f4ea86c77bb3330c84e2db4d77b5226490de4",
+      "intended_publication_license": [
+        "MIT"
+      ],
+      "notice_paths": [
+        ".fixtures/mit-atari8-dot.README.md",
+        ".fixtures/mit-flash-dot.README.md",
+        ".fixtures/mit-vectrex-dot.README.md",
+        "LICENSES/atari8-dot-MIT.txt",
+        "LICENSES/flash-dot-MIT.txt",
+        "LICENSES/vectrex-dot-MIT.txt",
+        "LICENSES/zx81-dot-MIT.txt",
+        "fixtures/flash-dot/LICENSE.txt",
+        "fixtures/ps1-dot/LICENSE.txt",
+        "fixtures/zx81-dot/LICENSE.txt"
+      ],
+      "git_authors_sample_union": [
+        "Akira <yuzai.akira@gmail.com>"
+      ],
+      "git_authorship_disclaimer": "Git authorship does not prove copyright ownership or redistribution rights.",
+      "known_third_party_notes": [],
+      "required_decision": "OWNER_ATTESTED",
+      "compatible_policy_tree_sha": "c2cff75e5c0d4f017800501a3fec2d59b59f704a",
+      "status": "NEEDS_REVIEW",
+      "auto_approved": false
+    },
+    {
+      "attestation_group_id": "OA-006",
+      "bucket": "fixtures/zx81-dot",
+      "member_count": 10,
+      "members": [
+        "fixtures/zx81-dot/LICENSE.txt",
+        "fixtures/zx81-dot/README.md",
+        "fixtures/zx81-dot/dot.c",
+        "fixtures/zx81-dot/mit-zx81-dot-fast",
+        "fixtures/zx81-dot/mit-zx81-dot-fast.P",
+        "fixtures/zx81-dot/mit-zx81-dot-fast.map",
+        "fixtures/zx81-dot/mit-zx81-dot-slow",
+        "fixtures/zx81-dot/mit-zx81-dot-slow.P",
+        "fixtures/zx81-dot/mit-zx81-dot-slow.map",
+        "fixtures/zx81-dot/patch_skip_altint.py"
+      ],
+      "scope_sha256": "d376963eb10cd475d95faa08e1a6868f45c0bb3184ad1ef8f95785b1ab8ad2e1",
+      "intended_publication_license": [
+        "MIT"
+      ],
+      "notice_paths": [
+        "LICENSES/zx81-dot-MIT.txt",
+        "fixtures/zx81-dot/LICENSE.txt"
+      ],
+      "git_authors_sample_union": [
+        "Akira <yuzai.akira@gmail.com>"
+      ],
+      "git_authorship_disclaimer": "Git authorship does not prove copyright ownership or redistribution rights.",
+      "known_third_party_notes": [],
+      "required_decision": "OWNER_ATTESTED",
+      "compatible_policy_tree_sha": "c2cff75e5c0d4f017800501a3fec2d59b59f704a",
+      "status": "NEEDS_REVIEW",
+      "auto_approved": false
+    },
+    {
+      "attestation_group_id": "OA-007",
+      "bucket": "fixtures/ps1-dot",
+      "member_count": 9,
+      "members": [
+        "fixtures/ps1-dot/CMakeLists.txt",
+        "fixtures/ps1-dot/LICENSE.txt",
+        "fixtures/ps1-dot/README.TXT",
+        "fixtures/ps1-dot/README.md",
+        "fixtures/ps1-dot/build.sh",
+        "fixtures/ps1-dot/iso.xml",
+        "fixtures/ps1-dot/scripts/gen_tone_wav.py",
+        "fixtures/ps1-dot/src/main.c",
+        "fixtures/ps1-dot/system.cnf"
+      ],
+      "scope_sha256": "36bdf5b8c5338472c7cc557c0ce8e48a3b2d4e6bad9d8d9b39a93db0c1b9bfdf",
+      "intended_publication_license": [
+        "MIT"
+      ],
+      "notice_paths": [
+        "fixtures/ps1-dot/LICENSE.txt"
+      ],
+      "git_authors_sample_union": [
+        "Akira <yuzai.akira@gmail.com>"
+      ],
+      "git_authorship_disclaimer": "Git authorship does not prove copyright ownership or redistribution rights.",
+      "known_third_party_notes": [],
+      "required_decision": "OWNER_ATTESTED",
+      "compatible_policy_tree_sha": "c2cff75e5c0d4f017800501a3fec2d59b59f704a",
+      "status": "NEEDS_REVIEW",
+      "auto_approved": false
+    },
+    {
+      "attestation_group_id": "OA-008",
+      "bucket": ".fixtures/j2me-midlets",
+      "member_count": 6,
+      "members": [
+        ".fixtures/mit-j2me-dot.jad",
+        ".fixtures/mit-j2me-dot.jar",
+        ".fixtures/mit-j2me-notes.jad",
+        ".fixtures/mit-j2me-notes.jar",
+        ".fixtures/mit-j2me-paddle.jad",
+        ".fixtures/mit-j2me-paddle.jar"
+      ],
+      "scope_sha256": "cfe9870ba11ebc4f27c91e5cd7fb822621fd2edf2e058dc468d58e2cbc62ea32",
+      "intended_publication_license": [
+        "MIT"
+      ],
+      "notice_paths": [
+        "LICENSES/j2me-dot-MIT.txt",
+        "fixtures/j2me-dot/LICENSE.txt"
+      ],
+      "git_authors_sample_union": [
+        "Akira <yuzai.akira@gmail.com>"
+      ],
+      "git_authorship_disclaimer": "Git authorship does not prove copyright ownership or redistribution rights.",
+      "known_third_party_notes": [],
+      "required_decision": "OWNER_ATTESTED",
+      "compatible_policy_tree_sha": "c2cff75e5c0d4f017800501a3fec2d59b59f704a",
+      "status": "NEEDS_REVIEW",
+      "auto_approved": false
+    },
+    {
+      "attestation_group_id": "OA-009",
+      "bucket": "fixtures/amiga-dot",
+      "member_count": 6,
+      "members": [
+        "fixtures/amiga-dot/.gitignore",
+        "fixtures/amiga-dot/LICENSE.txt",
+        "fixtures/amiga-dot/Makefile",
+        "fixtures/amiga-dot/README.md",
+        "fixtures/amiga-dot/Startup-Sequence",
+        "fixtures/amiga-dot/main.c"
+      ],
+      "scope_sha256": "13cb688db220244ea900ce3329ccd4ea51d312e5072933c63e21f88602d4c5ee",
+      "intended_publication_license": [
+        "MIT"
+      ],
+      "notice_paths": [
+        "LICENSES/amiga-dot-MIT.txt",
+        "fixtures/amiga-dot/LICENSE.txt"
+      ],
+      "git_authors_sample_union": [
+        "Akira <yuzai.akira@gmail.com>"
+      ],
+      "git_authorship_disclaimer": "Git authorship does not prove copyright ownership or redistribution rights.",
+      "known_third_party_notes": [],
+      "required_decision": "OWNER_ATTESTED",
+      "compatible_policy_tree_sha": "c2cff75e5c0d4f017800501a3fec2d59b59f704a",
+      "status": "NEEDS_REVIEW",
+      "auto_approved": false
+    },
+    {
+      "attestation_group_id": "OA-010",
+      "bucket": "fixtures/dreamcast-dot",
+      "member_count": 5,
+      "members": [
+        "fixtures/dreamcast-dot/LICENSE.txt",
+        "fixtures/dreamcast-dot/Makefile",
+        "fixtures/dreamcast-dot/build-disc2.sh",
+        "fixtures/dreamcast-dot/build-discs.sh",
+        "fixtures/dreamcast-dot/dot.c"
+      ],
+      "scope_sha256": "89820ece945df9468ab5f5a1a9ac58fea964c3adedb34262a34032b4ec5d6461",
+      "intended_publication_license": [
+        "MIT"
+      ],
+      "notice_paths": [
+        "LICENSES/dreamcast-dot-MIT.txt",
+        "fixtures/dreamcast-dot/LICENSE.txt"
+      ],
+      "git_authors_sample_union": [
+        "Akira <yuzai.akira@gmail.com>"
+      ],
+      "git_authorship_disclaimer": "Git authorship does not prove copyright ownership or redistribution rights.",
+      "known_third_party_notes": [],
+      "required_decision": "OWNER_ATTESTED",
+      "compatible_policy_tree_sha": "c2cff75e5c0d4f017800501a3fec2d59b59f704a",
+      "status": "NEEDS_REVIEW",
+      "auto_approved": false
+    },
+    {
+      "attestation_group_id": "OA-011",
+      "bucket": "fixtures/psp-dot",
+      "member_count": 5,
+      "members": [
+        "fixtures/psp-dot/LICENSE.txt",
+        "fixtures/psp-dot/Makefile",
+        "fixtures/psp-dot/README.md",
+        "fixtures/psp-dot/build.sh",
+        "fixtures/psp-dot/src/main.c"
+      ],
+      "scope_sha256": "8b41255ae7774ebf7e90bfee183752647350af36ea68942cd53d43ea937cec5f",
+      "intended_publication_license": [
+        "MIT"
+      ],
+      "notice_paths": [
+        "fixtures/psp-dot/LICENSE.txt"
+      ],
+      "git_authors_sample_union": [
+        "Akira <yuzai.akira@gmail.com>"
+      ],
+      "git_authorship_disclaimer": "Git authorship does not prove copyright ownership or redistribution rights.",
+      "known_third_party_notes": [],
+      "required_decision": "OWNER_ATTESTED",
+      "compatible_policy_tree_sha": "c2cff75e5c0d4f017800501a3fec2d59b59f704a",
+      "status": "NEEDS_REVIEW",
+      "auto_approved": false
+    },
+    {
+      "attestation_group_id": "OA-012",
+      "bucket": "fixtures/flash-dot",
+      "member_count": 4,
+      "members": [
+        "fixtures/flash-dot/Dot.hx",
+        "fixtures/flash-dot/LICENSE.txt",
+        "fixtures/flash-dot/Makefile",
+        "fixtures/flash-dot/mit-flash-dot.swf"
+      ],
+      "scope_sha256": "65756c452d5d8955dc04fac5a310545c36f68d9c2acacfd29ae3f83836a6e111",
+      "intended_publication_license": [
+        "MIT"
+      ],
+      "notice_paths": [
+        "LICENSES/flash-dot-MIT.txt",
+        "fixtures/flash-dot/LICENSE.txt"
+      ],
+      "git_authors_sample_union": [
+        "Akira <yuzai.akira@gmail.com>"
+      ],
+      "git_authorship_disclaimer": "Git authorship does not prove copyright ownership or redistribution rights.",
+      "known_third_party_notes": [],
+      "required_decision": "OWNER_ATTESTED",
+      "compatible_policy_tree_sha": "c2cff75e5c0d4f017800501a3fec2d59b59f704a",
+      "status": "NEEDS_REVIEW",
+      "auto_approved": false
+    },
+    {
+      "attestation_group_id": "OA-013",
+      "bucket": "fixtures/msx-dot",
+      "member_count": 4,
+      "members": [
+        "fixtures/msx-dot/LICENSE.txt",
+        "fixtures/msx-dot/README.md",
+        "fixtures/msx-dot/dot.c",
+        "fixtures/msx-dot/mit-msx-dot.rom"
+      ],
+      "scope_sha256": "25afff515ebb6563b0aff0ffb15174cdd32f6b95307f68c4cd3729012816381d",
+      "intended_publication_license": [
+        "MIT"
+      ],
+      "notice_paths": [
+        "LICENSES/msx-dot-MIT.txt",
+        "fixtures/msx-dot/LICENSE.txt"
+      ],
+      "git_authors_sample_union": [
+        "Akira <yuzai.akira@gmail.com>"
+      ],
+      "git_authorship_disclaimer": "Git authorship does not prove copyright ownership or redistribution rights.",
+      "known_third_party_notes": [],
+      "required_decision": "OWNER_ATTESTED",
+      "compatible_policy_tree_sha": "c2cff75e5c0d4f017800501a3fec2d59b59f704a",
+      "status": "NEEDS_REVIEW",
+      "auto_approved": false
+    },
+    {
+      "attestation_group_id": "OA-014",
+      "bucket": ".fixtures/arcade-rbgdot",
+      "member_count": 3,
+      "members": [
+        ".fixtures/mit-arcade-rbgdot.README.md",
+        ".fixtures/mit-arcade-rbgdot.zip",
+        ".fixtures/rbgdot.id"
+      ],
+      "scope_sha256": "af27c5db39a986360fe2850b1a3c4c0eaa3f3f428e39aadda0b9deb0c80bb536",
+      "intended_publication_license": [
+        "MIT"
+      ],
+      "notice_paths": [
+        ".fixtures/mit-arcade-rbgdot.README.md",
+        "LICENSES/arcade-rbgdot-MIT.txt"
+      ],
+      "git_authors_sample_union": [
+        "Akira <yuzai.akira@gmail.com>"
+      ],
+      "git_authorship_disclaimer": "Git authorship does not prove copyright ownership or redistribution rights.",
+      "known_third_party_notes": [],
+      "required_decision": "OWNER_ATTESTED",
+      "compatible_policy_tree_sha": "c2cff75e5c0d4f017800501a3fec2d59b59f704a",
+      "status": "NEEDS_REVIEW",
+      "auto_approved": false
+    },
+    {
+      "attestation_group_id": "OA-015",
+      "bucket": "fixtures/gb-dot",
+      "member_count": 3,
+      "members": [
+        "fixtures/gb-dot/LICENSE.txt",
+        "fixtures/gb-dot/README.md",
+        "fixtures/gb-dot/main.c"
+      ],
+      "scope_sha256": "ceb6e7b022aed6c1e4927938dd37be518a7a0b396853a1d905be1ed93e59669c",
+      "intended_publication_license": [
+        "MIT"
+      ],
+      "notice_paths": [
+        "LICENSES/gb-dot-MIT.txt",
+        "fixtures/gb-dot/LICENSE.txt"
+      ],
+      "git_authors_sample_union": [
+        "Akira <yuzai.akira@gmail.com>"
+      ],
+      "git_authorship_disclaimer": "Git authorship does not prove copyright ownership or redistribution rights.",
+      "known_third_party_notes": [],
+      "required_decision": "OWNER_ATTESTED",
+      "compatible_policy_tree_sha": "c2cff75e5c0d4f017800501a3fec2d59b59f704a",
+      "status": "NEEDS_REVIEW",
+      "auto_approved": false
+    },
+    {
+      "attestation_group_id": "OA-016",
+      "bucket": ".fixtures/fds-rbg-move-demo",
+      "member_count": 2,
+      "members": [
+        ".fixtures/fds-rbg-move-demo.README.md",
+        ".fixtures/fds-rbg-move-demo.fds"
+      ],
+      "scope_sha256": "05fbef2eafc06827ea66639acb34392f0d7d26aaae17ccfbb5a842f4af268320",
+      "intended_publication_license": [
+        "MIT"
+      ],
+      "notice_paths": [
+        ".fixtures/fds-rbg-move-demo.README.md",
+        "LICENSES/OpenDiskSysROM-LGPL-3.0.txt"
+      ],
+      "git_authors_sample_union": [
+        "Akira <yuzai.akira@gmail.com>"
+      ],
+      "git_authorship_disclaimer": "Git authorship does not prove copyright ownership or redistribution rights.",
+      "known_third_party_notes": [],
+      "required_decision": "OWNER_ATTESTED",
+      "compatible_policy_tree_sha": "c2cff75e5c0d4f017800501a3fec2d59b59f704a",
+      "status": "NEEDS_REVIEW",
+      "auto_approved": false
+    },
+    {
+      "attestation_group_id": "OA-017",
+      "bucket": "fixtures/lynx-dot",
+      "member_count": 2,
+      "members": [
+        "fixtures/lynx-dot/LICENSE.txt",
+        "fixtures/lynx-dot/main.c"
+      ],
+      "scope_sha256": "7ae37c05e45e792cd333d7c578325a8f086e81cf7dd17e48b54f0c28e1aa857e",
+      "intended_publication_license": [
+        "MIT"
+      ],
+      "notice_paths": [
+        "LICENSES/lynx-dot-MIT.txt",
+        "fixtures/lynx-dot/LICENSE.txt"
+      ],
+      "git_authors_sample_union": [
+        "Akira <yuzai.akira@gmail.com>"
+      ],
+      "git_authorship_disclaimer": "Git authorship does not prove copyright ownership or redistribution rights.",
+      "known_third_party_notes": [],
+      "required_decision": "OWNER_ATTESTED",
+      "compatible_policy_tree_sha": "c2cff75e5c0d4f017800501a3fec2d59b59f704a",
+      "status": "NEEDS_REVIEW",
+      "auto_approved": false
+    },
+    {
+      "attestation_group_id": "OA-018",
+      "bucket": "fixtures/zx81-81-eo-loadp",
+      "member_count": 1,
+      "members": [
+        "fixtures/zx81-81-eo-loadp/eo_loadp-cdflag-crt.c.snippet"
+      ],
+      "scope_sha256": "f90f3aead2c9d3aa1dc5306bdbdd54f2cf76c04686508402f8ba68743b236968",
+      "intended_publication_license": [
+        "GPL-3.0-or-later"
+      ],
+      "notice_paths": [
+        "docs/emulator-builds/zx81-eo-loadp-build.md",
+        "scripts/patches/81_eo/README.md"
+      ],
+      "git_authors_sample_union": [
+        "Akira <yuzai.akira@gmail.com>"
+      ],
+      "git_authorship_disclaimer": "Git authorship does not prove copyright ownership or redistribution rights.",
+      "known_third_party_notes": [],
+      "required_decision": "OWNER_ATTESTED",
+      "compatible_policy_tree_sha": "c2cff75e5c0d4f017800501a3fec2d59b59f704a",
+      "status": "NEEDS_REVIEW",
+      "auto_approved": false
+    }
+  ],
+  "policy": "Blankets with ambiguous scope are invalid. One OA-* decision covers only its members list."
+}

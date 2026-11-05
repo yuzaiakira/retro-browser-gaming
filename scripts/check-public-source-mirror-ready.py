@@ -23,7 +23,16 @@ COUNSEL = ROOT / "docs" / "release" / "legal-review" / "counsel-decisions.json"
 LEGAL_PACK = ROOT / "docs" / "release" / "legal-review" / "legal-review-pack.json"
 PROVENANCE = ROOT / "docs" / "release" / "legal-review" / "file-provenance.json"
 REVIEW_GROUPS = ROOT / "docs" / "release" / "legal-review" / "review-groups.json"
+OA_MANIFEST = ROOT / "docs" / "release" / "legal-review" / "owner-attestation-manifests.json"
+CD_MANIFEST = ROOT / "docs" / "release" / "legal-review" / "counsel-decision-manifests.json"
 MANIFEST = ROOT / "docs" / "open-source" / "history-removal-manifest.txt"
+
+# Product/runtime classes that SOURCE counsel must never silently clear.
+PRESERVED_RESTRICTIONS = {
+    "LOCAL_ONLY": ("flycast", "mame-rbg-arcade", "mame"),
+    "BLOCKED_LEGAL": ("81_eo", "virtualjaguar"),
+    "BLOCKED_EXTERNAL": ("coleco", "vectrex", "gearcoleco", "vecx"),
+}
 
 
 def load_json(path: Path) -> dict | None:
@@ -109,6 +118,9 @@ def main() -> int:
                     "scripts/build-sanitized-candidate.sh",
                     "scripts/build-legal-review-queues.py",
                     "scripts/check-provenance-inventory.py",
+                    "scripts/build-human-approval-manifests.py",
+                    "scripts/validate-human-approvals.py",
+                    "scripts/test_human_approvals.py",
                     "docs/open-source/fixture-provenance-index.json",
                     "docs/licenses-and-assets.md",
                     ".runtime/",
@@ -335,6 +347,88 @@ def main() -> int:
                     "auto_approved_groups": 0,
                 },
             }
+
+    # PH-20 human approvals — owner attestation ≠ counsel; fail closed.
+    import importlib.util
+
+    _ha_spec = importlib.util.spec_from_file_location(
+        "validate_human_approvals",
+        ROOT / "scripts" / "validate-human-approvals.py",
+    )
+    run_validation = None
+    if _ha_spec is not None and _ha_spec.loader is not None:
+        _ha_mod = importlib.util.module_from_spec(_ha_spec)
+        _ha_spec.loader.exec_module(_ha_mod)
+        run_validation = _ha_mod.run_validation
+
+    if run_validation is None:
+        blockers.append("validate-human-approvals.py unavailable")
+        checks["HUMAN_APPROVALS"] = {"status": "FAIL", "detail": "import failed"}
+    elif not OA_MANIFEST.is_file() or not CD_MANIFEST.is_file():
+        blockers.append(
+            "human approval manifests missing — run build-human-approval-manifests.py"
+        )
+        checks["HUMAN_APPROVALS"] = {"status": "FAIL", "detail": "manifests absent"}
+    else:
+        ha = run_validation(ROOT)
+        if not ha.get("ok"):
+            blockers.append(
+                f"human approval validation errors={len(ha.get('errors') or [])}"
+            )
+            checks["HUMAN_APPROVALS"] = {
+                "status": "FAIL",
+                "detail": (ha.get("errors") or [])[:3],
+            }
+        elif not ha.get("complete_for_mirror"):
+            blockers.append(
+                "human approvals incomplete: "
+                f"owner_missing={len(ha.get('attestation_groups_missing') or [])} "
+                f"counsel_missing={len(ha.get('counsel_groups_missing') or [])} "
+                "(owner attestation ≠ counsel approval; SOURCE ≠ product release)"
+            )
+            checks["HUMAN_APPROVALS"] = {
+                "status": "NOT_CLEARED",
+                "detail": {
+                    "owner_attested": ha.get("attestation_groups_attested"),
+                    "owner_total": ha.get("attestation_groups_total"),
+                    "counsel_approved": ha.get("counsel_groups_approved"),
+                    "counsel_total": ha.get("counsel_groups_total"),
+                    "unresolved_legal_flags": ha.get("unresolved_legal_flag_paths"),
+                },
+            }
+        else:
+            # Still fail closed if positive SOURCE clearances claim product clearance.
+            counsel_live = load_json(COUNSEL) or {}
+            product_leak = [
+                row.get("counsel_decision_id") or row.get("artifact_id")
+                for row in counsel_live.get("decisions", [])
+                if row.get("clears_product_restriction") is True
+            ]
+            if product_leak:
+                blockers.append(
+                    "counsel decision claims clears_product_restriction "
+                    f"(forbidden): {product_leak[:5]}"
+                )
+                checks["HUMAN_APPROVALS"] = {
+                    "status": "FAIL",
+                    "detail": "SOURCE≠product",
+                }
+            else:
+                checks["HUMAN_APPROVALS"] = {
+                    "status": "PASS",
+                    "detail": ha.get("human_approvals_received"),
+                }
+
+    # Documentary invariant: product restriction classes stay separate from SOURCE.
+    _ = PRESERVED_RESTRICTIONS
+    checks["PRESERVED_RESTRICTIONS"] = {
+        "status": "RECORDED",
+        "detail": (
+            "Flycast+MAME LOCAL_ONLY; 81_eo+Jaguar BLOCKED_LEGAL; "
+            "ColecoVision+Vectrex BLOCKED_EXTERNAL; catalog product pending; "
+            "owner attestation ≠ counsel; SOURCE mirror ≠ public product release"
+        ),
+    }
 
     ready = len(blockers) == 0
     verdict = "PASS" if ready else "NOT_CLEARED"

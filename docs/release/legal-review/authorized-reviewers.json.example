@@ -1,0 +1,25 @@
+{
+  "schema": "rbg-authorized-reviewers-v1",
+  "note": "EXAMPLE ONLY. Copy to authorized-reviewers.json and replace with real roster. Do not treat this file as live authority.",
+  "policy": "Positive decisions (OWNER_ATTESTED / COUNSEL_APPROVED) require reviewer_id present here with matching role and active=true. Git authorship alone is never authority.",
+  "reviewers": [
+    {
+      "reviewer_id": "EXAMPLE_OWNER_ID",
+      "display_name": "Example Owner (replace)",
+      "roles": ["owner"],
+      "active": false,
+      "authorization_evidence": [
+        "Replace with ticket/board resolution / signed appointment — never invent"
+      ]
+    },
+    {
+      "reviewer_id": "EXAMPLE_COUNSEL_ID",
+      "display_name": "Example Counsel (replace)",
+      "roles": ["counsel"],
+      "active": false,
+      "authorization_evidence": [
+        "Replace with engagement letter / matter ID — never invent"
+      ]
+    }
+  ]
+}

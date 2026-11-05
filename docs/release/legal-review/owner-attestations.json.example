@@ -1,0 +1,22 @@
+{
+  "schema": "rbg-owner-attestations-v1",
+  "note": "EXAMPLE ONLY. Copy to owner-attestations.json after a real authorized owner signs. Never commit forged OWNER_ATTESTED rows.",
+  "decisions": [
+    {
+      "decision_id": "OA-DEC-EXAMPLE-001",
+      "attestation_group_id": "OA-001",
+      "decision": "NEEDS_REVIEW",
+      "reviewer_id": "EXAMPLE_OWNER_ID",
+      "decided_at": "YYYY-MM-DD",
+      "scope_sha256": "paste-from-owner-attestation-manifests.json for OA-001",
+      "compatible_policy_tree_sha": "paste-compatible_policy_tree_sha-from-manifest",
+      "evidence_refs": [
+        "owner-decision-checklist.md",
+        "file-provenance.json"
+      ],
+      "publication_license": "MIT",
+      "notes": "Example placeholder — not an attestation",
+      "revoked": false
+    }
+  ]
+}

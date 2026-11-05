@@ -54,3 +54,20 @@
 
 Technical gap clearance ≠ counsel approval. `PUBLIC_SOURCE_MIRROR_READY` remains NOT_CLEARED.
 
+## PH-20 human approval workflow
+
+| File | Purpose |
+|---|---|
+| `owner-attestation-manifests.json` | Exact OA-* scopes for 146 first-party files (18 groups) |
+| `counsel-decision-manifests.json` | Exact CD-RG-* scopes for 52 review groups |
+| `owner-attestation-template.md` | Human attestation worksheet (unsigned) |
+| `counsel-decision-template.md` | Counsel decision worksheet (unsigned) |
+| `human-approval-workflow.md` | End-to-end fail-closed process |
+| `approval-validation-report.md` | Counts, test results, remaining blockers |
+| `authorized-reviewers.json.example` | Example roster — copy to live file only with real authority |
+| `owner-attestations.json.example` | Example owner decisions — never forge |
+| `counsel-decisions.json.example` | Example counsel decisions + schema linkage |
+| `counsel-decisions.schema.json` | Machine schema for counsel records |
+
+**Human approvals received:** 0. Validator: `scripts/validate-human-approvals.py`. Gate: `HUMAN_APPROVALS` on `check-public-source-mirror-ready.py` → **NOT_CLEARED**.
+

@@ -2,6 +2,8 @@
 
 ## Verdict
 
+**PH-20 human approval workflow / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Tip `b7a8587` lineage+. Owner attestation manifests **18** groups / **146** files; counsel decision manifests **52** groups / **65** questions; unresolved legal flags **3**; human approvals received **0**. Validator + mirror `HUMAN_APPROVALS` fail-closed. Tests: `scripts/test_human_approvals.py` **15 passed**. **PUBLIC_SOURCE_MIRROR_READY=NOT_CLEARED**; **GITHUB_SOURCE_PUSH_READY=NOT_CLEARED**; **PUBLIC_RELEASE_GO=STOP**. Report: `docs/release/legal-review/approval-validation-report.md`.
+
 **PH-19 provenance remediation / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Tip `0e920f2` lineage+. Technical provenance gaps **200→0** via `fixture-provenance-index.json` (201 linkages); **3** residual legal-uncertainty flags; NLR still **562**; groups **52**; questions **65**; auto-approvals **0**. **PUBLIC_SOURCE_MIRROR_READY=NOT_CLEARED**; **GITHUB_SOURCE_PUSH_READY=NOT_CLEARED**; **PUBLIC_RELEASE_GO=STOP**. Report: `docs/release/legal-review/provenance-remediation-report.md`.
 
 **PH-18 legal review queues / PUBLIC_RELEASE_GO = STOP** (2026-11-05). 562 NLR → 30 groups / 43 questions baseline. Packs under `docs/release/legal-review/`.
@@ -440,10 +442,11 @@ Reproduced black FB / `Size is zero` on `virtualjaguar` + `virtualjaguar_js` wit
 
 ### Next concrete task (on `main`)
 
-1. Counsel: work PH-18 `counsel-review-pack.md` / `review-groups.json` + fill real `counsel-decisions.json`; owner attestation queue; then rebuild mirror until `PUBLIC_SOURCE_MIRROR_READY=PASS`
-2. Owner: authorize Option B destination repo only after mirror gate PASS; never flip private GitHub visibility
-3. Keep private `main` history intact; do not push unsanitized `main` publicly
-4. Keep `PUBLIC_RELEASE_GO=STOP` and `GITHUB_SOURCE_PUSH_READY=NOT_CLEARED` until independent clearances
+1. Owner: fill live `authorized-reviewers.json` + `owner-attestations.json` from PH-20 templates/manifests (18 OA groups) — do not forge
+2. Counsel: fill live `counsel-decisions.json` for 52 `CD-RG-*` groups (+ legacy CS-* pack); address 3 unresolved flags — do not forge
+3. Re-run `validate-human-approvals.py` + `check-public-source-mirror-ready.py` after real decisions; rebuild Option B mirror only when `PUBLIC_SOURCE_MIRROR_READY=PASS`
+4. Owner: authorize Option B destination repo only after mirror gate PASS; never flip private GitHub visibility
+5. Keep `PUBLIC_RELEASE_GO=STOP` and `GITHUB_SOURCE_PUSH_READY=NOT_CLEARED` until independent clearances
 
 ## PH-16 sanitized history candidate (2026-11-05)
 

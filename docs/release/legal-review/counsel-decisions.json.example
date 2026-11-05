@@ -1,13 +1,36 @@
 {
   "schema": "rbg-counsel-decisions-v1",
-  "note": "Counsel fills CLEARED_FOR_PUBLIC or WITHHOLD per artifact_id. Empty/missing file keeps LEGAL_REVIEW_READY=PENDING_APPROVAL.",
+  "note": "EXAMPLE ONLY. Copy to counsel-decisions.json after authorized counsel decides. Do not copy rows as approvals. Tip-file CD-* rows and legacy CS-* pack rows are separate scopes — one never inherits the other. SOURCE clearance ≠ product LOCAL_ONLY/BLOCKED clearance.",
   "decisions": [
     {
+      "decision_id": "CD-DEC-EXAMPLE-PACK-001",
       "artifact_id": "CS-0001",
       "decision": "WITHHOLD",
-      "reviewer": "Counsel Name",
+      "reviewer_id": "EXAMPLE_COUNSEL_ID",
+      "reviewer": "Counsel Name (example)",
       "decided_at": "YYYY-MM-DD",
-      "notes": "Example only — do not copy as approval"
+      "evidence_refs": ["legal-review-pack.json"],
+      "notes": "Legacy pack-row example — does not clear tip-file CD-RG-* groups"
+    },
+    {
+      "decision_id": "CD-DEC-EXAMPLE-TIP-001",
+      "counsel_decision_id": "CD-RG-001",
+      "review_group_id": "RG-001",
+      "decision": "NEEDS_REVIEW",
+      "reviewer_id": "EXAMPLE_COUNSEL_ID",
+      "decided_at": "YYYY-MM-DD",
+      "scope_sha256": "paste-from-counsel-decision-manifests.json for CD-RG-001",
+      "compatible_policy_tree_sha": "paste-compatible_policy_tree_sha-from-manifest",
+      "permitted_distribution_scope": "UNDECIDED",
+      "conditions": [],
+      "clears_product_restriction": false,
+      "evidence_refs": [
+        "counsel-review-pack.md",
+        "review-groups.json",
+        "file-provenance.json"
+      ],
+      "revoked": false,
+      "notes": "Example tip-file group placeholder — not an approval"
     }
   ]
 }

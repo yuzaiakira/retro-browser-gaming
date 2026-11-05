@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retro-browser-gaming.local/schemas/counsel-decisions-v1.json",
+  "title": "RBG counsel decisions (human-filled)",
+  "description": "Schema for docs/release/legal-review/counsel-decisions.json. Automation must never fabricate decisions. A decision on one component must not approve unrelated components.",
+  "type": "object",
+  "required": ["schema", "decisions"],
+  "additionalProperties": true,
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "rbg-counsel-decisions-v1"
+    },
+    "note": { "type": "string" },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["decision", "decided_at"],
+        "properties": {
+          "decision_id": {
+            "type": "string",
+            "description": "Stable unique id for this decision record (e.g. CD-DEC-2026-001)."
+          },
+          "counsel_decision_id": {
+            "type": "string",
+            "pattern": "^CD-RG-[0-9]{3}$",
+            "description": "Exact tip-file group id from counsel-decision-manifests.json (CD-RG-NNN)."
+          },
+          "review_group_id": {
+            "type": "string",
+            "pattern": "^RG-[0-9]{3}$",
+            "description": "Optional alias; validator normalizes to CD-{review_group_id}."
+          },
+          "artifact_id": {
+            "type": "string",
+            "description": "Legacy PH-14 pack id (CS-NNNN). Does not clear tip-file CD-* groups."
+          },
+          "decision": {
+            "type": "string",
+            "enum": [
+              "COUNSEL_APPROVED",
+              "CLEARED_FOR_PUBLIC",
+              "NEEDS_REVIEW",
+              "REJECTED",
+              "EXPIRED",
+              "OUT_OF_SCOPE",
+              "REVOKED",
+              "WITHHOLD"
+            ]
+          },
+          "reviewer_id": {
+            "type": "string",
+            "description": "Must match active counsel entry in authorized-reviewers.json for positive decisions."
+          },
+          "reviewer": {
+            "type": "string",
+            "description": "Legacy display name; prefer reviewer_id."
+          },
+          "decided_at": {
+            "type": "string",
+            "description": "ISO date or datetime of the human decision."
+          },
+          "expires_at": {
+            "type": "string",
+            "description": "Optional expiry; past dates invalidate positive decisions."
+          },
+          "scope_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "description": "Must equal manifest scope_sha256 for the exact member list."
+          },
+          "compatible_policy_tree_sha": {
+            "type": "string",
+            "description": "Must match manifest compatible_policy_tree_sha when present."
+          },
+          "members": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Optional explicit file list; if present must equal manifest members."
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Required for positive decisions (memo, ticket, license notice paths)."
+          },
+          "permitted_distribution_scope": {
+            "type": "string",
+            "enum": [
+              "PUBLIC_SOURCE_MIRROR",
+              "PRIVATE_ONLY",
+              "WITHHOLD",
+              "UNDECIDED"
+            ]
+          },
+          "conditions": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "clears_product_restriction": {
+            "type": "boolean",
+            "description": "Must be false or omitted. SOURCE counsel ≠ LOCAL_ONLY/BLOCKED product clearance."
+          },
+          "revoked": { "type": "boolean" },
+          "notes": { "type": "string" }
+        },
+        "anyOf": [
+          { "required": ["counsel_decision_id"] },
+          { "required": ["review_group_id"] },
+          { "required": ["artifact_id"] }
+        ]
+      }
+    }
+  }
+}
