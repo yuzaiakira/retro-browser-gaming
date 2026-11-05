@@ -71,3 +71,13 @@ Flycast LOCAL_ONLY; MAME rbgdot LOCAL_ONLY; `81_eo` / Jaguar JS NOT_CLEARED; Col
 - `PUBLIC_RELEASE_GO=STOP`  
 
 Complete technical provenance ≠ counsel approval.
+
+## Exact commit hashes
+
+| Item | SHA |
+|---|---|
+| PH-19 remediation commit | `628a9bcbf307fac0d7476ce95b3b9d187e51c702` |
+| Mission baseline | `0e920f2ac9d4a6dc13a9e0777b3060fd2748610d` |
+
+Mirror rebuild stamp: `RBG_MIRROR_STAMP=20261105TPH19` (see `.runtime/test-evidence/PH-19/`).
+
