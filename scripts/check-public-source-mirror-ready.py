@@ -70,19 +70,56 @@ def main() -> int:
 
     if state:
         expected = args.expect_private_sha or private_head
-        if state.get("private_sha") != expected:
+        state_sha = state.get("private_sha") or ""
+        fresh = state_sha == expected
+        fresh_detail = f"private_sha={state_sha}"
+        if not fresh and state_sha:
+            # Allow docs-only commits after the rebuild pin: state SHA must be an
+            # ancestor of HEAD, and non-ignored paths must be unchanged.
+            anc = run(
+                ROOT,
+                ["git", "merge-base", "--is-ancestor", state_sha, expected],
+            )
+            if anc.returncode == 0:
+                diff = run(
+                    ROOT,
+                    ["git", "diff", "--name-only", state_sha, expected],
+                )
+                ignore_prefixes = (
+                    "docs/release/public-source-",
+                    "docs/EXECUTION_STATE.md",
+                    "docs/release/blocker-registry.md",
+                    "docs/release/git-history-",
+                    ".runtime/",
+                )
+                material = []
+                for name in (diff.stdout or "").splitlines():
+                    if any(
+                        name == p or name.startswith(p) for p in ignore_prefixes
+                    ):
+                        continue
+                    material.append(name)
+                if not material:
+                    fresh = True
+                    fresh_detail = (
+                        f"ancestor_docs_only state={state_sha} head={expected}"
+                    )
+                else:
+                    fresh_detail = f"material_delta={material[:8]}"
+            else:
+                fresh_detail = "state SHA not ancestor of HEAD"
+        if not fresh:
             blockers.append(
-                f"stale candidate: state.private_sha={state.get('private_sha')} "
-                f"expected={expected}"
+                f"stale candidate: state.private_sha={state_sha} expected={expected}"
             )
             checks["CANDIDATE_FRESHNESS"] = {
                 "status": "FAIL",
-                "detail": "candidate not built from expected private tip",
+                "detail": fresh_detail,
             }
         else:
             checks["CANDIDATE_FRESHNESS"] = {
                 "status": "PASS",
-                "detail": f"private_sha={expected}",
+                "detail": fresh_detail,
             }
 
         if not state.get("history_clean"):
