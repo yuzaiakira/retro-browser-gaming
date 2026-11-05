@@ -108,6 +108,9 @@ def main() -> int:
                     "scripts/classify-public-source-tree.py",
                     "scripts/build-sanitized-candidate.sh",
                     "scripts/build-legal-review-queues.py",
+                    "scripts/check-provenance-inventory.py",
+                    "docs/open-source/fixture-provenance-index.json",
+                    "docs/licenses-and-assets.md",
                     ".runtime/",
                 )
                 material = []

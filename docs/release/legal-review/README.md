@@ -42,3 +42,15 @@
 | `counsel-review-pack.md` | Counsel-facing grouped questions |
 
 **PH-18 counts:** 562 files → 26 groups; 37 independent questions; approved_by_automation=0.
+
+## PH-19 provenance remediation
+
+| File | Purpose |
+|---|---|
+| `provenance-remediation-report.md` | Before/after gap metrics |
+| `unresolved-provenance.json` | Residual legal uncertainty (3 paths) |
+| `owner-decision-checklist.md` | Unsigned owner attestation checklist |
+| `../open-source/fixture-provenance-index.json` | Technical path→notice linkage |
+
+Technical gap clearance ≠ counsel approval. `PUBLIC_SOURCE_MIRROR_READY` remains NOT_CLEARED.
+

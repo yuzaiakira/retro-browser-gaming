@@ -2,7 +2,9 @@
 
 ## Verdict
 
-**PH-18 legal review queues / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Tip `ca93b52` lineage. All **562** tip `NEEDS_LEGAL_REVIEW` files documented → **30** review groups / **43** independent questions / **0** auto-approvals. **PUBLIC_SOURCE_MIRROR_READY=NOT_CLEARED**; **GITHUB_SOURCE_PUSH_READY=NOT_CLEARED**; **PUBLIC_RELEASE_GO=STOP**. Packs under `docs/release/legal-review/` (`file-provenance.json`, `review-groups.json`, `owner-attestation-queue.md`, `counsel-review-pack.md`). Do not forge counsel decisions.
+**PH-19 provenance remediation / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Tip `0e920f2` lineage+. Technical provenance gaps **200→0** via `fixture-provenance-index.json` (201 linkages); **3** residual legal-uncertainty flags; NLR still **562**; groups **52**; questions **65**; auto-approvals **0**. **PUBLIC_SOURCE_MIRROR_READY=NOT_CLEARED**; **GITHUB_SOURCE_PUSH_READY=NOT_CLEARED**; **PUBLIC_RELEASE_GO=STOP**. Report: `docs/release/legal-review/provenance-remediation-report.md`.
+
+**PH-18 legal review queues / PUBLIC_RELEASE_GO = STOP** (2026-11-05). 562 NLR → 30 groups / 43 questions baseline. Packs under `docs/release/legal-review/`.
 
 **PH-17 Option B public-source mirror / PUBLIC_RELEASE_GO = STOP** (2026-11-05). Candidate `c8c6fba` from pin `c2cff75`. **PUBLIC_SOURCE_MIRROR_READY=NOT_CLEARED** (legal). Pipeline: `scripts/build-public-source-mirror.sh`. No remote created/pushed.
 

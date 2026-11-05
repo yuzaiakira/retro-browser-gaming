@@ -20,7 +20,8 @@
 | B-BIOS-01 | ColecoVision / Vectrex lawful BIOS | platform | **BLOCKED_EXTERNAL** | Legal + QA |
 | B-HIST-01 | Historical private cores + `docs/test-evidence/` still reachable from private `main` **and** `origin/main`/`origin/feat` | GITHUB_SOURCE_PUSH_READY | **NOT_CLEARED** | Release / OSS | PH-16/17 isolated candidates PASS; do not flip private repo public. See `git-history-remediation-plan.md` |
 | B-MIR-01 | Public-source mirror legal clearance (`NEEDS_LEGAL_REVIEW` + counsel) | PUBLIC_SOURCE_MIRROR_READY | **NOT_CLEARED** | Counsel + Release | Technical mirror OK; PH-18 packs 562→30 groups / 0 auto-approvals. `counsel-review-pack.md` |
-| B-LEG-02 | Tip-file counsel clearance for 562 NLR paths (grouped) | LEGAL_REVIEW_READY | **PENDING_APPROVAL** | Counsel | `file-provenance.json` + `review-groups.json`; no forged decisions |
+| B-LEG-02 | Tip-file counsel clearance for 562 NLR paths (grouped) | LEGAL_REVIEW_READY | **PENDING_APPROVAL** | Counsel | PH-19: technical gaps cleared; counsel/owner still open. `provenance-remediation-report.md` |
+| B-OWN-01 | First-party ownership attestation (146 tip paths) | PUBLIC_SOURCE_MIRROR_READY | **PENDING_APPROVAL** | Owner | `owner-decision-checklist.md` — unsigned |
 
 Full prerequisites, evidence, acceptance criteria, and verification commands: **`external-acceptance-checklist.json`** (do not duplicate here). Push audit: `main-push-safety-audit.md`. PH-16: `git-history-remediation-plan.md`. PH-17: `public-source-mirror-plan.md`, `public-source-file-policy.json`, `public-source-mirror-verification.md`.
 

@@ -1,18 +1,17 @@
 {
   "schema": "rbg-legal-review-groups-v1",
   "phase": "PH-18",
-  "generated_at": "2026-11-05T08:46:28Z",
-  "git_head": "ca93b52f8591605d572fa1893f667818a3ee4252",
+  "generated_at": "2026-11-05T09:11:40Z",
+  "git_head": "0e920f2ac9d4a6dc13a9e0777b3060fd2748610d",
   "summary": {
     "original_nlr_files": 562,
-    "review_groups": 30,
-    "groups_with_provenance_gaps": 14,
-    "independent_legal_questions": 43,
+    "review_groups": 52,
+    "groups_with_provenance_gaps": 2,
+    "independent_legal_questions": 65,
     "groups_by_track": {
-      "third_party_license_interpretation": 16,
-      "restricted_redistribution": 6,
-      "first_party_attestation": 3,
-      "missing_license_evidence": 2,
+      "third_party_license_interpretation": 23,
+      "first_party_attestation": 21,
+      "restricted_redistribution": 5,
       "counsel_decision_required": 3
     }
   },
@@ -24,7 +23,7 @@
       "upstream_revision": "e150dc0491ae747028919fb82d6598954976ede6",
       "review_track": "third_party_license_interpretation",
       "modifications": "none_documented",
-      "member_count": 69,
+      "member_count": 71,
       "members": [
         "apps/web/public/cores/ejs-4.2.3/compression/README.md",
         "apps/web/public/cores/ejs-4.2.3/compression/extract7z.js",
@@ -35,6 +34,7 @@
         "apps/web/public/cores/ejs-4.2.3/cores/core-README.md",
         "apps/web/public/cores/ejs-4.2.3/cores/package.json",
         "apps/web/public/cores/ejs-4.2.3/cores/reports/81.json",
+        "apps/web/public/cores/ejs-4.2.3/cores/reports/81_eo.json",
         "apps/web/public/cores/ejs-4.2.3/cores/reports/a5200.json",
         "apps/web/public/cores/ejs-4.2.3/cores/reports/atari800.json",
         "apps/web/public/cores/ejs-4.2.3/cores/reports/beetle_vb.json",
@@ -63,6 +63,7 @@
         "apps/web/public/cores/ejs-4.2.3/cores/reports/stella2014.json",
         "apps/web/public/cores/ejs-4.2.3/cores/reports/vice_x64sc.json",
         "apps/web/public/cores/ejs-4.2.3/cores/reports/virtualjaguar.json",
+        "apps/web/public/cores/ejs-4.2.3/cores/reports/virtualjaguar_js.json",
         "apps/web/public/cores/ejs-4.2.3/emulator.css",
         "apps/web/public/cores/ejs-4.2.3/loader.js",
         "apps/web/public/cores/ejs-4.2.3/localization/README.md",
@@ -100,39 +101,15 @@
       "auto_approved": false,
       "independent_legal_questions": [
         "May EmulatorJS 4.2.3 tracked JS/CSS/localization be published in public SOURCE?",
-        "Does public SOURCE of loaders without binaries satisfy GPL corresponding-source expectations when binaries are offered separately?"
+        "Does public SOURCE of loaders without binaries satisfy GPL corresponding-source expectations when binaries are offered separately?",
+        "May these inventoried paths be published in public SOURCE with recorded notices?"
       ],
-      "provenance_gaps": [
-        "core report JSON \u2014 confirm whether generated and redistributable"
-      ],
+      "provenance_gaps": [],
       "required_human_decision": true,
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
     {
       "group_id": "RG-002",
-      "component": "emulatorjs-4.2.3",
-      "spdx": "GPL-3.0-or-later",
-      "upstream_revision": "e150dc0491ae747028919fb82d6598954976ede6",
-      "review_track": "restricted_redistribution",
-      "modifications": "NOT_CLEARED lineage metadata \u2014 see not-cleared-cores.md",
-      "member_count": 2,
-      "members": [
-        "apps/web/public/cores/ejs-4.2.3/cores/reports/81_eo.json",
-        "apps/web/public/cores/ejs-4.2.3/cores/reports/virtualjaguar_js.json"
-      ],
-      "approval_status": "NEEDS_LEGAL_REVIEW",
-      "auto_approved": false,
-      "independent_legal_questions": [
-        "Confirm BLOCKED_LEGAL / NOT_CLEARED status remains for public SOURCE mention of this lineage."
-      ],
-      "provenance_gaps": [
-        "core report JSON \u2014 confirm whether generated and redistributable"
-      ],
-      "required_human_decision": true,
-      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
-    },
-    {
-      "group_id": "RG-003",
       "component": "fixture:cc0",
       "spdx": "CC0-1.0",
       "upstream_revision": "see source field (release/commit pin in licenses-and-assets.md)",
@@ -153,7 +130,7 @@
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
     {
-      "group_id": "RG-004",
+      "group_id": "RG-003",
       "component": "fixture:dot",
       "spdx": "MIT",
       "upstream_revision": "see source field (release/commit pin in licenses-and-assets.md)",
@@ -175,11 +152,11 @@
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
     {
-      "group_id": "RG-005",
+      "group_id": "RG-004",
       "component": "fixture:dreamcast",
-      "spdx": "SPDX_UNKNOWN",
+      "spdx": "MIT",
       "upstream_revision": "REV_UNKNOWN",
-      "review_track": "third_party_license_interpretation",
+      "review_track": "first_party_attestation",
       "modifications": "none_documented",
       "member_count": 1,
       "members": [
@@ -188,10 +165,31 @@
       "approval_status": "NEEDS_LEGAL_REVIEW",
       "auto_approved": false,
       "independent_legal_questions": [
-        "Confirm SPDX, upstream URL/revision, and redistribution for public SOURCE."
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-005",
+      "component": "fixture:fds",
+      "spdx": "LicenseRef-Noncommercial-Shareware",
+      "upstream_revision": "see upstream README; author TakuikaNinja",
+      "review_track": "third_party_license_interpretation",
+      "modifications": "none_documented",
+      "member_count": 2,
+      "members": [
+        ".fixtures/fds-dreamful-diskmag.README.md",
+        ".fixtures/fds-dreamful-diskmag.fds"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "Counsel: confirm redistribution terms from README/license evidence."
       ],
       "provenance_gaps": [
-        "partial provenance (README and/or LICENSES heuristic) \u2014 no exact licenses-and-assets.md row"
+        "legal_uncertainty_remains_after_technical_linkage"
       ],
       "required_human_decision": true,
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
@@ -199,25 +197,21 @@
     {
       "group_id": "RG-006",
       "component": "fixture:fds",
-      "spdx": "SPDX_UNKNOWN",
-      "upstream_revision": "REV_UNKNOWN",
-      "review_track": "third_party_license_interpretation",
+      "spdx": "MIT",
+      "upstream_revision": "generated fixture; SHA in fds-open-bios-feasibility.md",
+      "review_track": "first_party_attestation",
       "modifications": "none_documented",
-      "member_count": 4,
+      "member_count": 2,
       "members": [
-        ".fixtures/fds-dreamful-diskmag.README.md",
-        ".fixtures/fds-dreamful-diskmag.fds",
         ".fixtures/fds-rbg-move-demo.README.md",
         ".fixtures/fds-rbg-move-demo.fds"
       ],
       "approval_status": "NEEDS_LEGAL_REVIEW",
       "auto_approved": false,
       "independent_legal_questions": [
-        "Confirm SPDX, upstream URL/revision, and redistribution for public SOURCE."
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
       ],
-      "provenance_gaps": [
-        "partial provenance (README and/or LICENSES heuristic) \u2014 no exact licenses-and-assets.md row"
-      ],
+      "provenance_gaps": [],
       "required_human_decision": true,
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
@@ -256,11 +250,9 @@
       "approval_status": "NEEDS_LEGAL_REVIEW",
       "auto_approved": false,
       "independent_legal_questions": [
-        "Confirm SPDX, upstream URL/revision, and redistribution for public SOURCE."
+        "May these inventoried paths be published in public SOURCE with recorded notices?"
       ],
-      "provenance_gaps": [
-        "partial provenance (README and/or LICENSES heuristic) \u2014 no exact licenses-and-assets.md row"
-      ],
+      "provenance_gaps": [],
       "required_human_decision": true,
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
@@ -311,9 +303,9 @@
     {
       "group_id": "RG-011",
       "component": "fixture:misc",
-      "spdx": "SPDX_UNKNOWN",
+      "spdx": "MIT",
       "upstream_revision": "REV_UNKNOWN",
-      "review_track": "third_party_license_interpretation",
+      "review_track": "first_party_attestation",
       "modifications": "none_documented",
       "member_count": 1,
       "members": [
@@ -322,20 +314,18 @@
       "approval_status": "NEEDS_LEGAL_REVIEW",
       "auto_approved": false,
       "independent_legal_questions": [
-        "Confirm SPDX, upstream URL/revision, and redistribution for public SOURCE."
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
       ],
-      "provenance_gaps": [
-        "partial provenance (README and/or LICENSES heuristic) \u2014 no exact licenses-and-assets.md row"
-      ],
+      "provenance_gaps": [],
       "required_human_decision": true,
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
     {
       "group_id": "RG-012",
       "component": "fixture:misc",
-      "spdx": "SPDX_UNKNOWN",
-      "upstream_revision": "REV_UNKNOWN",
-      "review_track": "first_party_attestation",
+      "spdx": "CC0-1.0",
+      "upstream_revision": "bin/main.c.rom as packaged",
+      "review_track": "third_party_license_interpretation",
       "modifications": "none_documented",
       "member_count": 2,
       "members": [
@@ -345,38 +335,30 @@
       "approval_status": "NEEDS_LEGAL_REVIEW",
       "auto_approved": false,
       "independent_legal_questions": [
-        "Owner attestation: originality vs upstream; confirm public SOURCE redistribution.",
-        "Counsel: accept tree LICENSE as sufficient notice for these paths?"
+        "May these inventoried paths be published in public SOURCE with recorded notices?"
       ],
-      "provenance_gaps": [
-        "source-tree LICENSE present but not linked from licenses-and-assets.md row for this exact path"
-      ],
+      "provenance_gaps": [],
       "required_human_decision": true,
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
     {
       "group_id": "RG-013",
       "component": "fixture:misc",
-      "spdx": "SPDX_UNKNOWN",
-      "upstream_revision": "REV_UNKNOWN",
-      "review_track": "missing_license_evidence",
+      "spdx": "GPL-2.0-only",
+      "upstream_revision": "6.502.20050619 (see licenses-and-assets.md)",
+      "review_track": "third_party_license_interpretation",
       "modifications": "none_documented",
-      "member_count": 5,
+      "member_count": 2,
       "members": [
         "fixtures/a7800-rfk/COPYING",
-        "fixtures/a7800-rfk/README.txt",
-        "fixtures/pce-scroll/README.md",
-        "fixtures/pce-scroll/scroll.c",
-        "fixtures/zx81-81-eo-loadp/eo_loadp-cdflag-crt.c.snippet"
+        "fixtures/a7800-rfk/README.txt"
       ],
       "approval_status": "NEEDS_LEGAL_REVIEW",
       "auto_approved": false,
       "independent_legal_questions": [
-        "Establish SPDX, upstream URL/revision, and redistribution permission."
+        "May these inventoried paths be published in public SOURCE with recorded notices?"
       ],
-      "provenance_gaps": [
-        "no exact row in docs/licenses-and-assets.md and no tree LICENSE/README hit"
-      ],
+      "provenance_gaps": [],
       "required_human_decision": true,
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
@@ -384,31 +366,126 @@
       "group_id": "RG-014",
       "component": "fixture:misc",
       "spdx": "MIT",
-      "upstream_revision": "REV_UNKNOWN",
+      "upstream_revision": "tracked tree under fixtures/amiga-dot/",
       "review_track": "first_party_attestation",
       "modifications": "none_documented",
-      "member_count": 102,
+      "member_count": 6,
       "members": [
         "fixtures/amiga-dot/.gitignore",
         "fixtures/amiga-dot/LICENSE.txt",
         "fixtures/amiga-dot/Makefile",
         "fixtures/amiga-dot/README.md",
         "fixtures/amiga-dot/Startup-Sequence",
-        "fixtures/amiga-dot/main.c",
+        "fixtures/amiga-dot/main.c"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-015",
+      "component": "fixture:misc",
+      "spdx": "MIT",
+      "upstream_revision": "release artifact mirrored as .fixtures/mit-dos-floppybird.zip",
+      "review_track": "third_party_license_interpretation",
+      "modifications": "none_documented",
+      "member_count": 3,
+      "members": [
         "fixtures/dos-floppybird/AUTORUN.BAT",
         "fixtures/dos-floppybird/LICENSE.txt",
-        "fixtures/dos-floppybird/flpybird.com",
+        "fixtures/dos-floppybird/flpybird.com"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "May these inventoried paths be published in public SOURCE with recorded notices?"
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-016",
+      "component": "fixture:misc",
+      "spdx": "MIT",
+      "upstream_revision": "tracked tree; builds via scripts/build-dreamcast-dot-fixture.sh",
+      "review_track": "first_party_attestation",
+      "modifications": "none_documented",
+      "member_count": 5,
+      "members": [
         "fixtures/dreamcast-dot/LICENSE.txt",
         "fixtures/dreamcast-dot/Makefile",
         "fixtures/dreamcast-dot/build-disc2.sh",
         "fixtures/dreamcast-dot/build-discs.sh",
-        "fixtures/dreamcast-dot/dot.c",
+        "fixtures/dreamcast-dot/dot.c"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-017",
+      "component": "fixture:misc",
+      "spdx": "MIT",
+      "upstream_revision": "tracked tree under fixtures/flash-dot/",
+      "review_track": "first_party_attestation",
+      "modifications": "none_documented",
+      "member_count": 3,
+      "members": [
         "fixtures/flash-dot/Dot.hx",
         "fixtures/flash-dot/LICENSE.txt",
-        "fixtures/flash-dot/Makefile",
+        "fixtures/flash-dot/Makefile"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-018",
+      "component": "fixture:misc",
+      "spdx": "MIT",
+      "upstream_revision": "tracked tree under fixtures/gb-dot/",
+      "review_track": "first_party_attestation",
+      "modifications": "none_documented",
+      "member_count": 3,
+      "members": [
         "fixtures/gb-dot/LICENSE.txt",
         "fixtures/gb-dot/README.md",
-        "fixtures/gb-dot/main.c",
+        "fixtures/gb-dot/main.c"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-019",
+      "component": "fixture:misc",
+      "spdx": "MIT",
+      "upstream_revision": "tracked tree under fixtures/j2me-dot/",
+      "review_track": "first_party_attestation",
+      "modifications": "none_documented",
+      "member_count": 16,
+      "members": [
         "fixtures/j2me-dot/LICENSE.txt",
         "fixtures/j2me-dot/PROVENANCE.md",
         "fixtures/j2me-dot/build.sh",
@@ -424,7 +501,26 @@
         "fixtures/j2me-dot/src/javax/microedition/rms/RecordStoreFullException.java",
         "fixtures/j2me-dot/src/javax/microedition/rms/RecordStoreNotFoundException.java",
         "fixtures/j2me-dot/src/retro/j2me/dot/DotCanvas.java",
-        "fixtures/j2me-dot/src/retro/j2me/dot/DotMIDlet.java",
+        "fixtures/j2me-dot/src/retro/j2me/dot/DotMIDlet.java"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-020",
+      "component": "fixture:misc",
+      "spdx": "MIT",
+      "upstream_revision": "tracked tree under fixtures/j2me-notes/",
+      "review_track": "first_party_attestation",
+      "modifications": "none_documented",
+      "member_count": 21,
+      "members": [
         "fixtures/j2me-notes/LICENSE.txt",
         "fixtures/j2me-notes/PROVENANCE.md",
         "fixtures/j2me-notes/build.sh",
@@ -445,7 +541,26 @@
         "fixtures/j2me-notes/src/javax/microedition/rms/RecordStoreException.java",
         "fixtures/j2me-notes/src/javax/microedition/rms/RecordStoreFullException.java",
         "fixtures/j2me-notes/src/javax/microedition/rms/RecordStoreNotFoundException.java",
-        "fixtures/j2me-notes/src/retro/j2me/notes/NotesMIDlet.java",
+        "fixtures/j2me-notes/src/retro/j2me/notes/NotesMIDlet.java"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-021",
+      "component": "fixture:misc",
+      "spdx": "MIT",
+      "upstream_revision": "tracked tree under fixtures/j2me-paddle/",
+      "review_track": "first_party_attestation",
+      "modifications": "none_documented",
+      "member_count": 19,
+      "members": [
         "fixtures/j2me-paddle/LICENSE.txt",
         "fixtures/j2me-paddle/PROVENANCE.md",
         "fixtures/j2me-paddle/build.sh",
@@ -464,13 +579,110 @@
         "fixtures/j2me-paddle/src/javax/microedition/rms/RecordStoreFullException.java",
         "fixtures/j2me-paddle/src/javax/microedition/rms/RecordStoreNotFoundException.java",
         "fixtures/j2me-paddle/src/retro/j2me/paddle/PaddleCanvas.java",
-        "fixtures/j2me-paddle/src/retro/j2me/paddle/PaddleMIDlet.java",
+        "fixtures/j2me-paddle/src/retro/j2me/paddle/PaddleMIDlet.java"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-022",
+      "component": "fixture:misc",
+      "spdx": "MIT",
+      "upstream_revision": "tracked tree under fixtures/lynx-dot/",
+      "review_track": "first_party_attestation",
+      "modifications": "none_documented",
+      "member_count": 2,
+      "members": [
         "fixtures/lynx-dot/LICENSE.txt",
-        "fixtures/lynx-dot/main.c",
+        "fixtures/lynx-dot/main.c"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-023",
+      "component": "fixture:misc",
+      "spdx": "MIT",
+      "upstream_revision": "tracked tree under fixtures/msx-dot/",
+      "review_track": "first_party_attestation",
+      "modifications": "none_documented",
+      "member_count": 3,
+      "members": [
         "fixtures/msx-dot/LICENSE.txt",
         "fixtures/msx-dot/README.md",
-        "fixtures/msx-dot/dot.c",
-        "fixtures/n64-controller-test/LICENSE.txt",
+        "fixtures/msx-dot/dot.c"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-024",
+      "component": "fixture:misc",
+      "spdx": "MIT",
+      "upstream_revision": "release build-202008190836",
+      "review_track": "third_party_license_interpretation",
+      "modifications": "none_documented",
+      "member_count": 1,
+      "members": [
+        "fixtures/n64-controller-test/LICENSE.txt"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "May these inventoried paths be published in public SOURCE with recorded notices?"
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-025",
+      "component": "fixture:misc",
+      "spdx": "GPL-2.0-only",
+      "upstream_revision": "examples/scroll (HuC)",
+      "review_track": "third_party_license_interpretation",
+      "modifications": "none_documented",
+      "member_count": 2,
+      "members": [
+        "fixtures/pce-scroll/README.md",
+        "fixtures/pce-scroll/scroll.c"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "May these inventoried paths be published in public SOURCE with recorded notices?"
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-026",
+      "component": "fixture:misc",
+      "spdx": "MIT",
+      "upstream_revision": "tracked tree under fixtures/ps1-dot/",
+      "review_track": "first_party_attestation",
+      "modifications": "none_documented",
+      "member_count": 9,
+      "members": [
         "fixtures/ps1-dot/CMakeLists.txt",
         "fixtures/ps1-dot/LICENSE.txt",
         "fixtures/ps1-dot/README.TXT",
@@ -479,14 +691,91 @@
         "fixtures/ps1-dot/iso.xml",
         "fixtures/ps1-dot/scripts/gen_tone_wav.py",
         "fixtures/ps1-dot/src/main.c",
-        "fixtures/ps1-dot/system.cnf",
+        "fixtures/ps1-dot/system.cnf"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-027",
+      "component": "fixture:misc",
+      "spdx": "MIT",
+      "upstream_revision": "tracked tree under fixtures/psp-dot/",
+      "review_track": "first_party_attestation",
+      "modifications": "none_documented",
+      "member_count": 5,
+      "members": [
         "fixtures/psp-dot/LICENSE.txt",
         "fixtures/psp-dot/Makefile",
         "fixtures/psp-dot/README.md",
         "fixtures/psp-dot/build.sh",
-        "fixtures/psp-dot/src/main.c",
+        "fixtures/psp-dot/src/main.c"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-028",
+      "component": "fixture:misc",
+      "spdx": "MIT",
+      "upstream_revision": "v1.0 demo",
+      "review_track": "third_party_license_interpretation",
+      "modifications": "none_documented",
+      "member_count": 2,
+      "members": [
         "fixtures/vb-spong/LICENSE.txt",
-        "fixtures/vb-spong/SPONG Demo (2019-06-20).vb",
+        "fixtures/vb-spong/SPONG Demo (2019-06-20).vb"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "May these inventoried paths be published in public SOURCE with recorded notices?"
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-029",
+      "component": "fixture:misc",
+      "spdx": "GPL-3.0-or-later",
+      "upstream_revision": "see scripts/patches/81_eo/",
+      "review_track": "first_party_attestation",
+      "modifications": "none_documented",
+      "member_count": 1,
+      "members": [
+        "fixtures/zx81-81-eo-loadp/eo_loadp-cdflag-crt.c.snippet"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-030",
+      "component": "fixture:misc",
+      "spdx": "MIT",
+      "upstream_revision": "tracked tree under fixtures/zx81-dot/",
+      "review_track": "first_party_attestation",
+      "modifications": "none_documented",
+      "member_count": 4,
+      "members": [
         "fixtures/zx81-dot/LICENSE.txt",
         "fixtures/zx81-dot/README.md",
         "fixtures/zx81-dot/dot.c",
@@ -495,23 +784,20 @@
       "approval_status": "NEEDS_LEGAL_REVIEW",
       "auto_approved": false,
       "independent_legal_questions": [
-        "Owner attestation: originality vs upstream; confirm public SOURCE redistribution.",
-        "Counsel: accept tree LICENSE as sufficient notice for these paths?"
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
       ],
-      "provenance_gaps": [
-        "source-tree LICENSE present but not linked from licenses-and-assets.md row for this exact path"
-      ],
+      "provenance_gaps": [],
       "required_human_decision": true,
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
     {
-      "group_id": "RG-015",
+      "group_id": "RG-031",
       "component": "fixture:mit",
       "spdx": "MIT",
       "upstream_revision": "see source field (release/commit pin in licenses-and-assets.md)",
       "review_track": "third_party_license_interpretation",
       "modifications": "none_documented",
-      "member_count": 34,
+      "member_count": 33,
       "members": [
         ".fixtures/mit-a2600-berta.a26",
         ".fixtures/mit-a2600-pipes.a26",
@@ -530,7 +816,6 @@
         ".fixtures/mit-gg-snepzhen.gg",
         ".fixtures/mit-gg-sushinights.gg",
         ".fixtures/mit-gg-waternet.gg",
-        ".fixtures/mit-jaguar-2048.jag",
         ".fixtures/mit-lynx-dot.lnx",
         ".fixtures/mit-msx-dot.rom",
         ".fixtures/mit-n64-controller-test.z64",
@@ -559,19 +844,75 @@
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
     {
-      "group_id": "RG-016",
+      "group_id": "RG-032",
       "component": "fixture:mit",
       "spdx": "MIT",
       "upstream_revision": "REV_UNKNOWN",
-      "review_track": "third_party_license_interpretation",
+      "review_track": "first_party_attestation",
       "modifications": "none_documented",
-      "member_count": 37,
+      "member_count": 18,
       "members": [
         ".fixtures/mit-arcade-rbgdot.README.md",
         ".fixtures/mit-arcade-rbgdot.zip",
         ".fixtures/mit-atari8-dot.README.md",
         ".fixtures/mit-atari8-dot.xex",
+        ".fixtures/mit-flash-dot.README.md",
+        ".fixtures/mit-flash-dot.sha256",
+        ".fixtures/mit-flash-dot.swf",
+        ".fixtures/mit-j2me-dot.jad",
+        ".fixtures/mit-j2me-dot.jar",
+        ".fixtures/mit-j2me-notes.jad",
+        ".fixtures/mit-j2me-notes.jar",
+        ".fixtures/mit-j2me-paddle.jad",
+        ".fixtures/mit-j2me-paddle.jar",
+        ".fixtures/mit-ps1-dot-single.bin",
+        ".fixtures/mit-ps1-dot-single.cue",
+        ".fixtures/mit-vectrex-dot.README.md",
+        ".fixtures/mit-vectrex-dot.bin",
+        ".fixtures/mit-zx81-dot-noaltint.p"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-033",
+      "component": "fixture:mit",
+      "spdx": "MIT",
+      "upstream_revision": "REV_UNKNOWN",
+      "review_track": "third_party_license_interpretation",
+      "modifications": "none_documented",
+      "member_count": 2,
+      "members": [
         ".fixtures/mit-dos-floppybird.zip",
+        ".fixtures/mit-jaguar-2048.bin"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "May these inventoried paths be published in public SOURCE with recorded notices?",
+        "Counsel: confirm redistribution terms from README/license evidence."
+      ],
+      "provenance_gaps": [
+        "legal_uncertainty_remains_after_technical_linkage"
+      ],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-034",
+      "component": "fixture:mit",
+      "spdx": "MIT",
+      "upstream_revision": "generated via scripts/build-dreamcast-*.sh",
+      "review_track": "first_party_attestation",
+      "modifications": "none_documented",
+      "member_count": 19,
+      "members": [
         ".fixtures/mit-dreamcast-dot-disc2-track01.bin",
         ".fixtures/mit-dreamcast-dot-disc2-track02.raw",
         ".fixtures/mit-dreamcast-dot-disc2-track03.bin",
@@ -590,67 +931,106 @@
         ".fixtures/mit-dreamcast-dot.chd.sha256",
         ".fixtures/mit-dreamcast-dot.elf",
         ".fixtures/mit-dreamcast-dot.gdi",
-        ".fixtures/mit-dreamcast-dot.sha256",
-        ".fixtures/mit-flash-dot.README.md",
-        ".fixtures/mit-flash-dot.sha256",
-        ".fixtures/mit-flash-dot.swf",
-        ".fixtures/mit-j2me-dot.jad",
-        ".fixtures/mit-j2me-dot.jar",
-        ".fixtures/mit-j2me-notes.jad",
-        ".fixtures/mit-j2me-notes.jar",
-        ".fixtures/mit-j2me-paddle.jad",
-        ".fixtures/mit-j2me-paddle.jar",
-        ".fixtures/mit-jaguar-2048.bin",
-        ".fixtures/mit-vectrex-dot.README.md",
-        ".fixtures/mit-vectrex-dot.bin",
-        ".fixtures/mit-zx81-dot-noaltint.p"
+        ".fixtures/mit-dreamcast-dot.sha256"
       ],
       "approval_status": "NEEDS_LEGAL_REVIEW",
       "auto_approved": false,
       "independent_legal_questions": [
-        "Confirm SPDX, upstream URL/revision, and redistribution for public SOURCE."
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
       ],
-      "provenance_gaps": [
-        "partial provenance (README and/or LICENSES heuristic) \u2014 no exact licenses-and-assets.md row"
-      ],
+      "provenance_gaps": [],
       "required_human_decision": true,
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
     {
-      "group_id": "RG-017",
-      "component": "fixture:mit",
-      "spdx": "SPDX_UNKNOWN",
-      "upstream_revision": "REV_UNKNOWN",
-      "review_track": "missing_license_evidence",
-      "modifications": "none_documented",
-      "member_count": 2,
-      "members": [
-        ".fixtures/mit-ps1-dot-single.bin",
-        ".fixtures/mit-ps1-dot-single.cue"
-      ],
-      "approval_status": "NEEDS_LEGAL_REVIEW",
-      "auto_approved": false,
-      "independent_legal_questions": [
-        "Establish SPDX, upstream URL/revision, and redistribution permission."
-      ],
-      "provenance_gaps": [
-        "no exact row in docs/licenses-and-assets.md and no tree LICENSE/README hit"
-      ],
-      "required_human_decision": true,
-      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
-    },
-    {
-      "group_id": "RG-018",
+      "group_id": "RG-035",
       "component": "fixture:mit",
       "spdx": "MIT",
-      "upstream_revision": "REV_UNKNOWN",
+      "upstream_revision": "jag2048.jag as inventoried in licenses-and-assets.md",
+      "review_track": "third_party_license_interpretation",
+      "modifications": "none_documented",
+      "member_count": 1,
+      "members": [
+        ".fixtures/mit-jaguar-2048.jag"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "May these inventoried paths be published in public SOURCE with recorded notices?"
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-036",
+      "component": "fixture:mit",
+      "spdx": "MIT",
+      "upstream_revision": "tracked tree under fixtures/flash-dot/",
       "review_track": "first_party_attestation",
       "modifications": "none_documented",
-      "member_count": 9,
+      "member_count": 1,
       "members": [
-        "fixtures/flash-dot/mit-flash-dot.swf",
-        "fixtures/msx-dot/mit-msx-dot.rom",
-        "fixtures/n64-controller-test/mit-n64-controller-test.z64",
+        "fixtures/flash-dot/mit-flash-dot.swf"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-037",
+      "component": "fixture:mit",
+      "spdx": "MIT",
+      "upstream_revision": "tracked tree under fixtures/msx-dot/",
+      "review_track": "first_party_attestation",
+      "modifications": "none_documented",
+      "member_count": 1,
+      "members": [
+        "fixtures/msx-dot/mit-msx-dot.rom"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-038",
+      "component": "fixture:mit",
+      "spdx": "MIT",
+      "upstream_revision": "release build-202008190836",
+      "review_track": "third_party_license_interpretation",
+      "modifications": "none_documented",
+      "member_count": 1,
+      "members": [
+        "fixtures/n64-controller-test/mit-n64-controller-test.z64"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "May these inventoried paths be published in public SOURCE with recorded notices?"
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-039",
+      "component": "fixture:mit",
+      "spdx": "MIT",
+      "upstream_revision": "tracked tree under fixtures/zx81-dot/",
+      "review_track": "first_party_attestation",
+      "modifications": "none_documented",
+      "member_count": 6,
+      "members": [
         "fixtures/zx81-dot/mit-zx81-dot-fast",
         "fixtures/zx81-dot/mit-zx81-dot-fast.P",
         "fixtures/zx81-dot/mit-zx81-dot-fast.map",
@@ -661,17 +1041,14 @@
       "approval_status": "NEEDS_LEGAL_REVIEW",
       "auto_approved": false,
       "independent_legal_questions": [
-        "Owner attestation: originality vs upstream; confirm public SOURCE redistribution.",
-        "Counsel: accept tree LICENSE as sufficient notice for these paths?"
+        "Owner attestation: confirm originality/redistribution for public SOURCE."
       ],
-      "provenance_gaps": [
-        "source-tree LICENSE present but not linked from licenses-and-assets.md row for this exact path"
-      ],
+      "provenance_gaps": [],
       "required_human_decision": true,
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
     {
-      "group_id": "RG-019",
+      "group_id": "RG-040",
       "component": "hatari-2.6.1",
       "spdx": "GPL-2.0-or-later",
       "upstream_revision": "2.6.1",
@@ -691,13 +1068,13 @@
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
     {
-      "group_id": "RG-020",
+      "group_id": "RG-041",
       "component": "js2me",
       "spdx": "MIT",
       "upstream_revision": "828b81b468953c34bb754b59e67c1021754e8bdb",
       "review_track": "third_party_license_interpretation",
       "modifications": "none_documented",
-      "member_count": 249,
+      "member_count": 246,
       "members": [
         "apps/web/public/cores/js2me/ATTRIBUTION.md",
         "apps/web/public/cores/js2me/CONTRIBUTORS.md",
@@ -841,9 +1218,6 @@
         "apps/web/public/cores/js2me/js/me/java/util/Timer.js",
         "apps/web/public/cores/js2me/js/me/java/util/TimerTask.js",
         "apps/web/public/cores/js2me/js/me/java/util/Vector.js",
-        "apps/web/public/cores/js2me/js/me/javax/crypto/Cipher.js",
-        "apps/web/public/cores/js2me/js/me/javax/crypto/spec/IvParameterSpec.js",
-        "apps/web/public/cores/js2me/js/me/javax/crypto/spec/SecretKeySpec.js",
         "apps/web/public/cores/js2me/js/me/javax/microedition/io/Connection.js",
         "apps/web/public/cores/js2me/js/me/javax/microedition/io/ConnectionNotFoundException.js",
         "apps/web/public/cores/js2me/js/me/javax/microedition/io/Connector.js",
@@ -955,14 +1329,35 @@
         "Confirm vendored js2me tree at pinned commit may be published publicly under MIT.",
         "Review javax/crypto and other packages for additional notices."
       ],
-      "provenance_gaps": [
-        "crypto-related JS path \u2014 confirm no export-control / additional license issues"
-      ],
+      "provenance_gaps": [],
       "required_human_decision": true,
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
     {
-      "group_id": "RG-021",
+      "group_id": "RG-042",
+      "component": "js2me",
+      "spdx": "MIT",
+      "upstream_revision": "REV_UNKNOWN",
+      "review_track": "third_party_license_interpretation",
+      "modifications": "none_documented",
+      "member_count": 3,
+      "members": [
+        "apps/web/public/cores/js2me/js/me/javax/crypto/Cipher.js",
+        "apps/web/public/cores/js2me/js/me/javax/crypto/spec/IvParameterSpec.js",
+        "apps/web/public/cores/js2me/js/me/javax/crypto/spec/SecretKeySpec.js"
+      ],
+      "approval_status": "NEEDS_LEGAL_REVIEW",
+      "auto_approved": false,
+      "independent_legal_questions": [
+        "May these inventoried paths be published in public SOURCE with recorded notices?",
+        "Confirm no additional export-control or notice obligations for javax.crypto stubs in this MIT tree"
+      ],
+      "provenance_gaps": [],
+      "required_human_decision": true,
+      "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
+    },
+    {
+      "group_id": "RG-043",
       "component": "jsdos-8.3.8",
       "spdx": "GPL-2.0-only",
       "upstream_revision": "8.3.8",
@@ -985,7 +1380,7 @@
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
     {
-      "group_id": "RG-022",
+      "group_id": "RG-044",
       "component": "mame-rbg-arcade",
       "spdx": "GPL-2.0-or-later",
       "upstream_revision": "see docs/emulator-builds/mame-wasm-arcade.md",
@@ -1007,7 +1402,7 @@
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
     {
-      "group_id": "RG-023",
+      "group_id": "RG-045",
       "component": "mame-rbg-arcade-build",
       "spdx": "GPL-2.0-or-later",
       "upstream_revision": "see docs/emulator-builds/mame-wasm-arcade.md",
@@ -1028,7 +1423,7 @@
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
     {
-      "group_id": "RG-024",
+      "group_id": "RG-046",
       "component": "patch-81_eo",
       "spdx": "GPL-3.0-or-later",
       "upstream_revision": "REV_UNKNOWN",
@@ -1049,7 +1444,7 @@
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
     {
-      "group_id": "RG-025",
+      "group_id": "RG-047",
       "component": "patch-atari800",
       "spdx": "SPDX_UNKNOWN",
       "upstream_revision": "REV_UNKNOWN",
@@ -1070,7 +1465,7 @@
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
     {
-      "group_id": "RG-026",
+      "group_id": "RG-048",
       "component": "patch-bluemsx",
       "spdx": "SPDX_UNKNOWN",
       "upstream_revision": "REV_UNKNOWN",
@@ -1096,7 +1491,7 @@
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
     {
-      "group_id": "RG-027",
+      "group_id": "RG-049",
       "component": "patch-hatari",
       "spdx": "SPDX_UNKNOWN",
       "upstream_revision": "REV_UNKNOWN",
@@ -1120,12 +1515,12 @@
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
     {
-      "group_id": "RG-028",
+      "group_id": "RG-050",
       "component": "patch-mame-rbgdot",
-      "spdx": "SPDX_UNKNOWN",
+      "spdx": "GPL-2.0-or-later",
       "upstream_revision": "REV_UNKNOWN",
       "review_track": "restricted_redistribution",
-      "modifications": "none_documented",
+      "modifications": "LOCAL_ONLY",
       "member_count": 2,
       "members": [
         "scripts/patches/mame-rbgdot/mame.lst.snippet",
@@ -1134,16 +1529,14 @@
       "approval_status": "NEEDS_LEGAL_REVIEW",
       "auto_approved": false,
       "independent_legal_questions": [
-        "MAME rbgdot patches \u2014 LOCAL_ONLY product class; SOURCE publication of patches?"
+        "Counsel: confirm restricted class remains; SOURCE publication of these paths?"
       ],
-      "provenance_gaps": [
-        "patch license/upstream incomplete"
-      ],
+      "provenance_gaps": [],
       "required_human_decision": true,
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
     {
-      "group_id": "RG-029",
+      "group_id": "RG-051",
       "component": "patch-vecx",
       "spdx": "SPDX_UNKNOWN",
       "upstream_revision": "REV_UNKNOWN",
@@ -1164,7 +1557,7 @@
       "notes": "Do not combine with other groups that have different SPDX, upstream revision, or redistribution restrictions."
     },
     {
-      "group_id": "RG-030",
+      "group_id": "RG-052",
       "component": "ruffle-0.7.1",
       "spdx": "MIT OR Apache-2.0",
       "upstream_revision": "89a7049965f3090e706265670df309a5128233ac",

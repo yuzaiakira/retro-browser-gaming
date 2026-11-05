@@ -71,6 +71,27 @@ Atari Jaguar 2048 is MIT from `toarnold/jag2048`. EmulatorJS `virtualjaguar` emb
 
 EmulatorJS core packages for `fceumm`, `snes9x`, `gambatte`, `mgba`, `stella2014`, `a5200`, `beetle_vb`, `vice_x64sc`, `fuse`, `puae`, `81` / `81_eo` (experimental), `cap32`, `desmume`, `virtualjaguar` (experimental), `mupen64plus_next` (experimental), `prosystem`, `handy`, `mednafen_pce`, `mednafen_wswan`, `mednafen_ngp`, and research-only `dosbox_pure` are recorded in `docs/core-package-lock.json`. Playable MS-DOS uses self-hosted GPL-2.0 `emulators` 8.3.8 under `apps/web/public/cores/jsdos-8.3.8/` (`LICENSES/emulators-jsdos-GPL-2.0.txt`). Experimental Atari ST uses self-hosted GPL-2.0 **Hatari 2.6.1** + GPL-2.0 **EmuTOS** under `apps/web/public/cores/hatari-2.6.1/` (`LICENSES/hatari-GPL-2.0.txt`, `LICENSES/emutos-GPL-2.0.txt`); no proprietary Atari TOS. Fixture: GPL-3.0 Pong Wars `.fixtures/gpl-atari-st-pongwars.st` (`LICENSES/atari-st-pongwars-GPL-3.0.txt`). Save/load not yet exported — see `docs/emulator-builds/hatari-emutos-atari-st.md`. Playable J2ME uses self-hosted MIT **js2me** under `apps/web/public/cores/js2me/` (`LICENSES/js2me-MIT.txt`, upstream `szymor/js2me`); first-party MIT MIDlets `.fixtures/mit-j2me-{dot,paddle,notes}.jar` / `LICENSES/j2me-dot-MIT.txt`. JAR loads are allowlisted (`apps/web/public/runtime/j2me-allowlist.json`). Compatibility matrix: `docs/j2me-compatibility.md`. Lock includes EJS + jsdos + js2me + hatari tree. MIT Floppy Bird: `.fixtures/mit-dos-floppybird.zip` / `LICENSES/floppybird-MIT.txt`. Evidence: `PH-05/dos-gameplay-20261021.md`, `PH-06/j2me-*20261021*`. EmulatorJS `dosbox_pure` remains unplayable on 4.2.3. J2ME-For-Web rejected for LCDUI gaps. FDS open BIOS: `docs/emulator-builds/fds-open-bios-feasibility.md` (OpenDiskSysROM LGPL-3.0; catalog still disabled).
 
+## Fixture source trees and multi-file sets (PH-19 inventory linkage)
+
+Machine-readable path → notice / SPDX / upstream links for tip `NEEDS_LEGAL_REVIEW` fixtures live in `docs/open-source/fixture-provenance-index.json`. That index **links** existing LICENSE/README/LICENSES evidence to exact tracked paths (including `fixtures/*/` trees and multi-file `.fixtures/mit-dreamcast-*` sets). It does **not** approve public redistribution.
+
+| Set / pattern | SPDX (documented) | Notice | Notes |
+|---|---|---|---|
+| `fixtures/{amiga,dreamcast,ps1,psp,gb,msx,zx81,lynx,flash,j2me-*}-dot/` | MIT | tree `LICENSE.txt` + matching `LICENSES/*` | First-party RBG contributor LICENSE text; **owner attestation still required** |
+| `.fixtures/mit-dreamcast-dot*` / `dreamcast-dot.gdi.sha256` | MIT | `fixtures/dreamcast-dot/LICENSE.txt` | Built via `scripts/build-dreamcast-*.sh` |
+| `.fixtures/mit-ps1-dot-single.{bin,cue}` | MIT | `fixtures/ps1-dot/LICENSE.txt` | Single-track variant of first-party PS1 Dot |
+| `.fixtures/fds-rbg-move-demo.*` | MIT | README | Generator `scripts/build-fds-rbg-move-demo.py` |
+| `.fixtures/mit-arcade-rbgdot.*` / `rbgdot.id` | MIT | `LICENSES/arcade-rbgdot-MIT.txt` | Runtime remains **LOCAL_ONLY** |
+| `.fixtures/mit-{flash,atari8,vectrex,j2me-,dos-floppybird}*` | MIT | matching `LICENSES/` + README/tree | See index for SHAs |
+| `.fixtures/gpl-atari-st-pongwars.st` | GPL-3.0 | `LICENSES/atari-st-pongwars-GPL-3.0.txt` | Already cited in narrative above |
+| `fixtures/a7800-rfk/` | GPL-2.0 | `COPYING` + `LICENSES/rfk7800-GPL-2.0.txt` | Matches inventoried `.a78` |
+| `fixtures/pce-scroll/` | GPL-2.0 | `LICENSES/HuC-GPL-2.0.txt` + README | HuC example; matches `.fixtures/huc-pce-scroll.pce` |
+| `fixtures/zx81-81-eo-loadp/` | GPL-3.0-or-later | `scripts/patches/81_eo/` | Snippet for **NOT_CLEARED** `81_eo` lineage |
+| `ejs-4.2.3/cores/reports/*.json` | GPL-3.0-or-later | `LICENSES/EmulatorJS-GPL-3.0.txt` | Generated packaging metadata at EmulatorJS pin `e150dc04…` |
+| `scripts/patches/mame-rbgdot/*` | GPL-2.0-or-later | `docs/emulator-builds/mame-wasm-arcade.md` | **LOCAL_ONLY** rbgdot support patches |
+
+Exact SHA-256 values for binary fixtures remain authoritative when listed in the table above or in the index; do not confuse source-tree file hashes with packaged `.wasm`/`.data` hashes.
+
 ## Emulator runtime
 
 EmulatorJS source is pinned to commit `e150dc0491ae747028919fb82d6598954976ede6` (runtime 4.2.3). The vendored launcher source license is GPL-3.0 in `LICENSES/EmulatorJS-GPL-3.0.txt`. `docs/core-package-lock.json` records SHA-256/size/source for vendored runtime files (379 entries including `bluemsx` + SYSTEM pack + hatari); `scripts/verify-core-lock.py` verifies them. Arcade/FBNeo: do **not** vendor MAME Dev “free ROMs” (including Gridlee) — site-only redistribution (`PH-05/fbneo-blocker-20261022.md`).

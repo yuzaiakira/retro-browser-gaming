@@ -20,10 +20,43 @@ LEGAL_PACK = ROOT / "docs" / "release" / "legal-review" / "legal-review-pack.jso
 CS_MATRIX = ROOT / "docs" / "open-source" / "corresponding-source-matrix.json"
 ALLOWLIST = ROOT / "docs" / "open-source" / "browser-distributable-allowlist.json"
 LICENSES_MD = ROOT / "docs" / "licenses-and-assets.md"
+FIXTURE_INDEX = ROOT / "docs" / "open-source" / "fixture-provenance-index.json"
 OUT_DIR = ROOT / "docs" / "release" / "legal-review"
 
 EJS_PIN = "e150dc0491ae747028919fb82d6598954976ede6"
 EJS_UPSTREAM = f"https://github.com/EmulatorJS/EmulatorJS/tree/{EJS_PIN}"
+
+
+def load_fixture_index() -> dict:
+    if not FIXTURE_INDEX.is_file():
+        return {"path_prefixes": [], "path_globs": [], "component_notes": {}}
+    return json.loads(FIXTURE_INDEX.read_text(encoding="utf-8"))
+
+
+def lookup_fixture_index(path: str, index: dict) -> dict | None:
+    for rule in index.get("path_prefixes", []):
+        prefix = rule.get("prefix") or ""
+        if prefix and path.startswith(prefix):
+            return {"rule": rule, "match": "path_prefix", "key": prefix}
+    for rule in index.get("path_globs", []):
+        pref = rule.get("match_prefix") or ""
+        if pref and path.startswith(pref):
+            return {"rule": rule, "match": "path_glob", "key": pref}
+    # component notes
+    notes = index.get("component_notes") or {}
+    if "/cores/reports/" in path and path.endswith(".json"):
+        note = notes.get("ejs-4.2.3/cores/reports/*.json")
+        if note:
+            return {"rule": note, "match": "component_note", "key": "ejs-reports"}
+    if "/javax/crypto/" in path:
+        note = notes.get("js2me/javax/crypto/*")
+        if note:
+            return {"rule": note, "match": "component_note", "key": "js2me-crypto"}
+    if path.startswith("scripts/patches/mame-rbgdot/"):
+        note = notes.get("scripts/patches/mame-rbgdot/*")
+        if note:
+            return {"rule": note, "match": "component_note", "key": "mame-patches"}
+    return None
 
 
 def git_head() -> str:
@@ -204,9 +237,11 @@ def build_entries() -> tuple[list[dict], dict]:
     assert len(nlr_paths) == policy["summary"]["counts"]["NEEDS_LEGAL_REVIEW"]
 
     fixture_rows = parse_licenses_md()
+    fixture_index = load_fixture_index()
     legal = load_json(LEGAL_PACK) or {}
     cs = load_json(CS_MATRIX) or {}
     allow = load_json(ALLOWLIST) or {}
+    technical_gaps_cleared = 0
 
     # Index legal pack / CS by basename path under cores/
     legal_by_tail: dict[str, dict] = {}
@@ -243,6 +278,117 @@ def build_entries() -> tuple[list[dict], dict]:
         provenance_gaps: list[str] = []
         evidence: list[str] = []
         questions: list[str] = []
+        technical_remediation: list[str] = []
+        index_hit = lookup_fixture_index(path, fixture_index)
+
+        # --- Indexed technical provenance (PH-19) ---
+        if index_hit:
+            rule = index_hit["rule"]
+            upstream = rule.get("upstream_repository") or upstream
+            revision = rule.get("upstream_revision") or revision
+            license_name = rule.get("license_notice") and (
+                f"{rule.get('spdx')} ({rule.get('license_notice')})"
+            ) or license_name
+            spdx = rule.get("spdx") or spdx
+            if rule.get("license_notice"):
+                notices.append(rule["license_notice"])
+            for n in rule.get("also_notice") or []:
+                notices.append(n)
+            if rule.get("verification"):
+                evidence.append(f"index:{index_hit['key']}:{rule['verification']}")
+            evidence.append("docs/open-source/fixture-provenance-index.json")
+            if rule.get("build_script"):
+                evidence.append(rule["build_script"])
+                source_to_binary.append(f"build_script:{rule['build_script']}")
+            if rule.get("sha256"):
+                evidence.append(f"sha256:{rule['sha256']}")
+            ownership = rule.get("ownership_hypothesis") or ownership
+            if rule.get("attestation_required"):
+                review_track = "first_party_attestation"
+                questions.append(
+                    "Owner attestation: confirm originality/redistribution for public SOURCE."
+                )
+            elif rule.get("restricted_class") or rule.get("restricted_note"):
+                review_track = "restricted_redistribution"
+                modifications = rule.get("restricted_note") or rule.get(
+                    "restricted_class", modifications
+                )
+                questions.append(
+                    "Counsel: confirm restricted class remains; SOURCE publication of these paths?"
+                )
+            elif rule.get("counsel_required") or rule.get("unresolved_legal"):
+                review_track = "third_party_license_interpretation"
+                questions.append(
+                    "Counsel: confirm redistribution terms from README/license evidence."
+                )
+                if rule.get("unresolved_legal"):
+                    provenance_gaps.append(
+                        "legal_uncertainty_remains_after_technical_linkage"
+                    )
+            else:
+                review_track = "third_party_license_interpretation"
+                questions.append(
+                    "May these inventoried paths be published in public SOURCE with recorded notices?"
+                )
+            if rule.get("counsel_question"):
+                questions.append(rule["counsel_question"])
+            if rule.get("technical_gap_status") == "resolved_with_evidence" or rule.get(
+                "verification"
+            ):
+                technical_remediation.append(
+                    f"linked via fixture-provenance-index ({index_hit['match']}={index_hit['key']})"
+                )
+                technical_gaps_cleared += 1
+            # kind hints
+            if rule.get("kind"):
+                kind = rule["kind"]
+            elif path.endswith((".md", ".txt", ".sha256", "COPYING", "LICENSE.txt")):
+                kind = "documentation"
+            elif path.startswith("fixtures/") and (
+                path.endswith((".c", ".h", ".s", ".js", ".html", ".ld")) or "/src/" in path
+            ):
+                kind = "test_fixture_source"
+            elif path.startswith((".fixtures/", "fixtures/")):
+                kind = "test_fixture"
+            # Skip legacy fixture heuristics when index fully applies
+            if path.startswith((".fixtures/", "fixtures/")) or index_hit[
+                "match"
+            ] == "component_note":
+                # Still allow licenses-and-assets exact row to enrich sha
+                row = fixture_rows.get(path)
+                if row:
+                    if row.get("sha256"):
+                        evidence.append(f"sha256:{row['sha256']}")
+                    if row.get("source"):
+                        upstream = upstream or row["source"]
+                    evidence.append("docs/licenses-and-assets.md")
+                entry = {
+                    "path": path,
+                    "mirror_class": "NEEDS_LEGAL_REVIEW",
+                    "kind": kind,
+                    "component": component_for(path),
+                    "ownership_hypothesis": ownership,
+                    "upstream_repository": upstream,
+                    "upstream_revision": revision,
+                    "license_name": license_name,
+                    "spdx": spdx,
+                    "notice_paths": sorted(set(notices)),
+                    "modifications": modifications,
+                    "source_to_binary_relationships": source_to_binary,
+                    "git_authors_sample": authors,
+                    "git_authorship_disclaimer": (
+                        "Git authorship does not establish copyright ownership or redistribution permission."
+                    ),
+                    "review_track": review_track,
+                    "provenance_gaps": provenance_gaps,
+                    "technical_remediation": technical_remediation,
+                    "evidence": evidence,
+                    "counsel_questions": questions,
+                    "approval_status": "NEEDS_LEGAL_REVIEW",
+                    "auto_approved": False,
+                }
+                entries.append(entry)
+                continue
 
         # --- Fixtures ---
         if path.startswith(".fixtures/") or path.startswith("fixtures/"):
@@ -410,9 +556,10 @@ def build_entries() -> tuple[list[dict], dict]:
             )
             if path.endswith(".json") and "/reports/" in path:
                 kind = "generated_source"
-                provenance_gaps.append(
-                    "core report JSON — confirm whether generated and redistributable"
-                )
+                if not index_hit:
+                    provenance_gaps.append(
+                        "core report JSON — confirm whether generated and redistributable"
+                    )
 
         # --- js2me ---
         elif component == "js2me":
@@ -437,7 +584,7 @@ def build_entries() -> tuple[list[dict], dict]:
             questions.append(
                 "Review javax/crypto and other packages for additional notices."
             )
-            if "/me/javax/crypto/" in path:
+            if "/me/javax/crypto/" in path and not index_hit:
                 provenance_gaps.append(
                     "crypto-related JS path — confirm no export-control / additional license issues"
                 )
@@ -587,7 +734,7 @@ def build_entries() -> tuple[list[dict], dict]:
                 questions.append(
                     "Confirm patch corresponding-source completeness for any public binary offer."
                 )
-            if not license_name:
+            if not license_name and not index_hit:
                 unresolved_provenance += 1
                 provenance_gaps.append("patch license/upstream incomplete")
 
@@ -624,6 +771,7 @@ def build_entries() -> tuple[list[dict], dict]:
             ),
             "review_track": review_track,
             "provenance_gaps": provenance_gaps,
+            "technical_remediation": technical_remediation,
             "evidence": evidence,
             "counsel_questions": questions,
             "approval_status": "NEEDS_LEGAL_REVIEW",
@@ -637,7 +785,9 @@ def build_entries() -> tuple[list[dict], dict]:
         "unresolved_provenance_entries": sum(
             1 for e in entries if e["provenance_gaps"]
         ),
+        "technical_gaps_cleared_this_run": technical_gaps_cleared,
         "policy_sha": policy.get("classified_tree_sha"),
+        "baseline_provenance_gaps_ph18": 200,
     }
     return entries, meta
 
@@ -868,11 +1018,14 @@ def maybe_annotate_classifier_diagnostics() -> None | dict:
         "diagnostics_added": [
             "file-provenance.json kind/ownership/spdx fields for counsel efficiency",
             "review-groups.json exact membership",
+            "docs/open-source/fixture-provenance-index.json technical linkage (PH-19)",
         ],
         "before_after": {
             "NEEDS_LEGAL_REVIEW_count_before": 562,
             "NEEDS_LEGAL_REVIEW_count_after": 562,
             "PUBLIC_SOURCE_ALLOWED_changes": 0,
+            "ph18_provenance_gap_entries": 200,
+            "note": "Technical inventory gaps may be cleared without reducing NEEDS_LEGAL_REVIEW or auto-approving counsel.",
         },
         "reviewer_requirement": "Counsel + owner attestation — not automation",
     }

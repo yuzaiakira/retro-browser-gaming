@@ -1,0 +1,69 @@
+{
+  "schema": "rbg-unresolved-provenance-v1",
+  "phase": "PH-19",
+  "generated_at": "2026-11-05T09:11:40Z",
+  "git_head": "0e920f2ac9d4a6dc13a9e0777b3060fd2748610d",
+  "metrics": {
+    "ph18_baseline_gap_entries": 200,
+    "technical_gap_entries_corrected": 200,
+    "technical_gap_entries_remaining_structural": 0,
+    "entries_with_residual_legal_uncertainty_flag": 3,
+    "technical_linkages_applied": 201,
+    "nlr_files_still_needing_human_review": 562,
+    "first_party_attestation_files": 146,
+    "review_groups": 52,
+    "independent_legal_questions": 65,
+    "auto_approvals": 0,
+    "technical_gap_entries_remaining": 0
+  },
+  "items": [
+    {
+      "path": ".fixtures/fds-dreamful-diskmag.README.md",
+      "component": "fixture:fds",
+      "missing_evidence": [
+        "legal_uncertainty_remains_after_technical_linkage"
+      ],
+      "reason_unresolved": "LicenseRef-Noncommercial-Shareware (.fixtures/fds-dreamful-diskmag.README.md)",
+      "required_human_action": "counsel_review",
+      "suggested_evidence_source": [
+        "index:.fixtures/fds-dreamful-diskmag:README documents noncommercial shareware with no-fee redistribution conditions + attribution; NOT a standard OSI license \u2014 counsel must decide public SOURCE suitability",
+        "docs/open-source/fixture-provenance-index.json",
+        "sha256:289e9e1eb5a8ad38284d66bf6429e930d3c2cab8e36513cb9fc0943b27dbb8b4"
+      ],
+      "spdx": "LicenseRef-Noncommercial-Shareware",
+      "review_track": "third_party_license_interpretation"
+    },
+    {
+      "path": ".fixtures/fds-dreamful-diskmag.fds",
+      "component": "fixture:fds",
+      "missing_evidence": [
+        "legal_uncertainty_remains_after_technical_linkage"
+      ],
+      "reason_unresolved": "LicenseRef-Noncommercial-Shareware (.fixtures/fds-dreamful-diskmag.README.md)",
+      "required_human_action": "counsel_review",
+      "suggested_evidence_source": [
+        "index:.fixtures/fds-dreamful-diskmag:README documents noncommercial shareware with no-fee redistribution conditions + attribution; NOT a standard OSI license \u2014 counsel must decide public SOURCE suitability",
+        "docs/open-source/fixture-provenance-index.json",
+        "sha256:289e9e1eb5a8ad38284d66bf6429e930d3c2cab8e36513cb9fc0943b27dbb8b4"
+      ],
+      "spdx": "LicenseRef-Noncommercial-Shareware",
+      "review_track": "third_party_license_interpretation"
+    },
+    {
+      "path": ".fixtures/mit-jaguar-2048.bin",
+      "component": "fixture:mit",
+      "missing_evidence": [
+        "legal_uncertainty_remains_after_technical_linkage"
+      ],
+      "reason_unresolved": "MIT (LICENSES/jag2048-MIT.txt)",
+      "required_human_action": "counsel_review",
+      "suggested_evidence_source": [
+        "index:.fixtures/mit-jaguar-2048.bin:Tracked .bin coexists with inventoried .jag but different byte size (79460 vs 79506); confirm derivation/redistribution vs inventoried .jag",
+        "docs/open-source/fixture-provenance-index.json",
+        "sha256:57f40fe60e6e34c9a1acf747e246b3a69f16f72853aa5382b520c42176492433"
+      ],
+      "spdx": "MIT",
+      "review_track": "third_party_license_interpretation"
+    }
+  ]
+}

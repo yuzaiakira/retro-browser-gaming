@@ -1,0 +1,424 @@
+{
+  "schema": "rbg-fixture-provenance-index-v1",
+  "generated_for_phase": "PH-19",
+  "policy": "Inventory linkage is technical evidence only. It does not approve PUBLIC_SOURCE redistribution or clear NEEDS_LEGAL_REVIEW.",
+  "path_prefixes": [
+    {
+      "prefix": "fixtures/amiga-dot/",
+      "spdx": "MIT",
+      "license_notice": "fixtures/amiga-dot/LICENSE.txt",
+      "also_notice": ["LICENSES/amiga-dot-MIT.txt"],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "upstream_repository": "in-repo first-party sources",
+      "upstream_revision": "tracked tree under fixtures/amiga-dot/",
+      "build_script": null,
+      "attestation_required": true,
+      "verification": "LICENSE.txt Copyright (c) 2026 Retro Browser Gaming contributors; MIT text present"
+    },
+    {
+      "prefix": "fixtures/dreamcast-dot/",
+      "spdx": "MIT",
+      "license_notice": "fixtures/dreamcast-dot/LICENSE.txt",
+      "also_notice": ["LICENSES/dreamcast-dot-MIT.txt"],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "upstream_repository": "in-repo first-party sources",
+      "upstream_revision": "tracked tree; builds via scripts/build-dreamcast-dot-fixture.sh",
+      "build_script": "scripts/build-dreamcast-dot-fixture.sh",
+      "attestation_required": true,
+      "verification": "LICENSE.txt MIT RBG contributors; README/.fixtures mit-dreamcast-dot.README.md"
+    },
+    {
+      "prefix": "fixtures/ps1-dot/",
+      "spdx": "MIT",
+      "license_notice": "fixtures/ps1-dot/LICENSE.txt",
+      "also_notice": [],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "upstream_repository": "in-repo first-party sources (PSn00bSDK build)",
+      "upstream_revision": "tracked tree under fixtures/ps1-dot/",
+      "build_script": null,
+      "attestation_required": true,
+      "verification": "LICENSE.txt MIT RBG contributors; licenses-and-assets.md references first-party ps1-dot"
+    },
+    {
+      "prefix": "fixtures/psp-dot/",
+      "spdx": "MIT",
+      "license_notice": "fixtures/psp-dot/LICENSE.txt",
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "upstream_repository": "in-repo first-party sources",
+      "upstream_revision": "tracked tree under fixtures/psp-dot/",
+      "attestation_required": true,
+      "verification": "LICENSE.txt MIT RBG contributors"
+    },
+    {
+      "prefix": "fixtures/gb-dot/",
+      "spdx": "MIT",
+      "license_notice": "fixtures/gb-dot/LICENSE.txt",
+      "also_notice": ["LICENSES/gb-dot-MIT.txt"],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "upstream_repository": "in-repo first-party sources",
+      "upstream_revision": "tracked tree under fixtures/gb-dot/",
+      "attestation_required": true,
+      "verification": "LICENSE.txt MIT RBG contributors"
+    },
+    {
+      "prefix": "fixtures/msx-dot/",
+      "spdx": "MIT",
+      "license_notice": "fixtures/msx-dot/LICENSE.txt",
+      "also_notice": ["LICENSES/msx-dot-MIT.txt"],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "upstream_repository": "in-repo first-party sources",
+      "upstream_revision": "tracked tree under fixtures/msx-dot/",
+      "attestation_required": true,
+      "verification": "LICENSE.txt MIT RBG contributors"
+    },
+    {
+      "prefix": "fixtures/zx81-dot/",
+      "spdx": "MIT",
+      "license_notice": "fixtures/zx81-dot/LICENSE.txt",
+      "also_notice": ["LICENSES/zx81-dot-MIT.txt"],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "upstream_repository": "in-repo first-party sources",
+      "upstream_revision": "tracked tree under fixtures/zx81-dot/",
+      "attestation_required": true,
+      "verification": "LICENSE.txt MIT RBG contributors"
+    },
+    {
+      "prefix": "fixtures/lynx-dot/",
+      "spdx": "MIT",
+      "license_notice": "fixtures/lynx-dot/LICENSE.txt",
+      "also_notice": ["LICENSES/lynx-dot-MIT.txt"],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "upstream_repository": "in-repo first-party sources",
+      "upstream_revision": "tracked tree under fixtures/lynx-dot/",
+      "attestation_required": true,
+      "verification": "LICENSE.txt MIT RBG contributors"
+    },
+    {
+      "prefix": "fixtures/flash-dot/",
+      "spdx": "MIT",
+      "license_notice": "fixtures/flash-dot/LICENSE.txt",
+      "also_notice": ["LICENSES/flash-dot-MIT.txt"],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "upstream_repository": "in-repo first-party sources",
+      "upstream_revision": "tracked tree under fixtures/flash-dot/",
+      "attestation_required": true,
+      "verification": "LICENSE.txt MIT RBG contributors"
+    },
+    {
+      "prefix": "fixtures/j2me-dot/",
+      "spdx": "MIT",
+      "license_notice": "fixtures/j2me-dot/LICENSE.txt",
+      "also_notice": ["LICENSES/j2me-dot-MIT.txt"],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "upstream_repository": "in-repo first-party sources",
+      "upstream_revision": "tracked tree under fixtures/j2me-dot/",
+      "attestation_required": true,
+      "verification": "LICENSE.txt MIT RBG contributors"
+    },
+    {
+      "prefix": "fixtures/j2me-notes/",
+      "spdx": "MIT",
+      "license_notice": "fixtures/j2me-notes/LICENSE.txt",
+      "also_notice": ["LICENSES/j2me-dot-MIT.txt"],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "upstream_repository": "in-repo first-party sources",
+      "upstream_revision": "tracked tree under fixtures/j2me-notes/",
+      "attestation_required": true,
+      "verification": "LICENSE.txt MIT RBG contributors"
+    },
+    {
+      "prefix": "fixtures/j2me-paddle/",
+      "spdx": "MIT",
+      "license_notice": "fixtures/j2me-paddle/LICENSE.txt",
+      "also_notice": ["LICENSES/j2me-dot-MIT.txt"],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "upstream_repository": "in-repo first-party sources",
+      "upstream_revision": "tracked tree under fixtures/j2me-paddle/",
+      "attestation_required": true,
+      "verification": "LICENSE.txt MIT RBG contributors"
+    },
+    {
+      "prefix": "fixtures/dos-floppybird/",
+      "spdx": "MIT",
+      "license_notice": "fixtures/dos-floppybird/LICENSE.txt",
+      "also_notice": ["LICENSES/floppybird-MIT.txt"],
+      "ownership_hypothesis": "third_party_homebrew_with_tracked_notice",
+      "upstream_repository": "see LICENSES/floppybird-MIT.txt / mit-dos-floppybird.zip provenance",
+      "upstream_revision": "release artifact mirrored as .fixtures/mit-dos-floppybird.zip",
+      "attestation_required": false,
+      "verification": "Tree LICENSE + LICENSES/floppybird-MIT.txt + licenses-and-assets narrative"
+    },
+    {
+      "prefix": "fixtures/a5200-culomin/",
+      "spdx": "CC0-1.0",
+      "license_notice": "fixtures/a5200-culomin/LICENSE.txt",
+      "also_notice": ["LICENSES/culomin-A5200-CC0.txt"],
+      "ownership_hypothesis": "third_party_homebrew",
+      "upstream_repository": "8bitworkshop/culomin5200",
+      "upstream_revision": "bin/main.c.rom as packaged",
+      "attestation_required": false,
+      "verification": "licenses-and-assets.md row for .fixtures/cc0-a5200-culomin.a52; tree LICENSE"
+    },
+    {
+      "prefix": "fixtures/n64-controller-test/",
+      "spdx": "MIT",
+      "license_notice": "fixtures/n64-controller-test/LICENSE.txt",
+      "also_notice": ["LICENSES/n64-controller-test-MIT.txt"],
+      "ownership_hypothesis": "third_party_homebrew",
+      "upstream_repository": "Ryzee119/n64_controller_test",
+      "upstream_revision": "release build-202008190836",
+      "attestation_required": false,
+      "verification": "licenses-and-assets.md + tree LICENSE"
+    },
+    {
+      "prefix": "fixtures/vb-spong/",
+      "spdx": "MIT",
+      "license_notice": "fixtures/vb-spong/LICENSE.txt",
+      "also_notice": ["LICENSES/spong-VB-MIT.txt"],
+      "ownership_hypothesis": "third_party_homebrew",
+      "upstream_repository": "VUEngine/SPONG",
+      "upstream_revision": "v1.0 demo",
+      "attestation_required": false,
+      "verification": "licenses-and-assets.md + tree LICENSE"
+    },
+    {
+      "prefix": "fixtures/a7800-rfk/",
+      "spdx": "GPL-2.0-only",
+      "license_notice": "fixtures/a7800-rfk/COPYING",
+      "also_notice": ["LICENSES/rfk7800-GPL-2.0.txt"],
+      "ownership_hypothesis": "third_party_homebrew",
+      "upstream_repository": "SourceForge rfk7800",
+      "upstream_revision": "6.502.20050619 (see licenses-and-assets.md)",
+      "attestation_required": false,
+      "verification": "COPYING is GPL-2.0 text; .fixtures/gpl-a7800-rfk.a78 inventoried"
+    },
+    {
+      "prefix": "fixtures/pce-scroll/",
+      "spdx": "GPL-2.0-only",
+      "license_notice": "LICENSES/HuC-GPL-2.0.txt",
+      "also_notice": ["fixtures/pce-scroll/README.md"],
+      "ownership_hypothesis": "third_party_homebrew_example",
+      "upstream_repository": "https://github.com/BlockoS/huc",
+      "upstream_revision": "examples/scroll (HuC)",
+      "attestation_required": false,
+      "verification": "README cites BlockoS/huc examples/scroll; .fixtures/huc-pce-scroll.pce inventoried GPL-2.0"
+    },
+    {
+      "prefix": "fixtures/zx81-81-eo-loadp/",
+      "spdx": "GPL-3.0-or-later",
+      "license_notice": "scripts/patches/81_eo/README.md",
+      "also_notice": ["docs/emulator-builds/zx81-eo-loadp-build.md"],
+      "ownership_hypothesis": "first_party_patch_snippet_against_third_party",
+      "upstream_repository": "https://github.com/libretro/81-libretro",
+      "upstream_revision": "see scripts/patches/81_eo/",
+      "attestation_required": true,
+      "restricted_class": "BLOCKED_LEGAL_lineage_related",
+      "verification": "Snippet supports 81_eo NOT_CLEARED lineage; patch dir documented"
+    }
+  ],
+  "path_globs": [
+    {
+      "match_prefix": ".fixtures/mit-dreamcast-dot",
+      "spdx": "MIT",
+      "license_notice": "fixtures/dreamcast-dot/LICENSE.txt",
+      "also_notice": ["LICENSES/dreamcast-dot-MIT.txt", ".fixtures/mit-dreamcast-dot.README.md"],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "upstream_repository": "fixtures/dreamcast-dot/",
+      "upstream_revision": "generated via scripts/build-dreamcast-*.sh",
+      "build_script": "scripts/build-dreamcast-disc-fixtures.sh",
+      "attestation_required": true,
+      "verification": "README documents MIT + build scripts + source tree"
+    },
+    {
+      "match_prefix": ".fixtures/dreamcast-dot.",
+      "spdx": "MIT",
+      "license_notice": "fixtures/dreamcast-dot/LICENSE.txt",
+      "also_notice": [".fixtures/mit-dreamcast-dot.README.md"],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "upstream_repository": "fixtures/dreamcast-dot/",
+      "attestation_required": true,
+      "verification": "Checksum sidecar for first-party dreamcast disc set"
+    },
+    {
+      "match_prefix": ".fixtures/fds-rbg-move-demo",
+      "spdx": "MIT",
+      "license_notice": ".fixtures/fds-rbg-move-demo.README.md",
+      "also_notice": ["LICENSES/OpenDiskSysROM-LGPL-3.0.txt"],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "upstream_repository": "scripts/build-fds-rbg-move-demo.py",
+      "upstream_revision": "generated fixture; SHA in fds-open-bios-feasibility.md",
+      "build_script": "scripts/build-fds-rbg-move-demo.py",
+      "attestation_required": true,
+      "sha256": "c8b5b2b3f0f8f75112b1fc78269fc991952c0165bf72f6a1514e8562583541a5",
+      "verification": "README states MIT first-party; generator script named"
+    },
+    {
+      "match_prefix": ".fixtures/fds-dreamful-diskmag",
+      "spdx": "LicenseRef-Noncommercial-Shareware",
+      "license_notice": ".fixtures/fds-dreamful-diskmag.README.md",
+      "ownership_hypothesis": "third_party_shareware",
+      "upstream_repository": "https://github.com/TakuikaNinja/FDS-diskmag",
+      "upstream_revision": "see upstream README; author TakuikaNinja",
+      "attestation_required": false,
+      "counsel_required": true,
+      "unresolved_legal": true,
+      "verification": "README documents noncommercial shareware with no-fee redistribution conditions + attribution; NOT a standard OSI license — counsel must decide public SOURCE suitability",
+      "sha256": "289e9e1eb5a8ad38284d66bf6429e930d3c2cab8e36513cb9fc0943b27dbb8b4"
+    },
+    {
+      "match_prefix": ".fixtures/mit-arcade-rbgdot",
+      "spdx": "MIT",
+      "license_notice": ".fixtures/mit-arcade-rbgdot.README.md",
+      "also_notice": ["LICENSES/arcade-rbgdot-MIT.txt"],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "upstream_repository": "first-party rbgdot ROMset identity blob",
+      "restricted_note": "Driver/runtime remain LOCAL_ONLY (MAME rbgdot)",
+      "attestation_required": true,
+      "sha256": "98e2ed54bc93da8c855eaa23b340a964352e555d90cb5927841bf0a735df4637",
+      "verification": "README MIT; LICENSES/arcade-rbgdot-MIT.txt"
+    },
+    {
+      "match_prefix": ".fixtures/rbgdot.id",
+      "spdx": "MIT",
+      "license_notice": "LICENSES/arcade-rbgdot-MIT.txt",
+      "also_notice": [".fixtures/mit-arcade-rbgdot.README.md"],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "restricted_note": "Used with LOCAL_ONLY MAME rbgdot runtime",
+      "attestation_required": true,
+      "verification": "Identity blob for rbgdot; see arcade README"
+    },
+    {
+      "match_prefix": ".fixtures/mit-atari8-dot",
+      "spdx": "MIT",
+      "license_notice": ".fixtures/mit-atari8-dot.README.md",
+      "also_notice": ["LICENSES/atari8-dot-MIT.txt"],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "attestation_required": true,
+      "sha256": "bd52416d2d76201b3aa6c442eb197b338f3cd567fab2865a13aae0a12d81e16c",
+      "verification": "README + LICENSES/atari8-dot-MIT.txt"
+    },
+    {
+      "match_prefix": ".fixtures/mit-vectrex-dot",
+      "spdx": "MIT",
+      "license_notice": ".fixtures/mit-vectrex-dot.README.md",
+      "also_notice": ["LICENSES/vectrex-dot-MIT.txt"],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "restricted_note": "Vectrex BIOS remains BLOCKED_EXTERNAL; fixture is MIT Dot only",
+      "attestation_required": true,
+      "sha256": "9fed4d5143348cd3aae9a1fbe546c0a809399d1008341d7f95781b0cf4d22ace",
+      "verification": "README + LICENSES/vectrex-dot-MIT.txt"
+    },
+    {
+      "match_prefix": ".fixtures/mit-flash-dot",
+      "spdx": "MIT",
+      "license_notice": "fixtures/flash-dot/LICENSE.txt",
+      "also_notice": ["LICENSES/flash-dot-MIT.txt", ".fixtures/mit-flash-dot.README.md"],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "attestation_required": true,
+      "sha256": "3f5c78f2e7afa71acb84d2459d024399720c241c96a33a55b3a909469e57f85e",
+      "verification": "Tree LICENSE + LICENSES + README"
+    },
+    {
+      "match_prefix": ".fixtures/mit-j2me-",
+      "spdx": "MIT",
+      "license_notice": "LICENSES/j2me-dot-MIT.txt",
+      "also_notice": ["fixtures/j2me-dot/LICENSE.txt"],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "attestation_required": true,
+      "verification": "licenses-and-assets.md narrative + LICENSES/j2me-dot-MIT.txt"
+    },
+    {
+      "match_prefix": ".fixtures/mit-dos-floppybird",
+      "spdx": "MIT",
+      "license_notice": "LICENSES/floppybird-MIT.txt",
+      "also_notice": ["fixtures/dos-floppybird/LICENSE.txt"],
+      "ownership_hypothesis": "third_party_homebrew",
+      "sha256": "5666cf078694f5fa1e50da7ddd70d7ba1e0a6bdce702606c454d2e8261e133c1",
+      "verification": "licenses-and-assets.md + LICENSES/floppybird-MIT.txt"
+    },
+    {
+      "match_prefix": ".fixtures/gpl-atari-st-pongwars",
+      "spdx": "GPL-3.0-only",
+      "license_notice": "LICENSES/atari-st-pongwars-GPL-3.0.txt",
+      "ownership_hypothesis": "third_party_homebrew",
+      "sha256": "2c5ca8e161bec25ccb2a96452b837420b145538f67fa4e31c8075f204bbee99c",
+      "verification": "licenses-and-assets.md narrative + LICENSES file"
+    },
+    {
+      "match_prefix": ".fixtures/mit-jaguar-2048.jag",
+      "spdx": "MIT",
+      "license_notice": "LICENSES/jag2048-MIT.txt",
+      "ownership_hypothesis": "third_party_homebrew",
+      "upstream_repository": "toarnold/jag2048",
+      "upstream_revision": "jag2048.jag as inventoried in licenses-and-assets.md",
+      "verification": "Exact inventoried path .fixtures/mit-jaguar-2048.jag with SHA in licenses-and-assets.md"
+    },
+    {
+      "match_prefix": ".fixtures/mit-jaguar-2048.bin",
+      "spdx": "MIT",
+      "license_notice": "LICENSES/jag2048-MIT.txt",
+      "ownership_hypothesis": "third_party_homebrew_derived_artifact",
+      "upstream_repository": "toarnold/jag2048",
+      "unresolved_legal": true,
+      "counsel_required": true,
+      "verification": "Tracked .bin coexists with inventoried .jag but different byte size (79460 vs 79506); confirm derivation/redistribution vs inventoried .jag",
+      "sha256": "57f40fe60e6e34c9a1acf747e246b3a69f16f72853aa5382b520c42176492433"
+    },
+    {
+      "match_prefix": ".fixtures/mit-zx81-dot-noaltint",
+      "spdx": "MIT",
+      "license_notice": "fixtures/zx81-dot/LICENSE.txt",
+      "also_notice": ["LICENSES/zx81-dot-MIT.txt"],
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "attestation_required": true,
+      "sha256": "c18bbff1e505ffb7d896839f025bee66429305632abe03af67f6d61634f95a11",
+      "verification": "Variant of first-party zx81-dot fixture set"
+    },
+    {
+      "match_prefix": ".fixtures/mit-ps1-dot-single",
+      "spdx": "MIT",
+      "license_notice": "fixtures/ps1-dot/LICENSE.txt",
+      "ownership_hypothesis": "first_party_rbg_contributors",
+      "attestation_required": true,
+      "upstream_repository": "fixtures/ps1-dot/",
+      "verification": "Single-bin/cue variant of first-party ps1-dot; LICENSE in source tree",
+      "sha256_bin": "3d38869e807f3a78eab387f55f426e7f2a7fc4b7758fb7c89b9ce2082f260d3a",
+      "sha256_cue": "cf4245b763a4c9fa87178ae494f910e1e5dd791d5d221e715985cfc7fe36b943"
+    }
+  ],
+  "component_notes": {
+    "ejs-4.2.3/cores/reports/*.json": {
+      "kind": "generated_source",
+      "generator": "EmulatorJS/npm core packaging timestamps",
+      "upstream_repository": "https://github.com/EmulatorJS/EmulatorJS/tree/e150dc0491ae747028919fb82d6598954976ede6",
+      "upstream_revision": "e150dc0491ae747028919fb82d6598954976ede6",
+      "spdx": "GPL-3.0-or-later",
+      "license_notice": "LICENSES/EmulatorJS-GPL-3.0.txt",
+      "verification": "Sample reports contain core name + buildStart/buildEnd ISO timestamps; shipped with EmulatorJS 4.2.3 package",
+      "technical_gap_status": "resolved_with_evidence",
+      "legal_status": "NEEDS_LEGAL_REVIEW"
+    },
+    "js2me/javax/crypto/*": {
+      "kind": "unmodified_third_party_source",
+      "upstream_repository": "js2me upstream (see SOURCE_COMMIT.txt)",
+      "upstream_revision_file": "apps/web/public/cores/js2me/SOURCE_COMMIT.txt",
+      "spdx": "MIT",
+      "license_notice": "apps/web/public/cores/js2me/LICENSE",
+      "verification": "Paths are part of pinned js2me tree; no separate license file beyond MIT",
+      "technical_gap_status": "resolved_with_evidence",
+      "legal_status": "NEEDS_LEGAL_REVIEW",
+      "counsel_question": "Confirm no additional export-control or notice obligations for javax.crypto stubs in this MIT tree"
+    },
+    "scripts/patches/mame-rbgdot/*": {
+      "kind": "modified_upstream_source",
+      "upstream_repository": "MAME (rbgdot SUBTARGET)",
+      "spdx": "GPL-2.0-or-later",
+      "license_notice": "docs/emulator-builds/mame-wasm-arcade.md",
+      "also_notice": ["LICENSES/arcade-rbgdot-MIT.txt"],
+      "restricted_class": "LOCAL_ONLY",
+      "verification": "Patch files support LOCAL_ONLY rbgdot driver; build script scripts/build-mame-rbg-arcade-wasm.sh",
+      "technical_gap_status": "resolved_with_evidence",
+      "legal_status": "NEEDS_LEGAL_REVIEW"
+    }
+  }
+}
