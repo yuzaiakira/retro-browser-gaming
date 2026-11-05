@@ -3,7 +3,7 @@
 **Date:** 2026-11-04 (docs closed 2026-11-05)  
 **Development branch after integration:** `main`  
 **Merge commit:** `d650bf4e6f91da72d3cf6b52724bd11a62d347c3`  
-**Follow-up docs commit:** see `git rev-parse HEAD` after this report lands  
+**Follow-up docs commit:** `bc68351a5c35424baf2ed5891efc51b45017e8c8`  
 **PUBLIC_RELEASE_GO:** **STOP** (expected — external blockers unchanged)  
 **Public deploy / CDN / force-push:** **not performed**
 
