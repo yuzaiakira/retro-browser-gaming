@@ -100,6 +100,10 @@ def main() -> int:
                     "docs/EXECUTION_STATE.md",
                     "docs/release/blocker-registry.md",
                     "docs/release/git-history-",
+                    "scripts/build-public-source-mirror.sh",
+                    "scripts/check-public-source-mirror-ready.py",
+                    "scripts/classify-public-source-tree.py",
+                    "scripts/build-sanitized-candidate.sh",
                     ".runtime/",
                 )
                 material = []
